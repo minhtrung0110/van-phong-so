@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../../../Document_Webdeveloper/DoAn/SHOPBALO/fe_shop_balo/.idea/fe_shop_balo.iml" filepath="$PROJECT_DIR$/../../../../Document_Webdeveloper/DoAn/SHOPBALO/fe_shop_balo/.idea/fe_shop_balo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../LastYear/HK2/ProjectDemo/task_list/.idea/task_list.iml" filepath="$PROJECT_DIR$/../../../LastYear/HK2/ProjectDemo/task_list/.idea/task_list.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/van-phong-so.iml" filepath="$PROJECT_DIR$/.idea/van-phong-so.iml" />
     </modules>
   </component>

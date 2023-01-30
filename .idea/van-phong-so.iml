@@ -9,5 +9,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="task_list" />
+    <orderEntry type="module" module-name="fe_shop_balo" />
   </component>
 </module>
