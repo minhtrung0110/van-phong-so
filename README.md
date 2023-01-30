@@ -1,70 +1,136 @@
-# Getting Started with Create React App
+# 🎓 KHÓA LUẬN TỐT NGHIỆP 🎓
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🎯Đề Tài: Xây dựng văn phòng số cho doanh nghiệp vừa và nhỏ.
+![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master) ![](https://img.shields.io/github/tag/pandao/editor.md.svg)
+## Công Nghệ
+````
+Front-End: React Js
+Back-End: 
+````
+## Thành Viên 
 
-## Available Scripts
+| STT |    MSSV    | Họ và tên             |
+| :-: | :--------: | --------------------- |
+|  1  | 3119410424 | Võ Quang Thuận        |
+|  2  | 3119410467 | Nguyễn Đức Minh Trung |
 
-In the project directory, you can run:
+## Mô Tả Dự Án
+````
+-   Mục đích chính của đề tài là xây dựng một hệ thống giúp quy trình hoạt động của doanh nghiệp được chuẩn hoá 
+từ đó tạo tiền đề cho việc kiểm soát và nâng cao hiệu quả doanh nghiệp. Tối ưu hóa các chi phí, tiết kiệm thời gian.
+Tăng tính tương tác giữa lãnh đạo và nhân viện hình thành mô hình làm việc chuyên nghiệp, linh hoạt.
 
-### `npm start`
+-   Đối với sinh viên, đây là một bước phát triển bản thân mình vì trong quá trình làm đề tài này sinh viên phải 
+nghiên cứu các dữ liệu và phân tích chúng dựa trên các dữ kiện và tác vụ thực tế,tiếp theo đó là tập làm quen và sử dụng
+nhiều công nghệ mới để áp dụng vào mô hình này, điều này là bước đệm cho sinh viên khi ra trường và làm việc trong môi trường
+doanh nghiệp.
+````
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tổ Chức Folder
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+````
+src
+|_
+|_
+|_
+|_
+|_
+|_
+|_
+|_A
+   |_
 
-### `npm test`
+````
+## Hướng Dẫn Cài Đặt
+### 1. Setup ReactJS App via Create React App
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> Link: https://create-react-app.dev/docs/getting-started/
 
-### `npm run build`
+### 2. Add SCSS Support
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+`````
+npm i --save-dev node-sass
+`````
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 3. Add React Router
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+npm i --save react-router-dom
+```
 
-### `npm run eject`
+### 4. Add Redux
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+npm i redux redux-react redux-devtools-extension
+```
+### 5. Add Classnames
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+npm i classnames
+```
+### 6. Add Font Awesome
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+npm i --save @fortawesome/fontawesome-svg-core
+npm install --save @fortawesome/free-solid-svg-icons
+npm install --save @fortawesome/react-fontawesome
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+### 7. Add  Axios
 
-## Learn More
+```
+npm i axios
+```
+### 8. Add Customize-cra
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+npm i customize-cra react-app-rewired --dev
+```
+### 9. Add Formik Yup
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+npm i formik yup --dev
+```
+### 10. Add React-Hook-Form
 
-### Code Splitting
+```
+npm i react-hook-form
+```
+### 11. Add React-Content-Loader
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```
+npm i react-content-loader
+```
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Hướng Dẫn Sử Dụng
 
-### Making a Progressive Web App
+### 1. Quản Lý Công Việc
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+**Đối với quản lý:**
 
-### Advanced Configuration
+- Tạo, Cập nhật, Xóa dự án
+- Tạo công việc cho dự án ( phân công , thiết lập thời gian hoàn thành, độ ưu tiên, ….)
+- Cập nhật, Xóa công việc
+- Trao đổi dữ liệu giữa nhân viên và quản lý
+- Bình luận
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+**Đối với nhân viên:**
 
-### Deployment
+- Hoàn thành, theo dõi các công việc được giao.
+- Cập nhật trạng thái tiến độ, tài liệu.
+- Nộp file/links
+- Bình luận trả lời…
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### 2. Quản Lý Lịch Biểu
 
-### `npm run build` fails to minify
+- Xem các lịch trình, cộng việc được giao theo giời gian
+- Tạo các sự kiện, công việc cho bản thân.
+- Xem các lịch làm việc của đồng nghiệp cùng phòng ban.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 3. Quản Lý Tin Nhắn - Cuộc Họp
+
+- Chức năng cho phép các nhân viên trò chuyện, gọi video với nhau trong mạng nội bộ công ty
+
+## Giao Diện
+ 
