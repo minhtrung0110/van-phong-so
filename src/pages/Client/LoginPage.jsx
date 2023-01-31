@@ -5,40 +5,31 @@ import Wave from '~/asset/images/wave_login_client.png'
 import './style.scss'
 function LoginPage(props) {
     return (
-        <>
-            <img className="wave" src={Wave}  alt='Wave'/>
-                <div className="container">
-                    <div className="img">
-                        <img src={Bg}/>
-                    </div>
-                    <div className="login-content">
-                        <form action="index.html">
-                            <img src={Avatar}/>
-                                <h2 className="title">Welcome</h2>
-                                <div className="input-div one">
-                                    <div className="i">
-                                        <i className="fas fa-user"></i>
-                                    </div>
-                                    <div className="div">
-                                        <h5>Username</h5>
-                                        <input type="text" className="input"/>
-                                    </div>
-                                </div>
-                                <div className="input-div pass">
-                                    <div className="i">
-                                        <i className="fas fa-lock"></i>
-                                    </div>
-                                    <div className="div">
-                                        <h5>Password</h5>
-                                        <input type="password" className="input"/>
-                                    </div>
-                                </div>
-                                <a href="#">Forgot Password?</a>
-                                <input type="submit" className="btn" value="Login"/>
-                        </form>
-                    </div>
+        <div className="container">
+            <div className="design">
+                <div className="pill-1 rotate-45"></div>
+                <div className="pill-2 rotate-45"></div>
+                <div className="pill-3 rotate-45"></div>
+                <div className="pill-4 rotate-45"></div>
+            </div>
+            <div className="login">
+                <h3 className="title">User Login</h3>
+                <div className="text-input">
+                    <i className="ri-user-fill"></i>
+                    <input type="text" placeholder="Username"/>
                 </div>
-        </>
+                <div className="text-input">
+                    <i className="ri-lock-fill"></i>
+                    <input type="password" placeholder="Password"/>
+                </div>
+                <button className="login-btn">LOGIN</button>
+                <a href="#" className="forgot">Forgot Username/Password?</a>
+                <div className="create">
+                    <a href="#">Create Your Account</a>
+                    <i className="ri-arrow-right-fill"></i>
+                </div>
+            </div>
+        </div>
     );
 }
 
