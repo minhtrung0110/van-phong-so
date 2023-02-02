@@ -1,8 +1,13 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch} from "react-redux";
 import {Route, Routes} from "react-router-dom";
 import * as PropTypes from "prop-types";
 import LoginPage from "~/pages/Client/LoginPage";
+import {AuthRouter} from "~/router/AuthRouter";
+import ClientLayout from "~/layouts/Client";
+import ManageTaskPage from "~/pages/Client/ManageTask";
+import ManageSchedule from "~/pages/Client/ManageSchedule";
+import ManageMeeting from "~/pages/Client/ManageMeeting";
 
 function ProtectedRoutes(props) {
     return null;
@@ -34,16 +39,14 @@ function ClientRouter(props) {
     // const user = useSelector(getUserSelector);
     return (
         <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            {/*<Route element={<ProtectedRoutes isAuthenticate={isAuthenticate} userRole={user} />}>*/}
-            {/*    /!* {user && user.role_id === 1 && ( *!/*/}
-            {/*    <>*/}
-            {/*        /!* <Route element={<RoleAdminRoutes userRole={1} />}> *!/*/}
-            {/*        /!*<Route path="/admin" element={<AdminLayout slot={<DashBoardPage key={'a'} role={1} />} />} />*!/*/}
-            {/*        /!*<Route path="/admin/product" element={<AdminLayout slot={<ProductPage key={'1'} role={2} />} />} />*!/*/}
+            <Route path="/login" element={<LoginPage/>}/>
+            {/* Requỉed login */}
+            <Route element={<AuthRouter/>}>
+                <Route path="/task" element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
+                <Route path="/schedule" element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
+                <Route path="/communication/meeting" element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
 
-            {/*    </>*/}
-            {/*</Route>*/}
+            </Route>
         </Routes>
     );
 

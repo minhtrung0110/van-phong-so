@@ -1,0 +1,53 @@
+@mixin icon-box {
+  font-size:2em;
+  color: #606060;
+  line-height:2em;
+}
+
+.container-header{
+  padding: 0 1.4em;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+
+
+
+
+
+}
+.box{
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5em;
+  width: 25%;
+  .notification{
+
+
+    .icon-noti{
+      @include icon-box;
+    }
+    .badge {
+      position: absolute;
+      top: 5px;
+      right: 14.7rem;
+      padding: 0px 6px;
+      height: 1.5rem;
+      line-height: 1.5rem;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      color: white;
+      font-family: "ProximaNova", sans-serif;
+      background-color: rgb(218, 72, 72);
+
+    }
+  }
+
+  .info-user{
+
+
+    .icon-user{
+      @include icon-box;
+    }
+  }
+}
