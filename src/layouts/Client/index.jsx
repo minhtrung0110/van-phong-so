@@ -39,6 +39,7 @@ function ClientLayout({slot}) {
                             padding: 24,
                             minHeight: 360,
                             background: '#fff',
+
                         }}
                     >
                         {/*Content */}
@@ -54,6 +55,7 @@ function ClientLayout({slot}) {
                     }}
                 >
                    MinhTrung-VoThuan ©2023
+
                 </Footer>
             </Layout>
         </Layout>

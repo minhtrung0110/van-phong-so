@@ -6,6 +6,7 @@ import styles from './Header.module.scss'
 import {FaBell,  FaUserCircle} from "react-icons/fa";
 import classNames from "classnames/bind";
 import InfoUser from "~/components/Client/InfoUser";
+
 HeaderBar.propTypes = {
 
 };
@@ -19,6 +20,7 @@ function HeaderBar(props) {
         avatar: 'https://picsum.photos/200',
         role: 'Sale Person'
     }
+
     return (
         <>
             <Header

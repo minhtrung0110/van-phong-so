@@ -6,6 +6,7 @@ import Sider from "antd/es/layout/Sider";
 import {useNavigate} from "react-router-dom";
 import Company from '~/asset/images/logo.png'
 import './style.scss'
+
 SideBarCustom.propTypes = {
 
 };
