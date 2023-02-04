@@ -1,26 +1,50 @@
 import {
     FaCalendar,
-    FaFacebookMessenger,
-    FaFile, FaLaptop, FaPeopleArrows,
-    FaTasks,
-    FaTeamspeak,
+    FaFacebookMessenger, FaHome, FaTasks, FaUsers,
 } from "react-icons/fa";
 import React from "react";
-function getItem(label, key, icon, children) {
-    return {
-        key,
-        icon,
-        children,
-        label,
-    };
-}
-export  const listMenuClientItems=[
-    getItem('Công Việc', '/task', <FaTasks />,),
-    getItem('Lịch Biểu', '/schedule', <FaCalendar />),
-    getItem('Cuộc Họp', '/communication', <FaFacebookMessenger />, [
-        getItem('Tin Nhắn', '/communication/mess'),
-        getItem('Họp', '/communication/meeting'),
-    ]),
-    getItem('Nhân Sự', '/staff', <FaPeopleArrows />, ),
-    getItem('Văn Phòng Phẩm', '/stationery', <FaLaptop />),
+
+export const menu_client_items = [
+    {
+        id: 1,
+        name: 'Overview',
+        active: true,
+        link: '/',
+        icon: <FaHome />,
+        role: 1,
+    },
+    {
+        id: 2,
+        name: 'Công Việc ',
+        active: false,
+        link: '/task',
+        icon: <FaTasks />,
+        role: 2,
+    },
+    {
+        id: 3,
+        name: 'Lịch Biểu',
+        active: false,
+        link: '/schedule',
+        icon: <FaCalendar />,
+        role: 3,
+    },
+    {
+        id: 4,
+        name: 'Nhân Sự',
+        active: false,
+        link: '/staff',
+        icon: <FaUsers />,
+        role: 4,
+    },
+    {
+        id: 5,
+        name: 'Họp',
+        active: false,
+        link: '/meeting',
+        icon: <FaFacebookMessenger />,
+        role: 5,
+    },
+
+
 ];

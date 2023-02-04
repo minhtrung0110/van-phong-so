@@ -1,57 +1,44 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Menu} from "antd";
-import {listMenuClientItems} from "~/asset/data/menu-client-item";
+import {listMenuClientItems, menu_client_items} from "~/asset/data/menu-client-item";
 import Sider from "antd/es/layout/Sider";
-import {useNavigate} from "react-router-dom";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import Company from '~/asset/images/logo.png'
 import './style.scss'
+import {useDispatch, useSelector} from "react-redux";
+import {isCollapseSideBar} from "~/redux/selectors/dashboard/dashboardSelector";
+import {setCollapseSideBar} from "~/redux/reducer/dashboard/dashboardReducer";
+import {FaBuilding} from "react-icons/fa";
 
 SideBarCustom.propTypes = {
 
 };
 
 function SideBarCustom(props) {
-    const [collapsed, setCollapsed] = useState(false);
-    const navigate=useNavigate();
-
+    const location=useLocation()
+    const isCollapsed =useSelector(isCollapseSideBar)
     return (
-        <section id="sidebar">
+        <section id="sidebar" className={!!isCollapsed && 'hide'}>
             <a href="#" className="brand">
-                <i className='bx bxs-smile'></i>
+                <FaBuilding className='bx ' />
                 <span className="text">AdminHub</span>
             </a>
             <ul className="side-menu top">
-                <li className="active">
-                    <a href="#">
-                        <i className='bx bxs-dashboard'></i>
-                        <span className="text">Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i className='bx bxs-shopping-bag-alt'></i>
-                        <span className="text">My Store</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i className='bx bxs-doughnut-chart'></i>
-                        <span className="text">Analytics</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i className='bx bxs-message-dots'></i>
-                        <span className="text">Message</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i className='bx bxs-group'></i>
-                        <span className="text">Team</span>
-                    </a>
-                </li>
+                {
+                    menu_client_items.map((item,index)=>(
+                        <li   className={(item.link===location.pathname) && 'active'} key={index}>
+                            <NavLink to={item.link}
+
+                            >
+                                <span className='bx'>{item.icon}</span>
+                                <span className="text">{item.name}</span>
+                            </NavLink>
+                        </li>
+                    ))
+                }
+
+
             </ul>
             <ul className="side-menu">
                 <li>

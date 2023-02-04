@@ -125,4 +125,21 @@ body {
   #content main .table-data .todo .todo-list {
     min-width: 420px;
   }
+
+}
+/* Mobile: width < 740px */
+@media only screen and (max-width: 46.1875em) {
+
+  #sidebar {
+    width: 60px;
+
+  }
+  #sidebar .side-menu li a {
+    width: calc(48px - (4px * 2));
+    transition: width .3s ease;
+  }
+  #sidebar ~ #content {
+    width: calc(100% - 60px);
+    left: 60px;
+  }
 }

@@ -8,6 +8,8 @@ import ClientLayout from "~/layouts/Client";
 import ManageTaskPage from "~/pages/Client/ManageTask";
 import ManageSchedule from "~/pages/Client/ManageSchedule";
 import ManageMeeting from "~/pages/Client/ManageMeeting";
+import ManageStaff from "~/pages/Client/ManageStaff";
+import Overview from "~/pages/Client/Overview";
 
 function ProtectedRoutes(props) {
     return null;
@@ -42,9 +44,12 @@ function ClientRouter(props) {
             <Route path="/login" element={<LoginPage/>}/>
             {/* Requỉed login */}
             <Route element={<AuthRouter/>}>
+                <Route path="/" element={<ClientLayout slot={<Overview key={'a'}/>}/>}/>
                 <Route path="/task" element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
                 <Route path="/schedule" element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
-                <Route path="/communication/meeting" element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
+                <Route path="/meeting" element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
+                <Route path="/staff" element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>
+
 
             </Route>
         </Routes>

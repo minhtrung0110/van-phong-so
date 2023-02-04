@@ -1,0 +1,1 @@
+export const isCollapseSideBar = (state) => state.dashboard.collapseSideBar;
