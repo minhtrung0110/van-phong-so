@@ -7,10 +7,11 @@ import {FaBell,  FaUserCircle} from "react-icons/fa";
 import classNames from "classnames/bind";
 import InfoUser from "~/components/Client/InfoUser";
 
+import './style.scss'
+
 HeaderBar.propTypes = {
 
 };
-const cx = classNames.bind(styles);
 function HeaderBar(props) {
     const user={
         firstName: 'Le Pham',
@@ -23,27 +24,25 @@ function HeaderBar(props) {
 
     return (
         <>
-            <Header
-                style={{
-                    padding: 0,
-                    background:'#efefef',
-                }}
-
-            >
-                <div className={cx('container-header')}>
-                    <BreadcrumbCustom />
-                    <div className={cx('box')}>
-                        <div className={cx('notification')}>
-                            <div className={cx('icon-noti')} data-notify={10}>
-                                <FaBell className={cx('icon')} data-notify={10} />
-                            </div>
-                            <span className={cx('separator')}></span>
-                        </div>
-                          <InfoUser firstName={user.firstName} lastName={user.lastName}
-                                    email={user.email} role={user.role} avatar={user.avatar} />
+            <nav className='navbar'>
+                <i className='bx bx-menu'></i>
+                <a href="#" className="nav-link">Categories</a>
+                <form action="#">
+                    <div className="form-input">
+                        <input type="search" placeholder="Search..."/>
+                            <button type="submit" className="search-btn"><i className='bx bx-search'></i></button>
                     </div>
-                </div>
-            </Header>
+                </form>
+                <input type="checkbox" id="switch-mode" hidden/>
+                    <label htmlFor="switch-mode" className="switch-mode"></label>
+                    <a href="#" className="notification">
+                        <i className='bx bxs-bell'></i>
+                        <span className="num">8</span>
+                    </a>
+                    <a href="#" className="profile">
+                        <img src="img/people.png"/>
+                    </a>
+            </nav>
         </>
     );
 }
