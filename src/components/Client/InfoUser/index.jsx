@@ -4,6 +4,8 @@ import styles from './InfoUser.module.scss'
 import classNames from "classnames/bind";
 import ImgAvatar from "~/asset/images/avatar_user.png"
 import {Avatar} from "antd";
+import {FaPager, FaSignOutAlt, FaUser} from "react-icons/fa";
+import Menu from "~/components/commoms/Popper/Menu";
 
 InfoUser.propTypes = {
     avatar: PropTypes.string,
@@ -24,7 +26,26 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
         img.onerror = ()=> setShowImage(false)
     }
     checkImageUrl(avatar)
+    const userMenu = [
+        {
+            icon: <FaUser />,
+            title: 'Cài Đặt',
+            to: '/@hoaa',
+        },
+        {
+            icon: <FaPager  />,
+            title: 'Mở Rộng',
+            to: '/coin',
+        },
+        {
+            icon: <FaSignOutAlt />,
+            title: 'Đăng Xuất',
+            to: '/logout',
+            separate: true,
+        },
+    ];
     return (
+        <Menu   items={ userMenu} hideOnClick={false}>
         <div className={cx('box-user')}>
             {
                 !!showImage ? (<Avatar style={{backgroundColor: '#1d81ab', verticalAlign: 'middle'}} size="large"
@@ -41,6 +62,7 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
             </div>
 
         </div>
+        </Menu>
     );
 }
 

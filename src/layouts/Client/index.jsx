@@ -2,8 +2,7 @@ import React, {useLayoutEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import SideBarCustom from "~/components/commoms/SideBarCustom";
 import HeaderBar from "~/components/commoms/Header";
-import {useSelector} from "react-redux";
-import {isCollapseSideBar} from "~/redux/selectors/dashboard/dashboardSelector";
+import './style.scss'
 
 ClientLayout.propTypes = {
     slot: PropTypes.element.isRequired,

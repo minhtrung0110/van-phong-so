@@ -18,6 +18,7 @@ li {
   --poppins: 'Poppins', sans-serif;
   --lato: 'Lato', sans-serif;
 
+  --text-color: #333;
   --light: #F9F9F9;
   --blue: #3C91E6;
   --light-blue: #CFE8FF;
@@ -29,6 +30,13 @@ li {
   --light-yellow: #FFF2C6;
   --orange: #FD7238;
   --light-orange: #FFE0D3;
+  --border-color: #dbdbdb;
+  --border-focus-color: #888;
+
+  --gray40-color: #666; /* dark gray*/
+  --gray46-color: #757575;
+  --gray60-color: #999; /* light gray*/
+  --gray97-color: #e3e3e3; /* lighter gray :)*/
 }
 
 html {
@@ -143,3 +151,29 @@ body {
     left: 60px;
   }
 }
+
+/* --- ScrollBar Customizations --- */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #d6dee1;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #56accc;
+  border-radius: 10px;
+  border: 2px solid #d7d7d7;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #ea077a;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+
+
