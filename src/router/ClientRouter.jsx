@@ -10,6 +10,7 @@ import ManageSchedule from "~/pages/Client/ManageSchedule";
 import ManageMeeting from "~/pages/Client/ManageMeeting";
 import ManageStaff from "~/pages/Client/ManageStaff";
 import Overview from "~/pages/Client/Overview";
+import Profile from "~/pages/Client/Profile";
 
 function ProtectedRoutes(props) {
     return null;
@@ -49,6 +50,7 @@ function ClientRouter(props) {
                 <Route path="/schedule" element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
                 <Route path="/meeting" element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
                 <Route path="/staff" element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>
+                <Route path="/myprofile" element={<ClientLayout slot={<Profile key={'a'}/>}/>}/>
 
 
             </Route>

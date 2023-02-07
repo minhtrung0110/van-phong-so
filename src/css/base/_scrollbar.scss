@@ -1,0 +1,26 @@
+
+/* --- ScrollBar Customizations --- */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #d6dee1;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #56accc;
+  border-radius: 10px;
+  border: 2px solid #d7d7d7;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #ea077a;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+
+

@@ -30,12 +30,12 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
         {
             icon: <FaUser />,
             title: 'Cài Đặt',
-            to: '/@hoaa',
+            to: '/myprofile',
         },
         {
             icon: <FaPager  />,
             title: 'Mở Rộng',
-            to: '/coin',
+            to: '/expand',
         },
         {
             icon: <FaSignOutAlt />,
