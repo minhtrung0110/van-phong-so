@@ -2,9 +2,13 @@
 
 .box-avatar{
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   height: 350px;
   .container-img {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0 1rem 0;
     .img-avatar {
       opacity: 1;
       border-radius: 50%;
@@ -13,7 +17,7 @@
       transition: .5s ease;
       backface-visibility: hidden;
       box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
-      margin-top: 2rem;
+    //  margin-top: 2rem;
     }
 
     .middle {
@@ -41,7 +45,21 @@
     }
   }
 
+  .container-info{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    line-height:1.8rem;
+    .name {
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+    .role{
+      font-size: 1rem;
+      font-style: italic;
 
+    }
+  }
   .modal-upload-img .ant-modal-content{
     width: 40% !important;
   }

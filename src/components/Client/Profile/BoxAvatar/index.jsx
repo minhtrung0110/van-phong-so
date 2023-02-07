@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {Col, Image, Modal} from "antd";
+import {Button, Col, Image, Modal} from "antd";
 import Avatar from "react-avatar-edit";
 import './style.scss'
 import {FaCamera} from "react-icons/fa";
@@ -48,21 +48,28 @@ function BoxAvatar(props) {
                         <FaCamera className='icon-camera' />
                     </div>
             </div>
+            <div className="container-info">
+                <p className='name'>Lê Văn Nguyên Tu</p>
+                <span className='role'>Sale Person</span>
+                <Button type="dashed" block>
+                    Nhắn Tin
+                </Button>
+            </div>
 
             <Modal
-                title="Tải Ảnh Đại Diện"
+                title="Thay Đổi Ảnh Đại Diện"
                 open={isUpdateAvatar}
                 onCancel={handleCancelUpload}
                 onOk={handleUpload}
                 okText="Cập Nhật"
-                cancelText="Hủy"
+                cancelText="Hủy Bỏ"
                 okButtonProps={{
                     disabled: !!!preview,
                 }}
             >
                 <Avatar
-                    width={210}
-                    height={170}
+                    width={470}
+                    height={230}
                     onCrop={(view)=>setPreview(view)}
                     onClose={()=>setPreview(null)}
                     onBeforeFileLoad={handleBeforeFileUpload}
