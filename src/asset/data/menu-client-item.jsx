@@ -3,13 +3,14 @@ import {
     FaFacebookMessenger, FaHome, FaTasks, FaUsers,
 } from "react-icons/fa";
 import React from "react";
+import {config} from "~/config";
 
 export const menu_client_items = [
     {
         id: 1,
         name: 'Overview',
         active: true,
-        link: '/',
+        link: config.routes.overview,
         icon: <FaHome />,
         role: 1,
     },
@@ -17,7 +18,7 @@ export const menu_client_items = [
         id: 2,
         name: 'Công Việc ',
         active: false,
-        link: '/task',
+        link: config.routes.task,
         icon: <FaTasks />,
         role: 2,
     },
@@ -25,7 +26,7 @@ export const menu_client_items = [
         id: 3,
         name: 'Lịch Biểu',
         active: false,
-        link: '/schedule',
+        link:  config.routes.schedule,
         icon: <FaCalendar />,
         role: 3,
     },
@@ -33,7 +34,7 @@ export const menu_client_items = [
         id: 4,
         name: 'Nhân Sự',
         active: false,
-        link: '/staff',
+        link:  config.routes.staff,
         icon: <FaUsers />,
         role: 4,
     },
@@ -41,7 +42,7 @@ export const menu_client_items = [
         id: 5,
         name: 'Họp',
         active: false,
-        link: '/meeting',
+        link:  config.routes.meeting,
         icon: <FaFacebookMessenger />,
         role: 5,
     },

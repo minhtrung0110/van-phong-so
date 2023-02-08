@@ -31,6 +31,7 @@ function HeaderBar({onCollapse}) {
     const isCollapsed = useSelector(isCollapseSideBar)
     const dispatch = useDispatch();
     const location = useLocation();
+    console.log(location)
     const handleSwitchMode = (e) => {
         if (e.target.checked) {
             document.body.classList.add("dark");
@@ -64,7 +65,7 @@ function HeaderBar({onCollapse}) {
             <nav className='navbar'>
                 <FaBars className=' bx-menu' onClick={() => dispatch(setCollapseSideBar(!isCollapsed))}/>
                 <span className="nav-link">{
-                    dataConvertBreadcrumbLanguage.find((item) => ('/'.concat(item.href) === location.pathname)).label
+                    dataConvertBreadcrumbLanguage.find((item) => (item.href === location.pathname)).label
                 }</span>
                 <SearchCustom/>
                 <input type="checkbox" id="switch-mode" hidden onChange={(e) => handleSwitchMode(e)}/>

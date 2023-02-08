@@ -6,6 +6,7 @@ import ImgAvatar from "~/asset/images/avatar_user.png"
 import {Avatar} from "antd";
 import {FaPager, FaSignOutAlt, FaUser} from "react-icons/fa";
 import Menu from "~/components/commoms/Popper/Menu";
+import {config} from "~/config";
 
 InfoUser.propTypes = {
     avatar: PropTypes.string,
@@ -30,7 +31,7 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
         {
             icon: <FaUser />,
             title: 'Cài Đặt',
-            to: '/myprofile',
+            to:  config.routes.profile,
         },
         {
             icon: <FaPager  />,

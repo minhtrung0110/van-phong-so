@@ -1,9 +1,13 @@
+import {config} from "~/config";
+
+
 export  const dataConvertBreadcrumbLanguage=[
-    {href:'',label:'Tổng Quan'},
-    {href:'task',label:'Công Việc'},
-    {href:'schedule',label:'Lịch Biểu'},
-    {href:'communication',label:'Giao Tiếp'},
-    {href:'meeting',label:'Cuộc Họp'},
-    {href:'staff',label:'Nhân Sự'},
-    {href:'myprofile',label:'Thông Tin Cá Nhân'}
+    {href:config.routes.overview,label:'Tổng Quan'},
+    {href:config.routes.task,label:'Công Việc'},
+    {href:config.routes.schedule,label:'Lịch Biểu'},
+    {href:config.routes.meeting,label:'Cuộc Họp'},
+    {href:config.routes.staff,label:'Nhân Sự'},
+    {href:config.routes.profile,label:'Thông Tin Cá Nhân'},
+    {href:config.routes.notification,label:'Thông Báo'}
+
 ]

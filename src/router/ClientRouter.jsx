@@ -11,6 +11,8 @@ import ManageMeeting from "~/pages/Client/ManageMeeting";
 import ManageStaff from "~/pages/Client/ManageStaff";
 import Overview from "~/pages/Client/Overview";
 import Profile from "~/pages/Client/Profile";
+import NotificationsPage from "~/pages/Client/Notifications";
+import {config} from "~/config";
 
 function ProtectedRoutes(props) {
     return null;
@@ -45,12 +47,13 @@ function ClientRouter(props) {
             <Route path="/login" element={<LoginPage/>}/>
             {/* Requỉed login */}
             <Route element={<AuthRouter/>}>
-                <Route path="/" element={<ClientLayout slot={<Overview key={'a'}/>}/>}/>
-                <Route path="/task" element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
-                <Route path="/schedule" element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
-                <Route path="/meeting" element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
-                <Route path="/staff" element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>
-                <Route path="/myprofile" element={<ClientLayout slot={<Profile key={'a'}/>}/>}/>
+                <Route path={config.routes.overview} element={<ClientLayout slot={<Overview key={'a'}/>}/>}/>
+                <Route path={config.routes.task} element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
+                <Route path={config.routes.schedule} element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
+                <Route path={config.routes.meeting} element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
+                <Route path={config.routes.staff} element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>
+                <Route path={config.routes.profile} element={<ClientLayout slot={<Profile key={'a'}/>}/>}/>
+                <Route path={config.routes.notification} element={<ClientLayout slot={<NotificationsPage key={'a'}/>}/>}/>
 
 
             </Route>
