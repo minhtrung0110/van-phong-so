@@ -4,6 +4,7 @@ import styles from './DropdownNotify.module.scss'
 import classNames from "classnames/bind";
 import {FaBell} from "react-icons/fa";
 import {config} from "~/config";
+import {NavLink} from "react-router-dom";
 
 DropdownNotify.propTypes = {};
 const cx = classNames.bind(styles)
@@ -66,7 +67,7 @@ function DropdownNotify(props) {
 
                 </ul>
                 <footer className={cx("list__notify-footer")}>
-                    <a href={config.routes.notification} className={cx("list__notify-footer-btn")}>Xem tất cả</a>
+                    <NavLink to={config.routes.notification} className={cx("list__notify-footer-btn")}>Xem tất cả</NavLink>
                 </footer>
             </div>
         </div>

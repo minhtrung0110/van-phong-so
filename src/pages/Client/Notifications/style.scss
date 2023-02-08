@@ -1,0 +1,22 @@
+.container-notifications{
+    margin: 2rem 5rem;
+
+  .header-notifications{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1.3rem;
+    .icon-bell{
+      color: #d2a90b;
+      font-size: 1.8rem;
+      margin-right: 1rem;
+
+    }
+    .title{
+    color:var(--dark)
+    }
+  }
+  .list-notifications{
+    margin: 2rem 0 ;
+  }
+}

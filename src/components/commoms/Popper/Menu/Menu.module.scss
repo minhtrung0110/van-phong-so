@@ -12,9 +12,11 @@
     font-weight: 500;
     font-size: 15px;
     padding: 11px 16px;
+    color: var(--dark);
+    background-color: var(--light);
 
     &:hover {
-      background-color: rgb(243, 241, 241);
+      background-color: var(--grey);
     }
   }
 }
@@ -24,6 +26,8 @@
 .menu-body {
   overflow-y: auto;
   overflow-x: hidden;
+
+
 }
 
 

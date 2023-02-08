@@ -1,0 +1,37 @@
+$height-img:5rem;
+.notification-item{
+  background-color: var(--light);
+  border-radius: 3px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  height: $height-img + 2rem;
+  margin-bottom: 0.3rem;
+  .notification-header{
+      margin: 0 3rem;
+    .img-thumbnail{
+      border-radius:50%;
+      width: $height-img;
+      height: $height-img;
+      border: 2px solid rgba(0, 0, 0, 0.42);
+    }
+  }
+
+  .notification-content{
+    color: var(--dark);
+    padding: 0 1rem;
+
+
+    .notification-title{
+      font-size: 1rem;
+    }
+    .notification-description{
+
+    }
+
+    .notification-date{
+      display: block;
+      font-style: italic;
+    }
+  }
+}
