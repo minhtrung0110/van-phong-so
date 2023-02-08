@@ -8,11 +8,11 @@
 /* MAIN */
 #content main {
   width: 100%;
-  padding: 36px 24px;
+  padding: 30px 24px;
   font-family: var(--poppins);
   height: 1000px;
   //max-height: calc(100vh - 56px);
-  overflow-y: auto;
+
 }
 html::-webkit-scrollbar-thumb {
   background-color: #d6dee1;
@@ -23,3 +23,20 @@ html::-webkit-scrollbar-thumb {
 html::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
+
+// Mobile
+  @media only screen and (max-width: 768px) {
+
+    #content main{
+      padding: 5px;
+    }
+    #content{
+      left: 0;
+    }
+  }
+
+  /* Tablet: width >= 740px and width < 1024px */
+  @media only screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+
+
+  }

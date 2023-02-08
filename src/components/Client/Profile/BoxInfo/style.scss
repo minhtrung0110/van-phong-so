@@ -1,0 +1,64 @@
+.box-info{
+  margin-left: 2rem;
+  height: auto;
+  padding:2rem 2rem 2rem 3rem;
+
+  .header-box-info{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem ;
+    .btn-edit-info{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #032f31;
+    }
+  }
+  // EDIT View
+  .form-edit-user{
+    margin: 1rem 0;
+    label{
+      font-weight: bold;
+    }
+    input{
+      font-size: 1rem;
+    }
+  }
+  // Normal View
+  .info-user {
+    padding: 0 2rem;
+    margin-bottom: 2rem;
+    .tb-info-user {
+      font-size: 1em;
+      color: var(--text-color);
+
+      .row-item {
+        display: flex;
+
+        align-items: center;
+        line-height: 3.5rem;
+        border-bottom: 1px solid rgb(218, 218, 218);
+
+        .title {
+          font-weight: bold;
+          justify-content: flex-start;
+        }
+
+        .content {
+          justify-content: space-around;
+
+        }
+      }
+
+    }
+  }
+}
+@media only screen and (max-width: 760px) {
+  /* Styles mobile */
+  .box-info {
+    margin: 1rem;
+    height: auto;
+    padding: 0;
+
+  }
+}

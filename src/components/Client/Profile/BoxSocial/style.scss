@@ -1,0 +1,56 @@
+.box-social{
+  padding: 2rem;
+  height: 350px;
+  margin-top: 2em;
+    .tb-social{
+      font-size: 1rem;
+      font-weight: bold;
+
+      .row-item{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        line-height:3rem;
+        margin: 0.5rem 0;
+        border-bottom: 1px solid rgba(61, 52, 60, 0.7);
+        &:hover{
+          color: #0d6efd;
+        }
+          .icons{
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            .fb{
+              color: #3b5998;
+            }
+            .ig{
+              color: #f10893;
+            }
+            .tw{
+              color: #1da1f2;
+            }
+            .ws{
+              color: #25d366;
+            }
+            .lk{
+              color: #0077b5
+            ;
+            }
+            .title{
+              font-size: 1rem;
+              margin-left: 0.5rem;
+            }
+          }
+        .user{
+
+        }
+      }
+    }
+}
+
+@media only screen and (max-width: 760px) {
+  /* Styles mobile */
+  .box-social{
+
+  }
+}

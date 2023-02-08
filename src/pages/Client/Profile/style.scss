@@ -2,14 +2,19 @@
 .container-user{
   width: 100%;
   height: 100px;
-  padding: 2rem 4rem ;
+  padding: 1rem 0.1rem  1rem 0 ;
 
 
-  .box-info{
-    margin-left: 2rem;
+
+  .avatar-social{
+    padding:0;
   }
-  .box-social{
-    margin-top: 2rem;
-    height: 300px;
+}
+@media (max-width: 768px) {
+  .container-user {
+    padding: 0;
+    margin: 5px 0;
+    width: 95%;
+    height: auto;
   }
 }

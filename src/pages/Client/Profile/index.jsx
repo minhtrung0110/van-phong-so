@@ -4,6 +4,8 @@ import {Col, Row} from "antd";
 import './style.scss'
 import Avatar from "react-avatar-edit";
 import BoxAvatar from "~/components/Client/Profile/BoxAvatar";
+import BoxInfo from "~/components/Client/Profile/BoxInfo";
+import BoxSocial from "~/components/Client/Profile/BoxSocial";
 Profile.propTypes = {
 
 };
@@ -11,13 +13,13 @@ Profile.propTypes = {
 function Profile(props) {
     return (
         <Row className='container-user'>
-            <BoxAvatar />
-            <Col className='box-info box' span={14}>
+            <Col className='avatar-social'  xs={{ span: 24, offset: 1 }} lg={{ span: 7, offset: 1 }}>
+                <BoxAvatar />
+                <BoxSocial />
 
             </Col>
-            <Col className='box-social box' span={22}>
+            <BoxInfo />
 
-            </Col>
         </Row>
     );
 }

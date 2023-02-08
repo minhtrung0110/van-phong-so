@@ -41,7 +41,7 @@ function BoxAvatar(props) {
         }
     }
     return (
-        <Col className='box-avatar box' span={8}>
+        <div className='box-avatar box'>
             <div className="container-img" onClick={handleOpenPopupUpload}>
                 <img src={src} className='img-avatar' />
                     <div className="middle">
@@ -78,7 +78,7 @@ function BoxAvatar(props) {
                 />
             </Modal>
 
-        </Col>
+        </div>
     );
 }
 

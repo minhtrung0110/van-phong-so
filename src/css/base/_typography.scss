@@ -1,5 +1,8 @@
 .box {
-  border-radius: 6px;
+  border-radius: 4px;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
   background-color: var(--light);
+}
+.c-pointer {
+  cursor: pointer;
 }
