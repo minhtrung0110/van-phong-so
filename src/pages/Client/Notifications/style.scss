@@ -6,6 +6,8 @@
     justify-content: flex-start;
     align-items: center;
     font-size: 1.3rem;
+    height: 3rem;
+    padding: 0;
     .icon-bell{
       color: #d2a90b;
       font-size: 1.8rem;
@@ -16,7 +18,61 @@
     color:var(--dark)
     }
   }
-  .list-notifications{
-    margin: 2rem 0 ;
+  .filter-notifications{
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    height: 3.5rem;
+    justify-content: center;
+    background-color: var(--dark);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    .nav-fiter{
+
+      align-items: center;
+      justify-content: center;
+      .tab-item{
+        width: 100px;
+        padding: 1.2rem 2rem 1rem 2rem;
+        cursor: pointer;
+        position: relative;
+        bottom: 0;
+        margin:0;
+        color: var(--light);
+        &:after {
+          position: absolute;
+          content: "";
+          width: 0%;
+          height: 5px;
+          background-color: #30c9ff;
+          left: 50%;
+          bottom: 0px;
+          transition: all 0.4s ease-in-out;
+
+        }
+        &:hover:after {
+          width: 100%;
+          left: 0;
+        }
+
+        &:hover{
+          //background-color: #e05895;
+          //border-bottom:5px solid #ce0d64;
+          //border-bottom-left-radius: 2px;
+          //border-bottom-right-radius: 2px;
+          //color: var(--light);
+        }
+      }
+      .active  {
+       background-color:var(--light);
+        color: var(--dark);
+
+      }
+    }
+
   }
+  .list-notifications{
+    margin:  0 ;
+  }
+
+
 }
