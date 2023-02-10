@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/van-phong-so/static/css/main.16860735.css",
+    "main.js": "/van-phong-so/static/js/main.c9e63602.js",
+    "static/js/787.c2597436.chunk.js": "/van-phong-so/static/js/787.c2597436.chunk.js",
+    "static/media/boxicons.svg": "/van-phong-so/static/media/boxicons.61829f134e586c0c9e89.svg",
+    "static/media/wave_login_client.png": "/van-phong-so/static/media/wave_login_client.40d1887aeaea7ecd70cb.png",
+    "static/media/avatar_user.png": "/van-phong-so/static/media/avatar_user.3b139897599d68818047.png",
+    "static/media/boxicons.eot": "/van-phong-so/static/media/boxicons.65a8ce52fc5427e8f94d.eot",
+    "static/media/boxicons.woff": "/van-phong-so/static/media/boxicons.d12afc36557395143e4b.woff",
+    "static/media/boxicons.ttf": "/van-phong-so/static/media/boxicons.db9ddb1898dbd76badca.ttf",
+    "static/media/not_found.jpg": "/van-phong-so/static/media/not_found.bd905178db63e7bb5514.jpg",
+    "static/media/boxicons.woff2": "/van-phong-so/static/media/boxicons.df635aaf04cd75132f62.woff2",
+    "static/media/bg_login_client.svg": "/van-phong-so/static/media/bg_login_client.6a6537711c52105628c05fe5c6ae9945.svg",
+    "static/media/imagedefault.jpg": "/van-phong-so/static/media/imagedefault.9e348242608b01cb62de.jpg",
+    "static/media/avatar_login_client.svg": "/van-phong-so/static/media/avatar_login_client.deb822fea1001b6d12ff18c31b23aa28.svg",
+    "index.html": "/van-phong-so/index.html",
+    "main.16860735.css.map": "/van-phong-so/static/css/main.16860735.css.map",
+    "main.c9e63602.js.map": "/van-phong-so/static/js/main.c9e63602.js.map",
+    "787.c2597436.chunk.js.map": "/van-phong-so/static/js/787.c2597436.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.16860735.css",
+    "static/js/main.c9e63602.js"
+  ]
+}
