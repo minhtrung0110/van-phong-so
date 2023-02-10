@@ -5,12 +5,14 @@ import TableLayout from "~/components/commoms/Table";
 import {FaPen, FaTimesCircle} from "react-icons/fa";
 import ImageCustom from "~/components/commoms/Image";
 import {Button, Modal} from "antd";
+import DetailStaff from "~/components/Client/Staff/DetailStaff";
 StaffTable.propTypes = {
 
 };
 
 function StaffTable({tableHeader,tableBody}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [detailStaff,setDetailStaff] = useState({});
     const [isColoseModal,setIsColoseModal] = useState(false);
     const showModal = () => {
         setIsModalOpen(true);
@@ -21,11 +23,15 @@ function StaffTable({tableHeader,tableBody}) {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const handleShowDetailStaff=(user)=>{
+        setIsModalOpen(true);
+        setDetailStaff(user)
+    }
     const renderTableBody = () => {
         return tableBody.map((item) => {
             return (
                 <tr key={item.id} className="row-data c-pointer"
-                    onClick={showModal}
+                    onClick={()=>handleShowDetailStaff(item)}
                 >
                     <td>
                         <ImageCustom type="avatar" src={item.avatar} />
@@ -78,15 +84,14 @@ function StaffTable({tableHeader,tableBody}) {
             <div className="table-staff" >
                 <TableLayout tableHeader={tableHeader} tableBody={renderTableBody()} />
 
-                <Modal title="Basic Modal" open={isModalOpen}
+                <Modal title="Thông Tin Nhân Viên" open={isModalOpen}
 
                        maskClosable={true}
                         onCancel={handleCancel}
-
+                       footer={null}
+                       width={1100}
                        >
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
+                    {<DetailStaff user={detailStaff} />}
                 </Modal>
             </div>
     );
