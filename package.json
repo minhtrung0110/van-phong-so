@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
-    "babel-plugin-module-resolver": "^5.0.0"
+    "babel-plugin-module-resolver": "^5.0.0",
+    "gh-pages": "^5.0.0"
   }
 }
