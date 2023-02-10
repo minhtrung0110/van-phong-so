@@ -11,7 +11,6 @@
     "antd": "^5.1.6",
     "classnames": "^2.3.2",
     "customize-cra": "^1.0.0",
-    "normalize-css": "^2.3.1",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
     "react-avatar-edit": "^1.2.0",
@@ -28,7 +27,9 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -51,5 +52,6 @@
   "devDependencies": {
     "babel-plugin-module-resolver": "^5.0.0",
     "gh-pages": "^5.0.0"
-  }
+  },
+  "homepage": "http://minhtrung0110.github.io/van-phong-so"
 }
