@@ -1,11 +1,8 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {Header} from "antd/es/layout/layout";
-import BreadcrumbCustom from "~/components/commoms/BreadcrumbCustom";
-import styles from './Header.module.scss'
 import {FaBars, FaBell, FaPager, FaSearch, FaSignOutAlt, FaUser, FaUserCircle} from "react-icons/fa";
 import classNames from "classnames/bind";
-import InfoUser from "~/components/Client/InfoUser";
+import InfoUser from "~/components/commoms/InfoUser";
 
 import './style.scss'
 import {useDispatch, useSelector} from "react-redux";

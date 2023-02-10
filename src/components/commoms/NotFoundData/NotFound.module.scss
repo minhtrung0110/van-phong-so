@@ -1,0 +1,18 @@
+.box-notfound{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+  background-color: var(--light);
+  padding:4rem 1rem  ;
+  border-radius:6px;
+  .notfound-title{
+    margin: 4rem 0;
+  }
+  .notfound-img{
+    border-radius:4px;
+    object-fit: cover;
+    width: 35%;
+  }
+}

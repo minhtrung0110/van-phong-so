@@ -8,7 +8,6 @@ import Company from '~/asset/images/logo.png'
 import './style.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {isCollapseSideBar} from "~/redux/selectors/dashboard/dashboardSelector";
-import {setCollapseSideBar} from "~/redux/reducer/dashboard/dashboardReducer";
 import {FaBuilding} from "react-icons/fa";
 
 SideBarCustom.propTypes = {
@@ -20,7 +19,7 @@ function SideBarCustom(props) {
     const isCollapsed =useSelector(isCollapseSideBar)
     return (
         <section id="sidebar" className={!!isCollapsed && 'hide'}>
-            <a href="#" className="brand">
+            <a href="~/layouts/Client/SideBarCustom/index#" className="brand">
                 <FaBuilding className='bx ' />
                 <span className="text">AdminHub</span>
             </a>
@@ -42,13 +41,13 @@ function SideBarCustom(props) {
             </ul>
             <ul className="side-menu">
                 <li>
-                    <a href="#">
+                    <a href="~/layouts/Client/SideBarCustom/index#">
                         <i className='bx bxs-cog'></i>
                         <span className="text">Settings</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" className="logout">
+                    <a href="~/layouts/Client/SideBarCustom/index#" className="logout">
                         <i className='bx bxs-log-out-circle'></i>
                         <span className="text">Logout</span>
                     </a>

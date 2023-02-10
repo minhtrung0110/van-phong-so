@@ -1,0 +1,28 @@
+.container-staff{
+
+
+  .header-staff-page{
+    padding: 1rem 2rem;
+
+   .title{
+     display: flex;
+     align-items: center;
+      font-size: var(--18px);
+     .icon-staff{
+       font-size: var(--22px);
+       margin-right: 5px;
+       color: #a4026c;
+     }
+   }
+    .filter-staff-page{
+
+    }
+    .content-staff-page{
+    display: flex;
+
+    }
+
+  }
+
+
+}

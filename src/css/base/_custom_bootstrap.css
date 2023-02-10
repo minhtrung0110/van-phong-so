@@ -1,0 +1,92 @@
+.dropdown-menu {
+  right: 0;
+  left: auto !important;
+}
+
+form label {
+  color: var(--bs-black);
+}
+
+.form-control {
+  border-width: var(--2px);
+}
+
+.form-control:focus {
+  border-color: var(--bs-focus-input);
+}
+
+.form-password .show-hide-password {
+  border-width: 2px;
+  border-left: 0;
+  background-color: var(--bs-white);
+}
+
+.form-password .fp-input {
+  position: relative;
+}
+
+.form-password svg {
+  position: absolute;
+  top: var(--12px);
+  bottom: var(--12px);
+  right: var(--12px);
+  cursor: pointer;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+.form-check-input:checked {
+  background-color: var(--bs-danger);
+  border-color: var(--bs-danger);
+}
+
+.form-check-input:focus {
+  box-shadow: none;
+  border-color: var(--bs-danger);
+}
+
+.modal-content {
+  border: none;
+}
+
+.modal-backdrop,
+.modal {
+  --bs-backdrop-zindex: 1030;
+}
+.border-radius-2px {
+  border-radius: 5px;
+}
+.row-data {
+  overflow: hidden;
+}
+.row-data:hover {
+  transform: scale(1.01);
+  background-color: var(--bs-white);
+  box-shadow: 1px 3px 3px rgba(139, 142, 142, 0.3);
+  border-radius: 4px;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.btn-show-item:hover{
+  background-color: var(--blue-100)
+}
+.w-40{
+  width:40% !important;
+}
+.w-30{
+  width:30% !important;
+}
+.w-35{
+  width:35% !important;
+}
+.w-38{
+  width:38% !important;
+}
+.w-60{
+  width:60% !important;
+}
+

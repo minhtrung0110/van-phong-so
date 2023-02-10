@@ -1,7 +1,7 @@
 import React, {useLayoutEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import SideBarCustom from "~/components/commoms/SideBarCustom";
-import HeaderBar from "~/components/commoms/Header";
+import SideBarCustom from "~/layouts/Client/SideBarCustom";
+import HeaderBar from "~/layouts/Client/Header";
 import './style.scss'
 
 ClientLayout.propTypes = {
