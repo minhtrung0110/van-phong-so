@@ -27,9 +27,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -50,8 +48,6 @@
     ]
   },
   "devDependencies": {
-    "babel-plugin-module-resolver": "^5.0.0",
-    "gh-pages": "^5.0.0"
-  },
-  "homepage": "http://minhtrung0110.github.io/van-phong-so"
+    "babel-plugin-module-resolver": "^5.0.0"
+  }
 }
