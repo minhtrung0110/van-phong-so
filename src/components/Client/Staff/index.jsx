@@ -90,6 +90,7 @@ function StaffTable({tableHeader,tableBody}) {
                         onCancel={handleCancel}
                        footer={null}
                        width={1100}
+
                        >
                     {<DetailStaff user={detailStaff} />}
                 </Modal>

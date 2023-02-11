@@ -1,4 +1,4 @@
-.navbar form {
+.search-custom {
   max-width: 400px;
   width: 100%;
   margin-right: auto;
@@ -7,7 +7,7 @@
     align-items: center;
     height: 36px;
 
-    input {
+    .input-search {
       flex-grow: 1;
       padding: 0 16px;
       height: 100%;
@@ -18,7 +18,7 @@
       width: 100%;
       color: var(--dark);
     }
-    button {
+    .search-btn {
       width: 36px;
       height: 100%;
       display: flex;
@@ -33,5 +33,34 @@
       cursor: pointer;
     }
   }
+
+}
+@media screen and (max-width: 576px) {
+  .search-custom .form-input .input-search{
+    display: none;
+  }
+
+  .search-custom .form-input .search-btn {
+    width: auto;
+    height: auto;
+    background: transparent;
+    border-radius: 0px;
+    color: var(--dark);
+  }
+
+  .show .form-input .input-search {
+    display: block;
+    width: 100%;
+  }
+  .show .form-input .search-btn {
+    width: 36px;
+    height: 100%;
+    border-radius: 0 36px 36px 0;
+    color: var(--light);
+    background: var(--red);
+  }
+
+
+
 
 }
