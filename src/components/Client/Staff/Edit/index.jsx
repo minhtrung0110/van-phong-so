@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
-
-AddStaff.propTypes = {
+EditStaff.propTypes = {
 
 };
 
-function AddStaff(props) {
+function EditStaff(props) {
     return (
-        <div>Add</div>
+        <div>Edit</div>
     );
 }
 
-export default AddStaff;
+export default EditStaff;

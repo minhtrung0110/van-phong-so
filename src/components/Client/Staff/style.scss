@@ -235,3 +235,13 @@
     }
   }
 }
+.box-confirmation{
+  display: flex;
+  align-items: center;
+  margin: 1rem ;
+  .icon{
+    font-size: var(--28px);
+    color: #f3d206;
+    margin-right: 2rem;
+  }
+}

@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import TableLayout from "~/components/commoms/Table";
-import {FaPen, FaTimesCircle} from "react-icons/fa";
+import {FaExclamationTriangle, FaPen, FaQuestionCircle, FaTimesCircle} from "react-icons/fa";
 import ImageCustom from "~/components/commoms/Image";
 import {Button, Modal} from "antd";
 import DetailStaff from "~/components/Client/Staff/DetailStaff";
+import {useDispatch} from "react-redux";
+import {setIsEdit} from "~/redux/reducer/staff/staffReducer";
 StaffTable.propTypes = {
 
 };
@@ -14,6 +16,11 @@ function StaffTable({tableHeader,tableBody}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [detailStaff,setDetailStaff] = useState({});
     const [isColoseModal,setIsColoseModal] = useState(false);
+    const [showPopupDelete, setShowPopupDelete] = useState({
+        staff_id: null,
+        show: false,
+    });
+    const dispatch=useDispatch()
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -27,6 +34,42 @@ function StaffTable({tableHeader,tableBody}) {
         setIsModalOpen(true);
         setDetailStaff(user)
     }
+    const handleEditStaff = async (e, id) => {
+        // e.stopPropagation();
+        // const data = await getStaffById(id);
+        // if (Object.keys(data).length > 0) {
+        //     dispatch(setStaff(data));
+            dispatch(setIsEdit(true));
+        // } else if (data === 401) {
+        //     Notiflix.Block.remove('#root');
+        // } else {
+        //     Notiflix.Block.remove('#root');
+        //     ErrorToast('Something went wrong. Please try again', 3000);
+        // }
+    };
+    const handleRemoveStaff = async (id) => {
+        //e.stopPropagation();
+        // const result = await deleteStaff(id);
+        // console.log('result', result);
+        // if (result === 200) {
+        //     SuccessToast('Remove staff successfully', 3000);
+        // } else if (result === 404) {
+        //     ErrorToast('Remove staffs unsuccessfully', 3000);
+        //     Notiflix.Block.remove('#root');
+        // } else if (result === 401) {
+        //     Notiflix.Block.remove('#root');
+        // } else {
+        //     Notiflix.Block.remove('#root');
+        //     ErrorToast('Something went wrong. Please try again', 3000);
+        // }
+        setShowPopupDelete({ ...showPopupDelete, show: false });
+       // dispatch(setIsReset(Math.random()));
+    };
+
+    const showConfirmDeleteStaff = (e, id) => {
+        e.stopPropagation();
+        setShowPopupDelete({ staff_id: id, show: true });
+    };
     const renderTableBody = () => {
         return tableBody.map((item) => {
             return (
@@ -60,7 +103,7 @@ function StaffTable({tableHeader,tableBody}) {
                         <div className="d-flex">
                             <button
                                 id="edit-staff"
-                               // onClick={(e) => handleEditStaff(e, item.id)}
+                               onClick={(e) => handleEditStaff(e, item.id)}
                                 className=" btn-action"
                             >
                                 <FaPen className="icon-edit" />
@@ -68,7 +111,7 @@ function StaffTable({tableHeader,tableBody}) {
                             <button
                                 id="disabled-user"
                                 onClick={(e) => {
-                               //     showConfirmDeleteStaff(e, item.id);
+                                showConfirmDeleteStaff(e, item.id);
                                 }}
                                 className="btn-action"
                             >
@@ -90,9 +133,30 @@ function StaffTable({tableHeader,tableBody}) {
                         onCancel={handleCancel}
                        footer={null}
                        width={1100}
-
+                       style={{ top: 20 }}
                        >
                     {<DetailStaff user={detailStaff} />}
+                </Modal>
+                <Modal
+                    title="Xác Nhận Xóa"
+                    open={showPopupDelete.show}
+                    onOk={()=>handleRemoveStaff(showPopupDelete.staff_id)}
+                    onCancel={(e) => setShowPopupDelete({ ...showPopupDelete, show: false })}
+                    okText="Xóa"
+                    centered
+                    cancelText="Hủy"
+                    footer={[
+
+                        <Button key="2" onClick={(e) => setShowPopupDelete({ ...showPopupDelete, show: false })}>Hủy</Button>,
+                        <Button key="3" type="primary" danger onClick={()=>handleRemoveStaff(showPopupDelete.staff_id)}>
+                           Xóa
+                        </Button>
+                    ]}
+                >
+                 <div className="box-confirmation">
+                     <FaExclamationTriangle className='icon'/>
+                     <span >Bạn có thực sự muốn xóa nhân viên này ?</span>
+                 </div>
                 </Modal>
             </div>
     );
