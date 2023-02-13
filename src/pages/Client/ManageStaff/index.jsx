@@ -4,12 +4,12 @@ import StaffTable from "~/components/Client/Staff";
 import {staff_table_header} from "~/asset/data/staff-table-header";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import './style.scss'
-import {FaFileExcel, FaUser, FaUsers} from "react-icons/fa";
+import {FaFileDownload, FaFileExcel, FaFileUpload, FaUser, FaUsers} from "react-icons/fa";
 import {useSelector} from "react-redux";
 import {isAddStaffSelector, isEditStaffSelector} from "~/redux/selectors/staff/staffSelector";
 import AddStaff from "~/components/Client/Staff/Add";
 import EditStaff from "~/components/Client/Staff/Edit";
-import {Col, Row} from "antd";
+import {Button, Col, Row, Tooltip} from "antd";
 import SearchSelection from "~/components/commoms/SearchHideButton";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import FilterRadiobox from "~/components/commoms/FilterRadiobox";
@@ -63,13 +63,21 @@ function ManageStaff(props) {
                     !isAddStaff && !isEditStaff && (
                         <div className='filter-staff-page'>
                             <div  className='filter-group' >
-                                <FilterRadiobox  />
+                                <FilterRadiobox   width='15.2rem'/>
                                 <FilterCheckbox />
 
                             </div>
                             <div className='search-excel' >
                                 <SearchHidenButton  height='2.4rem' width='20rem' backgroundButton='#1477DAFF'/>
-                                <FaFileExcel />
+                                <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
+                                    <Button className='btn'><FaFileUpload className='icon'/></Button>
+                                </Tooltip>
+                                <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
+                                    <Button className='btn' ><FaFileDownload className='icon' /></Button>
+                                </Tooltip>
+
+
+
                             </div>
                         </div>
                     )

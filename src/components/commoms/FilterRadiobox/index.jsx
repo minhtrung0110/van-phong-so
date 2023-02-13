@@ -4,10 +4,13 @@ import styles from './FilterRadiobox.module.scss'
 import classNames from "classnames/bind";
 import {Select, Input, DatePicker} from "antd";
 
-FilterRadiobox.propTypes = {};
+FilterRadiobox.propTypes = {
+    width: PropTypes.string,
+    height: PropTypes.string,
+};
 const cx = classNames.bind(styles)
 
-function FilterRadiobox(props) {
+function FilterRadiobox({width, height}) {
     const [selectedItem, setSelectedItem] = useState()
     const lists = [
         {
@@ -33,12 +36,14 @@ function FilterRadiobox(props) {
     };
     return (
         <div className={cx('filter-box')}>
-            <Input.Group compact >
+            <Input.Group compact className={cx('input-group')}
+            style={{width:width, height:height}}
+            >
                 <Input
                     size='large'
                     className={cx('filter-title')}
                     style={{
-                        width: '29%',
+                        width: '44%',
                         fontWeight: 'bold',
                         color: 'white',
                         backgroundColor:'#0d6efd',
