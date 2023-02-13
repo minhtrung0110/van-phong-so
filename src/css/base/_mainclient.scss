@@ -63,7 +63,9 @@ body {
     display: none;
   }
 }
-
+input:focus {
+  border: 1px solid #0d6efd;
+}
 
 
 

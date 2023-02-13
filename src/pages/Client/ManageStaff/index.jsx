@@ -4,13 +4,16 @@ import StaffTable from "~/components/Client/Staff";
 import {staff_table_header} from "~/asset/data/staff-table-header";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import './style.scss'
-import {FaUser, FaUsers} from "react-icons/fa";
+import {FaFileExcel, FaUser, FaUsers} from "react-icons/fa";
 import {useSelector} from "react-redux";
 import {isAddStaffSelector, isEditStaffSelector} from "~/redux/selectors/staff/staffSelector";
 import AddStaff from "~/components/Client/Staff/Add";
 import EditStaff from "~/components/Client/Staff/Edit";
 import {Col, Row} from "antd";
-import SearchSelection from "~/components/commoms/SearchSelection";
+import SearchSelection from "~/components/commoms/SearchHideButton";
+import SearchHidenButton from "~/components/commoms/SearchHideButton";
+import FilterRadiobox from "~/components/commoms/FilterRadiobox";
+import FilterCheckbox from "~/components/commoms/FilterCheckbox";
 
 ManageStaff.propTypes = {};
 
@@ -58,17 +61,17 @@ function ManageStaff(props) {
                 </div>
                 {
                     !isAddStaff && !isEditStaff && (
-                        <Row className='filter-staff-page'>
-                            <Col xs={{ span: 24, offset: 1 }} lg={{ span: 8, offset: 1 }}>
+                        <div className='filter-staff-page'>
+                            <div  className='filter-group' >
+                                <FilterRadiobox  />
+                                <FilterCheckbox />
 
-                            </Col>
-                            <Col xs={{ span: 24, offset: 1 }} lg={{ span: 8, offset: 1 }}>
-
-                            </Col>
-                            <Col xs={{ span: 24, offset: 1 }} lg={{ span: 8, offset: 1 }}>
-                                <SearchSelection />
-                            </Col>
-                        </Row>
+                            </div>
+                            <div className='search-excel' >
+                                <SearchHidenButton  height='2.4rem' width='20rem' backgroundButton='#1477DAFF'/>
+                                <FaFileExcel />
+                            </div>
+                        </div>
                     )
                 }
             </div>
