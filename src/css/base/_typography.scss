@@ -24,3 +24,135 @@
 .fst-ital{
   font-style: italic !important;
 }
+.mr-2r{
+  margin-right: 2rem !important;
+}
+
+//style button global
+@mixin btn {
+  font-weight: 400;
+  text-align: center;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  border-radius: .25rem;
+  color: #fff;
+  height: 2.5rem;
+  background-color: #007bff;
+}
+@mixin btn-outline {
+  font-weight: 400;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  border-radius: .25rem;
+  height: 2.5rem;
+  background-color: #ffffff;
+}
+
+.btn-default{
+  @include btn;
+  background-color: #ffffff !important;
+  border: 1px solid #cecdcd;
+}
+.btn-primary{
+  @include btn;
+  background-color: #1758e7 !important;
+  color: white;
+}
+.btn-success{
+  @include btn;
+  background-color: #166932 !important;
+  color: white;
+}
+.btn-info{
+  @include btn;
+  background-color: #2ba4be !important;
+  color: white;
+}
+.btn-warning{
+  @include btn;
+  background-color: #bea60e !important;
+  color: white;
+}
+.btn-danger{
+  @include btn;
+  background-color: #930909 !important;
+  color: white;
+}
+.btn-link{
+  @include btn;
+  background-color: #ffffff !important;
+}
+
+.btn-outline-default{
+  @include  btn-outline;
+  color: #626262;
+  border: 1px solid #727372;
+  &:hover{
+    background-color: #8d8d8d;
+    color: white;
+  }
+}
+.btn-outline-primary{
+  @include  btn-outline;
+  color: #074cce;
+  border: 1px solid #074cce;
+  &:hover{
+    background-color: #074cce;
+    color: white;
+  }
+}
+.btn-outline-success{
+@include  btn-outline;
+  color: #21803f;
+  border: 1px solid #21803f;
+  &:hover{
+    background-color: #21803f;
+    color: white;
+  }
+}
+.btn-outline-info{
+  @include  btn-outline;
+  color: #35b4cb;
+  border: 1px solid #35b4cb;
+  &:hover{
+    background-color: #35b4cb;
+    color: white;
+  }
+}
+.btn-outline-warning{
+  @include  btn-outline;
+  color: #c9b016;
+  border: 1px solid #c9b016;
+  &:hover{
+    background-color: #c9b016;
+    color: white;
+  }
+}
+.btn-outline-danger{
+  @include  btn-outline;
+  color: #c90505;
+  border: 1px solid #dc0a0a;
+  &:hover{
+    background-color: #da0909;
+    color: #ffffff !important;
+    border: 1px solid #dc0a0a !important;
+  }
+}
+.btn-outline-link{
+  @include  btn-outline;
+  color: #3c413d;
+  border: 1px solid #323332;
+  &:hover{
+    background-color: #131313;
+    color: white;
+  }
+}
+.btn:hover{
+  background-color: #0069d9;
+
+}

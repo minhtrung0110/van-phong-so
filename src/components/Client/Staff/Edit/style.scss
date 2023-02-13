@@ -1,0 +1,53 @@
+@mixin bx-info {
+  height: auto;
+  padding: 2rem 8rem;
+  margin-bottom: 1.5rem;
+}
+
+.edit-staff {
+  padding: 1.5rem 3.5rem;
+
+  .basic-info {
+    @include bx-info;
+
+    .gr-ip-e-s label {
+      font-size: 1rem;
+      height: 2.4rem !important;
+      align-items: center;
+      font-weight: bold;
+    }
+
+  }
+
+  .advance-info {
+    @include bx-info;
+
+    .gr-ip-e-s label {
+      font-size: 1rem;
+      height: 2.4rem !important;
+      align-items: center;
+      font-weight: bold;
+    }
+
+
+  }
+  .upload-info {
+    @include bx-info;
+
+    .gr-ip-e-s label {
+      font-size: 1rem;
+      height: 2.4rem !important;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .footer-form{
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 2rem;
+      button{
+        margin-left: .5rem;
+      }
+    }
+  }
+}
