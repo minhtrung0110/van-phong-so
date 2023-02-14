@@ -1,0 +1,3 @@
+export const  hagiang= {
+    value: 'Hà Giang', label: 'Hà Giang', children:[{ value: 'TP.Hà Giang', label: 'TP.Hà Giang',children:[]},{ value: 'Bắc Quang', label: 'Bắc Quang',children:[]},{ value: 'Đồng Văn', label: 'Đồng Văn',children:[]},{ value: 'Hoàng Su Phì', label: 'Hoàng Su Phì',children:[]},{ value: 'Mèo Vạc', label: 'Mèo Vạc',children:[]},{ value: 'Quản Bạ', label: 'Quản Bạ',children:[]},{ value: 'Quang Bình', label: 'Quang Bình',children:[]},{ value: 'Vị Xuyên', label: 'Vị Xuyên',children:[]},{ value: 'Xín Mần', label: 'Xín Mần',children:[]},
+        { value: 'Yên Minh', label: 'Yên Minh',children:[]},]}

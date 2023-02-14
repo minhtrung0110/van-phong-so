@@ -1,0 +1,1 @@
+export const hanam = { value: 'Hà Nam ', label: 'Hà Nam ', children:[{ value: 'Bình Lục', label: 'Bình Lục',children:[]},{ value: 'Duy Tiên', label: 'Duy Tiên',children:[]},{ value: 'Kim Bảng', label: 'Kim Bảng',children:[]},{ value: 'Lý Nhân', label: 'Lý Nhân',children:[]},{ value: 'Thanh Liêm', label: 'Thanh Liêm',children:[]},]}

@@ -6,6 +6,7 @@ import {Option} from "antd/es/mentions";
 import {FaPlus} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import {setIsEdit} from "~/redux/reducer/staff/staffReducer";
+import {provinceVn} from "~/asset/data/provinces-vn"
 
 EditStaff.propTypes = {};
 
@@ -26,44 +27,7 @@ function EditStaff(props) {
         label: website,
         value: website,
     }));
-    const residences = [
-        {
-            value: 'HCM',
-            label: 'TP. Hồ Chí Minh',
-            children: [
-                {
-                    value: 'Bình Chánh',
-                    label: 'Bình Chánh',
-                    children: [
-                        {
-                            value: 'Tân Quý Tây',
-                            label: 'Tân Quý Tây',
-                        },
-                        {
-                            value: 'Tân Tuc',
-                            label: 'Tân Túc',
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            value: 'Hà Nội',
-            label: 'Hà Nội',
-            children: [
-                {
-                    value: 'Bắc Từ Liêm',
-                    label: 'Bắc Từ Liêm',
-                    children: [
-                        {
-                            value: 'Nam Yết',
-                            label: 'Nam Yết',
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
+    const residences =provinceVn;
     const formItemLayout = {
         labelCol: {
             xs: {

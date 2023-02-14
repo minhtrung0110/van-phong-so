@@ -1,0 +1,1 @@
+export const baclieu = { value: 'Bạc Liêu ', label: 'Bạc Liêu ', children:[{ value: 'Thành phố Bạc Liêu', label: 'Thành phố Bạc Liêu',children:[]},{ value: 'Hồng Dân', label: 'Hồng Dân',children:[]},{ value: 'Hội An', label: 'Hội An',children:[]},{ value: 'Phước Long', label: 'Phước Long',children:[]},]}
