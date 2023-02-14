@@ -55,9 +55,9 @@ function ManageStaff(props) {
         <div className='container-staff'>
 
             <div className='header-staff-page'>
-                <div className='title'>
+                <div className={` title ${isAddStaff || isEditStaff ?'ml-5':''}`}>
                     <FaUsers className='icon-staff'/>
-                    <h4>{isAddStaff ? 'Thêm Nhân Viên' : (isEditStaff ? 'Cập Nhật Thông Tin Nhân Viên' : 'Danh Sách Nhân Viên')}</h4>
+                    <h4 >{isAddStaff ? 'Thêm Nhân Viên' : (isEditStaff ? 'Cập Nhật Thông Tin Nhân Viên' : 'Danh Sách Nhân Viên')}</h4>
                 </div>
                 {
                     !isAddStaff && !isEditStaff && (

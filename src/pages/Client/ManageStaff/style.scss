@@ -3,11 +3,14 @@
 
   .header-staff-page{
     padding: 0rem 2rem;
-
+    .ml-5{
+      margin-left: 4rem;
+    }
    .title{
      display: flex;
      align-items: center;
       font-size: var(--18px);
+
      .icon-staff{
        font-size: var(--22px);
        margin-right: 5px;

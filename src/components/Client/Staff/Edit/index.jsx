@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
-import {AutoComplete, Button, Cascader, DatePicker, Form, Input, Select, Upload} from "antd";
+import {AutoComplete, Button, Cascader, DatePicker, Form, Input, Modal, Select, Upload} from "antd";
 import {Option} from "antd/es/mentions";
 import {FaPlus} from "react-icons/fa";
 import {useDispatch} from "react-redux";
@@ -9,8 +9,17 @@ import {setIsEdit} from "~/redux/reducer/staff/staffReducer";
 import {provinceVn} from "~/asset/data/provinces-vn"
 
 EditStaff.propTypes = {};
-
+const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
 function EditStaff(props) {
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewTitle, setPreviewTitle] = useState('');
     const dispatch=useDispatch();
         const onFormLayoutChange = ({ disabled }) => {
 
@@ -28,36 +37,7 @@ function EditStaff(props) {
         value: website,
     }));
     const residences =provinceVn;
-    const formItemLayout = {
-        labelCol: {
-            xs: {
-                span: 24,
-            },
-            sm: {
-                span: 8,
-            },
-        },
-        wrapperCol: {
-            xs: {
-                span: 24,
-            },
-            sm: {
-                span: 16,
-            },
-        },
-    };
-    const tailFormItemLayout = {
-        wrapperCol: {
-            xs: {
-                span: 24,
-                offset: 0,
-            },
-            sm: {
-                span: 16,
-                offset: 8,
-            },
-        },
-    }
+
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
             <Select
@@ -73,6 +53,14 @@ function EditStaff(props) {
     const handleCancel = ()=>{
             dispatch(setIsEdit(false))
     }
+    const handlePreview = async (file) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+        setPreviewImage(file.url || file.preview);
+        setPreviewOpen(true);
+        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+    };
     return (
         <Form
             labelCol={{
@@ -266,7 +254,12 @@ function EditStaff(props) {
                            className='gr-ip-e-s'
                            labelAlign='left'
                 >
-                    <Upload action="/upload.do" listType="picture-card">
+
+                    <Upload action="/upload.do" listType="picture-card"
+                            maxCount={1}
+                            onPreview={handlePreview}
+
+                    >
                         <div>
                             <FaPlus />
                             <div
@@ -303,8 +296,17 @@ function EditStaff(props) {
 
 
             </div>
-
+            <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={()=>setPreviewOpen(false)}>
+                <img
+                    alt="example"
+                    style={{
+                        width: '100%',
+                    }}
+                    src={previewImage}
+                />
+            </Modal>
         </Form>
+
     );
 }
 
