@@ -78,5 +78,29 @@
   --bs-disabled: #ce5c6d;
 
   --box-shadow: 0px 0px 20px rgb(1 41 112 / 10%);
+  // Task
+  //Screen
+  --screen-lg:1201px;
+  --screen-md:992px;
+  --screen-sm:7768px;
+  --screen-phone:480px;
+  --screen-ip6-down:'(max-width:375px)';
+  //=100vh
+  --navbar-app-height:4vh;
+  --navbar-board-height:5vh;
+  --board-content-height:auto;//91vh;
+
+  --color-text: #858585;
+  --board-bg-color:#0079bf;
+  --appbar-bg-color: #4db2ec;
+  --list-bg-color: #f1f1f1;
+  --gap:10px;
+  --column-header-height:36px;
+  --column-footer-height:45px;
+  --column-border-radius:8px;
+  --task-border-radius:3px;
 }
+
+
+
 

@@ -1,56 +1,4 @@
-.dropdown-menu {
-  right: 0;
-  left: auto !important;
-}
 
-form label {
-  color: var(--bs-black);
-}
-
-.form-control {
-  border-width: var(--2px);
-}
-
-.form-control:focus {
-  border-color: var(--bs-focus-input);
-}
-
-.form-password .show-hide-password {
-  border-width: 2px;
-  border-left: 0;
-  background-color: var(--bs-white);
-}
-
-.form-password .fp-input {
-  position: relative;
-}
-
-.form-password svg {
-  position: absolute;
-  top: var(--12px);
-  bottom: var(--12px);
-  right: var(--12px);
-  cursor: pointer;
-}
-
-input::-ms-reveal,
-input::-ms-clear {
-  display: none;
-}
-
-.form-check-input:checked {
-  background-color: var(--bs-danger);
-  border-color: var(--bs-danger);
-}
-
-.form-check-input:focus {
-  box-shadow: none;
-  border-color: var(--bs-danger);
-}
-
-.modal-content {
-  border: none;
-}
 
 .modal-backdrop,
 .modal {
@@ -71,9 +19,7 @@ input::-ms-clear {
 .cursor-pointer {
   cursor: pointer;
 }
-.btn-show-item:hover{
-  background-color: var(--blue-100)
-}
+
 .w-40{
   width:40% !important;
 }
