@@ -4,9 +4,9 @@
   padding: var(--gap);
   min-height: calc(5 * var(--gap));
   border-radius: var(--task-border-radius);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--bx-sh-task);
   margin-bottom: var(--gap);
-
+  font-size: var(--fs-task-pg);
   &:hover {
     transform: scale(1.0225);
     // background-color:var(--list-bg-color);
@@ -19,6 +19,16 @@
     padding: 0 5px;
     .btn-edit-task{
       display: none;
+    }
+    .task-title {
+      font-weight: 400;
+      display: block;
+
+    }
+    .task-description {
+      font-style: italic;
+      display: block;
+      text-align: justify;
     }
     &:hover .btn-edit-task {
       display: block;
@@ -47,18 +57,6 @@
       border-top-left-radius: var(--task-border-radius);
       border-top-right-radius: var(--task-border-radius);
     }
-  }
-
-  .task-title {
-    font-weight: bold;
-    display: block;
-
-  }
-
-  .task-description {
-    font-style: italic;
-    display: block;
-    text-align: justify;
   }
 
 

@@ -70,6 +70,10 @@ function Column({column, onCardDrop, onUpdateColumn}) {
         {
             label: 'Lọc',
             key: '2',
+        },
+        {
+            label: 'Sắp xếp',
+            key: '3',
         }
     ];
     const [open, setOpen] = useState(false);

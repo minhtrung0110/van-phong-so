@@ -147,7 +147,7 @@ function BoardContent() {
 
                                  }}
                             >
-                                <FaPlus />   Add new column
+                                <FaPlus className='icon-add' />   Tạo Mới
                             </Col>
                         </Row>
                     )}
@@ -157,17 +157,17 @@ function BoardContent() {
                                 <TextArea
                                     size='middle'
                                     type='text'
-                                    placeholder='Enter new column title'
+                                    placeholder='Tạo Mới'
                                     className='input-enter-new-column '
                                     value={newColTitle}
                                     onChange={e=>setNewColTitle(e.target.value)}
                                     ref={newColInputRef}
                                     onKeyDown={event => (event.key==='Enter')&& handleAddNewColumn()}
                                 />
-                                <div className='d-flex justify-content-between align-items-center'>
-                                    <button className='btn-outline-success'
+                                <div className='ft-btn'>
+                                    <button className='btn-outline-success btn-add-new-column'
                                             onClick={handleAddNewColumn}
-                                    >Add</button>
+                                    >Tạo</button>
                                     <FaTimes className='cancel-new-column'
                                              onClick={()=>setIsOpenNewColForm(false)}
                                     />

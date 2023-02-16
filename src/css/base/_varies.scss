@@ -2,27 +2,60 @@
   --font: 'Mulish';
   --poppins: 'Poppins', sans-serif;
   --lato: 'Lato', sans-serif;
-  // UI Dashboard
-  --text-color: #333;
+  //---------- PRIMATY COLOR--------------------------------------------------------//
+
+  --primary-color:#3C91E6;
   --light: #F9F9F9;
-  --blue: #3C91E6;
-  --light-blue: #CFE8FF;
   --grey: #eee;
-  --dark-grey: #AAAAAA;
   --dark: #342E37;
   --dark-50: rgba(38, 24, 26, 0.8);
+  // 7 Colors Basic
+
   --red: #DB504A;
   --yellow: #FFCE26;
   --light-yellow: #FFF2C6;
   --orange: #FD7238;
-  --light-orange: #FFE0D3;
-  --border-color: #dbdbdb;
-  --border-focus-color: #888;
-
+  --bs-text: #1f1d1d;
+  --bs-sub-txt: #5b5151;
+  --bs-white: #ffffff;
+  --bs-black: #333940;
+  --bs-red: #d6001c;
+  --bs-danger: #d6001c;
+  --bs-blue: #004dff;
+  --bs-info: #0078aa;
+  --bs-focus-input: #3ca9d5;
+  --bs-blue-100: #ccdbff;
+  --bs-red-100: #ffd4d4;
+  --bs-orange-100: #ffedea;
+  --bs-success-100: #d4f7e7;
+  --bs-success-500: #367558;
+  --bs-warning-100: #fff2cc;
+  --bs-infor-100: #ccf0ff;
   --gray40-color: #666; /* dark gray*/
   --gray46-color: #757575;
   --gray60-color: #999; /* light gray*/
   --gray97-color: #e3e3e3; /* lighter gray :)*/
+  --bs-green-100: #bbefce;
+  --bs-brown-200: #413c3d;
+  --blue: #3C91E6;
+  --light-blue: #CFE8FF;
+
+  --dark-grey: #AAAAAA;
+
+
+
+  --light-orange: #FFE0D3;
+  //----------FONT STYLE AND SIZE ------------------------//
+  --fs-task-pg:0.875rem;
+  --fs-task-pg-title:0.915rem;
+  // UI Dashboard
+  --text-color: #333;
+
+
+  --border-color: #dbdbdb;
+  --border-focus-color: #888;
+
+
 
   // UI Base
   --font-weight-extra-light: 200;
@@ -50,27 +83,7 @@
   --230px: 2.5rem;
   --48px: 3rem;
 
-  --bs-text: #1f1d1d;
-  --bs-sub-txt: #5b5151;
-  --bs-white: #ffffff;
-  --bs-black: #333940;
-  --bs-red: #d6001c;
-  --bs-danger: #d6001c;
-  --bs-blue: #004dff;
-  --bs-info: #0078aa;
-  --bs-focus-input: #3ca9d5;
-  --bs-blue-100: #ccdbff;
-  --bs-red-100: #ffd4d4;
-  --bs-orange-100: #ffedea;
-  --bs-success-100: #d4f7e7;
-  --bs-success-500: #367558;
-  --bs-warning-100: #fff2cc;
-  --bs-infor-100: #ccf0ff;
-  --bs-gray-100: #f5f6f8;
-  --bs-gray-200: #f5f8fa;
-  --bs-gray-300: #b5b0b5;
-  --bs-green-100: #bbefce;
-  --bs-brown-200: #413c3d;
+
   --bootstrap-border-color: #ced4da;
 
 
@@ -97,8 +110,12 @@
   --gap:10px;
   --column-header-height:36px;
   --column-footer-height:45px;
-  --column-border-radius:8px;
+  --column-border-radius:3px;
   --task-border-radius:3px;
+
+
+  //TASK PAGE
+  --bx-sh-task:  0 1px 1px rgba(0, 0, 0, 0.2);;
 }
 
 

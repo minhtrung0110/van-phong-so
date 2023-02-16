@@ -1,6 +1,7 @@
 $column-border-radius: 3px;
 $line-height: 2.2rem;
-$min-width: 290px;
+$min-width: 250px;
+@import "../../../../css/base/_mixins.scss";
 .column {
   flex: 0 0 auto;
   max-width: 350px;
@@ -144,31 +145,17 @@ $min-width: 290px;
 
       align-items: center;
       .btn-add-task{
-        padding: 0.2rem 0.8rem;
-        font-size: 14px;
-        cursor: pointer;
-        height: 2rem;
+        @include btn-add-task;
       }
     }
     .input-enter-card {
       margin-bottom: var(--gap);
-      box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      box-shadow: var(--bx-sh-task);
     }
 
     .cancel-new-card {
-      color: red;
-      height: 2rem;
-      width: calc(var(--gap) * 4);
-
-      padding: calc(var(--gap) /1.6 );
-      border-radius: 3px;
+     @include btn-cancel-task;
       margin-left: 0.3rem;
-
-      &:hover {
-        background-color: #e54141;
-        cursor: pointer;
-        color: white;
-      }
     }
   }
 }
