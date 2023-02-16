@@ -5,7 +5,7 @@
   display: flex;
   overflow-y: hidden;
   overflow-x: auto;
-  padding: calc(2 * var(--gap)) 0;
+  padding: calc(2 * var(--gap));
   font-size: var(--14px);
 
   .column-drop-preview{

@@ -9,12 +9,12 @@ SearchHidenButton.propTypes = {
     backgroundButton: PropTypes.string,
 };
 const cx=classNames.bind(styles)
-function SearchHidenButton({height, width,backgroundButton,searchButtonText}) {
+function SearchHidenButton({height, width,backgroundButton,searchButtonText,className}) {
     const handleSearch=(e)=>{
         e.preventDefault();
     }
     return (
-        <div className={cx('search-selection')}        >
+        <div className={cx('search-selection',className)}        >
             <form onSubmit={(e)=>handleSearch()} role="search" className={cx('form-search')}
                   style={{ width: width , backgroundColor:backgroundButton}}
             >

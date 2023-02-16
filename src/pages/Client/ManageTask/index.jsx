@@ -15,8 +15,8 @@ function ManageTaskPage(props) {
     }
     return (
         <div className='trello-minhtrung-master'>
-            <HeaderTask />
-            <BoardBar boardName={board.name} />
+            <HeaderTask  />
+            <BoardBar boardName={board.name}/>
             <BoardContent  />
         </div>
     );

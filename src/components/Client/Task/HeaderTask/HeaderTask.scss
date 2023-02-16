@@ -1,10 +1,37 @@
 
 
 .navbar-app{
-  height:var(--navbar-app-height);
-  padding-left: var(--gap);
+  height:3.5rem;
+  padding-left: calc( 2 * var(--gap) );
   display: flex;
   align-items: center;
   background-color:var(--appbar-bg-color) ;
-  font-size: 1.5rem;
+  font-size: 1rem;
+
+  .select-board{
+
+    .dropdown-board{
+      font-size: var(--16px);
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light);
+      border-radius: var(--task-border-radius);
+      border: hsla(0deg, 0%, 100%, 0.34);
+      height: 2.4rem;
+      padding: 0 1rem;
+      background-color: hsla(0deg, 0%, 100%, 0.34);
+      .icon{
+        font-size: var(--22px);
+        margin-right: 0.5rem;
+      }
+      .icon-down{
+        font-size: var(--22px);
+        line-height: 2.5rem;
+        margin-left: 1rem;
+      }
+    }
+
+  }
 }
