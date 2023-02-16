@@ -1,5 +1,39 @@
+//@import "../../../../css/base/_mixins.scss";
+
 @mixin  box {
   border-radius: 6px;
   box-shadow: 1px 2px 3px rgba(0,0,0,0.2);
   background-color: var(--light);
+}
+
+// Mixin in Task Page
+@mixin btn-add-task {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  font-size: var(--14px);
+  padding: 0.2rem 0.8rem;
+  cursor: pointer;
+  border-radius: 3px;
+  &:hover{
+    background-color: var(--blue);
+    color: var(--light) !important;
+  }
+ }
+
+@mixin btn-cancel-task{
+    color: #ea3131;
+    height: 2rem;
+    width: calc(var(--gap) * 4);
+    padding: calc(var(--gap) /1.6 );
+    border-radius: 3px;
+    cursor: pointer;
+    &:hover {
+      background-color: #ea1111;
+      color: var(--light) !important;
+    }
+
 }

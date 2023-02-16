@@ -1,0 +1,24 @@
+.trello-minhtrung-master {
+ // height: 100vh;
+  overflow: hidden;
+  background-color: var(--board-bg-color);
+
+  .trello-minhtrung-container {
+    margin: 0 15px;
+    padding: 0;
+  }
+
+  .minhtrung-content-editable {
+    background-color: inherit;
+    border: none;
+    font-size: inherit;
+    font-weight: inherit;
+    cursor: pointer;
+
+    &:focus {
+      background-color: white;
+      border: 1px solid var(--appbar-bg-color);
+      cursor: text;
+    }
+  }
+}

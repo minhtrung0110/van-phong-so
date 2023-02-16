@@ -1,0 +1,161 @@
+$column-border-radius: 3px;
+$line-height: 2.2rem;
+$min-width: 250px;
+@import "../../../../css/base/_mixins.scss";
+.column {
+  flex: 0 0 auto;
+  max-width: 350px;
+  min-width: $min-width;
+  height: 800px;
+  margin-left: var(--gap);
+  overflow-y: auto;;
+  font-size: var(--16px);
+
+  > * {
+    background-color: var(--list-bg-color);
+    color: #333;
+    padding: 0 8px;
+  }
+
+  .header-title {
+    font-size: var(--16px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--gap) var(--gap) var(--gap) calc(var(--gap));
+
+    font-weight: bold;
+    border-top-left-radius: $column-border-radius;
+    border-top-right-radius: $column-border-radius;
+
+    .input-header {
+      height: $line-height;
+      //  max-width:$min-width - 30px;
+    }
+    .dropdown-btn {
+      height: $line-height - 0.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.4rem;
+      color: #8d8d8d;
+      //    background-color: var(--list-bg-color) !important;
+      border: none;
+      letter-spacing: 1px;
+
+      &:hover {
+        background-color: rgba(132, 133, 131, 0.12);
+        border-radius: 2px;
+      }
+
+      .dot {
+        font-size: var(--16px);
+        font-weight: bold;
+        padding: 0;
+      }
+
+      .overlay-more {
+        padding: 0;
+      }
+    }
+  }
+
+  .footer-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem; //var(--column-footer-height);
+    color: var(--color-text);
+    border-bottom-left-radius: $column-border-radius;
+    border-bottom-right-radius: $column-border-radius;
+
+    .add-card-task {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 2rem;
+      // background-color: var(--color-text);
+      width: 100%;
+      font-size: var(--14px);
+      .footer-icon {
+        color: var(--gray60-color);
+        margin-right: 0.5rem;
+      }
+      &:hover {
+        cursor: pointer;
+        background-color: rgb(213, 212, 212);
+        border-radius: $column-border-radius;
+      }
+    }
+
+  }
+
+  .card-list {
+    list-style: none;
+    margin: 0;
+    max-height: 630px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+    }
+
+    &::-webkit-scrollbar:vertical {
+      width: var(--gap);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      //  background-color:darken(var(--list-bg-color),15);
+      border-radius: 3px;
+
+    }
+
+    .card-ghost {
+      transition: transform 0.18s ease;
+      transform: rotateZ(5deg);
+      font-weight: bold;
+    }
+
+    .card-ghost-drop {
+      transition: transform 0.18s ease-in-out;
+      transform: rotateZ(0deg);
+      font-weight: bold;
+    }
+
+    .drop-preview {
+      background-color: rgba(150, 150, 200, 0.1);
+      border: 1px dashed #abc;
+      margin: 5px;
+    }
+
+    .cards-drop-preview {
+      background-color: rgba(150, 150, 200, 0.1);
+      border: 1px dashed #abc;
+      margin: 5px 45px 5px 5px;
+    }
+
+  }
+
+  .add-new-card-area {
+    padding: var(--gap);
+    border-bottom-left-radius: $column-border-radius;
+    border-bottom-right-radius: $column-border-radius;
+    .box-btn{
+      display: flex;
+
+      align-items: center;
+      .btn-add-task{
+        @include btn-add-task;
+      }
+    }
+    .input-enter-card {
+      margin-bottom: var(--gap);
+      box-shadow: var(--bx-sh-task);
+    }
+
+    .cancel-new-card {
+     @include btn-cancel-task;
+      margin-left: 0.3rem;
+    }
+  }
+}
