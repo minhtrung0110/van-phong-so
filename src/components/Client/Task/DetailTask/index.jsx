@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {DatePicker, Modal, Select} from "antd";
+import {Avatar, DatePicker, Modal, Select, Tooltip} from "antd";
 import {useSelector} from "react-redux";
 import {detailStaffSelector} from "~/redux/selectors/task/taskSelector";
-import {FaDesktop} from "react-icons/fa";
+import {FaDesktop, FaFemale, FaMale, FaPlus, FaRegFlag} from "react-icons/fa";
 import './Detail.scss'
 import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
@@ -13,7 +13,8 @@ DetailTask.propTypes = {};
 function DetailTask() {
     const data = useSelector(detailStaffSelector)
     const [errorDescription, setErrorDescription] = useState('');
-    const { RangePicker } = DatePicker;
+    const [priority,setPriority] = useState ()
+    const {RangePicker} = DatePicker;
     const rangePresets = [
         {
             label: 'Last 7 Days',
@@ -41,32 +42,40 @@ function DetailTask() {
         }
     }
     const editorDescription = (value) => {
-      //  setValue('description', value);nay2y2 cho form
+        //  setValue('description', value);nay2y2 cho form
         setErrorDescription('');
     };
-    const listPriority=[
+    const listPriority = [
         {
-            value: 'Ưu tiên cao',
-            label: 'Ưu tiên cao',
+            label: 'Cao',
+            value: 'high',
+            color: '#e94040',
+            backgroundColor:'rgba(233,64,64,.12)'
         },
         {
-            value: 'Ưu tiên trung bình',
-            label: 'Ưu tiên trung bình',
+            label: 'Trung Bình',
+            value: 'middle',
+            color: '#fa8c16',
+            backgroundColor:'rgba(250,140,22,.12)'
         },
         {
-            value: 'Ưu tiên thấp',
-            label: 'Ưu tiên thấp',
+            label: 'Thấp',
+            value: 'low',
+            color: '#18baff',
+            backgroundColor:'rgba(24,186,255,.12)'
         },
         {
-            value: 'Không ưu tiên',
             label: 'Không ưu tiên',
+            value: 'none',
+            color: '#a9a8a8',
+            backgroundColor:'#f5f7f9'
         },
     ]
     return (
         <div className='detail-task'>
             <div className='header'>
                 <div className='name-task'>
-                    <FaDesktop/>
+                    <FaDesktop className='icon'/>
                     <h4>{data.title}</h4>
                 </div>
             </div>
@@ -76,23 +85,75 @@ function DetailTask() {
                         <RangePicker
                             presets={rangePresets}
                             showTime
-                            format="YYYY/MM/DD HH:mm:ss"
+                            format="DD/MM/YYYY HH:mm:ss"
                             onChange={onRangeChange}
+                            className="range-date"
                         />
 
                     </div>
                     <div className='priority'>
                         <Select
+                            className={`select-proiority-${priority}`  }
                             defaultValue="Không ưu tiên"
                             style={{
                                 width: 180,
+                                padding: 0,
                             }}
-                            options={listPriority}
-                        />
+                            dropdownStyle={{
+                                padding: 5,
+                                fontSize: '0.9rem',
+                            }}
+                            onChange={(e)=>setPriority(e)}
+                        >
+                            {!!listPriority && listPriority.map((item) => (
+                                <span key={item.value}
+                                      style={{
+                                          marginTop:'0.2rem',
+                                          backgroundColor: item.backgroundColor,
+                                          color: item.color,
+                                          ':hover': {
+                                              backgroundColor: '#67ef79',
+                                          },
+                                      }}
+                                      className='pre-item'><FaRegFlag
+                                    style={{marginRight: '0.5rem'}}/>{item.label}</span>
+                            ))}
+                        </Select>
                     </div>
                 </div>
                 <div className='gr-02'>
                     <div className='members'>
+                        <p>Thực Hiện :</p>
+                        <div className='avatar-group'>
+                            <Avatar.Group >
+                                <Avatar src="https://joeschmoe.io/api/v1/random" />
+                                <a href="https://ant.design">
+                                    <Avatar
+                                        style={{
+                                            backgroundColor: '#f56a00',
+                                        }}
+                                    >
+                                        K
+                                    </Avatar>
+                                </a>
+                                <Tooltip title="Ant User" placement="top">
+                                    <Avatar
+                                        style={{
+                                            backgroundColor: '#87d068',
+                                        }}
+                                        icon={<FaMale />}
+                                    />
+                                </Tooltip>
+                                <Avatar
+                                    style={{
+                                        backgroundColor: '#1890ff',
+                                    }}
+                                    icon={<FaFemale />}
+                                />
+                            </Avatar.Group>
+
+                            <button className='add-member'><FaPlus/></button>
+                        </div>
 
                     </div>
                     <div className='notification'>
@@ -100,26 +161,27 @@ function DetailTask() {
                     </div>
 
                 </div>
-
-            </div>
-
-            <div className='description'>
-                <CustomEditor id="description" editorDescription={editorDescription} />
-            </div>
-            <div className='todo-list'>
-
-            </div>
-            <div className='attach-file'>
-
-            </div>
-            <div className='activity-task'>
                 <div className='description'>
+                    <p>Nội Dung Công Việc:</p>
+                    <CustomEditor id="description" editorDescription={editorDescription} />
+                </div>
+                <div className='todo-list'>
 
                 </div>
-                <div className='comment'>
+                <div className='attach-file'>
 
+                </div>
+                <div className='activity-task'>
+                    <div className='description'>
+
+                    </div>
+                    <div className='comment'>
+
+                    </div>
                 </div>
             </div>
+
+
 
 
             <div className='footer'></div>
