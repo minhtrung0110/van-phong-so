@@ -10,7 +10,7 @@ import Column from "~/components/Client/Task/Column/Column";
 import {isEmpty} from "lodash";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import TextArea from "antd/es/input/TextArea";
-import {Col, Row} from "antd";
+import {Col, Modal, Row} from "antd";
 
 
 function BoardContent() {
@@ -18,6 +18,7 @@ function BoardContent() {
     const [columns,setColumns] = useState([])
     const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
     const [newColTitle,setNewColTitle]=useState('')
+
 
     const newColInputRef=useRef()
     useEffect(()=>{

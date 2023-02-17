@@ -5,10 +5,12 @@ import {FaEllipsisH, FaPlus, FaTimes} from "react-icons/fa";
 import {Button, ButtonGroup} from "react-bootstrap";
 import {cloneDeep} from "lodash";
 import {mapOrder} from "~/utils/sorts";
-import { Dropdown, Input,Form} from "antd";
+import {Dropdown, Input, Form, Modal} from "antd";
 import Card from "~/components/Client/Task/Card/TaskItem";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import TextArea from "antd/es/input/TextArea";
+import DetailStaff from "~/components/Client/Staff/DetailStaff";
+import DetailTask from "~/components/Client/Task/DetailTask";
 
 
 function Column({column, onCardDrop, onUpdateColumn}) {
@@ -16,6 +18,8 @@ function Column({column, onCardDrop, onUpdateColumn}) {
     const [columnTitle, setColumnTitle] = useState('')
     const [isAddCard, setIsAddCard] = useState(false)
     const [valueNewCard, setValueNewCard] = useState('')
+    const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
+    const [detailTask, setDetailTask] = useState()
     const newCardRef = useRef()
     useEffect(() => {
         setColumnTitle(column.title)
@@ -84,7 +88,11 @@ function Column({column, onCardDrop, onUpdateColumn}) {
     };
     const handleOpenChange = (flag) => {
         setOpen(flag);
-    };
+    }
+    const handleShowDetailTask=(value) => {
+        setIsOpenDetailTask(value);
+
+    }
     return (
         <div className="column">
 
@@ -148,7 +156,7 @@ function Column({column, onCardDrop, onUpdateColumn}) {
                     {
                         !!column.cards && column.cards.map((item, index) => (
                             <Draggable key={index}>
-                                <TaskItem task={item}/>
+                                <TaskItem task={item} onShowDetail={handleShowDetailTask}/>
                             </Draggable>
 
                         ))
@@ -194,6 +202,16 @@ function Column({column, onCardDrop, onUpdateColumn}) {
             {/*    title='Remove Column'*/}
             {/*    content={`Are you sure you want to remove columns ${column.title} ?`}*/}
             {/*    onAction={handleRemoveColumn} />*/}
+            <Modal
+                title=""
+                onCancel={()=>setIsOpenDetailTask(false)}
+                footer={null}
+                width={800}
+                style={{ top: 80 }}
+                open={isOpenDetailTask}
+            >
+              <DetailTask/>
+            </Modal>
         </div>
     );
 }

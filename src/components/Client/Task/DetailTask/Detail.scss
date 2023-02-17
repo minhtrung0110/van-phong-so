@@ -1,0 +1,32 @@
+.detail-task{
+  font-size: var(--14px);
+  overflow-y: auto;
+  height:auto !important;
+  .header{
+    .name-task{
+      font-size: var(--20px);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+  }
+  .content{
+      .gr-01{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 2rem;
+        .duration{
+
+        }
+        .priority{
+
+        }
+      }
+  }
+  .footer{
+
+  }
+
+}

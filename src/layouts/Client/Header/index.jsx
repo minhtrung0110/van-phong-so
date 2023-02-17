@@ -29,7 +29,6 @@ function HeaderBar({onCollapse}) {
     const isCollapsed = useSelector(isCollapseSideBar)
     const dispatch = useDispatch();
     const location = useLocation();
-    console.log(location)
     const handleSwitchMode = (e) => {
         if (e.target.checked) {
             document.body.classList.add("dark");
