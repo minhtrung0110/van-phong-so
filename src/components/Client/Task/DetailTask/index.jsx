@@ -7,6 +7,7 @@ import {FaDesktop, FaFemale, FaMale, FaPlus, FaRegFlag} from "react-icons/fa";
 import './Detail.scss'
 import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
+import ToDoList from "~/components/commoms/ToDoList";
 
 DetailTask.propTypes = {};
 
@@ -167,6 +168,7 @@ function DetailTask() {
                 </div>
                 <div className='todo-list'>
 
+                    <ToDoList />
                 </div>
                 <div className='attach-file'>
 

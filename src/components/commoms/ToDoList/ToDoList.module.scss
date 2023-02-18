@@ -1,0 +1,32 @@
+.todo-list{
+  height:auto;
+  .todo-container{
+
+  }
+  .btn-add-todo-item{
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 2rem;
+    background-color: transparent;
+    color: var(--pr-green);
+    border-radius: (--task-border-radius);
+    border: none;
+    padding: 0 1rem;
+
+    &:hover{
+      background-color: var(--gray97-color);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .icon{
+      font-size: var(--16px);
+    }
+    .title{
+      margin-left: 0.5rem;
+      font-size: var(--14px);
+      font-weight: bold;
+    }
+  }
+}

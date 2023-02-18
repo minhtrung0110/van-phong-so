@@ -1,3 +1,9 @@
+@mixin title{
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--dark);
+}
+
 .detail-task {
   font-size: var(--14px);
   overflow-y: auto;
@@ -85,9 +91,7 @@
     }
     .members{
       p{
-        font-size: var(--16px);
-        font-weight: bold;
-        margin-bottom: 1rem;
+        @include  title
       }
       .avatar-group{
         display: flex;
@@ -115,13 +119,17 @@
     .description{
       margin-top: 1rem;
       p{
-        font-weight: bold;
-        margin-bottom: 1rem;
-        color: var(--dark);
+        @include  title
       }
       color: var(--gray60-color);
       #description{
         height:20rem;
+      }
+    }
+    .todo-list{
+      margin-top: 1rem;
+      p{
+        @include  title
       }
     }
   }

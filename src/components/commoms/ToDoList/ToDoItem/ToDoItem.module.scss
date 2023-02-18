@@ -1,0 +1,46 @@
+@import "../../../../css/base/_mixins.scss";
+.todo-item{
+  width:90%;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .todo-item-content{
+    .todo-item-input{
+      background-color: inherit;
+      border: none;
+      font-size: inherit;
+      font-weight: inherit;
+      cursor: pointer;
+      width: 35rem;
+      height:2.5rem;
+      margin-left: 1.5rem;
+      &:focus{
+        border: 1.5px solid var(--pr-green);
+      }
+    }
+    .checked{
+      text-decoration: line-through;
+    }
+  }
+  .todo-item-add{
+    display: flex;
+    align-items: center;
+    height: 2rem;
+    margin-left: 3rem;
+    margin-top: 0.3rem;
+    .btn-add{
+      @include btn-add-task;
+      border: none;
+    }
+    .btn-cancel{
+      @include btn-cancel-task;
+      border: none;
+      margin-left: 1rem;
+    }
+  }
+}
+.editable{
+
+}
+
