@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, DatePicker, Modal, Select, Tooltip} from "antd";
+import {Avatar, DatePicker, Modal, Select, Tooltip, Upload} from "antd";
 import {useSelector} from "react-redux";
 import {detailStaffSelector} from "~/redux/selectors/task/taskSelector";
-import {FaDesktop, FaFemale, FaMale, FaPlus, FaRegFlag} from "react-icons/fa";
+import {FaDesktop, FaFemale, FaMale, FaPaperclip, FaPlus, FaRegFlag} from "react-icons/fa";
 import './Detail.scss'
 import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
@@ -72,6 +72,26 @@ function DetailTask() {
             backgroundColor:'#f5f7f9'
         },
     ]
+    const fileList = [
+        {
+            uid: '0',
+            name: 'xxx.png',
+            status: 'uploading',
+            percent: 33,
+        },
+        {
+            uid: '-1',
+            name: 'yyy.png',
+            status: 'done',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        },
+        {
+            uid: '-2',
+            name: 'zzz.png',
+            status: 'error',
+        },
+    ];
     return (
         <div className='detail-task'>
             <div className='header'>
@@ -171,7 +191,16 @@ function DetailTask() {
                     <ToDoList />
                 </div>
                 <div className='attach-file'>
-
+                    <Upload
+                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                        listType="picture"
+                        defaultFileList={[...fileList]}
+                    >
+                        <button className='btn-upload' >
+                            <FaPaperclip className='icon' />
+                            <span className='title'>Tải lên tệp đính kèm</span>
+                        </button>
+                    </Upload>
                 </div>
                 <div className='activity-task'>
                     <div className='description'>

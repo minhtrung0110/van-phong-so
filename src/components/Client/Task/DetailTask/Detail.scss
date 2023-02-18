@@ -132,6 +132,34 @@
         @include  title
       }
     }
+    .attach-file{
+      .btn-upload{
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 2.4rem;
+        background-color: transparent;
+        color: var(--pr-green);
+        border-radius: (--task-border-radius);
+        border: none;
+        padding: 0 1.5rem 0 1rem;
+
+        &:hover{
+          background-color: var(--gray97-color);
+          border-radius: 6px;
+          cursor: pointer;
+        }
+        .icon{
+          font-size: var(--16px);
+        }
+        .title{
+          margin-left: 0.5rem;
+          font-size: var(--14px);
+          font-weight: bold;
+        }
+      }
+    }
   }
 
 
