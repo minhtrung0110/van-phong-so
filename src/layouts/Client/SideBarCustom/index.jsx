@@ -18,7 +18,7 @@ function SideBarCustom(props) {
     const location=useLocation()
     const isCollapsed =useSelector(isCollapseSideBar)
     return (
-        <section id="sidebar" className={!!isCollapsed && 'hide'}>
+        <section id="sidebar" className={`${!!isCollapsed && 'hide'}`}>
             <a href="~/layouts/Client/SideBarCustom/index#" className="brand">
                 <FaBuilding className='bx ' />
                 <span className="text">AdminHub</span>
@@ -26,7 +26,7 @@ function SideBarCustom(props) {
             <ul className="side-menu top">
                 {
                     menu_client_items.map((item,index)=>(
-                        <li   className={(item.link===location.pathname) && 'active'} key={index}>
+                        <li   className={`${item.link===location.pathname && 'active'}`} key={index}>
                             <NavLink to={item.link}
 
                             >

@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, DatePicker, Modal, Select, Tooltip, Upload} from "antd";
+import {Avatar, DatePicker, Dropdown, Select, Tooltip, Upload} from "antd";
 import {useSelector} from "react-redux";
 import {detailTaskSelector} from "~/redux/selectors/task/taskSelector";
 import {
-    FaAngleDown,
     FaCaretDown,
     FaCheckCircle,
-    FaDesktop,
+    FaDesktop, FaEllipsisH,
     FaFemale,
     FaMale,
     FaPaperclip,
@@ -19,7 +18,6 @@ import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
 import ToDoList from "~/components/commoms/ToDoList";
 import {isEmpty} from "lodash";
-import {setDetailTask} from "~/redux/reducer/task/taskReducer";
 import {getListNameColumn, getNameColumn} from "~/utils/sorts";
 import {initialData} from "~/asset/data/initalDataTask";
 import {listColorStateDefaults} from "~/asset/data/defaullt_data_task";
@@ -32,6 +30,7 @@ function DetailTask() {
     const [priority, setPriority] = useState(data.priority)
     const [status, setStatus] = useState(getNameColumn(initialData.boards, data.columnId, data.boardId))
     const [listFile, setListFile] = useState([])
+    const [isMoreDetailTask, setIsMoreDetailTask] = useState(false)
     const {RangePicker} = DatePicker;
     const rangePresets = [
         {
@@ -92,7 +91,7 @@ function DetailTask() {
     const listState = getListNameColumn(initialData.boards, data.boardId)
     const listStateRender = listState.map((item, index) => ({
         label: item.label,
-        value:item.id,
+        value: item.id,
         color: listColorStateDefaults[index].color,
         backgroundColor: listColorStateDefaults[index].backgroundColor
     }))
@@ -119,7 +118,7 @@ function DetailTask() {
         },
     ];
 
-    // Upload
+    // Upload  //
 
     const handleChangeUpload = (info) => {
         setListFile(info.fileList)
@@ -138,7 +137,35 @@ function DetailTask() {
 
 
     }
+    //More
+    const handleOpenChange = (flag) => {
+        setIsMoreDetailTask(flag);
+    }
+    const handleMenuClick = (e) => {
+        if (e.key === '3') {
+            setIsMoreDetailTask(false);
+        }
+    };
 
+    const items = [
+        {
+            key: '1',
+            label: (
+                <span>
+                    Xóa Công Việc
+                </span>
+            ),
+        },
+        {
+            key: '2',
+            label: (
+                <span>
+                    Tao Bản Sao Công Việc
+                </span>
+            ),
+        },
+
+    ];
     return (
         <div className='detail-task'>
             <div className='header'>
@@ -146,6 +173,11 @@ function DetailTask() {
                     <FaDesktop className='icon'/>
                     <h4>{data.title}</h4>
                 </div>
+                <Dropdown className='dropdown-more' menu={{items}} placement="bottomRight" >
+                    <div ><FaEllipsisH/></div>
+                </Dropdown>
+
+
             </div>
             <div className='content'>
                 <div className='status'>
@@ -161,20 +193,20 @@ function DetailTask() {
                             padding: 5,
                             fontSize: '0.9rem',
                         }}
-                        onChange={(e) => setStatus({...status,value:e})}
+                        onChange={(e) => setStatus({...status, value: e})}
                     >
                         {!!listStateRender && listStateRender.map((item) => (
-                            <span key={item.value}
-                                  style={{
-                                      marginTop: '0.2rem',
-                                      backgroundColor: item.backgroundColor,
-                                      color: item.color,
-                                      ':hover': {
-                                          backgroundColor: '#67ef79',
-                                      },
-                                  }}
-                                  className='pre-item'><FaCheckCircle
-                                style={{marginRight: '0.5rem'}}/>{item.label}</span>
+                            <Select.Option key={item.value}
+                                           style={{
+                                               marginTop: '0.2rem',
+                                               backgroundColor: item.backgroundColor,
+                                               color: item.color,
+                                               ':hover': {
+                                                   backgroundColor: '#67ef79',
+                                               },
+                                           }}
+                                           className='pre-item'><FaCheckCircle
+                                style={{marginRight: '0.5rem'}}/>{item.label}</Select.Option>
                         ))}
                     </Select>
                 </div>
@@ -206,17 +238,17 @@ function DetailTask() {
                             onChange={(e) => setPriority(e)}
                         >
                             {!!listPriority && listPriority.map((item) => (
-                                <span key={item.value}
-                                      style={{
-                                          marginTop: '0.2rem',
-                                          backgroundColor: item.backgroundColor,
-                                          color: item.color,
-                                          ':hover': {
-                                              backgroundColor: '#67ef79',
-                                          },
-                                      }}
-                                      className='pre-item'><FaRegFlag
-                                    style={{marginRight: '0.5rem'}}/>{item.label}</span>
+                                <Select.Option key={item.value}
+                                               style={{
+                                                   marginTop: '0.2rem',
+                                                   backgroundColor: item.backgroundColor,
+                                                   color: item.color,
+                                                   ':hover': {
+                                                       backgroundColor: '#67ef79',
+                                                   },
+                                               }}
+                                               className='pre-item'><FaRegFlag
+                                    style={{marginRight: '0.5rem'}}/>{item.label}</Select.Option>
                             ))}
                         </Select>
                     </div>

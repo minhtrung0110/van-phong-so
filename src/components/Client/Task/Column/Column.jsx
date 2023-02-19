@@ -20,7 +20,7 @@ function Column({column, onCardDrop, onUpdateColumn}) {
     const [isAddCard, setIsAddCard] = useState(false)
     const [valueNewCard, setValueNewCard] = useState('')
     const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
-    const [detailTask, setDetailTask] = useState()
+
     const newCardRef = useRef()
     useEffect(() => {
         setColumnTitle(column.title)

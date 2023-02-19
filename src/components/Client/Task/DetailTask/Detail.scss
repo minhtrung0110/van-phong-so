@@ -12,6 +12,9 @@
 
   .header {
     height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
     .name-task {
       font-size: var(--20px);
       display: flex;
@@ -21,6 +24,19 @@
       }
 
     }
+    .dropdown-more{
+      margin-right: 0.5rem;
+      font-size: var(--18px);
+      padding: 0 0.5rem;
+      display: flex;
+      align-items: center;
+      height:2rem;
+      border-radius:var(--task-border-radius);
+           &:hover{
+        background-color: var(--gray97-color);
+      }
+    }
+
 
   }
 
