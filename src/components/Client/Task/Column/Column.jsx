@@ -14,6 +14,7 @@ import DetailTask from "~/components/Client/Task/DetailTask";
 
 
 function Column({column, onCardDrop, onUpdateColumn}) {
+    console.log(column )
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [columnTitle, setColumnTitle] = useState('')
     const [isAddCard, setIsAddCard] = useState(false)

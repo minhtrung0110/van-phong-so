@@ -1,18 +1,19 @@
 export const  initialData ={
     boards:[
         {
-            id:'board-1',
+            id:'kltn-01',
+            name:'Khóa Luận Tốt Nghiệp',
             columnOrder:['column-1', 'column-2','column-3'],
             columns:[
                 {
                     id:'column-1',
-                    boardId:'board-1',
-                    title:'Todo',
+                    boardId:'kltn-01',
+                    title:'Chuẩn Bị',
                     cardOrder:['card-1', 'card-2','card-3','card-4','card-5'],
                     cards:[
                         {
                             id:'card-1',
-                            boardId:'board-1',
+                            boardId:'kltn-01',
                             columnId:'column-1',
                             title:'Write PRD',
                             priority:'highly',
@@ -21,7 +22,7 @@ export const  initialData ={
                         },
                         {
                             id:'card-2',
-                            boardId:'board-1',
+                            boardId:'kltn-01',
                             columnId:'column-1',
                             title:'Write PRD',
                             priority:'highly',
@@ -30,7 +31,7 @@ export const  initialData ={
                         }
                         ,  {
                             id:'card-3',
-                            boardId:'board-1',
+                            boardId:'kltn-01',
                             columnId:'column-1',
                             title:'Write PRD',
                             priority:'highly',
@@ -39,7 +40,7 @@ export const  initialData ={
                         }
                         ,  {
                             id:'card-4',
-                            boardId:'board-1',
+                            boardId:'kltn-01',
                             columnId:'column-1',
                             title:'Write PRD',
                             priority:'highly',
@@ -48,7 +49,7 @@ export const  initialData ={
                         },
                         {
                             id:'card-5',
-                            boardId:'board-1',
+                            boardId:'kltn-01',
                             columnId:'column-1',
                             title:'Write PRD',
                             priority:'highly',
@@ -60,23 +61,23 @@ export const  initialData ={
                 },
                 {
                     id:'column-2',
-                    boardId:'board-1',
-                    title:'Doing',
+                    boardId:'kltn-01',
+                    title:'Đang Tiến Hành',
                     cardOrder:['card-1', 'card-2','card-3','card-4','card-5'],
                     cards:[
                         {
                             id:'card-1',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-2',
                             title:'Write PRD',
-                            priority:'highly',
+                            priority:'low',
                             description:'hahalll',
                             cover:null
                         },
                         {
                             id:'card-2',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-2',
                             title:'Write PRD',
                             priority:'highly',
                             description:'hahalll',
@@ -84,26 +85,26 @@ export const  initialData ={
                         }
                         ,  {
                             id:'card-3',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-2',
                             title:'Write PRD',
-                            priority:'highly',
+                            priority:'none',
                             description:'hahalll',
                             cover:"https://placeimg.com/640/480/any"
                         }
                         ,  {
                             id:'card-4',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-2',
                             title:'Write PRD',
-                            priority:'highly',
+                            priority:'middle',
                             description:'hahalll',
                             cover:null
                         },
                         {
                             id:'card-5',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-2',
                             title:'Write PRD',
                             priority:'highly',
                             description:'hahalll',
@@ -114,14 +115,14 @@ export const  initialData ={
                 },
                 {
                     id:'column-3',
-                    boardId:'board-1',
-                    title:'Complete',
+                    boardId:'kltn-01',
+                    title:'Đã Hoàn Thành',
                     cardOrder:['card-1', 'card-2','card-3','card-4','card-5'],
                     cards:[
                         {
                             id:'card-1',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-3',
                             title:'Write PRD',
                             priority:'highly',
                             description:'hahalll',
@@ -129,26 +130,26 @@ export const  initialData ={
                         },
                         {
                             id:'card-2',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-3',
                             title:'Write PRD',
-                            priority:'highly',
+                            priority:'low',
                             description:'hahalll',
                             cover:null
                         }
                         ,  {
                             id:'card-3',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-3',
                             title:'Write PRD',
-                            priority:'highly',
+                            priority:'low',
                             description:'hahalll',
                             cover:null
                         }
                         ,  {
                             id:'card-4',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-3',
                             title:'Write PRD',
                             priority:'highly',
                             description:'hahalll',
@@ -156,8 +157,8 @@ export const  initialData ={
                         },
                         {
                             id:'card-5',
-                            boardId:'board-1',
-                            columnId:'column-1',
+                            boardId:'kltn-01',
+                            columnId:'column-3',
                             title:'Write PRD',
                             priority:'highly',
                             description:'hahalll',

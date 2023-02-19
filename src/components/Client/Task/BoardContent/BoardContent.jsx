@@ -22,7 +22,7 @@ function BoardContent() {
 
     const newColInputRef=useRef()
     useEffect(()=>{
-        const boardFromDB=initialData.boards.find(board => board.id==='board-1')
+        const boardFromDB=initialData.boards.find(board => board.id==='kltn-01')
         if(boardFromDB){
             setBoard(boardFromDB)
             // sort Column

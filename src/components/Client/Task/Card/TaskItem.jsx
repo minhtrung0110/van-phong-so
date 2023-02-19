@@ -5,6 +5,7 @@ import {useDispatch} from "react-redux";
 import {setDetailTask} from "~/redux/reducer/task/taskReducer";
 
 function TaskItem({task, onShowDetail}) {
+   // console.log(task)
     const dispatch = useDispatch()
     const handleShowDetail = () => {
         dispatch(setDetailTask(task))

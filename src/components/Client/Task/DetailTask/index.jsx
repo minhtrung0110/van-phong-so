@@ -2,19 +2,36 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Avatar, DatePicker, Modal, Select, Tooltip, Upload} from "antd";
 import {useSelector} from "react-redux";
-import {detailStaffSelector} from "~/redux/selectors/task/taskSelector";
-import {FaDesktop, FaFemale, FaMale, FaPaperclip, FaPlus, FaRegFlag} from "react-icons/fa";
+import {detailTaskSelector} from "~/redux/selectors/task/taskSelector";
+import {
+    FaAngleDown,
+    FaCaretDown,
+    FaCheckCircle,
+    FaDesktop,
+    FaFemale,
+    FaMale,
+    FaPaperclip,
+    FaPlus,
+    FaRegFlag
+} from "react-icons/fa";
 import './Detail.scss'
 import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
 import ToDoList from "~/components/commoms/ToDoList";
+import {isEmpty} from "lodash";
+import {setDetailTask} from "~/redux/reducer/task/taskReducer";
+import {getListNameColumn, getNameColumn} from "~/utils/sorts";
+import {initialData} from "~/asset/data/initalDataTask";
+import {listColorStateDefaults} from "~/asset/data/defaullt_data_task";
 
 DetailTask.propTypes = {};
 
 function DetailTask() {
-    const data = useSelector(detailStaffSelector)
+    const data = useSelector(detailTaskSelector)
     const [errorDescription, setErrorDescription] = useState('');
-    const [priority,setPriority] = useState ()
+    const [priority, setPriority] = useState(data.priority)
+    const [status, setStatus] = useState(getNameColumn(initialData.boards, data.columnId, data.boardId))
+    const [listFile, setListFile] = useState([])
     const {RangePicker} = DatePicker;
     const rangePresets = [
         {
@@ -49,29 +66,38 @@ function DetailTask() {
     const listPriority = [
         {
             label: 'Cao',
-            value: 'high',
+            value: 'highly',
             color: '#e94040',
-            backgroundColor:'rgba(233,64,64,.12)'
+            backgroundColor: 'rgba(233,64,64,.12)'
         },
         {
             label: 'Trung Bình',
             value: 'middle',
             color: '#fa8c16',
-            backgroundColor:'rgba(250,140,22,.12)'
+            backgroundColor: 'rgba(250,140,22,.12)'
         },
         {
             label: 'Thấp',
             value: 'low',
             color: '#18baff',
-            backgroundColor:'rgba(24,186,255,.12)'
+            backgroundColor: 'rgba(24,186,255,.12)'
         },
         {
             label: 'Không ưu tiên',
             value: 'none',
             color: '#a9a8a8',
-            backgroundColor:'#f5f7f9'
+            backgroundColor: '#f5f7f9'
         },
     ]
+    const listState = getListNameColumn(initialData.boards, data.boardId)
+    const listStateRender = listState.map((item, index) => ({
+        label: item.label,
+        value:item.id,
+        color: listColorStateDefaults[index].color,
+        backgroundColor: listColorStateDefaults[index].backgroundColor
+    }))
+    // console.log(listStateRender)
+    // console.log('Status: ',status)
     const fileList = [
         {
             uid: '0',
@@ -92,6 +118,27 @@ function DetailTask() {
             status: 'error',
         },
     ];
+
+    // Upload
+
+    const handleChangeUpload = (info) => {
+        setListFile(info.fileList)
+    }
+    const handleHiddenListFile = () => {
+        const elements = document.querySelector('.attach-file .ant-upload-list');
+        const icon = document.querySelector('.attach-file .title-upload .icon');
+
+        if (elements.style.display !== 'none') {
+            elements.style.display = 'none';
+            icon.classList.toggle('rotate');
+        } else {
+            elements.style.display = 'block';
+            icon.classList.toggle('rotate');
+        }
+
+
+    }
+
     return (
         <div className='detail-task'>
             <div className='header'>
@@ -101,8 +148,39 @@ function DetailTask() {
                 </div>
             </div>
             <div className='content'>
+                <div className='status'>
+                    <span className='title'>Trạng Thái: </span>
+                    <Select
+                        className={`status-${status.value}`}
+                        defaultValue={status.label}
+                        style={{
+                            width: 180,
+                            padding: 0,
+                        }}
+                        dropdownStyle={{
+                            padding: 5,
+                            fontSize: '0.9rem',
+                        }}
+                        onChange={(e) => setStatus({...status,value:e})}
+                    >
+                        {!!listStateRender && listStateRender.map((item) => (
+                            <span key={item.value}
+                                  style={{
+                                      marginTop: '0.2rem',
+                                      backgroundColor: item.backgroundColor,
+                                      color: item.color,
+                                      ':hover': {
+                                          backgroundColor: '#67ef79',
+                                      },
+                                  }}
+                                  className='pre-item'><FaCheckCircle
+                                style={{marginRight: '0.5rem'}}/>{item.label}</span>
+                        ))}
+                    </Select>
+                </div>
                 <div className='gr-01'>
                     <div className='duration'>
+                        <p>Thời Hạn :</p>
                         <RangePicker
                             presets={rangePresets}
                             showTime
@@ -113,9 +191,10 @@ function DetailTask() {
 
                     </div>
                     <div className='priority'>
+                        <p>Độ Ưu Tiên :</p>
                         <Select
-                            className={`select-proiority-${priority}`  }
-                            defaultValue="Không ưu tiên"
+                            className={`select-proiority-${priority}`}
+                            defaultValue={priority}
                             style={{
                                 width: 180,
                                 padding: 0,
@@ -124,12 +203,12 @@ function DetailTask() {
                                 padding: 5,
                                 fontSize: '0.9rem',
                             }}
-                            onChange={(e)=>setPriority(e)}
+                            onChange={(e) => setPriority(e)}
                         >
                             {!!listPriority && listPriority.map((item) => (
                                 <span key={item.value}
                                       style={{
-                                          marginTop:'0.2rem',
+                                          marginTop: '0.2rem',
                                           backgroundColor: item.backgroundColor,
                                           color: item.color,
                                           ':hover': {
@@ -146,8 +225,8 @@ function DetailTask() {
                     <div className='members'>
                         <p>Thực Hiện :</p>
                         <div className='avatar-group'>
-                            <Avatar.Group >
-                                <Avatar src="https://joeschmoe.io/api/v1/random" />
+                            <Avatar.Group>
+                                <Avatar src="https://joeschmoe.io/api/v1/random"/>
                                 <a href="https://ant.design">
                                     <Avatar
                                         style={{
@@ -162,14 +241,14 @@ function DetailTask() {
                                         style={{
                                             backgroundColor: '#87d068',
                                         }}
-                                        icon={<FaMale />}
+                                        icon={<FaMale/>}
                                     />
                                 </Tooltip>
                                 <Avatar
                                     style={{
                                         backgroundColor: '#1890ff',
                                     }}
-                                    icon={<FaFemale />}
+                                    icon={<FaFemale/>}
                                 />
                             </Avatar.Group>
 
@@ -184,23 +263,28 @@ function DetailTask() {
                 </div>
                 <div className='description'>
                     <p>Nội Dung Công Việc:</p>
-                    <CustomEditor id="description" editorDescription={editorDescription} />
+                    <CustomEditor id="description" editorDescription={editorDescription}/>
                 </div>
                 <div className='todo-list'>
 
-                    <ToDoList />
+                    <ToDoList/>
                 </div>
                 <div className='attach-file'>
                     <Upload
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                        action="http://localhost:3000/"
                         listType="picture"
-                        defaultFileList={[...fileList]}
+                        defaultFileList={listFile}
+                        multiple
+                        onChange={handleChangeUpload}
                     >
-                        <button className='btn-upload' >
-                            <FaPaperclip className='icon' />
+                        <button className='btn-upload'>
+                            <FaPaperclip className='icon'/>
                             <span className='title'>Tải lên tệp đính kèm</span>
                         </button>
                     </Upload>
+                    {!isEmpty(listFile) && (<div className='title-upload'>Tệp đính kèm ({listFile.length})
+                        <FaCaretDown className='icon' onClick={handleHiddenListFile}/>
+                    </div>)}
                 </div>
                 <div className='activity-task'>
                     <div className='description'>
@@ -211,8 +295,6 @@ function DetailTask() {
                     </div>
                 </div>
             </div>
-
-
 
 
             <div className='footer'></div>

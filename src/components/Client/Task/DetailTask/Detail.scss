@@ -25,13 +25,114 @@
   }
 
   .content {
+    .status{
+      display: flex;
+      align-items: center;
+      height: 3rem;
+      margin-bottom: 1rem;
+      .title {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        margin-right: 2rem;
+      }
+      .status-column-1 .ant-select-selector {
+        color: #a9a8a8;
+        background-color: #faf9f9;
+        .ant-select-selection-item {
+          font-weight: bold;
+          margin-left: 0.5rem;
+        }
+      }
+      .status-column-2 .ant-select-selector {
+        color: #fa8c16;
+        background-color: rgba(250,140,22,.12);
+        .ant-select-selection-item {
+          font-weight: bold;
+          margin-left: 0.5rem;
+        }
+      }
+      .status-column-3 .ant-select-selector {
+        color: #3ab67b;
+        background-color: #56ca7629;
+        .ant-select-selection-item {
+          font-weight: bold;
+          margin-left: 0.5rem;
+        }
+      }
+      .status-column-4 .ant-select-selector {
+        color: #18baff;
+        background-color: rgba(24,186,255,.12);
+        .ant-select-selection-item {
+          font-weight: bold;
+          margin-left: 0.5rem;
+        }
+      }
+      .status-column-5 .ant-select-selector {
+        color: #e94040;
+        background-color: rgba(233, 64, 64, .12);
+        .ant-select-selection-item {
+          font-weight: bold;
+          margin-left: 0.5rem;
+        }
+      }
+      .status-column-6 .ant-select-selector {
+        color: #760ae7;
+        background-color: rgba(115,59,238,0.12);
+        .ant-select-selection-item {
+          font-weight: bold;
+          margin-left: 0.5rem;
+        }
+      }
+      .status-column-7 .ant-select-selector {
+        color: #43f5f5;
+        background-color: rgba(54,245,229,0.12);
+        .ant-select-selection-item {
+          font-weight: bold;
+          margin-left: 0.5rem;
+        }
+      }
+      .status-column-8 .ant-select-selector {
+        color: #f326d0;
+        background-color: rgba(219,37,239,0.12);
+        .ant-select-selection-item {
+          font-weight: bold;
+          margin-left: 0.5rem;
+        }
+      }
+      .status-content {
+        background-color: var(--pr-green-light);
+        color: var(--pr-green);
+        border:  var(--pr-green);
+        min-width: max-content;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        padding: 0.2rem 1rem ;
+        gap: 6px;
+        font-style: normal;
+        font-weight: 600;
+        font-size: var(--14px);
+        line-height: var(--20px);
+        cursor: pointer;
+        height: 32px;
+        .icon{
+          color: var(--pr-green);
+          margin-right: 0.5rem;
+        }
+      }
+    }
     .gr-01 {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 4rem;
+      height: 4.5rem;
+      margin-bottom: 1rem;
 
       .duration {
+        p {
+          @include title
+        }
         // Customize the date picker
         .range-date {
           background-color: rgba(222, 220, 220, 0.6);
@@ -42,8 +143,10 @@
       }
 
       .priority {
-
-        .select-proiority-high .ant-select-selector {
+        p {
+          @include title
+        }
+        .select-proiority-highly .ant-select-selector {
           color: #e94040;
           background-color: rgba(233, 64, 64, .12);
 
@@ -133,6 +236,10 @@
       }
     }
     .attach-file{
+      //display: flex;
+      //justify-content: space-between;
+      //align-items: center;
+      position: relative;
       .btn-upload{
         margin-top: 1rem;
         display: flex;
@@ -144,6 +251,7 @@
         border-radius: (--task-border-radius);
         border: none;
         padding: 0 1.5rem 0 1rem;
+
 
         &:hover{
           background-color: var(--gray97-color);
@@ -159,7 +267,33 @@
           font-weight: bold;
         }
       }
+      .title-upload{
+        font-size: var(--14px);
+        font-weight: bold;
+        margin-right: 2rem;
+        position: absolute;
+        right: 0.5rem;
+        top:1.5rem;
+        display: flex;
+        align-items: center;
+        .icon{
+          font-size: var(--22px);
+          color: var(--blue);
+          margin-left: 0.5rem;
+          transform-origin: center;
+          transition: transform 0.3s ease;
+          &:hover{
+            color: var(--red);
+
+          }
+        }
+        .icon.rotate {
+          transform: rotate(180deg);
+        }
+
+      }
     }
+
   }
 
 

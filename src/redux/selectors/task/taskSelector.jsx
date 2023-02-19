@@ -1,5 +1,5 @@
-export const isAddStaffSelector = state => state.task.isAdd
-export const isEditStaffSelector = state => state.task.isEdit
+export const isAddTaskSelector = state => state.task.isAdd
+export const isEditTaskSelector = state => state.task.isEdit
 export const taskByIdSelector = state => state.task.task
-export const isResetStaffSelector= state => state.task.isReset
-export const detailStaffSelector= state => state.task.detailTask
+export const isResetTaskSelector= state => state.task.isReset
+export const detailTaskSelector= state => state.task.detailTask
