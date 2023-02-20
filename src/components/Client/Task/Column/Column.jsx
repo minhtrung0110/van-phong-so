@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import "./Column.scss";
 import {Container, Draggable} from "react-smooth-dnd";
-import {FaEllipsisH, FaPlus, FaTimes} from "react-icons/fa";
+import {FaEllipsisH, FaExclamationTriangle, FaPlus, FaTimes} from "react-icons/fa";
 import {Button, ButtonGroup} from "react-bootstrap";
 import {cloneDeep} from "lodash";
 import {mapOrder} from "~/utils/sorts";
@@ -11,31 +11,29 @@ import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import TextArea from "antd/es/input/TextArea";
 import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import DetailTask from "~/components/Client/Task/DetailTask";
+import ConfirmModal from "~/components/commoms/ConfirmModal";
 
 
 function Column({column, onCardDrop, onUpdateColumn}) {
-    console.log(column )
+    // console.log(column )
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [columnTitle, setColumnTitle] = useState('')
     const [isAddCard, setIsAddCard] = useState(false)
     const [valueNewCard, setValueNewCard] = useState('')
     const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
-
     const newCardRef = useRef()
     useEffect(() => {
         setColumnTitle(column.title)
     }, [column.title])
     const cards = mapOrder(column.cards, column.cardOrder, 'id')
-    const handleRemoveColumn = (type) => {
-        (type === 'close') && setShowConfirmModal(false);
-        if (type === 'confirm') {
+    const handleRemoveColumn = () => {
             const newColumn = {
                 ...column,
                 _destroy: true
             }
             onUpdateColumn(newColumn)
             setShowConfirmModal(false);
-        }
+
     }
     const selectAllInlineTex = (e) => {
         e.target.focus();
@@ -83,8 +81,15 @@ function Column({column, onCardDrop, onUpdateColumn}) {
     ];
     const [open, setOpen] = useState(false);
     const handleMenuClick = (e) => {
-        if (e.key === '3') {
+        if (e.key === '1') {
             setOpen(false);
+            setShowConfirmModal(true)
+        }
+        else if (e.key === '3') {
+            setOpen(false);
+        }
+        else {
+
         }
     };
     const handleOpenChange = (flag) => {
@@ -213,6 +218,8 @@ function Column({column, onCardDrop, onUpdateColumn}) {
             >
               <DetailTask/>
             </Modal>
+            <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa' content={`Bạn Có Thực Sự Muốn Xóa Cột ${columnTitle} Này ? `}
+                          textCancel='Hủy' textOK='Xóa' onCancel={()=>setShowConfirmModal(false)} onOK={handleRemoveColumn}/>
         </div>
     );
 }

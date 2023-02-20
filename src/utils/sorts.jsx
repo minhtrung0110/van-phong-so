@@ -11,6 +11,6 @@ export const getNameColumn=(array,col_id,board_id) =>{
 }
 export const getListNameColumn=(array,board_id) =>{
     const listColumn=array.find(board => board.id === board_id)
-    console.log(listColumn)
+  //  console.log(listColumn)
     return listColumn.columns.map((item,index)=>({id:item.id,label:item.title}))
 }

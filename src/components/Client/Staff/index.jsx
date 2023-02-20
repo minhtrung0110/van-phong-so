@@ -8,6 +8,7 @@ import {Button, Modal} from "antd";
 import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import {useDispatch} from "react-redux";
 import {setIsEdit} from "~/redux/reducer/staff/staffReducer";
+import ConfirmModal from "~/components/commoms/ConfirmModal";
 StaffTable.propTypes = {
 
 };
@@ -137,27 +138,14 @@ function StaffTable({tableHeader,tableBody}) {
                        >
                     {<DetailStaff user={detailStaff} />}
                 </Modal>
-                <Modal
-                    title="Xác Nhận Xóa"
-                    open={showPopupDelete.show}
-                    onOk={()=>handleRemoveStaff(showPopupDelete.staff_id)}
-                    onCancel={(e) => setShowPopupDelete({ ...showPopupDelete, show: false })}
-                    okText="Xóa"
-                    centered
-                    cancelText="Hủy"
-                    footer={[
+                <ConfirmModal title="Xác Nhận Xóa"
+                              open={showPopupDelete.show}
+                              content={`Bạn Có Thực Sự Muốn Xóa Nhân Viên Này Không ? `}
+                              textOK="Xóa"
+                              textCancel="Hủy"
+                              onOK={()=>handleRemoveStaff(showPopupDelete.staff_id)}
+                              onCancel={(e) => setShowPopupDelete({ ...showPopupDelete, show: false })} />
 
-                        <Button key="2" onClick={(e) => setShowPopupDelete({ ...showPopupDelete, show: false })}>Hủy</Button>,
-                        <Button key="3" type="primary" danger onClick={()=>handleRemoveStaff(showPopupDelete.staff_id)}>
-                           Xóa
-                        </Button>
-                    ]}
-                >
-                 <div className="box-confirmation">
-                     <FaExclamationTriangle className='icon'/>
-                     <span >Bạn có thực sự muốn xóa nhân viên này ?</span>
-                 </div>
-                </Modal>
             </div>
     );
 }
