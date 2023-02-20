@@ -7,11 +7,11 @@ import {FaPlus} from "react-icons/fa";
 import ToDoItem from "~/components/commoms/ToDoList/ToDoItem";
 
 const cx=classNames.bind(styles)
-function TodoList(props) {
-    const list=[
-        {id:1,name:'Lập Kịch Bản',status:false,isNew:false},
-        {id:2,name:'Mua Đao Cu',status:false,isNew:false}
-    ]
+function TodoList({list}) {
+    // const list=[
+    //     {id:1,name:'Lập Kịch Bản',status:false,isNew:false},
+    //     {id:2,name:'Mua Đao Cu',status:false,isNew:false}
+    // ]
     const [listToDo,setListToDo] = useState(list)
     const [listToDoDone,setListToDoDone] = useState([])
     const [isAddItem,setIsAddItem] = useState(false)

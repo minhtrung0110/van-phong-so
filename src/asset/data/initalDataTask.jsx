@@ -12,49 +12,74 @@ export const  initialData ={
                     cardOrder:['card-1', 'card-2','card-3','card-4','card-5'],
                     cards:[
                         {
-                            id:'card-1',
+                            id: 'task-1',
                             boardId:'kltn-01',
-                            columnId:'column-1',
-                            title:'Write PRD',
-                            priority:'highly',
-                            description:'hahalll',
-                            cover:"https://placeimg.com/640/480/any"
+                            columnId: 'column-1',
+                            title:'Lập Kế Hoạch',
+                            description: '',
+                            startTime:'01/10/2022 00:10:00',
+                            endTime:'31/12/2022 21:00:00',
+                            priority:'none',
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
                         },
                         {
-                            id:'card-2',
+                            id:'task-2',
                             boardId:'kltn-01',
-                            columnId:'column-1',
-                            title:'Write PRD',
-                            priority:'highly',
-                            description:'hahalll',
-                            cover:null
+                            columnId: 'column-1',
+                            title:'Hoc React JS',
+                            description: '',
+                            startTime:'01/10/2022 00:10:00',
+                            endTime:'31/12/2022 21:00:00',
+                            priority:'none',
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
                         }
                         ,  {
-                            id:'card-3',
+                            id:'task-3',
                             boardId:'kltn-01',
-                            columnId:'column-1',
-                            title:'Write PRD',
-                            priority:'highly',
-                            description:'hahalll',
-                            cover:null
+                            columnId: 'column-1',
+                            title:'Xem Redux',
+                            description: '',
+                            startTime:'01/10/2022 00:10:00',
+                            endTime:'31/12/2022 21:00:00',
+                            priority:'none',
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
                         }
                         ,  {
-                            id:'card-4',
+                            id:'task-4',
                             boardId:'kltn-01',
-                            columnId:'column-1',
-                            title:'Write PRD',
-                            priority:'highly',
-                            description:'hahalll',
-                            cover:null
+                            columnId: 'column-1',
+                            title:'Nắm Yêu Cầu',
+                            description: '',
+                            startTime:'01/10/2022 00:10:00',
+                            endTime:'31/12/2022 21:00:00',
+                            priority:'none',
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
                         },
                         {
-                            id:'card-5',
+                            id:'task-5',
                             boardId:'kltn-01',
-                            columnId:'column-1',
-                            title:'Write PRD',
-                            priority:'highly',
-                            description:'hahalll',
-                            cover:null
+                            columnId: 'column-1',
+                            title:'Lên Bảng Màu',
+                            description: '',
+                            startTime:'01/10/2022 00:10:00',
+                            endTime:'31/12/2022 21:00:00',
+                            priority:'none',
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
                         }
 
                     ]
@@ -66,51 +91,47 @@ export const  initialData ={
                     cardOrder:['card-1', 'card-2','card-3','card-4','card-5'],
                     cards:[
                         {
-                            id:'card-1',
+                            id:'task-1',
                             boardId:'kltn-01',
-                            columnId:'column-2',
-                            title:'Write PRD',
-                            priority:'low',
-                            description:'hahalll',
-                            cover:null
+                            columnId: 'column-2',
+                            title:'Xây Nhân Sự',
+                            description: '',
+                            startTime:'01/10/2022 00:10:00',
+                            endTime:'31/12/2022 21:00:00',
+                            priority:'highly',
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
                         },
                         {
-                            id:'card-2',
+                            id:'task-2',
                             boardId:'kltn-01',
-                            columnId:'column-2',
-                            title:'Write PRD',
-                            priority:'highly',
-                            description:'hahalll',
-                            cover:null
-                        }
-                        ,  {
-                            id:'card-3',
-                            boardId:'kltn-01',
-                            columnId:'column-2',
-                            title:'Write PRD',
-                            priority:'none',
-                            description:'hahalll',
-                            cover:"https://placeimg.com/640/480/any"
-                        }
-                        ,  {
-                            id:'card-4',
-                            boardId:'kltn-01',
-                            columnId:'column-2',
-                            title:'Write PRD',
+                            columnId: 'column-2',
+                            title:'Thiê Kế Lich Trình',
+                            description: '',
+                            startTime:'01/01/2023 00:10:00',
+                            endTime:'11/03/2023 21:00:00',
                             priority:'middle',
-                            description:'hahalll',
-                            cover:null
-                        },
-                        {
-                            id:'card-5',
-                            boardId:'kltn-01',
-                            columnId:'column-2',
-                            title:'Write PRD',
-                            priority:'highly',
-                            description:'hahalll',
-                            cover:null
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
                         }
-
+                        ,  {
+                            id:'task-3',
+                            boardId:'kltn-01',
+                            columnId: 'column-2',
+                            title:'Tạo Dụ Án Github',
+                            description: '',
+                            startTime:'01/01/2023 00:10:00',
+                            endTime:'11/03/2023 21:00:00',
+                            priority:'low',
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
+                        }
                     ]
                 },
                 {
@@ -120,50 +141,65 @@ export const  initialData ={
                     cardOrder:['card-1', 'card-2','card-3','card-4','card-5'],
                     cards:[
                         {
-                            id:'card-1',
+                            id:'task-1',
                             boardId:'kltn-01',
-                            columnId:'column-3',
-                            title:'Write PRD',
+                            columnId: 'column-3',
+                            title:'UI Login',
+                            description: '',
+                            startTime:'01/01/2023 00:10:00',
+                            endTime:'11/07/2023 21:00:00',
                             priority:'highly',
-                            description:'hahalll',
-                            cover:null
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
                         },
                         {
-                            id:'card-2',
+                            id:'task-2',
                             boardId:'kltn-01',
-                            columnId:'column-3',
-                            title:'Write PRD',
-                            priority:'low',
-                            description:'hahalll',
-                            cover:null
-                        }
-                        ,  {
-                            id:'card-3',
-                            boardId:'kltn-01',
-                            columnId:'column-3',
-                            title:'Write PRD',
-                            priority:'low',
-                            description:'hahalll',
-                            cover:null
-                        }
-                        ,  {
-                            id:'card-4',
-                            boardId:'kltn-01',
-                            columnId:'column-3',
-                            title:'Write PRD',
+                            columnId: 'column-3',
+                            title:'UIBase DashBoard',
+                            description: '',
+                            startTime:'01/01/2023 00:10:00',
+                            endTime:'11/07/2023 21:00:00',
                             priority:'highly',
-                            description:'hahalll',
-                            cover:null
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
+                        }
+                        ,  {
+                            id:'task-3',
+                            boardId:'kltn-01',
+                            columnId: 'column-3',
+                            title:'Đề Cương Khóa Luận',
+                            description: 'Chú Ý xác định đúng đối tượng và tập trung vào quy trình doanh nghiệp',
+                            startTime:'01/02/2023 00:10:00 ',
+                            endTime:'11/02/2023 20:00:00 21:00:00',
+                            priority:'highly',
+                            members:[],
+                            todoList:[
+                                {id:1,name:'Lập Kịch Bản',status:false,isNew:false},
+                                {id:2,name:'Viết Mục Tiêu',status:false,isNew:false}
+                            ],
+                            fileList:[],
+                            comments:[],
                         },
                         {
-                            id:'card-5',
+                            id:'task-3',
                             boardId:'kltn-01',
-                            columnId:'column-3',
-                            title:'Write PRD',
-                            priority:'highly',
-                            description:'hahalll',
-                            cover:null
+                            columnId: 'column-3',
+                            title:'Tham Khảo UI',
+                            description: '',
+                            startTime:'01/1/2023 00:10:00',
+                            endTime:'01/02/2023 21:00:00',
+                            priority:'middle',
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
                         }
+
 
                     ]
                 }

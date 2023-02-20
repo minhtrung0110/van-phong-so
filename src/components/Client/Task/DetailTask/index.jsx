@@ -31,6 +31,10 @@ function DetailTask() {
     const [status, setStatus] = useState(getNameColumn(initialData.boards, data.columnId, data.boardId))
     const [listFile, setListFile] = useState([])
     const [isMoreDetailTask, setIsMoreDetailTask] = useState(false)
+    const [rangeValueTime, setRangeValueTime] = useState(
+        [dayjs(data.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(data.endTime, "DD/MM/YYYY HH:mm:ss")]
+           );
+
     const {RangePicker} = DatePicker;
     const rangePresets = [
         {
@@ -54,9 +58,10 @@ function DetailTask() {
         if (dates) {
             console.log('From: ', dates[0], ', to: ', dates[1]);
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-        } else {
+        } else
             console.log('Clear');
-        }
+
+            setRangeValueTime([dates[0],dates[1]])
     }
     const editorDescription = (value) => {
         //  setValue('description', value);nay2y2 cho form
@@ -146,7 +151,7 @@ function DetailTask() {
             setIsMoreDetailTask(false);
         }
     };
-
+        console.log(rangeValueTime)
     const items = [
         {
             key: '1',
@@ -219,6 +224,7 @@ function DetailTask() {
                             format="DD/MM/YYYY HH:mm:ss"
                             onChange={onRangeChange}
                             className="range-date"
+                            defaultValue={rangeValueTime}
                         />
 
                     </div>
@@ -295,11 +301,11 @@ function DetailTask() {
                 </div>
                 <div className='description'>
                     <p>Nội Dung Công Việc:</p>
-                    <CustomEditor id="description" editorDescription={editorDescription}/>
+                    <CustomEditor id="description"  editorDescription={editorDescription} defaultValues={data.description}/>
                 </div>
                 <div className='todo-list'>
 
-                    <ToDoList/>
+                    <ToDoList list={data.todoList}/>
                 </div>
                 <div className='attach-file'>
                     <Upload

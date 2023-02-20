@@ -33,7 +33,6 @@ function Column({column, onCardDrop, onUpdateColumn}) {
             }
             onUpdateColumn(newColumn)
             setShowConfirmModal(false);
-
     }
     const selectAllInlineTex = (e) => {
         e.target.focus();
@@ -52,7 +51,14 @@ function Column({column, onCardDrop, onUpdateColumn}) {
             boardId: column.boardId,
             columnId: column.id,
             title: valueNewCard,
-            cover: null
+            description: '',
+            startTime:'01/10/2022',
+            endTime:'31/12/2022',
+            priority:'none',
+            members:[],
+            todoList:[],
+            fileList:[],
+            comments:[],
         }
         let newColumn = cloneDeep(column)
         newColumn.cards.push(newCardToAdd)
