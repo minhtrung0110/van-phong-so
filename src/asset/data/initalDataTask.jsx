@@ -207,3 +207,58 @@ export const  initialData ={
         }
     ]
 }
+
+export const listMembersForTask =[
+    {
+        id: 1,
+        first_name: 'Nguyễn Đức Minh',
+        last_name: 'Trung',
+        phone_number: '09744148784',
+        gender: 'nam',
+        birth_date: '01-10-2001',
+        mail: 'minhtrung@gmail.com',
+        role: 'CEO',
+        avatar: 'https://i.ibb.co/mvybfht/C-i-n-3-1.jpg',
+        address: 'Tan Quy Tây, Bình Chanh,HCM',
+        status: 1,
+    },
+    {
+        id: 2,
+        first_name: 'Dương Đình Khả',
+        last_name: 'Ngân',
+        phone_number: '08844148784',
+        gender: 'nữ',
+        birth_date: '12-06-1996',
+        mail: 'nganxulaku@gmail.com',
+        role: 'diễn viên',
+        avatar: 'https://duyendangvietnam.net.vn/public/uploads/files/Chau%20Chau/aaa(74).jpg',
+        address: 'HCM',
+        status: 1,
+    },
+    {
+        id: 3,
+        first_name: 'Hà',
+        last_name: 'Nhi',
+        phone_number: '08844148784',
+        gender: 'nữ',
+        birth_date: '08-02-1994',
+        mail: 'nhixinhdep@gmail.com',
+        role: 'ca sĩ',
+        avatar: 'https://images2.thanhnien.vn/Uploaded/thynhm/2022_08_08/ha-nhi-7-8636.jpg',
+        address: 'HCM',
+        status: 1,
+    },
+    {
+        id: 4,
+        first_name: 'Lê Phạm',
+        last_name: 'Ngân',
+        phone_number: '08844148784',
+        gender: 'nữ',
+        birth_date: '01-10-2008',
+        mail: 'nganxulaku@gmail.com',
+        role: 'Thư Ký',
+        avatar: 'https://th.bing.com/th/id/OIP.JZb8Bkv2vXm6G4W6KZy-rAHaHV?pid=ImgDet&rs=1',
+        address: 'HCM',
+        status: 1,
+    }
+]

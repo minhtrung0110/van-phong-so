@@ -12,6 +12,8 @@ import TextArea from "antd/es/input/TextArea";
 import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import DetailTask from "~/components/Client/Task/DetailTask";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {useSelector} from "react-redux";
+import {deleteTaskSelector} from "~/redux/selectors/task/taskSelector";
 
 
 function Column({column, onCardDrop, onUpdateColumn}) {
@@ -21,6 +23,7 @@ function Column({column, onCardDrop, onUpdateColumn}) {
     const [isAddCard, setIsAddCard] = useState(false)
     const [valueNewCard, setValueNewCard] = useState('')
     const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
+
     const newCardRef = useRef()
     useEffect(() => {
         setColumnTitle(column.title)

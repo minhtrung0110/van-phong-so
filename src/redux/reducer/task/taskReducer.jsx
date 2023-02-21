@@ -6,6 +6,7 @@ export const taskReducer = createSlice({
     initialState: {
         key: 0,
         detailTask:{},
+        deleteTask:{},
         isAdd: false,
         isEdit: false,
         isReset:'reset-page',
@@ -17,6 +18,9 @@ export const taskReducer = createSlice({
         },
         setDetailTask: (state, action) => {
             state.detailTask = action.payload;
+        },
+        setDeleteTask: (state, action) => {
+            state.deleteTask = action.payload;
         },
         setIsAdd: (state, action) => {
             state.isAdd = action.payload;
@@ -33,6 +37,6 @@ export const taskReducer = createSlice({
     },
 });
 
-export const { setIsAdd,setIsEdit, setStaff,setIsReset,setDetailTask } = taskReducer.actions;
+export const { setIsAdd,setIsEdit, setStaff,setIsReset,setDetailTask,setDeleteTask } = taskReducer.actions;
 
 export default taskReducer.reducer;

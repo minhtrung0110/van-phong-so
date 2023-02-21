@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Avatar, DatePicker, Dropdown, Select, Tooltip, Upload} from "antd";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {detailTaskSelector} from "~/redux/selectors/task/taskSelector";
 import {
     FaCaretDown,
@@ -19,22 +19,25 @@ import CustomEditor from "~/components/commoms/Edittor";
 import ToDoList from "~/components/commoms/ToDoList";
 import {isEmpty} from "lodash";
 import {getListNameColumn, getNameColumn} from "~/utils/sorts";
-import {initialData} from "~/asset/data/initalDataTask";
+import {initialData, listMembersForTask} from "~/asset/data/initalDataTask";
 import {listColorStateDefaults} from "~/asset/data/defaullt_data_task";
+import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelectModal";
+import GroupMember from "~/components/Client/Task/GroupMember";
+import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {setDeleteTask} from "~/redux/reducer/task/taskReducer";
 
 DetailTask.propTypes = {};
 
-function DetailTask() {
+function DetailTask(onUpdateTask) {
     const data = useSelector(detailTaskSelector)
     const [errorDescription, setErrorDescription] = useState('');
     const [priority, setPriority] = useState(data.priority)
     const [status, setStatus] = useState(getNameColumn(initialData.boards, data.columnId, data.boardId))
     const [listFile, setListFile] = useState([])
-    const [isMoreDetailTask, setIsMoreDetailTask] = useState(false)
-    const [rangeValueTime, setRangeValueTime] = useState(
-        [dayjs(data.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(data.endTime, "DD/MM/YYYY HH:mm:ss")]
-           );
 
+    const [rangeValueTime, setRangeValueTime] = useState(
+        [dayjs(data.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(data.endTime, "DD/MM/YYYY HH:mm:ss")]);
+    const [members, setMembers] = useState([])
     const {RangePicker} = DatePicker;
     const rangePresets = [
         {
@@ -54,13 +57,16 @@ function DetailTask() {
             value: [dayjs().add(-90, 'd'), dayjs()],
         },
     ];
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
+    const dispatch =useDispatch()
+
+    //Handles
     const onRangeChange = (dates, dateStrings) => {
         if (dates) {
             console.log('From: ', dates[0], ', to: ', dates[1]);
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
         } else
             console.log('Clear');
-
             setRangeValueTime([dates[0],dates[1]])
     }
     const editorDescription = (value) => {
@@ -142,16 +148,6 @@ function DetailTask() {
 
 
     }
-    //More
-    const handleOpenChange = (flag) => {
-        setIsMoreDetailTask(flag);
-    }
-    const handleMenuClick = (e) => {
-        if (e.key === '3') {
-            setIsMoreDetailTask(false);
-        }
-    };
-        console.log(rangeValueTime)
     const items = [
         {
             key: '1',
@@ -171,6 +167,24 @@ function DetailTask() {
         },
 
     ];
+    // MOre Task
+    const handleMoreTask = (e) => {
+        if (e.key === '1') {
+            // xóa task
+            setShowConfirmModal(true)
+        }
+        else if (e.key === '2') {
+        }
+        else {
+
+        }
+    };
+    const handleRemoveTask = () => {
+        dispatch(setDeleteTask({id:data.id,columnId:data.columnId,boardId:data.boardId}))
+        setShowConfirmModal(false)
+    }
+    // DEBUG HERE
+    console.log(members)
     return (
         <div className='detail-task'>
             <div className='header'>
@@ -178,7 +192,11 @@ function DetailTask() {
                     <FaDesktop className='icon'/>
                     <h4>{data.title}</h4>
                 </div>
-                <Dropdown className='dropdown-more' menu={{items}} placement="bottomRight" >
+                <Dropdown className='dropdown-more'   menu={{
+                    items,
+                    onClick: handleMoreTask,
+                }}
+                          placement="bottomRight" >
                     <div ><FaEllipsisH/></div>
                 </Dropdown>
 
@@ -262,36 +280,7 @@ function DetailTask() {
                 <div className='gr-02'>
                     <div className='members'>
                         <p>Thực Hiện :</p>
-                        <div className='avatar-group'>
-                            <Avatar.Group>
-                                <Avatar src="https://joeschmoe.io/api/v1/random"/>
-                                <a href="https://ant.design">
-                                    <Avatar
-                                        style={{
-                                            backgroundColor: '#f56a00',
-                                        }}
-                                    >
-                                        K
-                                    </Avatar>
-                                </a>
-                                <Tooltip title="Ant User" placement="top">
-                                    <Avatar
-                                        style={{
-                                            backgroundColor: '#87d068',
-                                        }}
-                                        icon={<FaMale/>}
-                                    />
-                                </Tooltip>
-                                <Avatar
-                                    style={{
-                                        backgroundColor: '#1890ff',
-                                    }}
-                                    icon={<FaFemale/>}
-                                />
-                            </Avatar.Group>
-
-                            <button className='add-member'><FaPlus/></button>
-                        </div>
+                        <GroupMember onMembers={setMembers}/>
 
                     </div>
                     <div className='notification'>
@@ -328,7 +317,7 @@ function DetailTask() {
                     <div className='description'>
 
                     </div>
-                    <div className='comment'>
+                    <div className='comments'>
 
                     </div>
                 </div>
@@ -336,6 +325,8 @@ function DetailTask() {
 
 
             <div className='footer'></div>
+            <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa' content={`Bạn Có Thực Sự Muốn Xóa Công Việc Này ? `}
+                          textCancel='Hủy' textOK='Xóa' onCancel={()=>setShowConfirmModal(false)} onOK={handleRemoveTask}/>
         </div>
     )
         ;

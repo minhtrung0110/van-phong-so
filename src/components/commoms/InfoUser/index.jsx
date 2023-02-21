@@ -7,6 +7,7 @@ import {Avatar} from "antd";
 import {FaPager, FaSignOutAlt, FaUser} from "react-icons/fa";
 import Menu from "~/components/commoms/Popper/Menu";
 import {config} from "~/config";
+import checkErrorImage from "~/utils/validateImage";
 
 InfoUser.propTypes = {
     avatar: PropTypes.string,
@@ -45,6 +46,7 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
             separate: true,
         },
     ];
+    //console.log('check Image',checkErrorImage(avatar))
     return (
         <Menu   items={ userMenu} hideOnClick={false}>
         <div className={cx('box-user')}>

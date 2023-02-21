@@ -11,6 +11,8 @@ import {isEmpty} from "lodash";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import TextArea from "antd/es/input/TextArea";
 import {Col, Modal, Row} from "antd";
+import {useSelector} from "react-redux";
+import {deleteTaskSelector} from "~/redux/selectors/task/taskSelector";
 
 
 function BoardContent() {
@@ -18,7 +20,6 @@ function BoardContent() {
     const [columns,setColumns] = useState([])
     const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
     const [newColTitle,setNewColTitle]=useState('')
-
 
     const newColInputRef=useRef()
     useEffect(()=>{
@@ -29,7 +30,7 @@ function BoardContent() {
 
             setColumns(mapOrder(boardFromDB.columns,boardFromDB.columnOrder,'id'))
         }
-    },[       ])
+    },[  ])
 
     const onColumnDrop=(dropResult)=>{
         let newColumns=[...columns]

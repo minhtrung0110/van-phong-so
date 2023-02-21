@@ -212,27 +212,7 @@
       p{
         @include  title
       }
-      .avatar-group{
-        display: flex;
-        align-items: center;
-        height: 2.5rem;
-        .add-member{
-          margin-left: 2rem;
-          border-radius:50%;
-          width: 2rem;
-          height: 2rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--gray60-color);
-          border: none;
-          &:hover{
-            background-color:#eee;
-            transform: scale(1.125);
-            cursor: pointer;
-          }
-        }
-      }
+
 
     }
     .description{
