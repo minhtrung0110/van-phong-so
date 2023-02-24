@@ -5,11 +5,11 @@
   padding-left: calc( 2 * var(--gap) );
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color:var(--appbar-bg-color) ;
   font-size: 1rem;
 
   .select-board{
-
     .dropdown-board{
       font-size: var(--16px);
       font-weight: bold;
@@ -34,5 +34,34 @@
       }
     }
 
+
+  }
+  .add-board{
+    border-radius: var(--task-border-radius);
+    border: hsla(0deg, 0%, 100%, 0.34);
+    height: 2.4rem;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    background-color: var(--light);
+    margin-right: 1rem;
+    .icon{
+      font-size: var(--20px);
+      color: var(--primary-color-btn);
+      margin-right: 0.5rem;
+    }
+    .btn-add-board{
+      border: none;
+      font-size: var(--16px);
+      font-weight: bold;
+      background-color: transparent;
+      color: var(--primary-color-btn);
+
+
+    }
+    &:hover{
+      cursor: pointer;
+     // background-color:hsla(0deg, 0%, 100%, 0.34);
+    }
   }
 }

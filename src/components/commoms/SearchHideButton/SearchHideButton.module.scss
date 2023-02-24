@@ -16,7 +16,7 @@
   .form-search {
     position: relative;
     width: 12rem;
-    background: var(--color-brand);
+    background: var(--primary-color-btn);
     border-radius: var(--rad);
   }
   .input-search, .btn-search{
@@ -45,7 +45,7 @@
     right: 0;
     width: var(--btn-width);
     font-weight: bold;
-    background: var(--color-brand);
+    background: var(--primary-color-btn);
     border-radius: 0 var(--rad) var(--rad) 0;
     color: var(--light);
   }

@@ -1,12 +1,16 @@
+
 :root {
   --font: 'Mulish';
   --poppins: 'Poppins', sans-serif;
   --lato: 'Lato', sans-serif;
   //---------- PRIMATY COLOR--------------------------------------------------------//
 
-  --primary-color:#3C91E6;
+  --primary-color: #5fc5b2;
+  --primary-color-btn: #479f87;
+  --secondary-color-btn: #479f87;
+  --background-color: linear-gradient(to right, rgba(0, 176, 155, 0.75), rgb(17, 197, 174));
   --light: #F9F9F9;
-  --grey: #eee;
+  --grey: #eff0f1;
   --dark: #342E37;
   --dark-50: rgba(38, 24, 26, 0.8);
   --negativeSecondary: rgba(233,64,64,.12);
@@ -16,7 +20,7 @@
   --pr-green-light: #56ca7629;
   // 7 Colors Basic
 
-  --red: #DB504A;
+  --red: #e84261;
   --yellow: #FFCE26;
   --light-yellow: #FFF2C6;
   --orange: #FD7238;

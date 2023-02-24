@@ -4,7 +4,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 280px;
+  width: 200px;
   height: 100%;
   background: var(--light);
   z-index: 900;
@@ -51,7 +51,7 @@
   padding: 4px;
 }
 #sidebar .side-menu li.active {
-  background: var(--grey);
+  background: var(--primary-color);
   position: relative;
 }
 #sidebar .side-menu li.active::before {
@@ -62,7 +62,7 @@
   border-radius: 50%;
   top: -40px;
   right: 0;
-  box-shadow: 20px 20px 0 var(--grey);
+  box-shadow: 20px 20px 0 var(--primary-color);
   z-index: -1;
 }
 #sidebar .side-menu li.active::after {
@@ -73,7 +73,7 @@
   border-radius: 50%;
   bottom: -40px;
   right: 0;
-  box-shadow: 20px -20px 0 var(--grey);
+  box-shadow: 20px -20px 0 var(--primary-color);
   z-index: -1;
 }
 #sidebar .side-menu li a {

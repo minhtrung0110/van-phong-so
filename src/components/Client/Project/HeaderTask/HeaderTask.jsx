@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "./HeaderTask.scss"
-import {Dropdown} from "antd";
-import {FaAngleDown, FaFlipboard} from "react-icons/fa";
+import {Dropdown, Modal} from "antd";
+import {FaAngleDown, FaFlipboard, FaPlus} from "react-icons/fa";
+import AddProject from "~/components/Client/Project/Add";
 
 
 HeaderTask.prototype={
 
 }
 function HeaderTask(props) {
+    const [openAddProject,setOpenAddProject] = useState(false)
     const onClick = ({ key }) => {
         console.log(key)
     };
@@ -40,7 +42,22 @@ function HeaderTask(props) {
                       <FaAngleDown  className='icon-down'/>
                   </div>
                 </Dropdown>
+
             </div>
+            <div className='add-board'>
+                <FaPlus className='icon' />
+                <button className='btn-add-board' onClick={()=>setOpenAddProject(true)}>Tạo Dự Án</button>
+            </div>
+            <Modal
+                title="Tạo Dự Án Mới"
+                onCancel={()=>setOpenAddProject(false)}
+                footer={null}
+                width={700}
+                style={{ top: 100 }}
+                open={openAddProject}
+            >
+                <AddProject />
+            </Modal>
         </div>
     );
 }

@@ -19,7 +19,7 @@ import CustomEditor from "~/components/commoms/Edittor";
 import ToDoList from "~/components/commoms/ToDoList";
 import {isEmpty} from "lodash";
 import {getListNameColumn, getNameColumn} from "~/utils/sorts";
-import {initialData, listMembersForTask} from "~/asset/data/initalDataTask";
+import {initialData} from "~/asset/data/initalDataTask";
 import {listColorStateDefaults} from "~/asset/data/defaullt_data_task";
 import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelectModal";
 import GroupMember from "~/components/Client/Task/GroupMember";

@@ -1,7 +1,7 @@
 .trello-minhtrung-master {
  // height: 100vh;
   overflow: hidden;
-  background-color: var(--blue);
+  //background-color: var(--blue);
   border-radius: var(--pr-bradius);
 
   .trello-minhtrung-container {
@@ -18,7 +18,7 @@
 
     &:focus {
       background-color: white;
-      border: 1px solid var(--appbar-bg-color);
+    //  border: 1px solid var(--appbar-bg-color);
       cursor: text;
     }
   }

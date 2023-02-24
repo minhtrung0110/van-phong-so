@@ -23,21 +23,22 @@ html {
 
 body.dark {
   --light: #0C0C1E;
-  --grey: #060714;
+  --primary-color: #060714;
+  --background-color: rgba(4, 14, 5, 0.8);
   --dark: #FBFBFB;
   --dark-50: #e3e3e3;
 }
 
 body {
-  background: var(--grey);
+  background: var(--background-color);
   overflow-x: hidden;
 }
 
 
 #content {
   position: relative;
-  width: calc(100% - 280px);
-  left: 280px;
+  width: calc(100% - 200px);
+  left: 200px;
   transition: .3s ease;
 }
 #sidebar.hide ~ #content {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import SideBarCustom from "~/layouts/Client/SideBarCustom";
 import HeaderBar from "~/layouts/Client/Header";
 import './style.scss'
+import {config} from "~/config";
 
 ClientLayout.propTypes = {
     slot: PropTypes.element.isRequired,
@@ -11,12 +12,12 @@ ClientLayout.propTypes = {
 
 function ClientLayout({slot}) {
 
-
+//style={{background:`${config.backgroundColors.mainColor}`}}
 
     return (
         <>
             <SideBarCustom />
-            <section id="content">
+            <section id="content" >
 
                     <HeaderBar  />
                 <main>
