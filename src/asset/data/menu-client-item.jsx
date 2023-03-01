@@ -1,4 +1,5 @@
 import {
+    FaBuilding,
     FaCalendar,
     FaFacebookMessenger, FaHome, FaTasks, FaUsers,
 } from "react-icons/fa";
@@ -40,6 +41,14 @@ export const menu_client_items = [
     },
     {
         id: 5,
+        name: 'Phòng Ban',
+        active: false,
+        link:  config.routes.department,
+        icon: <FaBuilding/>,
+        role: 4,
+    },
+    {
+        id: 6,
         name: 'Họp',
         active: false,
         link:  config.routes.meeting,

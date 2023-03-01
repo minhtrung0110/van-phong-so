@@ -13,6 +13,7 @@ import Overview from "~/pages/Client/Overview";
 import Profile from "~/pages/Client/Profile";
 import NotificationsPage from "~/pages/Client/Notifications";
 import {config} from "~/config";
+import ManageDepartment from "~/pages/Client/ManageDepartment";
 
 function ProtectedRoutes(props) {
     return null;
@@ -52,6 +53,7 @@ function ClientRouter(props) {
                 <Route path={config.routes.schedule} element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
                 <Route path={config.routes.meeting} element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
                 <Route path={config.routes.staff} element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>
+                <Route path={config.routes.department} element={<ClientLayout slot={<ManageDepartment key={'a'}/>}/>}/>
                 <Route path={config.routes.profile} element={<ClientLayout slot={<Profile key={'a'}/>}/>}/>
                 <Route path={config.routes.notification} element={<ClientLayout slot={<NotificationsPage key={'a'}/>}/>}/>
 

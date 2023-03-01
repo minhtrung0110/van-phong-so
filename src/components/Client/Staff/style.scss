@@ -291,13 +291,10 @@
     }
 
     .col-action {
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      min-height: 100%;
 
       .btn-edit {
-
+        float: left;
+        width: 33.33%;
         @include btn-action;
 
         .icon-edit {
@@ -308,7 +305,8 @@
       }
 
       .btn-show {
-
+        float: left;
+        width: 33.33%;
         @include btn-action;
 
         .icon-show {
@@ -318,7 +316,8 @@
       }
 
       .btn-delete {
-
+        float: left;
+        width: 33.33%;
         @include btn-action;
 
         .icon-delete {

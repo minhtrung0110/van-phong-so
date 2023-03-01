@@ -8,6 +8,7 @@ const routes = {
     staff:"/staff",
     schedule:"/schedule",
     notification:"/notification",
+    department:"/department",
 
 }
 
