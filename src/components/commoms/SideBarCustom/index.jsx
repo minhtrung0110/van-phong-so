@@ -21,7 +21,7 @@ function SideBarCustom(props) {
         <section id="sidebar" className={`${!!isCollapsed && 'hide'}`}>
             <a href="~/layouts/Client/SideBarCustom/index#" className="brand">
                 <FaBuilding className='bx ' />
-                <span className="text">AdminHub</span>
+                <span className="text">Admin</span>
             </a>
             <ul className="side-menu top">
                 {

@@ -3,6 +3,10 @@
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
   background-color: var(--light);
 }
+.ant-input-no-radius {
+  border-radius: 0;
+}
+
 .c-pointer {
   cursor: pointer;
 }
@@ -16,9 +20,10 @@
   overflow: hidden;
 }
 .row-data:hover {
-  transform: scale(1.01);
-  background-color: var(--light);
-  box-shadow: 1px 3px 3px rgb(139 142 142 / 30%);
+  transform: scale(1.029);
+  background-color: var(--white);
+  box-shadow: 1px 3px 3px rgba(106, 107, 107, 0.3);
+  border: 2px solid rgb(100, 99, 99);
   border-radius: 4px;
 }
 .fst-ital{

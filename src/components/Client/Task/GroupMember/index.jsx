@@ -5,6 +5,7 @@ import { FaMale, FaPlus} from "react-icons/fa";
 import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelectModal";
 import {listMembersForTask} from "~/asset/data/initalDataTask";
 import './style.scss'
+import AvatarCustom from "~/components/commoms/AvatarCustom";
 
 GroupMember.propTypes = {
 
@@ -32,12 +33,13 @@ function GroupMember({onMembers}) {
                 {
                   !!members &&  members.map((item)=> (
                         <Tooltip title={`${item.first_name} ${item.last_name}`} placement="top" key={item.id}>
-                            <Avatar src={item.avatar}
-                                style={{
-                                    backgroundColor: '#87d068',
-                                }}
-                                icon={<FaMale/>}
-                            />
+                            <AvatarCustom avatar={item.avatar} lastName={item.last_name} />
+                            {/*<Avatar src={item.avatar}*/}
+                            {/*    style={{*/}
+                            {/*        backgroundColor: '#87d068',*/}
+                            {/*    }}*/}
+                            {/*    icon={<FaMale/>}*/}
+                            {/*/>*/}
 
                         </Tooltip>
                     ))

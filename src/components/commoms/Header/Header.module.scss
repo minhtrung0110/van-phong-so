@@ -10,19 +10,20 @@
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 1000;
+  width: 100%;
+  z-index: 25;
 }
- .navbar::before {
-  content: '';
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  bottom: -40px;
-  left: 0;
-  border-radius: 50%;
-  box-shadow: -20px -20px 0 var(--light);
-
-}
+// .navbar::before {
+//  content: '';
+//  position: absolute;
+//  width: 40px;
+//  height: 40px;
+//  bottom: -40px;
+//  left: 0;
+//  border-radius: 50%;
+//  box-shadow: -20px -20px 0 var(--light);
+//
+//}
  .navbar a {
   color: var(--dark);
 }

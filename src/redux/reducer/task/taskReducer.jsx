@@ -28,7 +28,7 @@ export const taskReducer = createSlice({
         setIsEdit: (state, action) => {
             state.isEdit = action.payload;
         },
-        setStaff: (state, action) => {
+        setTask: (state, action) => {
             state.task = action.payload;
         },
         setIsReset: (state, action) => {
@@ -37,6 +37,6 @@ export const taskReducer = createSlice({
     },
 });
 
-export const { setIsAdd,setIsEdit, setStaff,setIsReset,setDetailTask,setDeleteTask } = taskReducer.actions;
+export const { setIsAdd,setIsEdit, setTask,setIsReset,setDetailTask,setDeleteTask } = taskReducer.actions;
 
 export default taskReducer.reducer;
