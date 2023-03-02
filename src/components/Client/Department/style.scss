@@ -59,12 +59,11 @@
     }
 
     .col-action {
-      width: 15%;
+      display: flex;
+      justify-content: center;
       .btn-edit {
-        float: left;
-        width: 50%;
         @include btn-action;
-
+        display: inline-block;
         .icon-edit {
           font-size: var(--20px);
           color: var(--bs-success-500);
@@ -73,8 +72,6 @@
       }
 
       .btn-delete {
-        float: right;
-        width: 50%;
         @include btn-action;
 
         .icon-delete {

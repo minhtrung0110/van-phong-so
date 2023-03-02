@@ -12,23 +12,16 @@ import {setDepartment, setIsEdit} from "~/redux/reducer/department/departmentRed
 DepartmentTable.propTypes = {};
 
 function DepartmentTable({tableHeader, tableBody}) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [detailDepartment, setDetailDepartment] = useState({});
     const [isColoseModal, setIsColoseModal] = useState(false);
     const [showPopupDelete, setShowPopupDelete] = useState({
         department_id: null,
+        name:'',
         show: false,
     });
     const dispatch = useDispatch()
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+
     const handleShowDetailDepartment = (user) => {
         // setIsModalOpen(true);
         // setDetailDepartment(user)
@@ -66,9 +59,9 @@ function DepartmentTable({tableHeader, tableBody}) {
         // dispatch(setIsReset(Math.random()));
     };
 
-    const showConfirmDeleteDepartment = (e, id) => {
+    const showConfirmDeleteDepartment = (e, item) => {
         e.stopPropagation();
-        setShowPopupDelete({department_id: id, show: true});
+        setShowPopupDelete({department_id: item.id,name:item.name, show: true});
     };
     const renderTableBody = () => {
         return tableBody.map((item) => {
@@ -109,7 +102,7 @@ function DepartmentTable({tableHeader, tableBody}) {
                         <button
                             id="disabled-user"
                             onClick={(e) => {
-                                showConfirmDeleteDepartment(e, item.id);
+                                showConfirmDeleteDepartment(e, item);
                             }}
                             className="btn-delete"
                         >
@@ -125,19 +118,10 @@ function DepartmentTable({tableHeader, tableBody}) {
         <div className="table-department">
             <TableLayout tableHeader={tableHeader} tableBody={renderTableBody()}/>
 
-            <Modal title="Thông Tin Nhân Viên" open={isModalOpen}
 
-                   maskClosable={true}
-                   onCancel={handleCancel}
-                   footer={null}
-                   width={1100}
-                   style={{top: 20}}
-            >
-                {/*{<DetailDepartment user={detailDepartment}/>}*/}
-            </Modal>
             <ConfirmModal title="Xác Nhận Xóa"
                           open={showPopupDelete.show}
-                          content={`Bạn Có Thực Sự Muốn Xóa Nhân Viên Này Không ? `}
+                          content={`Bạn Có Thực Sự Muốn Xóa ${showPopupDelete.name} Này Không ? `}
                           textOK="Xóa"
                           textCancel="Hủy"
                           onOK={() => handleRemoveDepartment(showPopupDelete.department_id)}

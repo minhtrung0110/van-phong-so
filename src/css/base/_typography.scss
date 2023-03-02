@@ -6,7 +6,9 @@
 .ant-input-no-radius {
   border-radius: 0;
 }
-
+.ant-select-selector {
+  border-radius:var(--task-border-radius);
+}
 .c-pointer {
   cursor: pointer;
 }
