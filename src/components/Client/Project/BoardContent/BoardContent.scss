@@ -1,0 +1,68 @@
+@import "../../../../css/base/mixins";
+.board-content{
+  height:var(--board-content-height);
+  background-color:var(--appbar-bg-color) ;
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: auto;
+  padding: calc(2 * var(--gap));
+  font-size: var(--14px);
+
+  .column-drop-preview{
+    background-color: rgba(150, 150, 200, 0.1);
+    border: 1px dashed #abc;
+    margin: 5px 45px 5px 5px;
+  }
+  //  background-color:var(--
+  .add-new-column{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 350px;
+    min-width: 250px;
+    height: 45px;
+    line-height:40px;
+    padding: 4px 0 4px 15px;
+    color:white;
+    margin-left: var(--gap);
+    font-size: 14px;
+    font-weight: bold;
+    background-color: hsla(0,0%,100%,.24);
+    border-radius: var(--column-border-radius);
+    &:hover{
+      background-color: hsla(0,0%,100%,.14);
+      cursor: pointer;
+    }
+    .icon-add{
+      margin-right: 0.2rem;
+    }
+
+  }
+  .enter-new-column{
+    max-width: 400px;
+    min-width: 320px;
+    background-color: white;
+    line-height:40px;
+    padding: 4px 10px;
+    margin-top: 2px;
+    margin-left: var(--gap);
+    border-radius: var(--column-border-radius);
+    .input-enter-new-column{
+      margin: 5px 0 10px 0;
+      box-shadow: var(--bx-sh-task);
+    }
+    .ft-btn{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.2rem;
+      .btn-add-new-column{
+        @include  btn-add-task;
+      }
+      .cancel-new-column{
+        @include btn-cancel-task;
+      }
+    }
+
+  }
+}

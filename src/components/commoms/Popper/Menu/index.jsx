@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 
 
 function Menu({children,items, hideOnClick=false, }) {
-    console.log({children,items, hideOnClick, })
+
     const renderItems=()=>{
         return items.map((item,index)=>{
               return   <MenuItem data={item} key={index} />

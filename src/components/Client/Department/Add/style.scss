@@ -1,0 +1,20 @@
+@import "../../../../css/base/_mixins.scss";
+
+.add-department-container{
+    padding:  1rem 2rem;
+
+    .box-footer{
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        padding-right: 2rem;
+        .btn-confirm{
+            @include btn-ok;
+            margin-left: 0.2rem;
+        }
+        .btn-cancel{
+            @include btn-cancel;
+        }
+    }
+
+}

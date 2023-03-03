@@ -4,7 +4,7 @@
   width: 100%;
   .tb-header{
     color: var(--dark);
-    background-color: var(--light);
+    background-color: var(--gray100-color);
     border-bottom-width: 1px;
     box-shadow: inset 0 0 0 9999px transparent;
     .tr-header{
@@ -40,7 +40,7 @@
 
 #table thead tr th,
 #table tbody tr td {
-  padding: var(--16px);
+  padding: var(--16px) ;
 }
 
 /* #table thead tr th:last-child,

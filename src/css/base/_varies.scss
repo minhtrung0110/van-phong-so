@@ -1,17 +1,28 @@
+
 :root {
   --font: 'Mulish';
   --poppins: 'Poppins', sans-serif;
   --lato: 'Lato', sans-serif;
   //---------- PRIMATY COLOR--------------------------------------------------------//
 
-  --primary-color:#3C91E6;
-  --light: #F9F9F9;
-  --grey: #eee;
+  --primary-color: #5fc5b2;
+  --primary-color-btn: #479f87;
+  --secondary-color-btn: #479f87;
+  --background-color: #f0f2f5;//linear-gradient(to right, rgba(218, 218, 218, 0.75), rgba(243, 243, 243, 0.75));
+  --light: #FFFFFE;
+  --white: #fcfcf7;
+  --grey: #eff0f1;
   --dark: #342E37;
   --dark-50: rgba(38, 24, 26, 0.8);
+  --negativeSecondary: rgba(233,64,64,.12);
+  --criticalSecondary: rgba(250,140,22,.12);
+  --informativeSecondary: rgba(24,186,255,.12);
+  --pr-green: #3ab67b;
+  --pr-green-light: #56ca7629;
+  --border-radius:5px;
   // 7 Colors Basic
 
-  --red: #DB504A;
+  --red: #e84261;
   --yellow: #FFCE26;
   --light-yellow: #FFF2C6;
   --orange: #FD7238;
@@ -34,15 +45,18 @@
   --gray40-color: #666; /* dark gray*/
   --gray46-color: #757575;
   --gray60-color: #999; /* light gray*/
+  --gray80-color: #c0bfbf;
   --gray97-color: #e3e3e3; /* lighter gray :)*/
+  --gray100-color: rgba(239, 239, 239, 0.8);
   --bs-green-100: #bbefce;
   --bs-brown-200: #413c3d;
-  --blue: #3C91E6;
+  --blue: #1577e0;
   --light-blue: #CFE8FF;
 
   --dark-grey: #AAAAAA;
-
-
+  /*--------------------------------- PRIMARY STYLE PARAMETERS -----------------*/
+  --pd-content:24px;
+  --pr-bradius:8px;
 
   --light-orange: #FFE0D3;
   //----------FONT STYLE AND SIZE ------------------------//
@@ -92,6 +106,7 @@
 
   --box-shadow: 0px 0px 20px rgb(1 41 112 / 10%);
   // Task
+  --task-border-radius:3px;
   //Screen
   --screen-lg:1201px;
   --screen-md:992px;
@@ -121,3 +136,7 @@
 
 
 
+/*--primary-color: #5fc5b2;
+  --primary-color-btn: #479f87;
+  --secondary-color-btn: #479f87;
+  --background-color: linear-gradient(to right, rgba(0, 176, 155, 0.75), rgb(17, 197, 174)); */

@@ -5,6 +5,11 @@
   box-shadow: 1px 2px 3px rgba(0,0,0,0.2);
   background-color: var(--light);
 }
+@mixin center-in-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 // Mixin in Task Page
 @mixin btn-add-task {
@@ -36,4 +41,34 @@
       color: var(--light) !important;
     }
 
+}
+@mixin btn-ok{
+  @include center-in-center;
+  height: 2.4rem;
+  border-radius: var(--task-border-radius);
+  background-color: var(--light);
+  font-weight: bold;
+  padding: 0 1rem;
+  border: 1px solid var(--primary-color-btn);
+  color: var(--primary-color-btn);
+  &:hover{
+    cursor: pointer;
+    color: white;
+    background-color: var(--primary-color-btn);
+  }
+}
+@mixin btn-cancel{
+  @include center-in-center;
+  height: 2.4rem;
+  border-radius: var(--task-border-radius);
+  background-color: var(--light);
+  font-weight: bold;
+  padding: 0 1rem;
+  color: var(--red);
+  border: 1px solid var(--red);
+  &:hover{
+    cursor: pointer;
+    color: white;
+    background-color: var(--red);
+  }
 }

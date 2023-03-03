@@ -1,0 +1,73 @@
+@import "../../../../css/base/_mixins.scss";
+@import "../../../../css/base/_animations.scss";
+.todo-item{
+  width:90%;
+  height: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .more{
+
+    opacity:0;
+    animation: fadeInOut 0.9s ease-in-out ;
+  }
+
+  &:hover .more{
+    color: var(--red);
+    opacity:1;
+    font-size: var(--20px);
+    margin-left: 2rem;
+    padding: 0.5rem;
+    height: 2rem;
+    width: 2rem;
+    border-radius:var(--task-border-radius);
+    &:hover{
+      background-color: var(--gray97-color);
+      cursor: pointer;
+    }
+  }
+  .box{
+    display: flex;
+    flex-direction: column;
+    .todo-item-content{
+
+      .todo-item-input{
+        background-color: inherit;
+        border: none;
+        font-size: inherit;
+        font-weight: inherit;
+        cursor: pointer;
+        width: 30rem;
+        height:2.5rem;
+        margin-left: 1.5rem;
+        &:focus{
+          border: 1.5px solid var(--primary-color-btn);
+        }
+      }
+      .checked{
+        text-decoration: line-through;
+      }
+    }
+    .todo-item-save{
+      display: flex;
+      align-items: center;
+      height: 2rem;
+      margin-left: 3rem;
+      margin-top: 0.2rem;
+      .btn-save{
+        @include btn-add-task;
+        border: none;
+      }
+      .btn-cancel{
+        @include btn-cancel-task;
+        border: none;
+        margin-left: 1rem;
+      }
+    }
+  }
+
+}
+.editable{
+
+}
+

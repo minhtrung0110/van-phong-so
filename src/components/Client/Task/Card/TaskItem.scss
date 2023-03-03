@@ -9,6 +9,7 @@
   font-size: var(--fs-task-pg);
   &:hover {
     transform: scale(1.0225);
+    cursor: pointer;
     // background-color:var(--list-bg-color);
   }
 

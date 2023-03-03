@@ -1,7 +1,7 @@
 export const staff_table_header = [
     {
         id: 1,
-        name: "Ảnh",
+        name: "Nhân Viên",
         isSortAsc: false,
         isSortDesc: false,
         isSort: true,
@@ -9,15 +9,7 @@ export const staff_table_header = [
     },
     {
         id: 2,
-        name: "Giới Thiệu ",
-        isSortAsc: false,
-        isSortDesc: false,
-        isSort: true,
-        cursor: true,
-    },
-    {
-        id: 3,
-        name: "Chức Vụ",
+        name: "Chức Danh",
         isSortAsc: false,
         isSortDesc: false,
         isSort: false,
@@ -25,7 +17,7 @@ export const staff_table_header = [
     },
 
     {
-        id: 4,
+        id: 3,
         name: "Liên Lạc",
         isSortAsc: false,
         isSortDesc: false,
@@ -34,7 +26,7 @@ export const staff_table_header = [
     },
 
     {
-        id: 5,
+        id: 4,
         name: "Trạng Thái",
         isSortAsc: false,
         isSortDesc: false,
@@ -42,7 +34,7 @@ export const staff_table_header = [
         cursor: true,
     },
     {
-        id: 6,
+        id: 5,
         name: "Hành Động",
         isSortAsc: false,
         isSortDesc: false,

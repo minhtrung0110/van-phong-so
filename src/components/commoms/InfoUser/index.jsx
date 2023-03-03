@@ -7,6 +7,8 @@ import {Avatar} from "antd";
 import {FaPager, FaSignOutAlt, FaUser} from "react-icons/fa";
 import Menu from "~/components/commoms/Popper/Menu";
 import {config} from "~/config";
+import checkErrorImage from "~/utils/validateImage";
+import AvatarCustom from "~/components/commoms/AvatarCustom";
 
 InfoUser.propTypes = {
     avatar: PropTypes.string,
@@ -45,18 +47,11 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
             separate: true,
         },
     ];
+    //console.log('check Image',checkErrorImage(avatar))
     return (
         <Menu   items={ userMenu} hideOnClick={false}>
         <div className={cx('box-user')}>
-            {
-                !!showImage ? (<Avatar style={{backgroundColor: '#1d81ab', verticalAlign: 'middle'}} size="large"
-                                       src={avatar} className={cx('avatar')}/>)
-                    : (
-                    <Avatar style={{backgroundColor: '#f56a00', verticalAlign: 'middle'}} size="large" className={cx('avatar')}>
-                        {lastName}
-                    </Avatar>
-                )
-            }
+           <AvatarCustom avatar={avatar} lastName={lastName} />
             <div className={cx('info')}>
                 <span className={cx('name')}>{`${firstName} ${lastName}`}</span>
                 <span className={cx('role')}>{role}</span>

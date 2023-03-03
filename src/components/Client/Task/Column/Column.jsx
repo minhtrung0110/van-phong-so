@@ -1,36 +1,41 @@
 import React, {useEffect, useRef, useState} from 'react';
 import "./Column.scss";
 import {Container, Draggable} from "react-smooth-dnd";
-import {FaEllipsisH, FaPlus, FaTimes} from "react-icons/fa";
+import {FaEllipsisH, FaExclamationTriangle, FaPlus, FaTimes} from "react-icons/fa";
 import {Button, ButtonGroup} from "react-bootstrap";
 import {cloneDeep} from "lodash";
 import {mapOrder} from "~/utils/sorts";
-import { Dropdown, Input,Form} from "antd";
+import {Dropdown, Input, Form, Modal} from "antd";
 import Card from "~/components/Client/Task/Card/TaskItem";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import TextArea from "antd/es/input/TextArea";
+import DetailStaff from "~/components/Client/Staff/DetailStaff";
+import DetailTask from "~/components/Client/Task/DetailTask";
+import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {useSelector} from "react-redux";
+import {deleteTaskSelector} from "~/redux/selectors/task/taskSelector";
 
 
 function Column({column, onCardDrop, onUpdateColumn}) {
+    // console.log(column )
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [columnTitle, setColumnTitle] = useState('')
     const [isAddCard, setIsAddCard] = useState(false)
     const [valueNewCard, setValueNewCard] = useState('')
+    const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
+
     const newCardRef = useRef()
     useEffect(() => {
         setColumnTitle(column.title)
     }, [column.title])
     const cards = mapOrder(column.cards, column.cardOrder, 'id')
-    const handleRemoveColumn = (type) => {
-        (type === 'close') && setShowConfirmModal(false);
-        if (type === 'confirm') {
+    const handleRemoveColumn = () => {
             const newColumn = {
                 ...column,
                 _destroy: true
             }
             onUpdateColumn(newColumn)
             setShowConfirmModal(false);
-        }
     }
     const selectAllInlineTex = (e) => {
         e.target.focus();
@@ -49,7 +54,14 @@ function Column({column, onCardDrop, onUpdateColumn}) {
             boardId: column.boardId,
             columnId: column.id,
             title: valueNewCard,
-            cover: null
+            description: '',
+            startTime:'01/10/2022',
+            endTime:'31/12/2022',
+            priority:'none',
+            members:[],
+            todoList:[],
+            fileList:[],
+            comments:[],
         }
         let newColumn = cloneDeep(column)
         newColumn.cards.push(newCardToAdd)
@@ -78,13 +90,24 @@ function Column({column, onCardDrop, onUpdateColumn}) {
     ];
     const [open, setOpen] = useState(false);
     const handleMenuClick = (e) => {
-        if (e.key === '3') {
+        if (e.key === '1') {
             setOpen(false);
+            setShowConfirmModal(true)
+        }
+        else if (e.key === '3') {
+            setOpen(false);
+        }
+        else {
+
         }
     };
     const handleOpenChange = (flag) => {
         setOpen(flag);
-    };
+    }
+    const handleShowDetailTask=(value) => {
+        setIsOpenDetailTask(value);
+
+    }
     return (
         <div className="column">
 
@@ -148,7 +171,7 @@ function Column({column, onCardDrop, onUpdateColumn}) {
                     {
                         !!column.cards && column.cards.map((item, index) => (
                             <Draggable key={index}>
-                                <TaskItem task={item}/>
+                                <TaskItem task={item} onShowDetail={handleShowDetailTask}/>
                             </Draggable>
 
                         ))
@@ -194,6 +217,18 @@ function Column({column, onCardDrop, onUpdateColumn}) {
             {/*    title='Remove Column'*/}
             {/*    content={`Are you sure you want to remove columns ${column.title} ?`}*/}
             {/*    onAction={handleRemoveColumn} />*/}
+            <Modal
+                title=""
+                onCancel={()=>setIsOpenDetailTask(false)}
+                footer={null}
+                width={800}
+                style={{ top: 80 }}
+                open={isOpenDetailTask}
+            >
+              <DetailTask/>
+            </Modal>
+            <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa' content={`Bạn Có Thực Sự Muốn Xóa Cột ${columnTitle} Này ? `}
+                          textCancel='Hủy' textOK='Xóa' onCancel={()=>setShowConfirmModal(false)} onOK={handleRemoveColumn}/>
         </div>
     );
 }

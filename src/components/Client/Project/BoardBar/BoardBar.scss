@@ -1,0 +1,90 @@
+@mixin divide {
+  content:'';
+  position: absolute;
+  border: 1.5px solid var(--gray60-color);
+  right: -14px;
+  height: 1.8rem;
+}
+.navbar-board{
+  height: 3.2rem;
+  padding: 0 calc( 2 * var(--gap) );
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+ background-color:var(--primary-color-btn);
+  font-size: 1rem;
+  .board-name{
+    color: var(--light);
+  }
+  .board-view{
+    .board-name{
+      color: var(--light);
+      display: flex;
+      align-items: center;
+      .icon{
+        margin-right: 0.2rem;
+        font-size: var(--20px);
+        padding: 0;
+      }
+    }
+  }
+  .board-filter{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    .filter-btn{
+      height: 2rem;
+      background-color: var(--light);
+      padding: 0.5rem;
+      border-radius: var(--task-border-radius);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin-right: 1.4rem;
+      &:hover{
+
+      }
+      &:after{
+      @include divide
+
+      }
+    }
+    .search{
+      position: relative;
+      margin-right: 1.4rem;
+      &:after{
+        @include divide;
+        top: 0;
+
+      }
+    }
+    .avatar-group{
+      margin-right: 1.4rem;
+      position: relative;
+      display: flex;
+      align-items: center;
+      &:hover{
+
+      }
+      &:after{
+        @include divide
+      }
+    }
+    .btn-more{
+      line-height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: hsla(0deg, 0%, 100%, 0.24);
+      border: none;
+      padding:   0.4rem;
+      color: var(--gray97-color);
+      border-radius: 2px;
+      margin-left: 5px;
+      &:hover{
+        background-color: hsla(0deg, 0%, 100%, 0.14);
+      }
+    }
+  }
+}

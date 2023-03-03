@@ -1,53 +1,165 @@
+$padding: 2.5rem;
+$spacing: 0.5rem;
+$spacing-gr: 1.5rem;
+$pd-title: 2rem;
+$h-title: 3rem;
+@import "../../../../css/base/_mixins.scss";
 @mixin bx-info {
   height: auto;
-  padding: 2rem 8rem;
-  margin-bottom: 1.5rem;
+  border-radius: var(--border-radius);
+  background-color: #fff;
 }
 
-.edit-staff {
-  padding: 1.5rem 3.5rem;
-
-  .basic-info {
-    @include bx-info;
-
-    .gr-ip-e-s label {
-      font-size: 1rem;
-      height: 2.4rem !important;
-      align-items: center;
-      font-weight: bold;
-    }
-
+@mixin bx-header-gr {
+  height: $h-title;
+  width: 100%;
+  background-color: var(--primary-color);
+  margin-bottom: $spacing-gr;
+  display: flex;
+  align-items: center;
+  padding-left: $pd-title;
+  .title {
+    color: #fff;
+    font-weight: bold;
   }
+}
 
-  .advance-info {
+.edit-staff-container {
+  .row-frame {
     @include bx-info;
+    margin: var(--pd-content);
 
-    .gr-ip-e-s label {
-      font-size: 1rem;
-      height: 2.4rem !important;
-      align-items: center;
-      font-weight: bold;
+    .basic-info {
+
+      .col-title {
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+        @include bx-header-gr
+      }
+
+      .col-left {
+        padding-left: $padding;
+      }
+
+      .col-right {
+        padding-right: $padding;
+      }
     }
 
+    .info-company {
 
-  }
-  .upload-info {
-    @include bx-info;
+      .col-title {
+        @include bx-header-gr
+      }
 
-    .gr-ip-e-s label {
-      font-size: 1rem;
-      height: 2.4rem !important;
-      align-items: center;
-      font-weight: bold;
+      .col-left {
+        padding-left: $padding;
+      }
+
+      .col-right {
+        padding-right: $padding;
+      }
+
     }
 
-    .footer-form{
+    .info-advance {
+      .col-title {
+        @include bx-header-gr
+      }
+
+      .col-left {
+        padding-left: $padding;
+      }
+
+      .col-right {
+        padding-right: $padding;
+      }
+    }
+
+    .footer-form {
+      margin-right:   $padding * 2;
       display: flex;
       justify-content: flex-end;
       margin-bottom: 2rem;
-      button{
-        margin-left: .5rem;
+      height: $padding*2;
+      .btn-cancel{
+        @include btn-cancel
+      }
+      .btn-submit{
+        @include btn-ok;
+      }
+      button {
+        margin-left: 1rem;
       }
     }
   }
 }
+/* Responsive*/
+@media only screen and (max-width: 46.1875em) {
+  .col-left {
+    padding: 0 $padding;
+  }
+
+  .col-right {
+    padding: 0 $padding;
+  }
+}
+@media only screen and (min-width: 46.1875em) and (max-width: 63.9375em) {
+
+  .col-left {
+    padding: 0 $padding;
+  }
+
+  .col-right {
+    padding: 0 $padding;
+  }
+}
+//.basic-info {
+//  @include bx-info;
+//  width: 100%;
+//  margin: 0;
+//  .gr-ip-e-s label {
+//    font-size: 1rem;
+//    height: 2.4rem !important;
+//    align-items: center;
+//    font-weight: bold;
+//  }
+//
+//}
+//.basic-advance{
+//  @include bx-info;
+//  margin: 0;
+//  width: 100%;
+//}
+//.advance-info {
+//  @include bx-info;
+//
+//  .gr-ip-e-s label {
+//    font-size: 1rem;
+//    height: 2.4rem !important;
+//    align-items: center;
+//    font-weight: bold;
+//  }
+//
+//
+//}
+//.upload-info {
+//  @include bx-info;
+//
+//  .gr-ip-e-s label {
+//    font-size: 1rem;
+//    height: 2.4rem !important;
+//    align-items: center;
+//    font-weight: bold;
+//  }
+//
+//  .footer-form{
+//    display: flex;
+//    justify-content: flex-end;
+//    margin-bottom: 2rem;
+//    button{
+//      margin-left: .5rem;
+//    }
+//  }
+//}
+

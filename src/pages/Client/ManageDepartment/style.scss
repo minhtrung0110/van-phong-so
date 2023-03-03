@@ -1,0 +1,51 @@
+@import "../../../css/base/_mixins.scss";
+
+.container-department{
+    margin:var( --pd-content);
+  padding: 1rem 2.5rem;
+  background-color: #fff;
+  border-radius:var(--border-radius);
+  .header-department-page{
+    margin-top: var(--16px);
+    .title{
+      display: flex;
+      align-items: center;
+      .icon{
+        margin-right: var(--16px);
+      }
+    }
+    .filter-department-page{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: var(--20px) 0;
+      .filter-group{
+
+      }
+      .search-excel{
+        display: flex;
+        .btn-add{
+          @include btn-ok;
+          margin-left: 0.2rem;
+
+        }
+        .btn{
+          border-radius: var(--task-border-radius);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: 0.2rem;
+          height: 2.4rem;
+          .icon{
+            font-size: var(--16px);
+
+          }
+          &:hover .icon{
+            color: var(--white);
+          }
+        }
+      }
+    }
+  }
+
+}

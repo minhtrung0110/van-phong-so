@@ -1,0 +1,25 @@
+@import "../../../../css/base/_mixins.scss";
+.frame-edit-department{
+  margin: var(--pd-content);
+  .content{
+    height: auto;
+    border-radius: var(--border-radius);
+    background-color: #fff;
+    padding:calc( var(--pd-content) * 2 )  calc( var(--pd-content) * 6 ) ;
+
+    .box-footer{
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      padding-right: 2rem;
+      .btn-confirm{
+        @include btn-ok;
+        margin-left: 0.5rem;
+      }
+      .btn-cancel{
+        @include btn-cancel;
+      }
+    }
+  }
+
+}

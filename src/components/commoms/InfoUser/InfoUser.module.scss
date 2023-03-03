@@ -1,5 +1,4 @@
 
-
 .box-user{
   display: flex;
   align-items: center;
@@ -28,4 +27,17 @@
       color: var(--dark);
     }
   }
+}
+@media only screen and (max-width: 46.1875em) {
+  .info {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 46.1875em) and (max-width: 63.9375em) {
+
+  .info{
+    display: none !important;
+    }
+
+
 }
