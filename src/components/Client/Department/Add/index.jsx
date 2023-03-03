@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import HeaderContent from "~/components/commoms/HeaderContent";
 import './style.scss'
-import {AutoComplete, Cascader, Col, DatePicker, Form, Input, Radio, Row, Upload} from "antd";
-import {FaPlus} from "react-icons/fa";
-AddDepartment.propTypes = {
+import { Form, Input,} from "antd";
+import {useForm, Controller} from "react-hook-form";
 
-};
+AddDepartment.propTypes = {};
 
-function AddDepartment({onCancel,onSubmit}) {
+function AddDepartment({onCancel, onSave}) {
+    const { control, handleSubmit, formState: { errors } } = useForm();
+    const [value, setValue] = useState('')
+
     return (
         <div className="add-department-container">
             <Form
@@ -19,32 +20,31 @@ function AddDepartment({onCancel,onSubmit}) {
                     span: 16,
                 }}
                 layout="horizontal"
-
+                encType="multipart/form-data"
                 style={{}}
+                onFinish={handleSubmit(onSave)}
                 labelAlign={"left"}
                 className='row-frame'>
-                    <div className='col-left' xs={{ span: 24}} lg={{ span: 12}}>
+                <Controller
+                    name="roomName"
+                    control={control}
+                    defaultValue=""
+                    rules={{required: true}}
+                    render={({field}) => (
                         <Form.Item
-                            name="name "
-                            label="Nhập Tên Phòng Mới"
-                            tooltip="Điền đầy đủ - chính xác thông tin này"
+                            label="Tên phòng"
+                            hasFeedback
+                            validateStatus={errors.roomName ? 'error' : 'success'}
+                            help={errors.roomName ? 'Vui lòng nhập tên phòng' : null}>
 
-
-                            rules={[
-
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền họ và tên đệm!',
-                                },
-                            ]}
-                        >
-                            <Input size="middle" name='name' className='ant-input-no-radius '/>
+                            <Input  {...field} size="middle" className='ant-input-no-radius '/>
                         </Form.Item>
+                    )}
+                />
 
-                    </div>
                 <div className="box-footer">
-                    <button key="2"  className='btn-cancel' onClick={onCancel}>Hủy</button>
-                    <button key="3" className='btn-confirm' type='submit'  onClick={onSubmit}>Lưu</button>
+                    <button key="2" className='btn-cancel' onClick={onCancel}>Hủy</button>
+                    <button key="3" className='btn-confirm' type='submit'>Lưu</button>
                 </div>
 
             </Form>

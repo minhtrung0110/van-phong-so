@@ -94,7 +94,7 @@ function StaffTable({tableHeader, tableBody}) {
                     <td className={'text-status'}>
                         <p
                             className={` ${
-                                item.status === 1 ? 'active' : 'disabled '
+                                item.status === 1 ? 'active' : 'negative '
                             }`}
                         >
                             {item.status === 1 ? 'Đang Làm Việc' : 'Thôi Việc'}

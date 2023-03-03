@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import {Menu} from "antd";
+import {Menu, Tooltip} from "antd";
 import {listMenuClientItems, menu_client_items} from "~/asset/data/menu-client-item";
 import Sider from "antd/es/layout/Sider";
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
@@ -26,14 +26,18 @@ function SideBarCustom(props) {
             <ul className="side-menu top">
                 {
                     menu_client_items.map((item,index)=>(
-                        <li   className={`${item.link===location.pathname && 'active'}`} key={index}>
-                            <NavLink to={item.link}
+                        // <Tooltip title={item.name} placement={"right"} color={'#479f87'} >
+                            <li   className={`${item.link===location.pathname && 'active'}`} key={index}>
+                                <NavLink to={item.link}
 
-                            >
-                                <span className='bx'>{item.icon}</span>
-                                <span className="text">{item.name}</span>
-                            </NavLink>
-                        </li>
+                                >
+                                    <span className='bx'>{item.icon}</span>
+                                    <span className="text">{item.name}</span>
+                                </NavLink>
+                            </li>
+                        // </Tooltip>
+
+
                     ))
                 }
 

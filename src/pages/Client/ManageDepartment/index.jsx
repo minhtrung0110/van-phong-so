@@ -6,7 +6,7 @@ import NotFoundData from "~/components/commoms/NotFoundData";
 import DepartmentTable from "~/components/Client/Department";
 import {department_table_header} from "~/asset/data/department-table-header";
 import PaginationUI from "~/components/commoms/Pagination";
-import {FaFileDownload, FaFileUpload, FaRegBuilding, FaUsers} from "react-icons/fa";
+import {FaFileDownload, FaFileUpload, FaRegBuilding, FaSearch, FaUsers} from "react-icons/fa";
 import FilterRadiobox from "~/components/commoms/FilterRadiobox";
 import FilterCheckbox from "~/components/commoms/FilterCheckbox";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
@@ -15,7 +15,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {isAddDepartmentSelector, isEditDepartmentSelector} from "~/redux/selectors/department/departmenrSelector";
 import EditDepartment from "~/components/Client/Department/Edit";
 import AddDepartment from "~/components/Client/Department/Add";
-import {setIsAdd} from "~/redux/reducer/department/departmentReducer";
+import {setIsAdd, setIsEdit} from "~/redux/reducer/department/departmentReducer";
 
 ManageDepartment.propTypes = {};
 
@@ -60,7 +60,6 @@ function ManageDepartment(props) {
     const [totalRecord, setTotalRecord] = React.useState(data.length);
     const [loading, setLoading] = React.useState(true);
     const dispatch = useDispatch()
-    const isAdd = useSelector(isAddDepartmentSelector)
     const isEdit = useSelector(isEditDepartmentSelector)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handlePageChange = async (page) => {
@@ -80,22 +79,31 @@ function ManageDepartment(props) {
     const handleOpenAddDepartment = () => {
         setIsModalOpen(true);
     }
-    const handleAddDepartment=()=>{
-        setIsModalOpen(false);
+    const handleAddDepartment=(data)=>{
+       // setIsModalOpen(false);
+        console.log(data)
         //call api
     }
-    const handleCancel = () => {
+    const handleEditDepartment=(data)=>{
+        // setIsModalOpen(false);
+        console.log(data)
+        //call api
+    }
+    const handleCancelAdd = () => {
         setIsModalOpen(false);
+    };
+    const handleCancelEdit = () => {
+       dispatch(setIsEdit(false))
     };
     return (
         <>
-            {
-                !!isEdit ? (<EditDepartment/>) : (
+            {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit} onSave={handleEditDepartment}   />):(
+                (
                     <div className='container-department'>
                         <div className='header-department-page'>
                             <div className='title '>
                                 <FaRegBuilding className='icon'/>
-                                <h4> Danh Sách Phòng Ban</h4>
+                                <h3> Danh Sách Phòng Ban</h3>
                             </div>
                             <div className='filter-department-page'>
                                 <div className='filter-group'>
@@ -103,8 +111,8 @@ function ManageDepartment(props) {
 
                                 </div>
                                 <div className='search-excel'>
-                                    <SearchHidenButton height='2.4rem' width='18rem'
-                                                       backgroundButton='#1477DAFF'/>
+                                    <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
+                                                       backgroundButton='#479f87'/>
                                     <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
                                         <Button className='btn'><FaFileUpload className='icon'/></Button>
                                     </Tooltip>
@@ -141,17 +149,19 @@ function ManageDepartment(props) {
                     </div>
                 )
 
-            }\
+            )
+            }
             <Modal title="Tạo Mới Phòng Ban" open={isModalOpen}
 
                    maskClosable={true}
-                   onCancel={handleCancel}
+                   onCancel={handleCancelAdd}
                    footer={null}
                    width={700}
                    style={{top: 150}}
             >
-              <AddDepartment onCancel={handleCancel} onSubmit={handleAddDepartment} />
+              <AddDepartment onCancel={handleCancelAdd} onSave={handleAddDepartment} />
             </Modal>
+
         </>
     )
         ;

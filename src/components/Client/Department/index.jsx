@@ -2,43 +2,25 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import TableLayout from "~/components/commoms/Table";
-import {FaExclamationTriangle, FaEye, FaPen, FaQuestionCircle, FaTimesCircle} from "react-icons/fa";
-import ImageCustom from "~/components/commoms/Image";
-import {Button, Modal} from "antd";
+import {FaPen,FaTimesCircle} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {setDepartment, setIsEdit} from "~/redux/reducer/department/departmentReducer";
 
+
 DepartmentTable.propTypes = {};
 
 function DepartmentTable({tableHeader, tableBody}) {
-
-    const [detailDepartment, setDetailDepartment] = useState({});
-    const [isColoseModal, setIsColoseModal] = useState(false);
     const [showPopupDelete, setShowPopupDelete] = useState({
         department_id: null,
         name:'',
         show: false,
     });
     const dispatch = useDispatch()
-
-    const handleShowDetailDepartment = (user) => {
-        // setIsModalOpen(true);
-        // setDetailDepartment(user)
-        dispatch(setDepartment(user))
-    }
-    const handleEditDepartment = async (e, id) => {
-        // e.stopPropagation();
-        // const data = await getDepartmentById(id);
-        // if (Object.keys(data).length > 0) {
-        //     dispatch(setDepartment(data));
+    const handleEditDepartment = (e,item) => {
+        e.stopPropagation();
         dispatch(setIsEdit(true));
-        // } else if (data === 401) {
-        //     Notiflix.Block.remove('#root');
-        // } else {
-        //     Notiflix.Block.remove('#root');
-        //     ErrorToast('Something went wrong. Please try again', 3000);
-        // }
+        dispatch(setDepartment(item));
     };
     const handleRemoveDepartment = async (id) => {
         //e.stopPropagation();
@@ -78,23 +60,16 @@ function DepartmentTable({tableHeader, tableBody}) {
                     <td className={'text-status'}>
                         <p
                             className={` ${
-                                item.status === 1 ? 'active' : 'disabled '
+                                item.status === 1 ? 'active' : 'negative '
                             }`}
                         >
                             {item.status === 1 ? 'Đang Hoạt Động' : 'Tạm Dừng'}
                         </p>
                     </td>
                     <td className="col-action">
-                        {/*<button*/}
-                        {/*    id="show-user"*/}
-                        {/*    onClick={() => handleShowDetailDepartment(item)}*/}
-                        {/*    className="btn-show"*/}
-                        {/*>*/}
-                        {/*    <FaEye className="icon-show"/>*/}
-                        {/*</button>*/}
                         <button
                             id="edit-department"
-                            onClick={(e) => handleEditDepartment(e, item.id)}
+                            onClick={(e) => handleEditDepartment(e,item)}
                             className=" btn-edit"
                         >
                             <FaPen className="icon-edit"/>
@@ -114,6 +89,7 @@ function DepartmentTable({tableHeader, tableBody}) {
             );
         });
     };
+
     return (
         <div className="table-department">
             <TableLayout tableHeader={tableHeader} tableBody={renderTableBody()}/>
@@ -126,7 +102,6 @@ function DepartmentTable({tableHeader, tableBody}) {
                           textCancel="Hủy"
                           onOK={() => handleRemoveDepartment(showPopupDelete.department_id)}
                           onCancel={(e) => setShowPopupDelete({...showPopupDelete, show: false})}/>
-
         </div>
     );
 }

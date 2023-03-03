@@ -47,27 +47,32 @@ function FilterCheckbox(props) {
                     defaultValue="Chức Vụ:"
                 />
                 <Select
+                    showSearch
                     defaultValue= 'Tất Cả'
                     allowClear
                     size={"large"}
                     border={false}
+                    optionFilterProp="children"
+                    filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                    filterSort={(optionA, optionB) =>
+                        (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                    }
                     style={{
                         width: 135,
                         border:'none',
 
 
                     }}
+                    className={cx('select')}
                     dropdownStyle={{
                         padding:0,
                         fontSize:'0.9rem',
                     }}
                     onChange={handleChange}
                     options={lists}
-                    className={cx('select')}
-                >
-                    <Checkbox.Group options={lists} defaultValue={['Pear']} onChange={handleChange} />
-                </Select>
+                />
             </Input.Group>
+
         </div>
     );
 }
