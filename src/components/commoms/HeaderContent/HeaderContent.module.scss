@@ -5,6 +5,7 @@
   border-top: 3px solid #eee;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   .header-left{
       display: flex;
     align-items: center;
@@ -16,6 +17,9 @@
         font-size: var(--22px);
       }
     }
+
+  }
+  .header-right{
 
   }
 }

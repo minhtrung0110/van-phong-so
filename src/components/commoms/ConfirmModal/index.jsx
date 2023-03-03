@@ -28,7 +28,7 @@ function ConfirmModal({open=false,title,content,textCancel,textOK,onOK,onCancel}
         >
             <div className={cx("box-confirmation")}>
                 <FaExclamationTriangle className={cx('icon')}/>
-                <span >{content}</span>
+                <span className={cx("content")} >{content}</span>
             </div>
         </Modal>
     );

@@ -16,7 +16,9 @@ function HeaderContent({title,slot}) {
                     <h4>{title}</h4>
                 </div>
             </div>
-            <div className={cx('header-right')}></div>
+            <div className={cx('header-right')}>
+                {slot}
+            </div>
         </div>
     );
 }
