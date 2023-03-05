@@ -16,6 +16,7 @@ import {isAddDepartmentSelector, isEditDepartmentSelector} from "~/redux/selecto
 import EditDepartment from "~/components/Client/Department/Edit";
 import AddDepartment from "~/components/Client/Department/Add";
 import {setIsAdd, setIsEdit} from "~/redux/reducer/department/departmentReducer";
+import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 
 ManageDepartment.propTypes = {};
 
@@ -99,54 +100,55 @@ function ManageDepartment(props) {
         <>
             {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit} onSave={handleEditDepartment}   />):(
                 (
-                    <div className='container-department'>
-                        <div className='header-department-page'>
-                            <div className='title '>
-                                <FaRegBuilding className='icon'/>
-                                <h3> Danh Sách Phòng Ban</h3>
-                            </div>
-                            <div className='filter-department-page'>
-                                <div className='filter-group'>
-                                    <FilterRadiobox width='15.2rem'/>
+                  !!loading ?(<ListPageSkeleton column={5} lengthItem={5} /> ):
+                      (  <div className='container-department'>
+                          <div className='header-department-page'>
+                              <div className='title '>
+                                  <FaRegBuilding className='icon'/>
+                                  <h3> Danh Sách Phòng Ban</h3>
+                              </div>
+                              <div className='filter-department-page'>
+                                  <div className='filter-group'>
+                                      <FilterRadiobox width='15.2rem'/>
 
-                                </div>
-                                <div className='search-excel'>
-                                    <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
-                                                       backgroundButton='#479f87'/>
-                                    <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
-                                        <Button className='btn'><FaFileUpload className='icon'/></Button>
-                                    </Tooltip>
-                                    <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
-                                        <Button className='btn'><FaFileDownload className='icon'/></Button>
-                                    </Tooltip>
-                                    <Button className='btn-add'
-                                            onClick={handleOpenAddDepartment}>Tạo Mới </Button>
+                                  </div>
+                                  <div className='search-excel'>
+                                      <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
+                                                         backgroundButton='#479f87'/>
+                                      <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
+                                          <Button className='btn'><FaFileUpload className='icon'/></Button>
+                                      </Tooltip>
+                                      <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
+                                          <Button className='btn'><FaFileDownload className='icon'/></Button>
+                                      </Tooltip>
+                                      <Button className='btn-add'
+                                              onClick={handleOpenAddDepartment}>Tạo Mới </Button>
 
 
-                                </div>
-                            </div>
+                                  </div>
+                              </div>
 
-                        </div>
-                        <div className='content-department-page'>
-                            {
-                                data.length > 0 ? (
-                                    <DepartmentTable tableHeader={department_table_header} tableBody={data}/>
-                                ) : (
-                                    <NotFoundData/>
-                                )
+                          </div>
+                          <div className='content-department-page'>
+                              {
+                                  data.length > 0 ? (
+                                      <DepartmentTable tableHeader={department_table_header} tableBody={data}/>
+                                  ) : (
+                                      <NotFoundData/>
+                                  )
 
-                            }
-                            {totalRecord >= 5 && (
-                                <PaginationUI
-                                    handlePageChange={handlePageChange}
-                                    perPage={5}
-                                    totalRecord={totalRecord}
-                                    currentPage={page}
-                                />
-                            )}
+                              }
+                              {totalRecord >= 5 && (
+                                  <PaginationUI
+                                      handlePageChange={handlePageChange}
+                                      perPage={5}
+                                      totalRecord={totalRecord}
+                                      currentPage={page}
+                                  />
+                              )}
 
-                        </div>
-                    </div>
+                          </div>
+                      </div>)
                 )
 
             )

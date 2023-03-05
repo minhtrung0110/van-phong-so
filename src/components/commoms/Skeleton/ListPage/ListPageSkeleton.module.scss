@@ -1,0 +1,96 @@
+.page-list-item{
+  background-color: #fff;
+  border-radius:var(--border-radius);
+  padding: 1rem 2.5rem;
+  margin: var(--pd-content);
+  .title{
+    height: 4rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .text{
+      width: 20rem;
+    }
+  }
+  .header{
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 6rem;
+    .filter{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 21rem;
+    }
+    .search{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 19rem;
+    }
+  }
+  .content{
+    display: flex;
+    justify-content: center;
+  }
+  .footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 6rem;
+    .pagination{
+        width: 19rem;
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+}
+
+
+
+#table {
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+#table thead,
+#table tbody {
+  background-color: var(--light);
+}
+
+#table thead tr th:first-child,
+#table tbody tr td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+#table thead tr th:last-child,
+#table tbody tr td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+#table thead tr th,
+#table tbody tr td {
+  padding: var(--16px) ;
+}
+
+/* #table thead tr th:last-child,
+#table tbody tr td:last-child {
+  border-bottom-width: 0;
+} */
+
+#table tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  border-style: none;
+}
+
+#table tbody tr td {
+  vertical-align: middle;
+}

@@ -47,8 +47,8 @@ function EditStaff(props) {
                     width: 70,
                 }}
             >
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
+                <Select.Option value="86">+86</Select.Option>
+                <Select.Option value="87">+87</Select.Option>
             </Select>
         </Form.Item>
     );
@@ -356,9 +356,9 @@ function EditStaff(props) {
                             ]}
                         >
                             <Select placeholder="Chọn chức vụ" size="middle" name=''>
-                                <Option value="male">CEO</Option>
-                                <Option value="female">CTO</Option>
-                                <Option value="other">Other</Option>
+                                <Select.Option value="male">CEO</Select.Option>
+                                <Select.Option value="female">CTO</Select.Option>
+                                <Select.Option value="other">Other</Select.Option>
                             </Select>
                         </Form.Item>
                         <Form.Item

@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {isAddStaffSelector, isEditStaffSelector, staffSelector} from "~/redux/selectors/staff/staffSelector";
 import AddStaff from "~/components/Client/Staff/Add";
 import EditStaff from "~/components/Client/Staff/Edit";
-import {Button, Col, Row, Tooltip} from "antd";
+import {Button, Col, Row, Skeleton, Tooltip} from "antd";
 import SearchSelection from "~/components/commoms/SearchHideButton";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import FilterRadiobox from "~/components/commoms/FilterRadiobox";
@@ -18,6 +18,8 @@ import {setIsAdd} from "~/redux/reducer/staff/staffReducer";
 import {isEmpty} from "lodash";
 import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import PaginationUI from "~/components/commoms/Pagination";
+import ListStaffSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
+import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 
 ManageStaff.propTypes = {};
 
@@ -182,58 +184,61 @@ function ManageStaff(props) {
                     : (
                         !!isEditStaff ? (<EditStaff/>) : (
                             isEmpty(detailStaff) ? (
-                                    <div className='container-staff'>
 
-                                        <div className='header-staff-page'>
-                                            <div className='title '>
-                                                <FaUsers className='icon-staff'/>
-                                                <h4> Danh Sách Nhân Viên</h4>
-                                            </div>
-                                            {
-                                                !isAddStaff && !isEditStaff && (
-                                                    <div className='filter-staff-page'>
-                                                        <div className='filter-group'>
-                                                            <FilterRadiobox width='15.2rem'/>
-                                                            <FilterCheckbox/>
+                                        !!loading ?(<ListTableSkeleton column={6} lengthItem={5}/>):
+                                            (    <div className='container-staff'>
 
-                                                        </div>
-                                                        <div className='search-excel'>
-                                                            <SearchHidenButton height='2.4rem' width='20rem'
-                                                                               backgroundButton='#1477DAFF'/>
-                                                            <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
-                                                                <Button className='btn'><FaFileUpload className='icon'/></Button>
-                                                            </Tooltip>
-                                                            <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
-                                                                <Button className='btn'><FaFileDownload className='icon'/></Button>
-                                                            </Tooltip>
-                                                            <Button className='btn-outline-primary btn-add'
-                                                                    onClick={goToPageAddStaff}>Thêm </Button>
-
-
-                                                        </div>
+                                                <div className='header-staff-page'>
+                                                    <div className='title '>
+                                                        <FaUsers className='icon-staff'/>
+                                                        <h4> Danh Sách Nhân Viên</h4>
                                                     </div>
-                                                )
-                                            }
-                                        </div>
-                                        <div className='content-staff-page'>
-                                            {
-                                                data.length > 0 ? (
-                                                    <StaffTable tableHeader={data_staff_table_header} tableBody={data}/>
-                                                ) : (
-                                                    <NotFoundData/>
-                                                )
+                                                    {
+                                                        !isAddStaff && !isEditStaff && (
+                                                            <div className='filter-staff-page'>
+                                                                <div className='filter-group'>
+                                                                    <FilterRadiobox width='15.2rem'/>
+                                                                    <FilterCheckbox/>
 
-                                            }
-                                            {totalRecord >= 8 && (
-                                                <PaginationUI
-                                                    handlePageChange={handlePageChange}
-                                                    perPage={8}
-                                                    totalRecord={totalRecord}
-                                                    currentPage={page}
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
+                                                                </div>
+                                                                <div className='search-excel'>
+                                                                    <SearchHidenButton height='2.4rem' width='20rem'
+                                                                                       backgroundButton='#1477DAFF'/>
+                                                                    <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>
+                                                                        <Button className='btn'><FaFileUpload className='icon'/></Button>
+                                                                    </Tooltip>
+                                                                    <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>
+                                                                        <Button className='btn'><FaFileDownload className='icon'/></Button>
+                                                                    </Tooltip>
+                                                                    <Button className='btn-outline-primary btn-add'
+                                                                            onClick={goToPageAddStaff}>Thêm </Button>
+
+
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                </div>
+                                                <div className='content-staff-page'>
+                                                    {
+                                                        data.length > 0 ? (
+                                                            <StaffTable tableHeader={data_staff_table_header} tableBody={data}/>
+                                                        ) : (
+                                                            <NotFoundData/>
+                                                        )
+
+                                                    }
+                                                    {totalRecord >= 8 && (
+                                                        <PaginationUI
+                                                            handlePageChange={handlePageChange}
+                                                            perPage={8}
+                                                            totalRecord={totalRecord}
+                                                            currentPage={page}
+                                                        />
+                                                    )}
+                                                </div>
+                                            </div>)
+
 
 
                                 )
