@@ -166,7 +166,26 @@
 
       }
     }
+    .footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 1rem 2rem;
+      margin-top: 2rem;
+      .btn-back{
+        @include btn-ok;
+        width: 8rem;
+        font-style: var(--14px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .icon {
+          margin-right: 1rem;
+          font-style: var(--14px);
+        }
+      }
+    }
   }
+
 }
 
 ///*  .img{

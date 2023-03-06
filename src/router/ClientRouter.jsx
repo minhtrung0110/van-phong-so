@@ -1,8 +1,7 @@
 import React, {useEffect} from 'react';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Route, Routes} from "react-router-dom";
 import * as PropTypes from "prop-types";
-import LoginPage from "~/pages/Client/LoginPage";
 import {AuthRouter} from "~/router/AuthRouter";
 import ClientLayout from "~/layouts/Client";
 import ManageTaskPage from "~/pages/Client/ManageTask";
@@ -14,6 +13,10 @@ import Profile from "~/pages/Client/Profile";
 import NotificationsPage from "~/pages/Client/Notifications";
 import {config} from "~/config";
 import ManageDepartment from "~/pages/Client/ManageDepartment";
+import LoginPage from "~/pages/Client/Auth/LoginPage";
+import {getUserSelector, isLoginSelector} from "~/redux/selectors/auth/authSelector";
+import {deleteCookie, getCookies, handleVerifyUserLogin} from "~/api/Client/Auth";
+import {setIsLogin, setUser} from "~/redux/reducer/auth/authReducer";
 
 function ProtectedRoutes(props) {
     return null;
@@ -25,24 +28,24 @@ ProtectedRoutes.propTypes = {
 };
 
 function ClientRouter(props) {
-    // const dispatch = useDispatch();
-    // const isAuthenticate = useSelector(isLoginSelector);
-    // useEffect(() => {
-    //     handleGetMe().then((result) => {
-    //         if (result === 401) {
-    //             const token = getCookies('token');
-    //             dispatch(setIsLogin(false));
-    //             if (token) {
-    //                 deleteCookie('token');
-    //             }
-    //         } else {
-    //             dispatch(setIsLogin(true));
-    //             dispatch(setUser(result));
-    //
-    //         }
-    //     });
-    // }, [dispatch]);
-    // const user = useSelector(getUserSelector);
+    const dispatch = useDispatch();
+    const isAuthenticate = useSelector(isLoginSelector);
+    useEffect(() => {
+        handleVerifyUserLogin().then((result) => {
+            if (result === 401) {
+                const token = getCookies('token');
+                dispatch(setIsLogin(false));
+                if (token) {
+                    deleteCookie('token');
+                }
+            } else {
+                dispatch(setIsLogin(true));
+                dispatch(setUser(result));
+
+            }
+        });
+    }, [dispatch]);
+    const user = useSelector(getUserSelector);
     return (
         <Routes>
             <Route path="/login" element={<LoginPage/>}/>

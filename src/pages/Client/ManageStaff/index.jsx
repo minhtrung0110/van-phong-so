@@ -144,7 +144,7 @@ function ManageStaff(props) {
     ]
     const data_staff_table_header = [...staff_table_header];
 
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState(data_staff_table);
     const isAddStaff = useSelector(isAddStaffSelector);
     const isEditStaff = useSelector(isEditStaffSelector);

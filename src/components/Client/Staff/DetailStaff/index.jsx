@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import {Button, Col, DatePicker, Form, Input, Row, Select, Tabs} from "antd";
 import AutoSendMail from "~/components/commoms/AutoSendMail";
 import AutoCallPhone from "~/components/commoms/AutoCallPhone";
 import {
+    FaAngleLeft, FaArrowLeft,
     FaBirthdayCake,
     FaChair,
     FaCut, FaDotCircle,
@@ -20,9 +21,10 @@ import {Option} from "antd/es/mentions";
 import HeaderContent from "~/components/commoms/HeaderContent";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import ImageCustom from "~/components/commoms/Image";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {staffSelector} from "~/redux/selectors/staff/staffSelector";
 import TabPane from "antd/lib/tabs/TabPane";
+import {setStaff} from "~/redux/reducer/staff/staffReducer";
 
 DetailStaff.propTypes = {};
 const contentPrevie = (key) => (
@@ -37,9 +39,16 @@ function DetailStaff({user}) {
     const [isDeleted, setIsDeleted] = useState(false)
     const [isCut, setIsCut] = useState(false)
     const [tab, setTab] = useState(false)
+    const dispatch=useDispatch()
     const onChange = (key) => {
         console.log(key);
     };
+    useEffect(()=>{
+
+    },[dispatch])
+    const handleBackStaffPage=()=>{
+            dispatch(setStaff({}))
+    }
     const items = [
         {
             key: '1',
@@ -110,6 +119,7 @@ function DetailStaff({user}) {
             </Row>
         )
     }
+
     return (
         <div className="detail-staff">
             <HeaderContent title='Thông Tin Chi Tiet Nhân Viên'
@@ -196,16 +206,23 @@ function DetailStaff({user}) {
                             style={{display: "flex", justifyContent: "center"}}
                             renderTabBar={(props) => <CustomTabBar {...props} tabs={items} />}
                         >
-                            <TabPane tab="Thông Tin Cơ Bàn" key="1">
+                            <Tabs.TabPane tab="Thông Tin Cơ Bàn" key="1">
                                 <TabBasicInfo/>
-                            </TabPane>
-                            <TabPane tab="Thông Tin Bô Sung" key="2">
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab="Thông Tin Bô Sung" key="2">
                                 Content of Tab Pane 2
-                            </TabPane>
+                            </Tabs.TabPane>
                         </Tabs>
                     </div>
+                    <div className='footer' >
+                        <button className={'btn-back'} onClick={handleBackStaffPage}>
+                            <FaArrowLeft className='icon' />
+                            Quay Về </button>
+                    </div>
                 </Col>
+
             </Row>
+
 
             <ConfirmModal title='Xóa Nhân Viên' open={isDeleted} onCancel={() => setIsDeleted(false)}
                           content='Bạn đang chuẩn bị xóa thông tin của một nhân viên khỏi hệ thống. Hành động này không thể hoàn tác và sẽ gây mất mát dữ liệu vĩnh viễn. Bạn có chắc chắn muốn tiếp tục xóa ?'

@@ -59,7 +59,7 @@ function ManageDepartment(props) {
     const [data, setData] = useState(listDepartments)
     const [page, setPage] = React.useState(1);
     const [totalRecord, setTotalRecord] = React.useState(data.length);
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
     const dispatch = useDispatch()
     const isEdit = useSelector(isEditDepartmentSelector)
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -115,10 +115,10 @@ function ManageDepartment(props) {
                                   <div className='search-excel'>
                                       <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
                                                          backgroundButton='#479f87'/>
-                                      <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
+                                      <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>
                                           <Button className='btn'><FaFileUpload className='icon'/></Button>
                                       </Tooltip>
-                                      <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'#2F8D45FF'}>
+                                      <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>
                                           <Button className='btn'><FaFileDownload className='icon'/></Button>
                                       </Tooltip>
                                       <Button className='btn-add'
