@@ -17,45 +17,12 @@ import EditDepartment from "~/components/Client/Department/Edit";
 import AddDepartment from "~/components/Client/Department/Add";
 import {setIsAdd, setIsEdit} from "~/redux/reducer/department/departmentReducer";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
+import {listDepartments} from "~/asset/data/initDataGlobal";
 
 ManageDepartment.propTypes = {};
 
 function ManageDepartment(props) {
-    const listDepartments = [
-        {
-            id: 1,
-            name: 'Phòng Kinh Doanh',
-            status: 1,
 
-        },
-        {
-            id: 2,
-            name: 'Phòng Kỹ Thuật',
-            status: 0,
-        },
-        {
-            id: 3,
-            name: 'Phòng Kinh Doanh',
-            status: 1,
-
-        },
-        {
-            id: 4,
-            name: 'Phòng Kỹ Thuật',
-            status: 0,
-        },
-        {
-            id: 5,
-            name: 'Phòng Kinh Doanh',
-            status: 1,
-
-        },
-        {
-            id: 6,
-            name: 'Phòng Kỹ Thuật',
-            status: 0,
-        }
-    ]
     const [data, setData] = useState(listDepartments)
     const [page, setPage] = React.useState(1);
     const [totalRecord, setTotalRecord] = React.useState(data.length);

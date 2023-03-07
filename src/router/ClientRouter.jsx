@@ -53,6 +53,7 @@ function ClientRouter(props) {
             <Route element={<AuthRouter/>}>
                 <Route path={config.routes.overview} element={<ClientLayout slot={<Overview key={'a'}/>}/>}/>
                 <Route path={config.routes.task} element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
+                <Route path={config.routes.addProject} element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
                 <Route path={config.routes.schedule} element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
                 <Route path={config.routes.meeting} element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
                 <Route path={config.routes.staff} element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>

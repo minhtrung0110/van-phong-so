@@ -1,4 +1,4 @@
-
+@import "../../../../css/base/_mixins.scss";
 
 .navbar-app{
   height:3.5rem;
@@ -64,4 +64,21 @@
      // background-color:hsla(0deg, 0%, 100%, 0.34);
     }
   }
+}
+
+.footer-create-project{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 4rem;
+  .btn-cancel{
+    @include btn-cancel;
+    margin-right: 1rem;
+  }
+  .btn-add{
+    @include btn-ok;
+
+  }
+
+
 }

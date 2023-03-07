@@ -7,6 +7,7 @@ export const taskReducer = createSlice({
         key: 0,
         detailTask:{},
         deleteTask:{},
+        isCreateProject:false,
         isAdd: false,
         isEdit: false,
         isReset:'reset-page',
@@ -25,6 +26,9 @@ export const taskReducer = createSlice({
         setIsAdd: (state, action) => {
             state.isAdd = action.payload;
         },
+        setIsCreateProject: (state, action) => {
+            state.isCreateProject = action.payload;
+        },
         setIsEdit: (state, action) => {
             state.isEdit = action.payload;
         },
@@ -37,6 +41,6 @@ export const taskReducer = createSlice({
     },
 });
 
-export const { setIsAdd,setIsEdit, setTask,setIsReset,setDetailTask,setDeleteTask } = taskReducer.actions;
+export const { setIsAdd,setIsEdit, setTask,setIsReset,setDetailTask,setDeleteTask,setIsCreateProject } = taskReducer.actions;
 
 export default taskReducer.reducer;

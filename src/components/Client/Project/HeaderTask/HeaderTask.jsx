@@ -3,15 +3,17 @@ import "./HeaderTask.scss"
 import {Dropdown, Modal} from "antd";
 import {FaAngleDown, FaFlipboard, FaPlus} from "react-icons/fa";
 import AddProject from "~/components/Client/Project/Add";
+import {useDispatch} from "react-redux";
+import {setIsCreateProject} from "~/redux/reducer/task/taskReducer";
 
 
 HeaderTask.prototype={
 
 }
-function HeaderTask(props) {
+function HeaderTask({onCurrentProject}) {
     const [openAddProject,setOpenAddProject] = useState(false)
     const onClick = ({ key }) => {
-        console.log(key)
+        onCurrentProject(key)
     };
     const items = [
         {
@@ -27,6 +29,13 @@ function HeaderTask(props) {
             key: '3',
         },
     ];
+    const dispatch=useDispatch()
+    const handleCreateNewProject=() => {
+        setOpenAddProject(true)
+    }
+    const handleCancelCreateProject=()=>{
+       setOpenAddProject(false)
+    }
     return (
         <div className="navbar-app">
             <div className="select-board">
@@ -46,17 +55,24 @@ function HeaderTask(props) {
             </div>
             <div className='add-board'>
                 <FaPlus className='icon' />
-                <button className='btn-add-board' onClick={()=>setOpenAddProject(true)}>Tạo Dự Án</button>
+                <button className='btn-add-board' onClick={handleCreateNewProject}>Tạo Dự Án</button>
             </div>
             <Modal
                 title="Tạo Dự Án Mới"
-                onCancel={()=>setOpenAddProject(false)}
-                footer={null}
-                width={700}
-                style={{ top: 100 }}
+                onCancel={handleCancelCreateProject}
+                footer={
+                    <div className='footer-create-project'>
+                        <button className='btn-cancel' onClick={handleCancelCreateProject}>Hủy</button>
+                        <button className='btn-add' type='submit'>Thêm</button>
+                    </div>
+                }
+                width={500}
+                style={{ top: 100   }}
+                bodyStyle={{height: "400px"}}
+
                 open={openAddProject}
             >
-                <AddProject />
+                <AddProject  />
             </Modal>
         </div>
     );

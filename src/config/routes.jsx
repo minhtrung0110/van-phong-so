@@ -2,7 +2,8 @@ import React from 'react'
 
 const routes = {
     overview:"/",
-    task:"/task",
+    task:"/project",
+    addProject:"/project/add",
     profile:"/@:nickname",
     meeting:"/meeting",
     staff:"/staff",

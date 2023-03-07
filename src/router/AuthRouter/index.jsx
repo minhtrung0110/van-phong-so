@@ -6,7 +6,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 // import { checkLogin } from '../../api/Auth';
 
 export function AuthRouter(props) {
-    const isAuthenticate = false;//checkLogin();
+    const isAuthenticate = true;//checkLogin();
    // console.log('use', props.userRole.role_id);
     return isAuthenticate ? <Outlet /> : <Navigate to="/login" />;
 }

@@ -1,32 +1,25 @@
-@import "../../../../css/base/_mixins.scss";
-.form-add-project{
-    padding: 1rem 2rem ;
-  .input-title{
-    margin-bottom: 1rem;
-    .lable{
+
+.container-create-project{
+
+  .form-add-project{
+    background-color: #fff;
+    border-radius:var(--border-radius);
+    margin: var(--pd-content);
+    .input-title{
       margin-bottom: 1rem;
-    }
-    .input{
+      .lable{
+        margin-bottom: 1rem;
+      }
+      .input{
+
+      }
 
     }
 
-  }
-  .footer{
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    .btn-cancel{
-      @include btn-cancel;
-      margin-right: 1rem;
+    .members{
+     .lable{
+       margin: 1rem 0;
+     }
     }
-    .btn-add{
-      @include btn-ok;
-
-    }
-
-
-  }
-  .members{
-
   }
 }

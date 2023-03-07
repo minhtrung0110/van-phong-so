@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "./BoardBar.scss"
 import {Avatar, Dropdown, Space, Tooltip} from "antd";
 import {FaAngleDown, FaClipboardList, FaDocker, FaEllipsisH, FaFilter, FaSearch, FaTasks, FaUser} from "react-icons/fa";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
+import GroupMember from "~/components/Client/Task/GroupMember";
 
-function BoardBar(props) {
+function BoardBar({boardName,onFilter,onSearch}) {
     const onClick = ({ key }) => {
-        console.log(key)
+        onFilter(key)
     };
     const items = [
         {
@@ -25,10 +26,12 @@ function BoardBar(props) {
     return (
         <div className="navbar-board">
             <div className="board-view">
-                <h4 className='board-name'> <FaClipboardList className='icon'/> {props.boardName}</h4>
+                <h4 className='board-name'> <FaClipboardList className='icon'/> {boardName}</h4>
             </div>
             <div className="board-filter">
-                <SearchHidenButton className='search' width='14rem' height='2rem' searchButtonText={<FaSearch/>} />
+                <SearchHidenButton className='search'  width='14rem' height='2rem'  searchButtonText={<FaSearch/>}
+                    onSearch={onSearch}
+                    />
                 <Dropdown
                     menu={{
                         items,
@@ -43,38 +46,7 @@ function BoardBar(props) {
                         </Space>
                     </a>
                 </Dropdown>
-                <Avatar.Group
-                    maxCount={2}
-                    size="middle"
-                    className='avatar-group'
-                    maxStyle={{
-                        color: '#f56a00',
-                        backgroundColor: '#fde3cf',
-                    }}
-                >
-                    <Avatar src="https://joeschmoe.io/api/v1/random" />
-                    <Avatar
-                        style={{
-                            backgroundColor: '#d50f96',
-                        }}
-                    >
-                        K
-                    </Avatar>
-                    <Tooltip title="Ant User" placement="top">
-                        <Avatar
-                            style={{
-                                backgroundColor: '#87d068',
-                            }}
-                            icon={<FaUser />}
-                        />
-                    </Tooltip>
-                    <Avatar
-                        style={{
-                            backgroundColor: '#1890ff',
-                        }}
-                        icon={<FaDocker />}
-                    />
-                </Avatar.Group>
+             <GroupMember addMember={true} />
                 <button className='btn-more'> <FaEllipsisH className='dot'/></button>
             </div>
         </div>

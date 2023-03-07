@@ -13,24 +13,20 @@ import TextArea from "antd/es/input/TextArea";
 import {Col, Modal, Row} from "antd";
 import {useSelector} from "react-redux";
 import {deleteTaskSelector} from "~/redux/selectors/task/taskSelector";
+import column from "~/components/Client/Task/Column/Column";
 
 
-function BoardContent() {
-    const [board,setBoard]=useState({})
-    const [columns,setColumns] = useState([])
+function BoardContent({board,onBoard,columnData}) {
+    console.log({board,onBoard,columnData})
+    console.log('rendering')
+    const [columns,setColumns] = useState(columnData)
     const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
     const [newColTitle,setNewColTitle]=useState('')
-
+    console.log(columns)
     const newColInputRef=useRef()
     useEffect(()=>{
-        const boardFromDB=initialData.boards.find(board => board.id==='kltn-01')
-        if(boardFromDB){
-            setBoard(boardFromDB)
-            // sort Column
-
-            setColumns(mapOrder(boardFromDB.columns,boardFromDB.columnOrder,'id'))
-        }
-    },[  ])
+      setColumns(columnData)
+    },[columnData  ])
 
     const onColumnDrop=(dropResult)=>{
         let newColumns=[...columns]
@@ -42,7 +38,7 @@ function BoardContent() {
         newBoard.columnOrder=newColumns.map(item=>item.id)
         newBoard.columns=newColumns
         setColumns(newColumns)
-        setBoard(newBoard)
+        onBoard(newBoard)
         // console.log(newColumns)
         // console.log(newBoard)
     }
@@ -80,7 +76,7 @@ function BoardContent() {
         newBoard.columnOrder=newColumns.map(item=>item.id)
         newBoard.columns=newColumns
         setColumns(newColumns)
-        setBoard(newBoard)
+        onBoard(newBoard)
 
 
         //clear inout
@@ -108,7 +104,7 @@ function BoardContent() {
         newBoard.columnOrder=newColumns.map(item=>item.id)
         newBoard.columns=newColumns
 
-        setBoard(newBoard)
+        onBoard(newBoard)
       //  console.log(newColUpdate)
     }
 
