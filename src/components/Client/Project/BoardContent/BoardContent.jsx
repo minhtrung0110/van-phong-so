@@ -14,20 +14,23 @@ import {Badge, Calendar, Col, Modal, Row} from "antd";
 import {useSelector} from "react-redux";
 import {deleteTaskSelector, isViewTimelineSelector} from "~/redux/selectors/task/taskSelector";
 import column from "~/components/Client/Task/Column/Column";
+import dayjs from "dayjs";
 
 
-function BoardContent({board,onBoard,columnData}) {
-    console.log({board,onBoard,columnData})
-    console.log('rendering')
+function BoardContent({board,onBoard,columnData,timeLine}) {
+   // console.log({board,onBoard,columnData})
+   // console.log('rendering')
     const [columns,setColumns] = useState(columnData)
     const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
     const [newColTitle,setNewColTitle]=useState('')
-    console.log(columns)
+    const [timeLineTask,setTimeLineTask]=useState(timeLine)
+  //  console.log(columns)
     const newColInputRef=useRef()
         const isViewTimeLine=useSelector(isViewTimelineSelector)
     useEffect(()=>{
       setColumns(columnData)
-    },[columnData  ])
+        setTimeLineTask(timeLine)
+    },[columnData])
 
     const onColumnDrop=(dropResult)=>{
         let newColumns=[...columns]
@@ -113,67 +116,21 @@ function BoardContent({board,onBoard,columnData}) {
             return 1394;
         }
     };
+
+    const getTaskInDate=(date) => {
+        const inputDate=dayjs(date, "DD/MM/YYYY HH:mm:ss")
+     return timeLineTask.filter(task=> dayjs(task.endTime, "DD/MM/YYYY HH:mm:ss").date()===inputDate.date())
+
+    }
     const getListData = (value) => {
-        let listData;
-        switch (value.date()) {
-            case 8:
-                listData = [
-                    {
-                        type: 'warning',
-                        content: 'This is warning event.',
-                    },
-                    {
-                        type: 'success',
-                        content: 'This is usual event.',
-                    },
-                ];
-                break;
-            case 10:
-                listData = [
-                    {
-                        type: 'warning',
-                        content: 'This is warning event.',
-                    },
-                    {
-                        type: 'success',
-                        content: 'This is usual event.',
-                    },
-                    {
-                        type: 'error',
-                        content: 'This is error event.',
-                    },
-                ];
-                break;
-            case 15:
-                listData = [
-                    {
-                        type: 'warning',
-                        content: 'This is warning event',
-                    },
-                    {
-                        type: 'success',
-                        content: 'This is very long usual event。。....',
-                    },
-                    {
-                        type: 'error',
-                        content: 'This is error event 1.',
-                    },
-                    {
-                        type: 'error',
-                        content: 'This is error event 2.',
-                    },
-                    {
-                        type: 'error',
-                        content: 'This is error event 3.',
-                    },
-                    {
-                        type: 'error',
-                        content: 'This is error event 4.',
-                    },
-                ];
-                break;
-            default:
-        }
+        console.log(value.date(),getTaskInDate(value))
+     //   console.log('date: ',value.date())
+        const listTask=getTaskInDate(value)
+        let listData=listTask.map((item)=>({
+            type: 'success',
+                content: item.title,
+        }))
+
         return listData || [];
     };
     const monthCellRender = (value) => {
@@ -271,7 +228,7 @@ function BoardContent({board,onBoard,columnData}) {
                             }
                         </div>
                     </>):(
-                        <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+                        <Calendar dateCellRender={dateCellRender}  />
                     )
                 }
 

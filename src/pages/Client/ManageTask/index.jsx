@@ -12,6 +12,7 @@ import {initialData} from "~/asset/data/initalDataTask";
 import {mapOrder} from "~/utils/sorts";
 import backgroundImage from "~/asset/images/backgroundTask01.jpg"
 import {setIsViewTimeline} from "~/redux/reducer/task/taskReducer";
+import {flatten} from "lodash";
 
 ManageTaskPage.propTypes = {};
 
@@ -22,14 +23,34 @@ function ManageTaskPage(props) {
     const [filter, setFilter] = useState()
     const [search, setSearch] = useState()
     const isCreateProject = useSelector(isCreateProjectSelector)
+    const [timeLine,setTimeLine]=useState()
     const dispatch=useDispatch()
     useEffect(() => {
         // console.log
         const boardFromDB = initialData.boards.find(board => board.id === 'kltn-01')
         if (boardFromDB) {
             setBoard(boardFromDB)
-            // sort Column
             setColumns(mapOrder(boardFromDB.columns, boardFromDB.columnOrder, 'id'))
+
+
+            // const data=   boardFromDB.columns.map((column) =>{
+            //   return  column.cards.map((card)=>({id:card.id,title:card.title,endTime:card.endTime}))
+            //
+            //  //   setTimeLine(prev=>[...prev,...data])
+            //   //  console.log(timeLine)
+            // })
+            // const flattenedArr = data.reduce((acc, val) => Array.isArray(val) ? acc.concat(flatten(val)) : acc.concat(val), []);
+            // console.log(flattenedArr )
+            const data=   boardFromDB.columns.reduce((acc,value) =>{
+                return acc.concat(value.cards.map((card)=>({id:card.id,title:card.title,endTime:card.endTime})))
+            },[])
+            setTimeLine(data)
+
+            console.log(data )
+
+            // sort Column
+
+
 
         }
         if(filter==='3'){
@@ -43,7 +64,7 @@ function ManageTaskPage(props) {
         <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
             <HeaderTask onCurrentProject={setCurrentProject}/>
             <BoardBar boardName={board.name} onFilter={setFilter} onSearch={setSearch}/>
-            <BoardContent board={board} onBoard={setBoard} columnData={columns}/>
+            <BoardContent board={board} onBoard={setBoard} columnData={columns} timeLine={timeLine}/>
         </div>
     );
 }
