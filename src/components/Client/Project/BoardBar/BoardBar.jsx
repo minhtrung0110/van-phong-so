@@ -1,7 +1,17 @@
 import React, {useState} from 'react';
 import "./BoardBar.scss"
 import {Avatar, Dropdown, Space, Tooltip} from "antd";
-import {FaAngleDown, FaClipboardList, FaDocker, FaEllipsisH, FaFilter, FaSearch, FaTasks, FaUser} from "react-icons/fa";
+import {
+    FaAngleDown,
+    FaClipboardList,
+    FaDocker,
+    FaEllipsisH,
+    FaFilter,
+    FaRegFlag,
+    FaSearch,
+    FaTasks,
+    FaUser
+} from "react-icons/fa";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import GroupMember from "~/components/Client/Task/GroupMember";
 
@@ -11,17 +21,26 @@ function BoardBar({boardName,onFilter,onSearch}) {
     };
     const items = [
         {
-            label: '1st menu item',
+            label: 'Trạng Thái Công Việc',
             key: '1',
+            icon: <FaRegFlag />,
         },
         {
-            label: '2nd menu item',
+            label: 'Công Việc Của Tôi',
             key: '2',
+            icon: <FaRegFlag />,
         },
         {
-            label: '3rd menu item',
+            label: 'Thời Gian',
             key: '3',
+            icon: <FaRegFlag />,
         },
+        {
+            label: 'Độ Ưu Tiên',
+            key: '4',
+            icon: <FaRegFlag />,
+        },
+
     ];
     return (
         <div className="navbar-board">
@@ -36,14 +55,16 @@ function BoardBar({boardName,onFilter,onSearch}) {
                     menu={{
                         items,
                         onClick,
+                        selectable: true,
                     }}
                     className='filter-btn'
+                    overlayClassName='overlay-dropdown-filter-task'
                 >
                     <a onClick={(e) => e.preventDefault()}>
-                        <Space>
-                            <FaFilter/>
+                        <div className='filter-task'>
+                            <FaFilter className='icon'/>
                          Bộ lọc
-                        </Space>
+                        </div>
                     </a>
                 </Dropdown>
              <GroupMember addMember={true} />

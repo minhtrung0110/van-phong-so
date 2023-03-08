@@ -25,7 +25,7 @@ function HeaderTask({onCurrentProject}) {
             key: '2',
         },
         {
-            label: 'Cá Nhân Khóa Luận',
+            label: 'Cá Nhân Khóa  Tioy CHU NG',
             key: '3',
         },
     ];
@@ -43,7 +43,10 @@ function HeaderTask({onCurrentProject}) {
                     menu={{
                         items,
                         onClick,
+                        selectable: true,
+
                     }}
+                    overlayClassName='custom-overlay-dropdown'
                 >
                   <div className='dropdown-board'>
                         <FaFlipboard className='icon' />

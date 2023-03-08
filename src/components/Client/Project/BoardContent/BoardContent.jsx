@@ -10,9 +10,9 @@ import Column from "~/components/Client/Task/Column/Column";
 import {isEmpty} from "lodash";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import TextArea from "antd/es/input/TextArea";
-import {Col, Modal, Row} from "antd";
+import {Badge, Calendar, Col, Modal, Row} from "antd";
 import {useSelector} from "react-redux";
-import {deleteTaskSelector} from "~/redux/selectors/task/taskSelector";
+import {deleteTaskSelector, isViewTimelineSelector} from "~/redux/selectors/task/taskSelector";
 import column from "~/components/Client/Task/Column/Column";
 
 
@@ -24,6 +24,7 @@ function BoardContent({board,onBoard,columnData}) {
     const [newColTitle,setNewColTitle]=useState('')
     console.log(columns)
     const newColInputRef=useRef()
+        const isViewTimeLine=useSelector(isViewTimelineSelector)
     useEffect(()=>{
       setColumns(columnData)
     },[columnData  ])
@@ -107,78 +108,173 @@ function BoardContent({board,onBoard,columnData}) {
         onBoard(newBoard)
       //  console.log(newColUpdate)
     }
-
+    const getMonthData = (value) => {
+        if (value.month() === 8) {
+            return 1394;
+        }
+    };
+    const getListData = (value) => {
+        let listData;
+        switch (value.date()) {
+            case 8:
+                listData = [
+                    {
+                        type: 'warning',
+                        content: 'This is warning event.',
+                    },
+                    {
+                        type: 'success',
+                        content: 'This is usual event.',
+                    },
+                ];
+                break;
+            case 10:
+                listData = [
+                    {
+                        type: 'warning',
+                        content: 'This is warning event.',
+                    },
+                    {
+                        type: 'success',
+                        content: 'This is usual event.',
+                    },
+                    {
+                        type: 'error',
+                        content: 'This is error event.',
+                    },
+                ];
+                break;
+            case 15:
+                listData = [
+                    {
+                        type: 'warning',
+                        content: 'This is warning event',
+                    },
+                    {
+                        type: 'success',
+                        content: 'This is very long usual event。。....',
+                    },
+                    {
+                        type: 'error',
+                        content: 'This is error event 1.',
+                    },
+                    {
+                        type: 'error',
+                        content: 'This is error event 2.',
+                    },
+                    {
+                        type: 'error',
+                        content: 'This is error event 3.',
+                    },
+                    {
+                        type: 'error',
+                        content: 'This is error event 4.',
+                    },
+                ];
+                break;
+            default:
+        }
+        return listData || [];
+    };
+    const monthCellRender = (value) => {
+        const num = getMonthData(value);
+        return num ? (
+            <div className="notes-month">
+                <section>{num}</section>
+                <span>Backlog number</span>
+            </div>
+        ) : null;
+    };
+    const dateCellRender = (value) => {
+        const listData = getListData(value);
+        return (
+            <ul className="events">
+                {listData.map((item) => (
+                    <li key={item.content}>
+                        <Badge status={item.type} text={item.content} />
+                    </li>
+                ))}
+            </ul>
+        );
+    };
     return (
         isEmpty(board)?(
             <NotFoundData/>
         ):(
             <div className="board-content ">
-                <Container
-                    orientation="horizontal"
-                    onDrop={onColumnDrop}
-                    getChildPayload={index =>columns[index]}
-                    dragHandleSelector=".column-drag-handle"
-                    dropPlaceholder={{
-                        animationDuration: 150,
-                        showOnTop: true,
-                        className: 'column-drop-preview'
-                    }}
-                >
-                    {
-                        !!columns && columns.map((col,index)=> (
-                            <Draggable
+                {
+                    !isViewTimeLine ? (<>
+                        <Container
+                            orientation="horizontal"
+                            onDrop={onColumnDrop}
+                            getChildPayload={index =>columns[index]}
+                            dragHandleSelector=".column-drag-handle"
+                            dropPlaceholder={{
+                                animationDuration: 150,
+                                showOnTop: true,
+                                className: 'column-drop-preview'
+                            }}
+                        >
+                            {
+                                !!columns && columns.map((col,index)=> (
+                                    <Draggable
 
-                                key={index}>
-                                <Column
-                                    column={col}
-                                    onCardDrop={onCardDrop}
-                                    onUpdateColumn={handleUpdateColumn}
+                                        key={index}>
+                                        <Column
+                                            column={col}
+                                            onCardDrop={onCardDrop}
+                                            onUpdateColumn={handleUpdateColumn}
 
-                                />
-                            </Draggable>
+                                        />
+                                    </Draggable>
 
-                        ))
-                    }
-                </Container>
-                <div className='trello-minhtrung-container'  >
-                    {!isOpenNewColForm && (
-                        <Row>
-                            <Col className='add-new-column'
-                                 onClick={()=>{
-                                     setIsOpenNewColForm(true)
+                                ))
+                            }
+                        </Container>
+                        <div className='trello-minhtrung-container'  >
+                            {!isOpenNewColForm && (
+                                <Row>
+                                    <Col className='add-new-column'
+                                         onClick={()=>{
+                                             setIsOpenNewColForm(true)
 
-                                 }}
-                            >
-                                <FaPlus className='icon-add' />   Tạo Mới
-                            </Col>
-                        </Row>
-                    )}
-                    {
-                        !!isOpenNewColForm  && ( <Row>
-                            <Col className='enter-new-column'>
-                                <TextArea
-                                    size='middle'
-                                    type='text'
-                                    placeholder='Tạo Mới'
-                                    className='input-enter-new-column '
-                                    value={newColTitle}
-                                    onChange={e=>setNewColTitle(e.target.value)}
-                                    ref={newColInputRef}
-                                    onKeyDown={event => (event.key==='Enter')&& handleAddNewColumn()}
-                                />
-                                <div className='ft-btn'>
-                                    <button className='btn-outline-success btn-add-new-column'
-                                            onClick={handleAddNewColumn}
-                                    >Tạo</button>
-                                    <FaTimes className='cancel-new-column'
-                                             onClick={()=>setIsOpenNewColForm(false)}
-                                    />
-                                </div>
+                                         }}
+                                    >
+                                        <FaPlus className='icon-add' />   Tạo Mới
+                                    </Col>
+                                </Row>
+                            )}
+                            {
+                                !!isOpenNewColForm  && ( <Row>
+                                    <Col className='enter-new-column'>
+                                        <TextArea
+                                            size='middle'
+                                            type='text'
+                                            placeholder='Tạo Mới'
+                                            className='input-enter-new-column '
+                                            value={newColTitle}
+                                            onChange={e=>setNewColTitle(e.target.value)}
+                                            ref={newColInputRef}
+                                            onKeyDown={event => (event.key==='Enter')&& handleAddNewColumn()}
+                                        />
+                                        <div className='ft-btn'>
+                                            <button className='btn-outline-success btn-add-new-column'
+                                                    onClick={handleAddNewColumn}
+                                            >Tạo</button>
+                                            <FaTimes className='cancel-new-column'
+                                                     onClick={()=>setIsOpenNewColForm(false)}
+                                            />
+                                        </div>
 
-                            </Col>
-                        </Row>)
-                    }
-                </div>
+                                    </Col>
+                                </Row>)
+                            }
+                        </div>
+                    </>):(
+                        <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+                    )
+                }
+
 
 
             </div>
