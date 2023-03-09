@@ -49,6 +49,10 @@ function DetailTask(onUpdateTask) {
             value: [dayjs().add(-14, 'd'), dayjs()],
         },
         {
+            label: 'Last 21 Days',
+            value: [dayjs().add(-21, 'd'), dayjs()],
+        },
+        {
             label: 'Last 30 Days',
             value: [dayjs().add(-30, 'd'), dayjs()],
         },

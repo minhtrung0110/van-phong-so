@@ -23,7 +23,7 @@ function ManageTaskPage(props) {
     const [filter, setFilter] = useState()
     const [search, setSearch] = useState()
     const isCreateProject = useSelector(isCreateProjectSelector)
-    const [timeLine,setTimeLine]=useState()
+
     const dispatch=useDispatch()
     useEffect(() => {
         // console.log
@@ -41,12 +41,6 @@ function ManageTaskPage(props) {
             // })
             // const flattenedArr = data.reduce((acc, val) => Array.isArray(val) ? acc.concat(flatten(val)) : acc.concat(val), []);
             // console.log(flattenedArr )
-            const data=   boardFromDB.columns.reduce((acc,value) =>{
-                return acc.concat(value.cards.map((card)=>({id:card.id,title:card.title,endTime:card.endTime})))
-            },[])
-            setTimeLine(data)
-
-            console.log(data )
 
             // sort Column
 
@@ -64,7 +58,7 @@ function ManageTaskPage(props) {
         <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
             <HeaderTask onCurrentProject={setCurrentProject}/>
             <BoardBar boardName={board.name} onFilter={setFilter} onSearch={setSearch}/>
-            <BoardContent board={board} onBoard={setBoard} columnData={columns} timeLine={timeLine}/>
+            <BoardContent board={board} onBoard={setBoard} columnData={columns} />
         </div>
     );
 }

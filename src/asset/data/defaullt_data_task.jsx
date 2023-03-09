@@ -1,4 +1,4 @@
-// Quy ước tối da 8 cột ->co1o 8 màu có sẵn
+// Quy ước tối da 8 cột ->co 8 màu có sẵn
 export const listColorStateDefaults =[
     {id:1,
         color: '#a9a8a8',

@@ -15,6 +15,7 @@ import {useSelector} from "react-redux";
 import {deleteTaskSelector, isViewTimelineSelector} from "~/redux/selectors/task/taskSelector";
 import column from "~/components/Client/Task/Column/Column";
 import dayjs from "dayjs";
+import TimeLine from "~/components/Client/Project/TimeLine";
 
 
 function BoardContent({board,onBoard,columnData,timeLine}) {
@@ -23,13 +24,11 @@ function BoardContent({board,onBoard,columnData,timeLine}) {
     const [columns,setColumns] = useState(columnData)
     const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
     const [newColTitle,setNewColTitle]=useState('')
-    const [timeLineTask,setTimeLineTask]=useState(timeLine)
   //  console.log(columns)
     const newColInputRef=useRef()
         const isViewTimeLine=useSelector(isViewTimelineSelector)
     useEffect(()=>{
       setColumns(columnData)
-        setTimeLineTask(timeLine)
     },[columnData])
 
     const onColumnDrop=(dropResult)=>{
@@ -111,49 +110,10 @@ function BoardContent({board,onBoard,columnData,timeLine}) {
         onBoard(newBoard)
       //  console.log(newColUpdate)
     }
-    const getMonthData = (value) => {
-        if (value.month() === 8) {
-            return 1394;
-        }
-    };
 
-    const getTaskInDate=(date) => {
-        const inputDate=dayjs(date, "DD/MM/YYYY HH:mm:ss")
-     return timeLineTask.filter(task=> dayjs(task.endTime, "DD/MM/YYYY HH:mm:ss").date()===inputDate.date())
 
-    }
-    const getListData = (value) => {
-        console.log(value.date(),getTaskInDate(value))
-     //   console.log('date: ',value.date())
-        const listTask=getTaskInDate(value)
-        let listData=listTask.map((item)=>({
-            type: 'success',
-                content: item.title,
-        }))
 
-        return listData || [];
-    };
-    const monthCellRender = (value) => {
-        const num = getMonthData(value);
-        return num ? (
-            <div className="notes-month">
-                <section>{num}</section>
-                <span>Backlog number</span>
-            </div>
-        ) : null;
-    };
-    const dateCellRender = (value) => {
-        const listData = getListData(value);
-        return (
-            <ul className="events">
-                {listData.map((item) => (
-                    <li key={item.content}>
-                        <Badge status={item.type} text={item.content} />
-                    </li>
-                ))}
-            </ul>
-        );
-    };
+
     return (
         isEmpty(board)?(
             <NotFoundData/>
@@ -228,7 +188,7 @@ function BoardContent({board,onBoard,columnData,timeLine}) {
                             }
                         </div>
                     </>):(
-                        <Calendar dateCellRender={dateCellRender}  />
+                      <TimeLine board={board} />
                     )
                 }
 
