@@ -56,9 +56,9 @@ function HeaderTask({onCurrentProject}) {
                 </Dropdown>
 
             </div>
-            <div className='add-board'>
+            <div className='add-board' onClick={handleCreateNewProject}>
                 <FaPlus className='icon' />
-                <button className='btn-add-board' onClick={handleCreateNewProject}>Tạo Dự Án</button>
+                <button className='btn-add-board' >Tạo Dự Án</button>
             </div>
             <Modal
                 title="Tạo Dự Án Mới"

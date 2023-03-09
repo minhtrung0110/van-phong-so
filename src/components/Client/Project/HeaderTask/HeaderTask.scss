@@ -45,12 +45,14 @@
     align-items: center;
     background-color: var(--light);
     margin-right: 1rem;
+    cursor: pointer;
     .icon{
       font-size: var(--20px);
       color: var(--primary-color-btn);
       margin-right: 0.5rem;
     }
     .btn-add-board{
+      cursor: pointer;
       border: none;
       font-size: var(--16px);
       font-weight: bold;
