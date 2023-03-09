@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Avatar, DatePicker, Dropdown, Select, Tooltip, Upload} from "antd";
 import {useDispatch, useSelector} from "react-redux";
@@ -30,6 +30,8 @@ DetailTask.propTypes = {};
 
 function DetailTask(onUpdateTask) {
     const data = useSelector(detailTaskSelector)
+
+    console.log(data)
     const [errorDescription, setErrorDescription] = useState('');
     const [priority, setPriority] = useState(data.priority)
     const [status, setStatus] = useState(getNameColumn(initialData.boards, data.columnId, data.boardId))
@@ -38,7 +40,11 @@ function DetailTask(onUpdateTask) {
     const [rangeValueTime, setRangeValueTime] = useState(
         [dayjs(data.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(data.endTime, "DD/MM/YYYY HH:mm:ss")]);
     const [members, setMembers] = useState([])
+    const dispatch=useDispatch()
     const {RangePicker} = DatePicker;
+    // useEffect(()=>{
+    //
+    // },[data])
     const rangePresets = [
         {
             label: 'Last 7 Days',
@@ -62,7 +68,6 @@ function DetailTask(onUpdateTask) {
         },
     ];
     const [showConfirmModal, setShowConfirmModal] = useState(false)
-    const dispatch =useDispatch()
 
     //Handles
     const onRangeChange = (dates, dateStrings) => {

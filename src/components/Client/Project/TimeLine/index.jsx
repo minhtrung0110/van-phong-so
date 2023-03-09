@@ -9,6 +9,8 @@ import {initialData} from "~/asset/data/initalDataTask";
 import {listColorStateDefaults} from "~/asset/data/defaullt_data_task";
 import DetailTask from "~/components/Client/Task/DetailTask";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {useDispatch} from "react-redux";
+import {setDetailTask, setTask} from "~/redux/reducer/task/taskReducer";
 TimeLine.propTypes = {
     
 };
@@ -16,22 +18,21 @@ TimeLine.propTypes = {
 function TimeLine({board}) {
     const [timeLine,setTimeLine]=useState([])
     const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
+    const dispatch=useDispatch()
     useEffect(()=>{
         if(!isEmpty(board)){
             const data=   board.columns.reduce((acc,value) =>{
-                return acc.concat(value.cards.map((card)=>({id:card.id,columnId:card.columnId,status:value.title,
-                    title:card.title,endTime:card.endTime})))
+                return acc.concat(value.cards.map((card)=>({...card,status:value.title})))
             },[])
             setTimeLine(data)
         }
+        console.log(timeLine)
     },[board])
 
     const getTaskInDate=(date) => {
-
         return timeLine.filter(task=> {
            return  dayjs(task.endTime, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY')===dayjs(date).format('DD/MM/YYYY')
         })
-
     }
     const getListData = (value) => {
        // console.log(value.date(),getTaskInDate(value))
@@ -48,13 +49,13 @@ function TimeLine({board}) {
     };
 
     const dateCellRender = (value) => {
-        const listData = getListData(value);
+        const listData = getTaskInDate(value)
        // console.log(listData)
         return (
             <ul className="list-task-events">
                 {listData.map((item) => {
                     return (
-                        <li key={item.title} className="task-event-item" onClick={()=>setIsOpenDetailTask(true)}>
+                        <li key={item.title} className="task-event-item" onClick={()=>handleOpenDetailTask(item)}>
                             <div className="title">
                                 {item.title}
                             </div>
@@ -89,6 +90,10 @@ function TimeLine({board}) {
     // Task UI
 
   //  console.log(listState)
+    const handleOpenDetailTask = (item)=>{
+        setIsOpenDetailTask(true)
+        dispatch(setDetailTask(item))
+    }
     return (
         <div className='timeline-project'>
             <Calendar dateCellRender={dateCellRender} mode={'month'} />
