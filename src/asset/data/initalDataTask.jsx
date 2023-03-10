@@ -81,6 +81,20 @@ export const  initialData ={
                             fileList:[],
                             comments:[],
                         }
+                        ,  {
+                            id:'task-6',
+                            boardId:'kltn-01',
+                            columnId: 'column-1',
+                            title:'Xem Redux',
+                            description: '',
+                            startTime:'01/10/2022 00:10:00',
+                            endTime:'21/04/2022 21:00:00',
+                            priority:'none',
+                            members:[],
+                            todoList:[],
+                            fileList:[],
+                            comments:[],
+                        }
 
                     ]
                 },
@@ -111,7 +125,7 @@ export const  initialData ={
                             title:'Thiê Kế Lich Trình',
                             description: '',
                             startTime:'01/01/2023 00:10:00',
-                            endTime:'15/03/2023 21:00:00',
+                            endTime:'15/04/2023 21:00:00',
                             priority:'middle',
                             members:[],
                             todoList:[],
@@ -175,7 +189,7 @@ export const  initialData ={
                             title:'Đề Cương Khóa Luận',
                             description: 'Chú Ý xác định đúng đối tượng và tập trung vào quy trình doanh nghiệp',
                             startTime:'01/02/2023 00:10:00 ',
-                            endTime:'20/03/2023 20:00:00 ',
+                            endTime:'20/04/2023 20:00:00 ',
                             priority:'highly',
                             members:[],
                             todoList:[

@@ -73,16 +73,44 @@ function TimeLine({board}) {
     };
 
     const getMonthData = (value) => {
-        if (value.month() === 8) {
-            return 1394;
+
+       const data=timeLine.filter(task=> {
+          return  dayjs(task.endTime, 'DD/MM/YYYY HH:mm:ss').format('MM') ===dayjs(value).format('MM')
+        })
+        console.log(data)
+        const countByColumnId = {};
+        for (let i = 0; i < data.length; i++) {
+            const item = data[i];
+            const columnId = item.status;
+            if (countByColumnId[columnId]) {
+                countByColumnId[columnId]++;
+            } else {
+                countByColumnId[columnId] = 1;
+            }
         }
+        console.log({listStatus:Object.entries(countByColumnId).map(([key, value]) => ({ key, value }))
+            ,totalTask:data.length})
+        return {listStatus:Object.entries(countByColumnId).map(([key, value]) => ({ key, value }))
+            ,totalTask:data.length}
     };
+   //console.log(board)
     const monthCellRender = (value) => {
-        const num = getMonthData(value);
-        return num ? (
+        const dataStatistic = getMonthData(value);
+        return dataStatistic.totalTask>0 ? (
             <div className="notes-month">
-                <section>{num}</section>
-                <span>Backlog number</span>
+                <div className="total-task">Công Viêc: {dataStatistic.totalTask}</div>
+                <section className='statistic'>
+                    {
+                        !!dataStatistic.listStatus && dataStatistic.listStatus.map((item)=>(
+                            <div className="status-item">
+                                <span className="title">{item.key}: </span>
+                                <span className="num">{item.value}</span>
+                            </div>
+                        ))
+
+                    }
+                </section>
+
             </div>
         ) : null;
     };
@@ -96,7 +124,7 @@ function TimeLine({board}) {
     }
     return (
         <div className='timeline-project'>
-            <Calendar dateCellRender={dateCellRender} mode={'month'} />
+            <Calendar dateCellRender={dateCellRender}  monthCellRender={monthCellRender} />
             <Modal
                 title=""
                 onCancel={()=>setIsOpenDetailTask(false)}
@@ -107,8 +135,7 @@ function TimeLine({board}) {
             >
                 <DetailTask/>
             </Modal>
-            {/*<ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa' content={`Bạn Có Thực Sự Muốn Xóa Cột ${columnTitle} Này ? `}*/}
-            {/*              textCancel='Hủy' textOK='Xóa' onCancel={()=>setShowConfirmModal(false)} onOK={handleRemoveColumn}/>*/}
+
 
         </div>
     );

@@ -74,3 +74,40 @@
    }
   }
 }
+
+.notes-month{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0;
+  background-color: var(--bs-orange-100);
+  padding: 0.5rem ;
+  border-radius: var(--task-border-radius);
+  .total-task{
+    font-weight: bold;
+    font-style: var(--18px);
+    color: var(--blue);
+  }
+  .statistic{
+   display: flex;
+    flex-direction: row;
+    margin-top: 0.3rem;
+    .status-item{
+      font-size: var(--10px);
+      border-radius: var(--task-border-radius);
+      border: 1px solid var(--gray97-color);
+      padding: 0.4rem;
+      background-color: var(--pr-green-light);
+      color: var(--pr-green);
+      margin-right: 2px;
+      .title{
+
+      }
+      .num{
+        color: var(--red);
+      }
+    }
+  }
+}
