@@ -10,6 +10,6 @@ export  const dataConvertBreadcrumbLanguage=[
     {href:config.routes.staff,label:'Nhân Sự'},
     {href:config.routes.profile,label:'Thông Tin Cá Nhân'},
     {href:config.routes.notification,label:'Thông Báo'},
-    {href:config.routes.department,label:'Phòng Ban'}
+    {href:config.routes.changePassword,label:'Tài Khoản Của Tôi'}
 
 ]

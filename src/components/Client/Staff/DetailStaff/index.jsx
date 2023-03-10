@@ -10,7 +10,7 @@ import {
     FaChair,
     FaCut, FaDotCircle,
     FaFemale,
-    FaHome,
+    FaHome, FaLock,
     FaMailBulk,
     FaMap,
     FaPhone,
@@ -125,6 +125,7 @@ function DetailStaff({user}) {
             <HeaderContent title='Thông Tin Chi Tiet Nhân Viên'
                            slot={
                                <div className='gr-button'>
+
                                    <button className='btn-disabled' onClick={() => setIsCut(true)}><FaCut/> Cho Thôi
                                        Việc
                                    </button>
@@ -232,6 +233,7 @@ function DetailStaff({user}) {
                           content='Bạn đang tiến hành cho nhân viên thôi việc. Hành động này sẽ gây ảnh hưởng các chính sách, quyền lợi và các ưu đãi khác được cung cấp bởi công ty. Vui lòng xác nhận lại quyết định của bạn trước khi tiếp tục'
                           textCancel='Hủy' textOK='Xác Nhận'
             />
+
         </div>
 
     );

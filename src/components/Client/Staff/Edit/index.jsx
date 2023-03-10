@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import './style.scss'
 import {AutoComplete, Button, Cascader, Col, DatePicker, Form, Input, Modal, Radio, Row, Select, Upload} from "antd";
 import {Option} from "antd/es/mentions";
-import {FaPlus} from "react-icons/fa";
+import {FaCut, FaLock, FaPlus, FaTrashAlt} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import {setIsEdit} from "~/redux/reducer/staff/staffReducer";
 import {provinceVn} from "~/asset/data/provinces-vn"
 import HeaderContent from "~/components/commoms/HeaderContent";
+import AddProject from "~/components/Client/Project/Add";
 
 EditStaff.propTypes = {};
 const getBase64 = (file) =>
@@ -65,7 +66,7 @@ function EditStaff(props) {
     };
     return (
         <div className="edit-staff-container">
-            <HeaderContent title='Cập Nhật Nhân Viên'/>
+            <HeaderContent title='Cập Nhật Nhân Viên' />
             <Form
                 labelCol={{
                     span: 7,

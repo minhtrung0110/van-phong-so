@@ -82,13 +82,13 @@
   align-items: center;
   flex-direction: column;
   margin: 0;
-  background-color: var(--bs-orange-100);
+  background-color: var(--criticalSecondary);
   padding: 0.5rem ;
   border-radius: var(--task-border-radius);
   .total-task{
     font-weight: bold;
     font-style: var(--18px);
-    color: var(--blue);
+    color: var(--red);
   }
   .statistic{
    display: flex;
@@ -101,12 +101,14 @@
       padding: 0.4rem;
       background-color: var(--pr-green-light);
       color: var(--pr-green);
+      font-weight: bold;
       margin-right: 2px;
       .title{
 
       }
       .num{
-        color: var(--red);
+        color: var(--blue);
+
       }
     }
   }

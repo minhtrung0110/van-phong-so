@@ -1,0 +1,47 @@
+@import "../../../css/base/_mixins.scss";
+
+.my-account-page{
+
+  background-color: #fff;
+  border-radius:var(--border-radius);
+  padding: 1rem 2.5rem;
+  margin: var(--pd-content);
+  .header-changed-password{
+    height:2.5rem;
+    .icon{
+      font-size: var(--18px);
+      line-height:2.5rem;
+    }
+    .title{
+      font-weight: bold;
+      line-height:2.5rem;
+      font-size: var(--18px);
+      margin-left: 0.5rem;
+    }
+  }
+  .form-changed-password{
+      display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 4rem 0;
+
+    .form-item{
+      width: 40rem;
+      margin: 1.5rem 0;
+    }
+  }
+
+  .footer-changed-password{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2.5rem;
+    .btn-save{
+      @include btn-ok;
+      margin-left: 1rem;
+    }
+    .btn-cancel{
+      @include btn-cancel;
+    }
+  }
+}

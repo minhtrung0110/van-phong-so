@@ -11,8 +11,20 @@
 .detail-staff {
   .gr-button {
     display: flex;
+    .btn-change-password{
+      @include btn;
+      width: 10rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
 
+      &:hover {
+        border: var(--primary-color-btn);
+        background-color: var(--primary-color-btn);
+      }
+    }
     .btn-disabled {
+      margin-left: 0.5rem;
       @include btn;
       width: 10rem;
       display: flex;

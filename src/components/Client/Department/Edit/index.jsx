@@ -18,7 +18,7 @@ function EditDepartment({onCancel, onSave}) {
         defaultValues: {...department}
     });
 
-    const onSubmit = (data) => console.log({ errors, isDirty, dirtyFields });
+    const onSubmit = (data) => console.log({ data,errors, isDirty, dirtyFields });
 
     return (
         <div className="edit-department-container">

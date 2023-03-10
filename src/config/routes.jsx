@@ -10,6 +10,7 @@ const routes = {
     schedule:"/schedule",
     notification:"/notification",
     department:"/department",
+    changePassword:"/change-password",
 
 }
 

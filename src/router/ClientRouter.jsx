@@ -17,6 +17,7 @@ import LoginPage from "~/pages/Client/Auth/LoginPage";
 import {getUserSelector, isLoginSelector} from "~/redux/selectors/auth/authSelector";
 import {deleteCookie, getCookies, handleVerifyUserLogin} from "~/api/Client/Auth";
 import {setIsLogin, setUser} from "~/redux/reducer/auth/authReducer";
+import ManageMyAccount from "~/pages/Client/ManageMyAccount";
 
 function ProtectedRoutes(props) {
     return null;
@@ -59,6 +60,7 @@ function ClientRouter(props) {
                 <Route path={config.routes.staff} element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>
                 <Route path={config.routes.department} element={<ClientLayout slot={<ManageDepartment key={'a'}/>}/>}/>
                 <Route path={config.routes.profile} element={<ClientLayout slot={<Profile key={'a'}/>}/>}/>
+                <Route path={config.routes.changePassword} element={<ClientLayout slot={<ManageMyAccount key={'a'}/>}/>}/>
                 <Route path={config.routes.notification} element={<ClientLayout slot={<NotificationsPage key={'a'}/>}/>}/>
 
 

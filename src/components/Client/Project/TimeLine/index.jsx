@@ -11,6 +11,8 @@ import DetailTask from "~/components/Client/Task/DetailTask";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {useDispatch} from "react-redux";
 import {setDetailTask, setTask} from "~/redux/reducer/task/taskReducer";
+import 'dayjs/locale/zh-cn';
+import locale from 'antd/locale/zh_CN';
 TimeLine.propTypes = {
     
 };
