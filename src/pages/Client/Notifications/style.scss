@@ -1,5 +1,9 @@
 .container-notifications{
-    margin: 2rem 5rem;
+  overflow: hidden;
+  background-color: #fff;
+  border-radius:var(--border-radius);
+  margin: var(--pd-content);
+  padding: 2rem 8rem;
 
   .header-notifications{
     display: flex;
@@ -17,6 +21,19 @@
     .title{
     color:var(--dark)
     }
+    .num-notifications{
+      width: 1.8rem;
+      height: 1.8rem;
+      font-size: var(--14px);
+      display: flex;
+      justify-content: center;;
+      align-items: center;
+      font-weight: bold;
+      color: var(--white);
+      background-color: var(--primary-color-btn);
+      border-radius: var(--border-radius);
+      margin-left: 1rem;
+    }
   }
   .filter-notifications{
     display: flex;
@@ -26,10 +43,13 @@
     justify-content: center;
     background-color: var(--dark);
     box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    border-radius: 0.5rem;
+    margin-bottom: 0.8rem;
     .nav-fiter{
 
       align-items: center;
       justify-content: center;
+
       .tab-item{
         width: 100px;
         padding: 1.2rem 2rem 1rem 2rem;

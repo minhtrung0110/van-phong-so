@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './DropdownNotify.module.scss'
 import classNames from "classnames/bind";
@@ -38,8 +38,39 @@ function DropdownNotify(props) {
             description: 'Lalaland',
             image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
 
+        },
+        {
+            id: 5,
+            title: 'Messi is G.O.A.T',
+            description: 'Lalaland',
+            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+
+        },
+        {
+            id: 6,
+            title: 'Messi is G.O.A.T',
+            description: 'Lalaland',
+            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+
+        },
+        {
+            id: 7,
+            title: 'Messi is G.O.A.T',
+            description: 'Lalaland',
+            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+
         }
     ]
+    const listRef=useRef();
+    const [isCroll,setIsCroll] =useState(false)
+    useEffect(() => {
+        listRef.current.addEventListener('scroll', handleScroll);
+        return () =>  listRef.current.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const handleScroll = () => {
+        setIsCroll(true)
+    };
     return (
         <div className={cx("notification")}>
             <FaBell className='bx bxs-bell'/>
@@ -48,7 +79,7 @@ function DropdownNotify(props) {
                 <header className={cx("list__notify-header")}>
                     <h3>Thông báo mới nhận</h3>
                 </header>
-                <ul className={cx("list__notify-list")}>
+                <ul className={cx("list__notify-list",`${isCroll ? 'scrolled':''}`)} ref={listRef}>
                     {listNotifies.map((item, index) => (
                         <li className={cx("list__notify-item")} key={item.id}>
                             <a href="" className={cx("list__notify-link")}>

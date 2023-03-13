@@ -33,7 +33,7 @@ function ManageMyAccount(props) {
                 labelAlign={"left"}
                 className='form-changed-password'>
                 <Controller
-                    name="current-password"
+                    name="currentPassword"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
@@ -43,15 +43,15 @@ function ManageMyAccount(props) {
                             tooltip="Điền mật khẩu của tài khoản đang đăng nhập"
                             className='form-item'
                             hasFeedback
-                            validateStatus={errors.name ? 'error' : 'success'}
-                            help={errors.name ? 'Vui lòng nhập mật khẩu hiện tại' : null}>
+                            validateStatus={errors.currentPassword ? 'error' : 'success'}
+                            help={errors.currentPassword ? 'Vui lòng nhập mật khẩu hiện tại' : null}>
 
                             <Input.Password  {...field} size="middle" className='ant-input-no-radius '/>
                         </Form.Item>
                     )}
                 />
                 <Controller
-                    name="password"
+                    name="passwordChanged"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
@@ -61,47 +61,51 @@ function ManageMyAccount(props) {
                             tooltip="Điền mật khẩu của tài khoản đang đăng nhập"
                             className='form-item'
                             hasFeedback
-                            validateStatus={errors.name ? 'error' : 'success'}
-                            help={errors.name ? 'Vui lòng nhập mật khẩu mới' : null}>
+                            validateStatus={errors.passwordChanged ? 'error' : 'success'}
+                            help={errors.passwordChanged ? 'Vui lòng nhập mật khẩu mới' : null}>
 
                             <Input.Password  {...field} size="middle" className='ant-input-no-radius '/>
                         </Form.Item>
                     )}
                 />
                 <Controller
-                    name="confirm"
+                    name="confirmPassword"
                     control={control}
                     defaultValue=""
-                    dependencies={['password']}
                     rules={[
                         {
                             required: true,
                             message: 'Vui lòng nhập mật khẩu như',
                         },
                         ({ getFieldValue }) => ({
+
                             validator(_, value) {
-                                if (!value || getFieldValue('password') === value) {
+                                console.log(value)
+                                console.log(value)
+                                if (!value || getFieldValue('passwordChanged') === value) {
                                     return Promise.resolve();
                                 }
                                 return Promise.reject(new Error('Mật khẩu không trùng khớp!'));
                             },
                         }),
                     ]}
-                    render={({field}) => (
-                        <Form.Item
-                            label="Xác Nhận Mật Khẩu"
-                            tooltip="Điền mật khẩu của tài khoản đang đăng nhập"
-                            className='form-item'
+                    dependencies={['passwordChanged']}
+                    render={({field}) => {
+                        console.log(errors)
+                        return (
+                            <Form.Item
+                                label="Mật Khẩu Mới"
+                                tooltip="Điền mật khẩu của tài khoản đang đăng nhập"
+                                className='form-item'
+                                hasFeedback
+                                validateStatus={errors.confirmPassword ? 'error' : 'success'}
+                                help={errors.confirmPassword ? 'Vui lòng nhập mật khẩu mới' : null}>
 
-                            hasFeedback
-
-                            validateStatus={errors.name ? 'error' : 'success'}
-                            help={errors.name ? 'Vui lòng nhập mật khẩu mới' : null}>
-
-                            <Input.Password  {...field} size="middle" className='ant-input-no-radius '/>
-                        </Form.Item>
-                    )}
-                    />
+                                <Input.Password  {...field} size="middle" className='ant-input-no-radius '/>
+                            </Form.Item>
+                        )
+                    }}
+                />
                 {/*/>*/}
                 {/*<Form.Item*/}
                 {/*    name="confirm"*/}

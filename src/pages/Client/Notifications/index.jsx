@@ -23,7 +23,8 @@ function NotificationsPage(props) {
             description: 'Đi họp',
             thumbnail: 'https://upload.wikimedia.org/wikipedia/commons/9/96/USS_Enterprise_%28CVN-80%29_artist_depiction.jpg',
             url: 'http://   ',
-            date: '29 tháng 12,2020'
+            date: '29 tháng 12,2020',
+            read:0,
         },
         {
             id: 2,
@@ -33,7 +34,8 @@ function NotificationsPage(props) {
             description: 'Đi họp',
             thumbnail: 'https://upload.wikimedia.org/wikipedia/commons/9/96/USS_Enterprise_%28CVN-80%29_artist_depiction.jpg',
             url: 'http://   ',
-            date: '19 tháng 08,2021'
+            date: '19 tháng 08,2021',
+            read:1,
         }, {
             id: 3,
             title: 'Họp Giao Ban Đầu Tuần',
@@ -42,7 +44,8 @@ function NotificationsPage(props) {
             description: 'Đi họp',
             thumbnail: 'https://upload.wikimedia.org/wikipedia/commons/9/96/USS_Enterprise_%28CVN-80%29_artist_depiction.jpg',
             url: 'http://   ',
-            date: '09 tháng 12,2021'
+            date: '09 tháng 12,2021',
+            read:0,
         }, {
             id: 4,
             title: 'Họp Giao Ban Đầu Tuần',
@@ -50,7 +53,8 @@ function NotificationsPage(props) {
             name_type: 'lịch biểu',
             thumbnail: 'https://upload.wikimedia.org/wikipedia/commons/9/96/USS_Enterprise_%28CVN-80%29_artist_depiction.jpg',
             url: 'http://   ',
-            date: '01 tháng 12,2022'
+            date: '01 tháng 12,2022',
+            read:0,
         }, {
             id: 5,
             title: 'Họp Giao Ban Đầu Tuần',
@@ -58,7 +62,8 @@ function NotificationsPage(props) {
             name_type: 'công việc',
             thumbnail: 'https://upload.wikimedia.org/wikipedia/commons/9/96/USS_Enterprise_%28CVN-80%29_artist_depiction.jpg',
             url: 'http://   ',
-            date: '19 tháng 02,2023'
+            date: '19 tháng 02,2023',
+            read:1,
         },
 
     ]
@@ -67,6 +72,7 @@ function NotificationsPage(props) {
             <div className='header-notifications'>
                 <FaBell className='icon-bell'/>
                 <h4 className='title'>Thông Báo</h4>
+                <div className='num-notifications'>10</div>
             </div>
             <div className='filter-notifications'>
 
@@ -86,13 +92,13 @@ function NotificationsPage(props) {
                             return (
                                 <NotificationItem key={item.id} id={item.id} title={item.title} type={item.type}
                                                   description={item.description} thumbnail={item.thumbnail}
-                                                  url={item.url} date={item.date}/>
+                                                  url={item.url} date={item.date} read={item.read}/>
                             )
                            else if(item.type === type)
                                 return (
                                     <NotificationItem key={item.id} id={item.id} title={item.title} type={item.type}
                                                       description={item.description} thumbnail={item.thumbnail}
-                                                      url={item.url} date={item.date}/>
+                                                      url={item.url} date={item.date} read={item.read}/>
                                 )
                         }
                     )
