@@ -4,21 +4,19 @@ import {Avatar, Dropdown, Space, Tooltip} from "antd";
 import {
     FaAngleDown,
     FaClipboardList,
-    FaDocker,
+    FaDocker, FaEdit,
     FaEllipsisH,
     FaFilter,
     FaRegFlag,
     FaSearch,
-    FaTasks,
+    FaTasks, FaTrash,
     FaUser
 } from "react-icons/fa";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import GroupMember from "~/components/Client/Task/GroupMember";
 
 function BoardBar({boardName,onFilter,onSearch}) {
-    const onClick = ({ key }) => {
-        onFilter(key)
-    };
+
     const items = [
         {
             label: 'Trạng Thái Công Việc',
@@ -42,6 +40,25 @@ function BoardBar({boardName,onFilter,onSearch}) {
         },
 
     ];
+    const listActionProjects = [
+        {
+            label: 'Cập Nhật Dự Án',
+            key: '1',
+            icon: <FaEdit />,
+        },
+        {
+            label: 'Hủy Dự Án',
+            key: '2',
+            icon: <FaTrash />,
+        },
+
+    ];
+    const onClick = ({ key }) => {
+        onFilter(key)
+    };
+    const handleChooseActionProject = ({ key }) => {
+
+    };
     return (
         <div className="navbar-board">
             <div className="board-view">
@@ -68,7 +85,19 @@ function BoardBar({boardName,onFilter,onSearch}) {
                     </a>
                 </Dropdown>
              <GroupMember addMember={true} />
-                <button className='btn-more'> <FaEllipsisH className='dot'/></button>
+              <div>
+                  <Dropdown
+                      menu={{
+                          items:listActionProjects,
+                          onClick:handleChooseActionProject,
+                      }}
+                      className='action-project'
+                      overlayClassName='overlay-dropdown-action-project'
+                  >
+                      <button className='btn-more'> <FaEllipsisH className='dot'/></button>
+                  </Dropdown>
+              </div>
+
             </div>
         </div>
     );

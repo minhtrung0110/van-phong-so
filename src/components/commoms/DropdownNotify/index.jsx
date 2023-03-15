@@ -13,51 +13,51 @@ function DropdownNotify(props) {
     const listNotifies = [
         {
             id: 1,
-            title: 'Messi is G.O.A.T',
-            description: 'Lalaland',
-            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+            title: 'Lich Làm Việc Tuần 8',
+            description: 'Hop Giao Ban',
+            image: 'https://www.gannett-cdn.com/-mm-/51932f63609cbba284fa13232e749b463be53a48/c=2-0-749-422/local/-/media/2018/05/02/TreasureCoast/TreasureCoast/636608798020779494-0509-ynsl-hurston-lib-word-training.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp',
 
         },
         {
             id: 2,
-            title: 'Messi is G.O.A.T',
-            description: 'Lalaland',
-            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+            title: 'Lich Làm Việc Tuần 8',
+            description: 'Hop Giao Ban',
+            image: 'https://www.gannett-cdn.com/-mm-/51932f63609cbba284fa13232e749b463be53a48/c=2-0-749-422/local/-/media/2018/05/02/TreasureCoast/TreasureCoast/636608798020779494-0509-ynsl-hurston-lib-word-training.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp',
 
         },
         {
             id: 3,
-            title: 'Messi is G.O.A.T',
-            description: 'Lalaland',
-            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+            title: 'Lich Làm Việc Tuần 8',
+            description: 'Hop Giao Ban',
+            image: 'https://www.gannett-cdn.com/-mm-/51932f63609cbba284fa13232e749b463be53a48/c=2-0-749-422/local/-/media/2018/05/02/TreasureCoast/TreasureCoast/636608798020779494-0509-ynsl-hurston-lib-word-training.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp',
 
         },
         {
             id: 4,
-            title: 'Messi is G.O.A.T',
-            description: 'Lalaland',
-            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+            title: 'Lich Làm Việc Tuần 8',
+            description: 'Hop Giao Ban',
+            image: 'https://www.gannett-cdn.com/-mm-/51932f63609cbba284fa13232e749b463be53a48/c=2-0-749-422/local/-/media/2018/05/02/TreasureCoast/TreasureCoast/636608798020779494-0509-ynsl-hurston-lib-word-training.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp',
 
         },
         {
             id: 5,
-            title: 'Messi is G.O.A.T',
-            description: 'Lalaland',
-            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+            title: 'Lich Làm Việc Tuần 8',
+            description: 'Hop Giao Ban',
+            image: 'https://www.gannett-cdn.com/-mm-/51932f63609cbba284fa13232e749b463be53a48/c=2-0-749-422/local/-/media/2018/05/02/TreasureCoast/TreasureCoast/636608798020779494-0509-ynsl-hurston-lib-word-training.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp',
 
         },
         {
             id: 6,
-            title: 'Messi is G.O.A.T',
-            description: 'Lalaland',
-            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+            title: 'Lich Làm Việc Tuần 8',
+            description: 'Hop Giao Ban',
+            image: 'https://www.gannett-cdn.com/-mm-/51932f63609cbba284fa13232e749b463be53a48/c=2-0-749-422/local/-/media/2018/05/02/TreasureCoast/TreasureCoast/636608798020779494-0509-ynsl-hurston-lib-word-training.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp',
 
         },
         {
             id: 7,
-            title: 'Messi is G.O.A.T',
-            description: 'Lalaland',
-            image: 'https://1.bp.blogspot.com/-rIZvGHdH8L8/YUxNVBj8pEI/AAAAAAABShY/GeiNuNIh0r84QPPfZgAHZUwcsRT64gbaQCLcBGAsYHQ/s0/BaoBua-CoM-FONGBEER-1.jpg',
+            title: 'Lich Làm Việc Tuần 8',
+            description: 'Hop Giao Ban',
+            image: 'https://www.gannett-cdn.com/-mm-/51932f63609cbba284fa13232e749b463be53a48/c=2-0-749-422/local/-/media/2018/05/02/TreasureCoast/TreasureCoast/636608798020779494-0509-ynsl-hurston-lib-word-training.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp',
 
         }
     ]
