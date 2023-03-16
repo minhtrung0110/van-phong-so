@@ -1,32 +1,62 @@
-
+.avatar-header{
+  margin-left: 1.4rem;
+  margin-right: 0.8rem;
+}
 .box-user{
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  .avatar{
 
-
-  }
-  .info{
-    display: flex;
-    flex-direction:column;
-    line-height: 100%;
-    padding-left: 0.5rem;
-
-    .name{
-      font-size:15px;
+  .info-user{
+    height: 5rem;
+    cursor: default;
+    .title{
+      font-size:var(--12px);
       font-weight: bold;
-      margin-bottom: 0.3rem;
+      margin-bottom:0.8rem;
       color: var(--dark);
     }
+    .info{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      line-height: 100%;
+      padding-left: 0.5rem;
 
-    .role{
-      font-size:12px;
-      text-align: center;
-      font-style: italic;
-      color: var(--dark);
+    .gr{
+      display: flex;
+      flex-direction: column;
+      margin-left: 01rem;
+      .name{
+        font-size:var(--16px);
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+        color: var(--dark);
+      }
+
+      .role{
+        font-size:var(--12px);
+        text-align: center;
+        font-style: italic;
+        color: var(--dark);
+      }
+    }
     }
   }
+  .dropdown-item{
+    line-height: 2.4rem;
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+
+
+    .dropdown-icon{
+      font-size: var(--16px);
+    }
+    .dropdown-title{
+      font-size: var(--16px);
+      margin-left: 1rem;
+
+    }
+  }
+
 }
 @media only screen and (max-width: 46.1875em) {
   .info {

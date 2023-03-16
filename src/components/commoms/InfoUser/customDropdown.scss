@@ -1,0 +1,9 @@
+.custom-dropdown{
+  .ant-dropdown-menu{
+    padding: 0;
+    .ant-dropdown-menu-item{
+      border-bottom: 1px solid var(--gray97-color);
+    }
+  }
+
+}

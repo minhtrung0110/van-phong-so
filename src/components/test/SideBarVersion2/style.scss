@@ -1,0 +1,17 @@
+.sidebar-version2{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px ;
+  height: 100%;
+  background: var(--light);
+  z-index: 900;
+  font-family: var(--lato);
+  transition: .3s ease;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  box-shadow: 1px 1px 2px 3px rgba(204, 202, 202, 0.2);
+  &.hide {
+    width: 80px;
+  }
+}

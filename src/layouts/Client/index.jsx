@@ -5,6 +5,7 @@ import HeaderBar from "~/components/commoms/Header";
 import './style.scss'
 import {config} from "~/config";
 import HeaderContent from "~/components/commoms/HeaderContent";
+import SideBarVersion2 from "~/components/test/SideBarVersion2";
 
 ClientLayout.propTypes = {
     slot: PropTypes.element.isRequired,
@@ -18,6 +19,7 @@ function ClientLayout({slot}) {
     return (
         <>
             <SideBarCustom/>
+            {/*<SideBarVersion2 />*/}
             <section id="content">
 
                 <HeaderBar/>

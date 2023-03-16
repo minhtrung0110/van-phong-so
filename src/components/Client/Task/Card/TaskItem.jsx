@@ -14,8 +14,12 @@ function TaskItem({task, onShowDetail}) {
     return (
         <div className='task-item' onClick={handleShowDetail}>
             <div className='header-task-item'>
-                <span className='task-title'>{`${task.title}`}</span>
-                <FaPen className='btn-edit-task'/>
+                <div className='task-title'>{`${task.title}`}</div>
+                <div className='description'>
+                    <span className='priority'>{`cao`}</span>
+                    <span className='id'>{`id: ${task.id}`}</span>
+                </div>
+                {/*<FaPen className='btn-edit-task'/>*/}
             </div>
             {!!task.cover && (
                 <div className='thumbnail'>

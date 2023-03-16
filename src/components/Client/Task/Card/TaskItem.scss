@@ -7,6 +7,7 @@
   box-shadow: var(--bx-sh-task);
   margin-bottom: var(--gap);
   font-size: var(--fs-task-pg);
+
   &:hover {
     transform: scale(1.0225);
     cursor: pointer;
@@ -14,23 +15,41 @@
   }
 
   .header-task-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+
     padding: 0 5px;
-    .btn-edit-task{
+
+    .btn-edit-task {
       display: none;
     }
+
     .task-title {
       font-weight: 400;
       display: block;
+      height: 1.5rem;
 
     }
-    .task-description {
-      font-style: italic;
-      display: block;
-      text-align: justify;
+
+    .description {
+      display: flex;
+      justify-content: space-between;
+      height: 2rem;
+      align-items: center;
+      .priority {
+        color: #18baff;
+        background-color: rgba(24, 186, 255, .12);
+        font-size: var(--12px);
+        padding:0.4rem;
+        border-radius: calc(var(--task-border-radius) - 1px);
+      }
+
+      .id {
+        font-size: var(--12px);
+        font-style: italic;
+
+      }
     }
+
     &:hover .btn-edit-task {
       display: block;
       color: #d5d3d3;
@@ -47,8 +66,9 @@
     }
   }
 
-  .thumbnail{
+  .thumbnail {
     margin-top: 0.8rem;
+
     .img-thumbnail-task {
       display: block;
       width: calc(95% + (3 * #{var(--gap)}));
@@ -65,10 +85,10 @@
 
 
 @media (min-width: 768px) {
-  .task-item{
-    .thumbnail{
+  .task-item {
+    .thumbnail {
       .img-thumbnail-task {
-      //  width: 50%;
+        //  width: 50%;
         height: auto;
       }
     }
@@ -77,10 +97,10 @@
 }
 
 @media (min-width: 1024px) {
-  .task-item{
-    .thumbnail{
+  .task-item {
+    .thumbnail {
       .img-thumbnail-task {
-       // width: 33.33%;
+        // width: 33.33%;
         height: auto;
       }
     }

@@ -8,7 +8,8 @@ import Company from '~/asset/images/logo.png'
 import './style.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {isCollapseSideBar} from "~/redux/selectors/dashboard/dashboardSelector";
-import {FaBuilding} from "react-icons/fa";
+import {FaBuilding, FaCogs, FaRegDotCircle} from "react-icons/fa";
+import {config} from "~/config";
 
 SideBarCustom.propTypes = {
 
@@ -44,17 +45,13 @@ function SideBarCustom(props) {
 
             </ul>
             <ul className="side-menu">
-                <li>
-                    <a href="~/layouts/Client/SideBarCustom/index#">
-                        <i className='bx bxs-cog'></i>
-                        <span className="text">Settings</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="~/layouts/Client/SideBarCustom/index#" className="logout">
-                        <i className='bx bxs-log-out-circle'></i>
-                        <span className="text">Logout</span>
-                    </a>
+                <li   className={`${config.routes.config===location.pathname && 'active'}`} >
+                    <NavLink to={config.routes.config}
+
+                    >
+                        <span className='bx'><FaCogs/></span>
+                        <span className="text">Cấu Hình</span>
+                    </NavLink>
                 </li>
             </ul>
         </section>

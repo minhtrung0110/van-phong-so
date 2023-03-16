@@ -62,6 +62,7 @@ function ClientRouter(props) {
                 <Route path={config.routes.profile} element={<ClientLayout slot={<Profile key={'a'}/>}/>}/>
                 <Route path={config.routes.changePassword} element={<ClientLayout slot={<ManageMyAccount key={'a'}/>}/>}/>
                 <Route path={config.routes.notification} element={<ClientLayout slot={<NotificationsPage key={'a'}/>}/>}/>
+                <Route path={config.routes.config} element={<ClientLayout slot={<></>}/>}/>
 
 
             </Route>

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import "./HeaderTask.scss"
 import {Dropdown, Modal} from "antd";
-import {FaAngleDown, FaFlipboard, FaPlus} from "react-icons/fa";
+import {FaAngleDown, FaFlipboard, FaListUl, FaPlus} from "react-icons/fa";
 import AddProject from "~/components/Client/Project/Add";
 import {useDispatch} from "react-redux";
 import {setIsCreateProject} from "~/redux/reducer/task/taskReducer";
@@ -12,23 +12,7 @@ HeaderTask.prototype={
 }
 function HeaderTask({onCurrentProject}) {
     const [openAddProject,setOpenAddProject] = useState(false)
-    const onClick = ({ key }) => {
-        onCurrentProject(key)
-    };
-    const items = [
-        {
-            label: 'Cơ Sở Dữ Liệu Phân Tán',
-            key: '1',
-        },
-        {
-            label: 'Lập Trình Mạng',
-            key: '2',
-        },
-        {
-            label: 'Cá Nhân Khóa  Tioy CHU NG',
-            key: '3',
-        },
-    ];
+
     const dispatch=useDispatch()
     const handleCreateNewProject=() => {
         setOpenAddProject(true)
@@ -38,27 +22,13 @@ function HeaderTask({onCurrentProject}) {
     }
     return (
         <div className="navbar-app">
-            <div className="select-board">
-                <Dropdown
-                    menu={{
-                        items,
-                        onClick,
-                        selectable: true,
-
-                    }}
-                    overlayClassName='custom-overlay-dropdown'
-                >
-                  <div className='dropdown-board'>
-                        <FaFlipboard className='icon' />
-                      <span className='board-title'> Dự Án</span>
-                      <FaAngleDown  className='icon-down'/>
-                  </div>
-                </Dropdown>
-
+            <div className='list-task' >
+                <FaListUl className='icon' />
+                <span className='text' >Danh Sách Công Việc</span>
             </div>
             <div className='add-board' onClick={handleCreateNewProject}>
                 <FaPlus className='icon' />
-                <button className='btn-add-board' >Tạo Dự Án</button>
+                <span className='text' >Tạo Dự Án</span>
             </div>
             <Modal
                 title="Tạo Dự Án Mới"

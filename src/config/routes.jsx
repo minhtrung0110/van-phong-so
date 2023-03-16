@@ -11,6 +11,8 @@ const routes = {
     notification:"/notification",
     department:"/department",
     changePassword:"/change-password",
+    logout:"/logout",
+    config:'/config'
 
 }
 

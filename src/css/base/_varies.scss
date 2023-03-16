@@ -1,6 +1,6 @@
 
 :root {
-  --font: 'Mulish';
+  --font: 'Roboto', sans-serif;
   --poppins: 'Poppins', sans-serif;
   --lato: 'Lato', sans-serif;
   //---------- PRIMATY COLOR--------------------------------------------------------//
@@ -19,7 +19,7 @@
   --informativeSecondary: rgba(24,186,255,.12);
   --pr-green: #3ab67b;
   --pr-green-light: #56ca7629;
-  --border-radius:5px;
+  --border-radius:0.6rem;
   // 7 Colors Basic
 
   --red: #e84261;
@@ -127,7 +127,6 @@
   --column-header-height:36px;
   --column-footer-height:45px;
   --column-border-radius:3px;
-  --task-border-radius:3px;
 
 
   //TASK PAGE

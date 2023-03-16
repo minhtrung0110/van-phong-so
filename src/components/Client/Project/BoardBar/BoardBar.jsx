@@ -14,9 +14,10 @@ import {
 } from "react-icons/fa";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import GroupMember from "~/components/Client/Task/GroupMember";
+import ConfirmModal from "~/components/commoms/ConfirmModal";
 
 function BoardBar({boardName,onFilter,onSearch}) {
-
+    const [showConfirmDelete,setIsShowConfirmDelete]=useState(false)
     const items = [
         {
             label: 'Trạng Thái Công Việc',
@@ -57,8 +58,13 @@ function BoardBar({boardName,onFilter,onSearch}) {
         onFilter(key)
     };
     const handleChooseActionProject = ({ key }) => {
-
+            if(key==='2'){
+                setIsShowConfirmDelete(true)
+            }
     };
+    const handleRemoveProject=()=>{
+        setIsShowConfirmDelete(false)
+    }
     return (
         <div className="navbar-board">
             <div className="board-view">
@@ -99,6 +105,9 @@ function BoardBar({boardName,onFilter,onSearch}) {
               </div>
 
             </div>
+
+            <ConfirmModal open={showConfirmDelete} title='Xác Nhận Xóa' content={`Bạn Có Thực Sự Muốn Xóa Cột ${boardName} Này ? `}
+                          textCancel='Hủy' textOK='Xóa' onCancel={()=>setIsShowConfirmDelete(false)} onOK={handleRemoveProject}/>
         </div>
     );
 }

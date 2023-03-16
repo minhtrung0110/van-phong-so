@@ -5,8 +5,13 @@
   transition: .3s ease;
 }
 #sidebar.hide ~ #content {
-  width: calc(100% - 60px);
+  width: calc(100% - 60px) !important;
   left: 60px;
+}
+/* demo 2**/
+.sidebar-version2.hide ~ #content {
+  width: calc(100% - 80px);
+  left: 80px;
 }
 
 

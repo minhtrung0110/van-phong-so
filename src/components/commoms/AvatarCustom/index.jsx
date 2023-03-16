@@ -8,7 +8,7 @@ AvatarCustom.propTypes = {
     lastName: PropTypes.string.isRequired,
 };
 const cx=classNames.bind(styles)
-function AvatarCustom({avatar,lastName}) {
+function AvatarCustom({avatar,lastName,size='large'}) {
     const [show, setShow] = useState(false);
     const checkImageUrl = (url) => {
         // /\.(jpeg|jpg|png|gif)\b/i.test(url);
@@ -21,10 +21,10 @@ function AvatarCustom({avatar,lastName}) {
     return (
         <div className={cx('avatar-user')}>
             {
-                !!show ? (<Avatar style={{backgroundColor: '#1d81ab', verticalAlign: 'middle'}} size="large"
+                !!show ? (<Avatar style={{backgroundColor: '#1d81ab', verticalAlign: 'middle'}} size={size}
                                        src={avatar} className={cx('avatar')}/>)
                     : (
-                        <Avatar style={{backgroundColor: '#f56a00', verticalAlign: 'middle'}} size="large" className={cx('avatar')}>
+                        <Avatar style={{backgroundColor: '#f56a00', verticalAlign: 'middle'}} size={size} className={cx('avatar')}>
                             {lastName}
                         </Avatar>
                     )
