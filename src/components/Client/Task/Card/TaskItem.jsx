@@ -16,7 +16,7 @@ function TaskItem({task, onShowDetail}) {
             <div className='header-task-item'>
                 <div className='task-title'>{`${task.title}`}</div>
                 <div className='description'>
-                    <span className='priority'>{`cao`}</span>
+                    <span className='priority'>{`Thấp`}</span>
                     <span className='id'>{`id: ${task.id}`}</span>
                 </div>
                 {/*<FaPen className='btn-edit-task'/>*/}

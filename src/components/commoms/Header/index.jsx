@@ -51,7 +51,7 @@ function HeaderBar({onCollapse}) {
                     <span className={cx("nav-link")}>{
                         dataConvertBreadcrumbLanguage.find((item) => (item.href === location.pathname)).label
                     }</span>
-                   <SelectHeaderProject/>
+                   {/*<SelectHeaderProject/>*/}
                 </div>
                 {/*<SearchCustom/>*/}
 
