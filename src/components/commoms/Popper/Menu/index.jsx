@@ -29,12 +29,13 @@ function Menu({children,items, hideOnClick=false, }) {
         interactive='true'
         placement="bottom-end"
         hideOnClick={hideOnClick}
+            zIndex={999}
         delay={[0,700]}
         offset={[12, 2]}
         render={(attrs) => (
             <div className={cx('menu-list')}
                  style={{
-                     width:'25rem'
+                     width:'26rem'
                  }}
                  tabIndex="-1" {...attrs}>
                 <PopperWrapper>

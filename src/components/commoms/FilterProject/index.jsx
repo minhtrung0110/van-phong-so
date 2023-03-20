@@ -3,45 +3,27 @@ import PropTypes from 'prop-types';
 import styles from './FilterProject.module.scss'
 import classNames from "classnames/bind";
 import {Dropdown, Checkbox, Select} from "antd";
-import {FaFilter, FaPager, FaRegFlag, FaSignOutAlt, FaUser} from "react-icons/fa";
+import {FaFilter, FaPager, FaRegFlag, FaSearch, FaSignOutAlt, FaUser} from "react-icons/fa";
 import GroupMember from "~/components/Client/Task/GroupMember";
 import {config} from "~/config";
 import Menu from "~/components/commoms/Popper/Menu";
+import SearchHidenButton from "~/components/commoms/SearchHideButton";
 
-FilterProject.propTypes = {};
+FilterProject.propTypes = {
+
+};
 const cx = classNames.bind(styles)
 
-function FilterProject({listMember = [], onFilter}) {
-    const [filters, setFilters] = useState([])
+function FilterProject({listMember = [], onFilter,className}) {
     const [checkedListMember, setCheckedListMember] = useState([]);
     const [checkedListDuration, setCheckedListDuration] = useState([]);
     const [checkedListPriority, setCheckedListPriority] = useState([]);
-    const [value, setValue] = useState([]);
-    const filterOption = (input, option) => {
-        //validate
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (emailRegex.test(input))
-            return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-        else return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    }
+    const [listMemberMore, setListMemberMore] = useState([]);
+    const [searchValue, setSearchValue] = useState('')
     const optionsSelectMember = listMember.map((d) => ({
         value: d.id,
         label: `${d.first_name} ${d.last_name}`,
     }))
-    console.log(optionsSelectMember)
-    const selectProps = {
-        mode: 'multiple',
-        style: {
-            width: '100%',
-        },
-        value,
-        options:optionsSelectMember,
-        onChange: (newValue) => {
-            setValue(newValue);
-        },
-        placeholder: 'Chọn thành viên...',
-        maxTagCount: 'responsive',
-    };
     const optionsMember = [
         {value: 'none-member', label: 'Không được giao'},
         {value: 'myself', label: 'Giao cho tôi'},
@@ -62,32 +44,44 @@ function FilterProject({listMember = [], onFilter}) {
     ];
     const onChangeDuration = (list) => {
         setCheckedListDuration(list)
-        const newlistFilter = (filters, newOptions) => {
-            return filters.filter((item) => item !== newOptions)
-        }
-
-        // console.log(filters)
     };
     const onChangePriority = (list) => {
         setCheckedListPriority(list)
-
-        // console.log(filters)
     };
     const onChangeMember = (list) => {
         setCheckedListMember(list)
-
-        // console.log(filters)
     };
-    useEffect(() => {
-        onFilter({
-            member: checkedListMember,
-            duration: checkedListDuration,
-            priority: checkedListPriority
-        })
-    }, [checkedListMember, checkedListDuration, checkedListPriority])
+    const onSearch = (value) => {
+        setSearchValue(value)
+    };
+    const selectProps = {
+        mode: 'multiple',
+        style: {
+            width: '100%',
+        },
+        listMember,
+        options:optionsSelectMember,
+        onChange: (newValue) => {
+            setListMemberMore(newValue);
+        },
+        placeholder: 'Chọn thành viên...',
+        maxTagCount: 'responsive',
+    };
+
     const itemsFilter = [
         {
             id: '1',
+            label: 'Tìm kiếm',
+            content: (
+                <div className={cx('list-sub-item-search')}>
+                    <SearchHidenButton className='search'  width='20rem' height='2rem'  searchButtonText={<FaSearch/>}
+                                       onSearch={onSearch}
+                    />
+                </div>
+            )
+        },
+        {
+            id: '2',
             label: 'Thành Viên',
             content: (
                 <div className={cx('list-sub-item')}>
@@ -102,7 +96,7 @@ function FilterProject({listMember = [], onFilter}) {
             )
         },
         {
-            id: '2',
+            id: '3',
             label: 'Thời gian hoàn thành',
             content: (
                 <Checkbox.Group className={cx('list-sub-item')}
@@ -114,7 +108,7 @@ function FilterProject({listMember = [], onFilter}) {
             )
         },
         {
-            id: '3',
+            id: '4',
             label: 'Độ ưu tiên',
             content: (
                 <Checkbox.Group className={cx('list-sub-item')}
@@ -125,12 +119,20 @@ function FilterProject({listMember = [], onFilter}) {
             )
         }
     ]
+    useEffect(() => {
+        onFilter({
+            search:searchValue,
+            member: checkedListMember.concat(listMemberMore),
+            duration: checkedListDuration,
+            priority: checkedListPriority
+        })
+    }, [searchValue,checkedListMember,listMemberMore, checkedListDuration, checkedListPriority])
     return (
         <div>
             <Menu items={itemsFilter} hideOnClick={false}>
-                <a onClick={(e) => e.preventDefault()}>
-                    <div className='filter-task'>
-                        <FaFilter className='icon'/>
+                <a onClick={(e) => e.preventDefault()} className={className}>
+                    <div className={cx('filter-task')}>
+                        <FaFilter className={cx('icon')}/>
                         Bộ lọc
                     </div>
                 </a>

@@ -19,7 +19,7 @@ import FilterProject from "~/components/commoms/FilterProject";
 import {listStaffs} from "~/asset/data/initDataGlobal";
 import {listMembersForTask} from "~/asset/data/initalDataTask";
 
-function BoardBar({boardName,onFilter,onSearch}) {
+function BoardBar({boardName,onFilter}) {
     const [showConfirmDelete,setIsShowConfirmDelete]=useState(false)
 
     const listActionProjects = [
@@ -52,10 +52,8 @@ function BoardBar({boardName,onFilter,onSearch}) {
                 <h4 className='board-name'> <FaClipboardList className='icon'/> {boardName}</h4>
             </div>
             <div className="board-filter">
-                <SearchHidenButton className='search'  width='14rem' height='2rem'  searchButtonText={<FaSearch/>}
-                    onSearch={onSearch}
-                    />
-            <FilterProject onFilter={onFilter} listMember={listMembersForTask} />
+
+            <FilterProject onFilter={onFilter} listMember={listMembersForTask} className={'filter-btn'} />
              <GroupMember addMember={true} />
               <div>
                   <Dropdown
