@@ -13,20 +13,30 @@ function Menu({children,items, hideOnClick=false, }) {
 
     const renderItems=()=>{
         return items.map((item,index)=>{
-              return   <MenuItem data={item} key={index} />
+            return <div className={cx('filter-item')} key={item.id}>
+                    <span className={cx('filter-title')}>{item.label}</span>
+                {
+                    item.content
+                }
+            </div>
+              // return   <MenuItem data={item} key={index} />
     })
     }
     return ( 
         <Tippy
-         
-      
+            visible
+            showOnInit={true}
         interactive='true'
         placement="bottom-end"
         hideOnClick={hideOnClick}
         delay={[0,700]}
         offset={[12, 2]}
         render={(attrs) => (
-            <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
+            <div className={cx('menu-list')}
+                 style={{
+                     width:'25rem'
+                 }}
+                 tabIndex="-1" {...attrs}>
                 <PopperWrapper>
                     <div className={cx('menu-body')}>
                         {

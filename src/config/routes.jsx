@@ -2,7 +2,7 @@ import React from 'react'
 
 const routes = {
     overview:"/",
-    task:"/project",
+    project:"/project",
     addProject:"/project/add",
     profile:"/@:nickname",
     meeting:"/meeting",
@@ -12,7 +12,8 @@ const routes = {
     department:"/department",
     changePassword:"/change-password",
     logout:"/logout",
-    config:'/config'
+    config:'/config',
+    backlog:'/project/backlog',
 
 }
 

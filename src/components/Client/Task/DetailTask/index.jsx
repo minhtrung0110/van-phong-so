@@ -20,7 +20,7 @@ import ToDoList from "~/components/commoms/ToDoList";
 import {isEmpty} from "lodash";
 import {getListNameColumn, getNameColumn} from "~/utils/sorts";
 import {initialData} from "~/asset/data/initalDataTask";
-import {listColorStateDefaults} from "~/asset/data/defaullt_data_task";
+import {listColorStateDefaults, listPriority} from "~/asset/data/defaullt_data_task";
 import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelectModal";
 import GroupMember from "~/components/Client/Task/GroupMember";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
@@ -29,11 +29,10 @@ import {setDeleteTask} from "~/redux/reducer/task/taskReducer";
 DetailTask.propTypes = {};
 
 function DetailTask(onUpdateTask) {
-    const data = useSelector(detailTaskSelector)
 
-    console.log(data)
+    const data = useSelector(detailTaskSelector)
     const [errorDescription, setErrorDescription] = useState('');
-    const [priority, setPriority] = useState(data.priority)
+    const [priority, setPriority] = useState(data.priority);
     const [status, setStatus] = useState(getNameColumn(initialData.boards, data.columnId, data.boardId))
     const [listFile, setListFile] = useState([])
 
@@ -42,9 +41,13 @@ function DetailTask(onUpdateTask) {
     const [members, setMembers] = useState([])
     const dispatch=useDispatch()
     const {RangePicker} = DatePicker;
-    // useEffect(()=>{
-    //
-    // },[data])
+  // console.log(priority)
+   //  useEffect(()=>{
+   //          setPriority(data.priority)
+   //      return () =>{
+   //              setPriority('')
+   //      }
+   //  },[data])
     const rangePresets = [
         {
             label: 'Last 7 Days',
@@ -82,32 +85,7 @@ function DetailTask(onUpdateTask) {
         //  setValue('description', value);nay2y2 cho form
         setErrorDescription('');
     };
-    const listPriority = [
-        {
-            label: 'Cao',
-            value: 'highly',
-            color: '#e94040',
-            backgroundColor: 'rgba(233,64,64,.12)'
-        },
-        {
-            label: 'Trung Bình',
-            value: 'middle',
-            color: '#fa8c16',
-            backgroundColor: 'rgba(250,140,22,.12)'
-        },
-        {
-            label: 'Thấp',
-            value: 'low',
-            color: '#18baff',
-            backgroundColor: 'rgba(24,186,255,.12)'
-        },
-        {
-            label: 'Không ưu tiên',
-            value: 'none',
-            color: '#a9a8a8',
-            backgroundColor: '#f5f7f9'
-        },
-    ]
+
     const listState = getListNameColumn(initialData.boards, data.boardId)
     const listStateRender = listState.map((item, index) => ({
         label: item.label,
@@ -193,7 +171,6 @@ function DetailTask(onUpdateTask) {
         setShowConfirmModal(false)
     }
     // DEBUG HERE
-    console.log(members)
     return (
         <div className='detail-task'>
             <div className='header'>
@@ -259,7 +236,7 @@ function DetailTask(onUpdateTask) {
                         <p>Độ Ưu Tiên :</p>
                         <Select
                             className={`select-proiority-${priority}`}
-                            defaultValue={priority}
+                            defaultValue={data.priority}
                             style={{
                                 width: 180,
                                 padding: 0,
@@ -270,7 +247,7 @@ function DetailTask(onUpdateTask) {
                             }}
                             onChange={(e) => setPriority(e)}
                         >
-                            {!!listPriority && listPriority.map((item) => (
+                            {listPriority.map((item) => (
                                 <Select.Option key={item.value}
                                                style={{
                                                    marginTop: '0.2rem',

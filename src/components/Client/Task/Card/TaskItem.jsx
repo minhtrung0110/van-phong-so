@@ -3,6 +3,8 @@ import "./TaskItem.scss";
 import {FaPen} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import {setDetailTask} from "~/redux/reducer/task/taskReducer";
+import {findStyleForStatusTask} from "~/utils/sorts";
+import {listPriority} from "~/asset/data/defaullt_data_task";
 
 function TaskItem({task, onShowDetail}) {
    // console.log(task)
@@ -11,12 +13,18 @@ function TaskItem({task, onShowDetail}) {
         dispatch(setDetailTask(task))
         onShowDetail(true)
     }
+    const stylePriority=findStyleForStatusTask(task.priority,listPriority)
     return (
         <div className='task-item' onClick={handleShowDetail}>
             <div className='header-task-item'>
                 <div className='task-title'>{`${task.title}`}</div>
                 <div className='description'>
-                    <span className='priority'>{`Thấp`}</span>
+                    <span className='priority'
+                          style={{
+                              backgroundColor: stylePriority.backgroundColor,
+                              color: stylePriority.color
+                          }}
+                    >{stylePriority.label}</span>
                     <span className='id'>{`id: ${task.id}`}</span>
                 </div>
                 {/*<FaPen className='btn-edit-task'/>*/}

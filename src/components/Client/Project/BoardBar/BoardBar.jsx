@@ -15,32 +15,13 @@ import {
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import GroupMember from "~/components/Client/Task/GroupMember";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import FilterProject from "~/components/commoms/FilterProject";
+import {listStaffs} from "~/asset/data/initDataGlobal";
+import {listMembersForTask} from "~/asset/data/initalDataTask";
 
 function BoardBar({boardName,onFilter,onSearch}) {
     const [showConfirmDelete,setIsShowConfirmDelete]=useState(false)
-    const items = [
-        {
-            label: 'Trạng Thái Công Việc',
-            key: '1',
-            icon: <FaRegFlag />,
-        },
-        {
-            label: 'Công Việc Của Tôi',
-            key: '2',
-            icon: <FaRegFlag />,
-        },
-        {
-            label: 'Thời Gian',
-            key: '3',
-            icon: <FaRegFlag />,
-        },
-        {
-            label: 'Độ Ưu Tiên',
-            key: '4',
-            icon: <FaRegFlag />,
-        },
 
-    ];
     const listActionProjects = [
         {
             label: 'Cập Nhật Dự Án',
@@ -74,22 +55,7 @@ function BoardBar({boardName,onFilter,onSearch}) {
                 <SearchHidenButton className='search'  width='14rem' height='2rem'  searchButtonText={<FaSearch/>}
                     onSearch={onSearch}
                     />
-                <Dropdown
-                    menu={{
-                        items,
-                        onClick,
-                        selectable: true,
-                    }}
-                    className='filter-btn'
-                    overlayClassName='overlay-dropdown-filter-task'
-                >
-                    <a onClick={(e) => e.preventDefault()}>
-                        <div className='filter-task'>
-                            <FaFilter className='icon'/>
-                         Bộ lọc
-                        </div>
-                    </a>
-                </Dropdown>
+            <FilterProject onFilter={onFilter} listMember={listMembersForTask} />
              <GroupMember addMember={true} />
               <div>
                   <Dropdown

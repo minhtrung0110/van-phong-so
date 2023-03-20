@@ -224,6 +224,7 @@ function Column({column, onCardDrop, onUpdateColumn}) {
                 width={800}
                 style={{ top: 80 }}
                 open={isOpenDetailTask}
+                destroyOnClose={true}
             >
               <DetailTask/>
             </Modal>

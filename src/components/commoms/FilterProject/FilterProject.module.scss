@@ -1,0 +1,26 @@
+
+.list-sub-item{
+  display: flex;
+  flex-direction: column;
+    padding-left: 0.5rem;
+  label{
+    height: 2rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-inline-start:0!important;
+  }
+    .filter-option{
+      height: 2.4rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-inline-start:0!important;
+    }
+
+
+
+}
+.filter-select-member{
+  height: 3rem;
+}

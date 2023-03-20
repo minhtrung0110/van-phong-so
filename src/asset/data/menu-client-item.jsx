@@ -19,7 +19,7 @@ export const menu_client_items = [
         id: 2,
         name: 'Dự Án ',
         active: false,
-        link: config.routes.task,
+        link: config.routes.project,
         icon: <FaTasks />,
         role: 2,
     },

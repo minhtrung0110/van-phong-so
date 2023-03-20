@@ -51,7 +51,7 @@ function ManageTaskPage(props) {
             dispatch(setIsViewTimeline(true))
         }
         else  dispatch(setIsViewTimeline(false))
-
+        console.log(filter)
     }, [currentProject, filter, search])
     return (
 

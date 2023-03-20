@@ -1,8 +1,7 @@
 //Menu Wrapper
 .menu-list {
   width: 234px;
-  padding: 8px;
-  margin-right: -30px;
+  margin-right: -3rem;
 
   .menu-item {
     margin-left: 0 !important;
@@ -17,6 +16,13 @@
 
     &:hover {
       background-color: var(--grey);
+    }
+  }
+  .filter-item{
+    padding: 0.5rem 0;
+    .filter-title {
+      font-weight: 600;
+
     }
   }
 }

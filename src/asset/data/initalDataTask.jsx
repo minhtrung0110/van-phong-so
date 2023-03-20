@@ -19,7 +19,7 @@ export const  initialData ={
                             description: '',
                             startTime:'01/10/2022 00:10:00',
                             endTime:'12/03/2022 21:00:00',
-                            priority:'none',
+                            priority:'highly',
                             members:[],
                             todoList:[],
                             fileList:[],

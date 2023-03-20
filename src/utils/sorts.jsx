@@ -15,3 +15,6 @@ export const getListNameColumn=(array,board_id) =>{
   //  console.log(listColumn)
     return listColumn.columns.map((item,index)=>({id:item.id,label:item.title}))
 }
+export const findStyleForStatusTask=(status,list)=>{
+    return list.find((item)=>item.value===status)
+}

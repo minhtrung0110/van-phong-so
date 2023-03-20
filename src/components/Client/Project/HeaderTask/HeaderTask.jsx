@@ -5,6 +5,8 @@ import {FaAngleDown, FaFlipboard, FaListUl, FaPlus} from "react-icons/fa";
 import AddProject from "~/components/Client/Project/Add";
 import {useDispatch} from "react-redux";
 import {setIsCreateProject} from "~/redux/reducer/task/taskReducer";
+import {NavLink} from "react-router-dom";
+import {config} from "~/config";
 
 
 HeaderTask.prototype={
@@ -22,10 +24,10 @@ function HeaderTask({onCurrentProject}) {
     }
     return (
         <div className="navbar-app">
-            <div className='list-task' >
+            <NavLink className='list-task'  to={config.routes.backlog}>
                 <FaListUl className='icon' />
                 <span className='text' >Danh Sách Công Việc</span>
-            </div>
+            </NavLink>
             <div className='add-board' onClick={handleCreateNewProject}>
                 <FaPlus className='icon' />
                 <span className='text' >Tạo Dự Án</span>

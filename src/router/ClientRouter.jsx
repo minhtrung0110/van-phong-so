@@ -18,6 +18,8 @@ import {getUserSelector, isLoginSelector} from "~/redux/selectors/auth/authSelec
 import {deleteCookie, getCookies, handleVerifyUserLogin} from "~/api/Client/Auth";
 import {setIsLogin, setUser} from "~/redux/reducer/auth/authReducer";
 import ManageMyAccount from "~/pages/Client/ManageMyAccount";
+import {Switch} from "antd";
+import BacklogPage from "~/pages/Client/Project/BacklogPage";
 
 function ProtectedRoutes(props) {
     return null;
@@ -53,8 +55,6 @@ function ClientRouter(props) {
             {/* Requỉed login */}
             <Route element={<AuthRouter/>}>
                 <Route path={config.routes.overview} element={<ClientLayout slot={<Overview key={'a'}/>}/>}/>
-                <Route path={config.routes.task} element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
-                <Route path={config.routes.addProject} element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
                 <Route path={config.routes.schedule} element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
                 <Route path={config.routes.meeting} element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
                 <Route path={config.routes.staff} element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>
@@ -62,7 +62,9 @@ function ClientRouter(props) {
                 <Route path={config.routes.profile} element={<ClientLayout slot={<Profile key={'a'}/>}/>}/>
                 <Route path={config.routes.changePassword} element={<ClientLayout slot={<ManageMyAccount key={'a'}/>}/>}/>
                 <Route path={config.routes.notification} element={<ClientLayout slot={<NotificationsPage key={'a'}/>}/>}/>
-                <Route path={config.routes.notification} element={<ClientLayout slot={<NotificationsPage key={'a'}/>}/>}/>
+
+                <Route path={config.routes.project} element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
+                <Route path={config.routes.backlog} element={<ClientLayout slot={<BacklogPage key={'a'}/>}/>}/>
 
 
             </Route>
