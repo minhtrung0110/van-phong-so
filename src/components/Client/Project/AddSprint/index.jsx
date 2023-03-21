@@ -124,7 +124,7 @@ function AddSprint({onClose,onSave}) {
                         </Form.Item>
                     )}
                 />
-                <div className="footer-create-project">
+                <div className="footer-create-sprint">
                     <button className='btn-cancel' onClick={onClose}>Hủy</button>
                     <button type='submit' className='btn-save'>Lưu</button>
                 </div>

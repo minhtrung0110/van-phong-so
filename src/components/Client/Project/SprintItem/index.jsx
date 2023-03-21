@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import './style.scss'
 import {FaAngleDown, FaEllipsisH, FaPlus} from "react-icons/fa";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
-import {Dropdown} from "antd";
+import {Dropdown, Modal} from "antd";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {getListNameColumn} from "~/utils/sorts";
+import {initialData} from "~/asset/data/initalDataTask";
+import EditSprint from "~/components/Client/Project/EditSprint";
 
 SprintItem.propTypes = {};
 
 function SprintItem({sprint,onEdit,onDelete}) {
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete,setShowConfirmDelete] = useState(false)
+    const [showEditSprint,setShowEditSprint]=useState(false)
     const listOptions =[
         {
             key: 'edit',
@@ -22,13 +26,29 @@ function SprintItem({sprint,onEdit,onDelete}) {
         },
     ]
     const handleOnClick=({key})=>{
-        if (key==='edit') onEdit(sprint)
+        if (key==='edit') {
+           setShowEditSprint(true)
+        }
         else setShowConfirmDelete(true)
     }
     const handleDelete=()=>{
         onDelete(sprint)
     }
 
+    const listStatus=[
+        {
+            id:'column-1',
+            name:'Chuan bi'
+        },
+        {
+            id:'column-2',
+            name:'Chuan bi'
+        },
+        {
+            id:'column-3',
+            name:'Chuan bi'
+        },
+    ]
     return (
         <div className='sprint-item'>
             <div className='sprint-header'>
@@ -41,10 +61,12 @@ function SprintItem({sprint,onEdit,onDelete}) {
                 </div>
                 <div className='sprint-action'>
                     <div className='sprint-status'>
-                        <span className={'status-none'}>1</span>
-                        <span className={'status-low'}>1</span>
-                        <span className={'status-middle'}>1</span>
-                        <span className={'status-highly'}>1</span>
+                        {
+                            listStatus.map((item)=>(
+                                <span className={`status-${item.id}`}>1</span>
+
+                            ))
+                        }
                     </div>
                     <button className='action-sprint'>
                         {sprint.status === 1 ? 'Bắt Đầu' : 'Kết Thúc'}
@@ -79,6 +101,16 @@ function SprintItem({sprint,onEdit,onDelete}) {
                     </button>
                 </div>
             )}
+            <Modal title="Cập Nhât" open={showEditSprint}
+                   destroyOnClose
+                   maskClosable={true}
+                   onCancel={()=>setShowEditSprint(false)}
+                   footer={null}
+                   width={700}
+                   style={{top: 150}}
+            >
+                <EditSprint sprint={sprint} onClose={()=>setShowEditSprint(false)} onSave={onEdit} />
+            </Modal>
             <ConfirmModal open={showConfirmDelete} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Phiên <strong>${sprint.name}</strong>  ? `}} />}
                           textCancel='Hủy' textOK='Xóa' onCancel={() => setShowConfirmDelete(false)}

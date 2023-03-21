@@ -7,19 +7,21 @@ import FilterProject from "~/components/commoms/FilterProject";
 import {listMembersForTask} from "~/asset/data/initalDataTask";
 import {Modal} from "antd";
 import AddSprint from "~/components/Client/Project/AddSprint";
+import EditSprint from "~/components/Client/Project/EditSprint";
 
 BacklogPage.propTypes = {};
 
 function BacklogPage(props) {
     const [filter,setFilter]=useState()
     const [showAddSprint,setShowAddSprint]=useState(false)
+
     const listPrints = [
         {
             id: 1,
             name: 'Sprint 1',
             description: 'Sprint to display',
-            startTime: '18/03/2023',
-            endTime: '18/03/2024',
+            startTime: '18/03/2023 00:10:00',
+            endTime: '18/04/2023 23:10:00',
             listTasks: [   {
                 id:'task-1',
                 boardId  :'kltn-01',
@@ -136,8 +138,8 @@ function BacklogPage(props) {
             id: 2,
             name: 'Sprint 2',
             description: 'Sprint to implement',
-            startTime: '18/04/2023',
-            endTime: '18/04/2024',
+            startTime: '18/04/2023 00:10:00',
+            endTime: '18/05/2023 23:10:00',
             listTasks: [   {
                 id:'task-1',
                 boardId  :'kltn-01',
@@ -252,9 +254,15 @@ function BacklogPage(props) {
         }
     ]
     useEffect(()=>{
-
+        console.log(filter)
     },[filter])
     const handleCreateSprint=(data)=>{
+        console.log(data)
+    }
+    const handleUpdateSprint=(data)=>{
+        console.log(data)
+    }
+    const handleDeleteSprint=(data)=>{
         console.log(data)
     }
     return (
@@ -277,11 +285,11 @@ function BacklogPage(props) {
                 </div>
                 {
                     !!listPrints && listPrints.map((item) =>(
-                        <SprintItem sprint={item} />
+                        <SprintItem sprint={item} onEdit={handleUpdateSprint} onDelete={handleUpdateSprint} />
                     ))
                 }
             </div>
-            <Modal title="Tạo Mới Phòng Ban" open={showAddSprint}
+            <Modal title="Tạo Mới " open={showAddSprint}
                    destroyOnClose
                    maskClosable={true}
                    onCancel={()=>setShowAddSprint(false)}
@@ -292,6 +300,7 @@ function BacklogPage(props) {
             >
                 <AddSprint onClose={()=>setShowAddSprint(false)} onSave={handleCreateSprint} />
             </Modal>
+
 
         </div>
     );

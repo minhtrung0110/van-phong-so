@@ -96,29 +96,51 @@ $spacing: 0.5rem;
         display: flex;
         align-items: center;
         justify-content: space-around;
-        .status-none {
+        .status-column-1  {
           @include dot;
-          color: #575656;
-          background-color: #f6f5f5;
-          border: 1px solid #cbcbcb;
+          color: #a9a8a8;
+          background-color: #faf9f9;
         }
-
-        .status-low {
-          @include dot;
-          color: #18baff;
-          background-color: rgba(24, 186, 255, .12);
-        }
-
-        .status-middle {
+        .status-column-2  {
           @include dot;
           color: #fa8c16;
-          background-color: rgba(250, 140, 22, .12);
-        }
+          background-color: rgba(250,140,22,.12);
 
-        .status-highly {
+        }
+        .status-column-3 {
+          @include dot;
+          color: #3ab67b;
+          background-color: #56ca7629;
+
+        }
+        .status-column-4 {
+          @include dot;
+          color: #18baff;
+          background-color: rgba(24,186,255,.12);
+
+        }
+        .status-column-5  {
           @include dot;
           color: #e94040;
           background-color: rgba(233, 64, 64, .12);
+
+        }
+        .status-column-6 {
+          @include dot;
+          color: #760ae7;
+          background-color: rgba(115,59,238,0.12);
+
+        }
+        .status-column-7  {
+          @include dot;
+          color: #43f5f5;
+          background-color: rgba(54,245,229,0.12);
+        }
+        .status-column-8  {
+          @include dot;
+          color: #f326d0;
+          background-color: rgba(219,37,239,0.12);
+
         }
       }
 
