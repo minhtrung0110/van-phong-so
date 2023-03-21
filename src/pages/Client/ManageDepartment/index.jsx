@@ -121,7 +121,6 @@ function ManageDepartment(props) {
             )
             }
             <Modal title="Tạo Mới Phòng Ban" open={isModalOpen}
-
                    maskClosable={true}
                    onCancel={handleCancelAdd}
                    footer={null}

@@ -50,23 +50,23 @@ function DetailTask(onUpdateTask) {
    //  },[data])
     const rangePresets = [
         {
-            label: 'Last 7 Days',
+            label: 'Trong 7 ngày',
             value: [dayjs().add(-7, 'd'), dayjs()],
         },
         {
-            label: 'Last 14 Days',
+            label: 'Trong 14 ngày',
             value: [dayjs().add(-14, 'd'), dayjs()],
         },
         {
-            label: 'Last 21 Days',
+            label: 'Trong 21 ngày',
             value: [dayjs().add(-21, 'd'), dayjs()],
         },
         {
-            label: 'Last 30 Days',
+            label: 'Trong 30 ngàys',
             value: [dayjs().add(-30, 'd'), dayjs()],
         },
         {
-            label: 'Last 90 Days',
+            label: 'Trong 90 ngày',
             value: [dayjs().add(-90, 'd'), dayjs()],
         },
     ];

@@ -1,0 +1,12 @@
+@import "../../../../css/base/_mixins.scss";
+
+
+.footer-create-project{
+  padding: 0 4rem;
+  .btn-cancel{
+    @include btn-cancel;
+  }
+  .btn-save{
+    @include btn-ok;
+  }
+}

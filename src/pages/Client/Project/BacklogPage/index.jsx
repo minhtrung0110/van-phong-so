@@ -5,11 +5,14 @@ import SprintItem from "~/components/Client/Project/SprintItem";
 import {FaList} from "react-icons/fa";
 import FilterProject from "~/components/commoms/FilterProject";
 import {listMembersForTask} from "~/asset/data/initalDataTask";
+import {Modal} from "antd";
+import AddSprint from "~/components/Client/Project/AddSprint";
 
 BacklogPage.propTypes = {};
 
 function BacklogPage(props) {
     const [filter,setFilter]=useState()
+    const [showAddSprint,setShowAddSprint]=useState(false)
     const listPrints = [
         {
             id: 1,
@@ -251,6 +254,9 @@ function BacklogPage(props) {
     useEffect(()=>{
 
     },[filter])
+    const handleCreateSprint=(data)=>{
+        console.log(data)
+    }
     return (
         <div className='container-backlog'>
             <div className='header-backlog'>
@@ -264,7 +270,7 @@ function BacklogPage(props) {
                     </div>
                     <div className= 'sprint-backlog-actions'>
                         <FilterProject onFilter={setFilter} listMember={listMembersForTask} className='filter-btn' />
-                        <button className='create-sprint'>
+                        <button className='create-sprint' onClick={()=>setShowAddSprint(true)}>
                             Tạo mới phiên dự án
                         </button>
                     </div>
@@ -275,6 +281,17 @@ function BacklogPage(props) {
                     ))
                 }
             </div>
+            <Modal title="Tạo Mới Phòng Ban" open={showAddSprint}
+                   destroyOnClose
+                   maskClosable={true}
+                   onCancel={()=>setShowAddSprint(false)}
+                   footer={null}
+
+                   width={700}
+                   style={{top: 150}}
+            >
+                <AddSprint onClose={()=>setShowAddSprint(false)} onSave={handleCreateSprint} />
+            </Modal>
 
         </div>
     );
