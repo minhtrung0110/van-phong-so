@@ -224,10 +224,12 @@ function Column({column, onCardDrop, onUpdateColumn}) {
                 width={800}
                 style={{ top: 80 }}
                 open={isOpenDetailTask}
+                destroyOnClose={true}
             >
               <DetailTask/>
             </Modal>
-            <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa' content={`Bạn Có Thực Sự Muốn Xóa Cột ${columnTitle} Này ? `}
+            <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
+                          content={<div dangerouslySetInnerHTML={{__html:`Bạn Có Thực Sự Muốn Xóa Cột <strong>${columnTitle}</strong> Này ? `}} />}
                           textCancel='Hủy' textOK='Xóa' onCancel={()=>setShowConfirmModal(false)} onOK={handleRemoveColumn}/>
         </div>
     );

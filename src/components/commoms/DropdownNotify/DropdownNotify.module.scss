@@ -1,18 +1,19 @@
 .notification {
   font-size: 19px;
   position: relative;
-  margin-right: 1.5rem;
+  margin-right: 2rem;
+  margin-left: 2rem;
   .list__notify {
     position: absolute;
-    z-index: 2;
+    z-index: 1000;
     top: calc(100% + 8px);
     right: 0;
-    width: 250px;
+    width: 255px;
     background-color: var(--light);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     cursor: default;
-    transform-origin: calc(90% - 22px) top; /* Tính toán luôn để sau có thay đổi width vẫn giữ nguyên vị trí*/
+  //  transform-origin: calc(90% - 22px) top; /* Tính toán luôn để sau có thay đổi width vẫn giữ nguyên vị trí*/
     animation: headerNotifyGrowth ease-in 0.2s;
     /* animation cho các loại browser: webkit, microsoft, opera-mini, firefox */
     -webkit-animation: headerNotifyGrowth ease-in 0.2s;
@@ -39,7 +40,7 @@
       content: '';
       position: absolute;
       width: 250px;
-      height: 250px;
+      height: 50px;
       display: block;
       top: -28px;
       right: 0;
@@ -47,21 +48,28 @@
     }
 
     .list__notify-header {
-      height: 2rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: var(--white-color);
     }
 
     .list__notify-header h3 {
       color: var(--gray60-color);
-      margin: 0 0 0 12px; /* left */
       font-weight: 400;
       font-size: 0.9rem;
-      line-height: 40px; /* cho = chiều cao cao của element cha 'list__notify-header' => 40px */
       user-select: none;
     }
 
     .list__notify-list {
       padding-left: 0; /* default ul */
+      max-height: 350px;
+      overflow-y: auto;
+      &.scrolled{
+        border-top: solid 1px #d0cece;
+        border-bottom: solid 1px #d0cece;
+      }
     }
 
     .list__notify-item {
@@ -70,11 +78,11 @@
 
 
       &:hover {
-        background-color: var(--gray97-color);
+        background-color: var(--gray100-color);
       }
     }
     .list__notify-item--viewed {
-      background-color: rgba(166, 165, 165, 0.81);
+      background-color: rgba(236, 236, 236, 0.81);
     }
 
     .list__notify-link {
@@ -110,12 +118,17 @@
 
     .list__notify-footer {
       display: flex;
+      height: 2.5rem;
+      margin-top: 0.1rem;
+      justify-content: center;
+      align-items: center;
 
       &:hover{
         background-color: var(--gray97-color);
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: var(--border-radius);
+        border-bottom-right-radius:  var(--border-radius);
         overflow: hidden;
+        font-weight: bold;
       }
       .list__notify-footer-btn {
         color: var(--text-color);

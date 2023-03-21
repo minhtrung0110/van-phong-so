@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Avatar, DatePicker, Dropdown, Select, Tooltip, Upload} from "antd";
 import {useDispatch, useSelector} from "react-redux";
@@ -20,7 +20,7 @@ import ToDoList from "~/components/commoms/ToDoList";
 import {isEmpty} from "lodash";
 import {getListNameColumn, getNameColumn} from "~/utils/sorts";
 import {initialData} from "~/asset/data/initalDataTask";
-import {listColorStateDefaults} from "~/asset/data/defaullt_data_task";
+import {listColorStateDefaults, listPriority} from "~/asset/data/defaullt_data_task";
 import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelectModal";
 import GroupMember from "~/components/Client/Task/GroupMember";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
@@ -29,36 +29,48 @@ import {setDeleteTask} from "~/redux/reducer/task/taskReducer";
 DetailTask.propTypes = {};
 
 function DetailTask(onUpdateTask) {
+
     const data = useSelector(detailTaskSelector)
     const [errorDescription, setErrorDescription] = useState('');
-    const [priority, setPriority] = useState(data.priority)
+    const [priority, setPriority] = useState(data.priority);
     const [status, setStatus] = useState(getNameColumn(initialData.boards, data.columnId, data.boardId))
     const [listFile, setListFile] = useState([])
 
     const [rangeValueTime, setRangeValueTime] = useState(
         [dayjs(data.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(data.endTime, "DD/MM/YYYY HH:mm:ss")]);
     const [members, setMembers] = useState([])
+    const dispatch=useDispatch()
     const {RangePicker} = DatePicker;
+  // console.log(priority)
+   //  useEffect(()=>{
+   //          setPriority(data.priority)
+   //      return () =>{
+   //              setPriority('')
+   //      }
+   //  },[data])
     const rangePresets = [
         {
-            label: 'Last 7 Days',
+            label: 'Trong 7 ngày',
             value: [dayjs().add(-7, 'd'), dayjs()],
         },
         {
-            label: 'Last 14 Days',
+            label: 'Trong 14 ngày',
             value: [dayjs().add(-14, 'd'), dayjs()],
         },
         {
-            label: 'Last 30 Days',
+            label: 'Trong 21 ngày',
+            value: [dayjs().add(-21, 'd'), dayjs()],
+        },
+        {
+            label: 'Trong 30 ngàys',
             value: [dayjs().add(-30, 'd'), dayjs()],
         },
         {
-            label: 'Last 90 Days',
+            label: 'Trong 90 ngày',
             value: [dayjs().add(-90, 'd'), dayjs()],
         },
     ];
     const [showConfirmModal, setShowConfirmModal] = useState(false)
-    const dispatch =useDispatch()
 
     //Handles
     const onRangeChange = (dates, dateStrings) => {
@@ -73,32 +85,7 @@ function DetailTask(onUpdateTask) {
         //  setValue('description', value);nay2y2 cho form
         setErrorDescription('');
     };
-    const listPriority = [
-        {
-            label: 'Cao',
-            value: 'highly',
-            color: '#e94040',
-            backgroundColor: 'rgba(233,64,64,.12)'
-        },
-        {
-            label: 'Trung Bình',
-            value: 'middle',
-            color: '#fa8c16',
-            backgroundColor: 'rgba(250,140,22,.12)'
-        },
-        {
-            label: 'Thấp',
-            value: 'low',
-            color: '#18baff',
-            backgroundColor: 'rgba(24,186,255,.12)'
-        },
-        {
-            label: 'Không ưu tiên',
-            value: 'none',
-            color: '#a9a8a8',
-            backgroundColor: '#f5f7f9'
-        },
-    ]
+
     const listState = getListNameColumn(initialData.boards, data.boardId)
     const listStateRender = listState.map((item, index) => ({
         label: item.label,
@@ -184,7 +171,6 @@ function DetailTask(onUpdateTask) {
         setShowConfirmModal(false)
     }
     // DEBUG HERE
-    console.log(members)
     return (
         <div className='detail-task'>
             <div className='header'>
@@ -250,7 +236,7 @@ function DetailTask(onUpdateTask) {
                         <p>Độ Ưu Tiên :</p>
                         <Select
                             className={`select-proiority-${priority}`}
-                            defaultValue={priority}
+                            defaultValue={data.priority}
                             style={{
                                 width: 180,
                                 padding: 0,
@@ -261,7 +247,7 @@ function DetailTask(onUpdateTask) {
                             }}
                             onChange={(e) => setPriority(e)}
                         >
-                            {!!listPriority && listPriority.map((item) => (
+                            {listPriority.map((item) => (
                                 <Select.Option key={item.value}
                                                style={{
                                                    marginTop: '0.2rem',

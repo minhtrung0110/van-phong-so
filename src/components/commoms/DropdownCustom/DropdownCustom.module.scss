@@ -1,0 +1,23 @@
+.custom-overlay-dropdown{
+  .ant-dropdown-menu{
+    border-radius: var(--task-border-radius);
+    .ant-dropdown-menu-item{
+      height:2.5rem;
+      margin: 0.15rem 0;
+      &:hover{
+        font-weight: bold;
+      }
+    }
+    .ant-dropdown-menu-item-selected{
+      height:2.5rem;
+      background-color: var(--pr-green-light);
+      color: var(--pr-green);
+      font-weight: bold;
+      &:hover{
+        background-color: var(--pr-green-light);
+        cursor: default;
+      }
+
+    }
+  }
+}

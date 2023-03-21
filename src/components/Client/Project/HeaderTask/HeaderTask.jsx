@@ -1,62 +1,53 @@
 import React, {useState} from 'react';
 import "./HeaderTask.scss"
 import {Dropdown, Modal} from "antd";
-import {FaAngleDown, FaFlipboard, FaPlus} from "react-icons/fa";
+import {FaAngleDown, FaFlipboard, FaListUl, FaPlus} from "react-icons/fa";
 import AddProject from "~/components/Client/Project/Add";
+import {useDispatch} from "react-redux";
+import {setIsCreateProject} from "~/redux/reducer/task/taskReducer";
+import {NavLink} from "react-router-dom";
+import {config} from "~/config";
 
 
 HeaderTask.prototype={
 
 }
-function HeaderTask(props) {
+function HeaderTask({onCurrentProject}) {
     const [openAddProject,setOpenAddProject] = useState(false)
-    const onClick = ({ key }) => {
-        console.log(key)
-    };
-    const items = [
-        {
-            label: 'Cơ Sở Dữ Liệu Phân Tán',
-            key: '1',
-        },
-        {
-            label: 'Lập Trình Mạng',
-            key: '2',
-        },
-        {
-            label: 'Cá Nhân Khóa Luận',
-            key: '3',
-        },
-    ];
+
+    const dispatch=useDispatch()
+    const handleCreateNewProject=() => {
+        setOpenAddProject(true)
+    }
+    const handleCancelCreateProject=()=>{
+       setOpenAddProject(false)
+    }
     return (
         <div className="navbar-app">
-            <div className="select-board">
-                <Dropdown
-                    menu={{
-                        items,
-                        onClick,
-                    }}
-                >
-                  <div className='dropdown-board'>
-                        <FaFlipboard className='icon' />
-                      <span className='board-title'> Dự Án</span>
-                      <FaAngleDown  className='icon-down'/>
-                  </div>
-                </Dropdown>
-
-            </div>
-            <div className='add-board'>
+            <NavLink className='list-task'  to={config.routes.backlog}>
+                <FaListUl className='icon' />
+                <span className='text' >Danh Sách Công Việc</span>
+            </NavLink>
+            <div className='add-board' onClick={handleCreateNewProject}>
                 <FaPlus className='icon' />
-                <button className='btn-add-board' onClick={()=>setOpenAddProject(true)}>Tạo Dự Án</button>
+                <span className='text' >Tạo Dự Án</span>
             </div>
             <Modal
                 title="Tạo Dự Án Mới"
-                onCancel={()=>setOpenAddProject(false)}
-                footer={null}
-                width={700}
-                style={{ top: 100 }}
+                onCancel={handleCancelCreateProject}
+                footer={
+                    <div className='footer-create-project'>
+                        <button className='btn-cancel' onClick={handleCancelCreateProject}>Hủy</button>
+                        <button className='btn-add' type='submit'>Thêm</button>
+                    </div>
+                }
+                width={500}
+                style={{ top: 100   }}
+                bodyStyle={{height: "400px"}}
+
                 open={openAddProject}
             >
-                <AddProject />
+                <AddProject  />
             </Modal>
         </div>
     );

@@ -1,0 +1,15 @@
+@import "../../../../css/base/_mixins.scss";
+
+
+.footer-edit-sprint{
+  padding: 1rem 4rem;
+  display: flex;
+  justify-content: flex-end;
+  .btn-cancel{
+    @include btn-cancel;
+    margin-right: 1rem;
+  }
+  .btn-save{
+    @include btn-ok;
+  }
+}

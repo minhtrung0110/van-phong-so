@@ -1,82 +1,69 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "./BoardBar.scss"
-import {Avatar, Dropdown, Space, Tooltip} from "antd";
-import {FaAngleDown, FaClipboardList, FaDocker, FaEllipsisH, FaFilter, FaSearch, FaTasks, FaUser} from "react-icons/fa";
-import SearchHidenButton from "~/components/commoms/SearchHideButton";
+import {Dropdown} from "antd";
+import {
+    FaClipboardList, FaEdit,
+    FaEllipsisH,
+    FaTrash,
 
-function BoardBar(props) {
-    const onClick = ({ key }) => {
-        console.log(key)
-    };
-    const items = [
+} from "react-icons/fa";
+import GroupMember from "~/components/Client/Task/GroupMember";
+import ConfirmModal from "~/components/commoms/ConfirmModal";
+import FilterProject from "~/components/commoms/FilterProject";
+import {listMembersForTask} from "~/asset/data/initalDataTask";
+
+function BoardBar({boardName, sprintName, onFilter}) {
+    const [showConfirmDelete, setIsShowConfirmDelete] = useState(false)
+
+    const listActionProjects = [
         {
-            label: '1st menu item',
+            label: 'Cập Nhật Dự Án',
             key: '1',
+            icon: <FaEdit/>,
         },
         {
-            label: '2nd menu item',
+            label: 'Hủy Dự Án',
             key: '2',
+            icon: <FaTrash/>,
         },
-        {
-            label: '3rd menu item',
-            key: '3',
-        },
+
     ];
+    const handleChooseActionProject = ({key}) => {
+        if (key === '2') {
+            setIsShowConfirmDelete(true)
+        }
+    };
+    const handleRemoveProject = () => {
+        setIsShowConfirmDelete(false)
+    }
     return (
         <div className="navbar-board">
             <div className="board-view">
-                <h4 className='board-name'> <FaClipboardList className='icon'/> {props.boardName}</h4>
+                <h4 className='board-name'><FaClipboardList className='icon'/> {boardName}</h4>
             </div>
             <div className="board-filter">
-                <SearchHidenButton className='search' width='14rem' height='2rem' searchButtonText={<FaSearch/>} />
-                <Dropdown
-                    menu={{
-                        items,
-                        onClick,
-                    }}
-                    className='filter-btn'
-                >
-                    <a onClick={(e) => e.preventDefault()}>
-                        <Space>
-                            <FaFilter/>
-                         Bộ lọc
-                        </Space>
-                    </a>
-                </Dropdown>
-                <Avatar.Group
-                    maxCount={2}
-                    size="middle"
-                    className='avatar-group'
-                    maxStyle={{
-                        color: '#f56a00',
-                        backgroundColor: '#fde3cf',
-                    }}
-                >
-                    <Avatar src="https://joeschmoe.io/api/v1/random" />
-                    <Avatar
-                        style={{
-                            backgroundColor: '#d50f96',
+                <div className="sprint-name">{sprintName}</div>
+                <FilterProject onFilter={onFilter} listMember={listMembersForTask} className={'filter-btn'}/>
+                <GroupMember addMember={true}/>
+                <div>
+                    <Dropdown
+                        menu={{
+                            items: listActionProjects,
+                            onClick: handleChooseActionProject,
                         }}
+                        className='action-project'
+                        overlayClassName='overlay-dropdown-action-project'
                     >
-                        K
-                    </Avatar>
-                    <Tooltip title="Ant User" placement="top">
-                        <Avatar
-                            style={{
-                                backgroundColor: '#87d068',
-                            }}
-                            icon={<FaUser />}
-                        />
-                    </Tooltip>
-                    <Avatar
-                        style={{
-                            backgroundColor: '#1890ff',
-                        }}
-                        icon={<FaDocker />}
-                    />
-                </Avatar.Group>
-                <button className='btn-more'> <FaEllipsisH className='dot'/></button>
+                        <button className='btn-more'><FaEllipsisH className='dot'/></button>
+                    </Dropdown>
+                </div>
+
             </div>
+
+            <ConfirmModal open={showConfirmDelete} title='Xác Nhận Xóa'
+                          content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Thực Sự Muốn Xóa Dự Án <strong>${boardName}</strong> Này ? `}} />}
+                          textCancel='Hủy' textOK='Xóa' onCancel={() => setIsShowConfirmDelete(false)}
+                          onOK={handleRemoveProject}/>
         </div>
     );
 }

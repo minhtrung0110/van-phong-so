@@ -1,7 +1,7 @@
 @mixin divide {
   content:'';
   position: absolute;
-  border: 1.5px solid var(--gray60-color);
+  border: 1.5px solid var(--white);
   right: -14px;
   height: 1.8rem;
 }
@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
- background-color:var(--primary-color-btn);
+ background-color: rgba(255, 255, 255, 0.13);
   font-size: 1rem;
   .board-name{
     color: var(--light);
@@ -32,22 +32,50 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    .filter-btn{
+    .sprint-name{
       height: 2rem;
       background-color: var(--light);
-      padding: 0.5rem;
+      padding: 1rem;
       border-radius: var(--task-border-radius);
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
       margin-right: 1.4rem;
-      &:hover{
+      font-weight: bold;
+      &:after{
+        @include divide;
+        top: 0;
 
+      }
+    }
+    .filter-btn{
+      height: 2rem;
+      background-color: var(--light);
+      padding: 1rem;
+      border-radius: var(--task-border-radius);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin-right: 1.4rem;
+
+      &:hover{
       }
       &:after{
       @include divide
 
+      }
+      .filter-task {
+        font-weight: 450;
+        display: flex;
+        align-items: center;
+        .icon{
+          font-weight: 200;
+          color: #81807f;
+          font-size: var(--14px);
+          margin-right: 0.5rem;
+        }
       }
     }
     .search{
@@ -71,6 +99,25 @@
         @include divide
       }
     }
+    .action-project {
+      height: 2rem;
+      background-color: var(--light);
+      padding: 1rem;
+      border-radius: var(--task-border-radius);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin-right: 1.4rem;
+      &:hover{
+
+      }
+      &:after{
+        @include divide
+
+      }
+
+    }
     .btn-more{
       line-height: 2rem;
       display: flex;
@@ -86,5 +133,68 @@
         background-color: hsla(0deg, 0%, 100%, 0.14);
       }
     }
+  }
+}
+
+.overlay-dropdown-filter-task{
+  .ant-dropdown-menu{
+    border-radius: var(--task-border-radius);
+    .ant-dropdown-menu-item{
+      height:2.5rem;
+      margin: 0.15rem 0;
+      &:hover{
+
+      }
+    }
+    .ant-dropdown-menu-item-selected{
+      height:2.5rem;
+      background-color: var(--criticalSecondary);
+      color: #fa8c16;
+      font-weight: bold;
+      &:hover{
+        background-color: var(--criticalSecondary);
+        cursor: default;
+      }
+
+    }
+  }
+}
+
+.overlay-dropdown-action-project{
+  .ant-dropdown-menu{
+    border-radius: var(--task-border-radius);
+    &:last-child  {
+      svg{
+        color: var(--red) !important;
+      }
+      height:2.5rem;
+      background-color: var(--criticalSecondary);
+      color: var(--red);
+      font-weight: bold;
+      &:hover{
+        background-color: var(--criticalSecondary);
+        cursor: pointer;
+      }
+
+
+    }
+    .ant-dropdown-menu-item{
+      height:2.5rem;
+      margin: 0.15rem 0;
+      svg{
+        color: var(--gray40-color);
+      }
+
+      font-weight: bold;
+      &:hover{
+        cursor: default;
+        background-color: var(--negativeSecondary);
+        color: var(--red);
+        svg{
+          color: var(--red);
+        }
+      }
+    }
+
   }
 }

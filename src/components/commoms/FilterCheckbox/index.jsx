@@ -51,7 +51,6 @@ function FilterCheckbox(props) {
                     defaultValue= 'Tất Cả'
                     allowClear
                     size={"large"}
-                    border={false}
                     optionFilterProp="children"
                     filterOption={(input, option) => (option?.label ?? '').includes(input)}
                     filterSort={(optionA, optionB) =>

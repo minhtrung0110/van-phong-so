@@ -1,0 +1,38 @@
+.table-skeleton {
+  width: 80rem;
+  .tb-header{
+    color: var(--dark);
+    background-color: var(--white);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px transparent;
+
+
+    .tr-header{
+      .th-header{
+        width: 13rem !important;
+        padding: 1rem ;
+      }
+      th .header-item{
+
+      }
+    }
+  }
+  .tb-body{
+
+    .tr-row{
+      &:first-child{
+
+        height: 8rem !important;
+        .td-item{
+          padding-top: 1.5rem ;
+        }
+      }
+      .td-item{
+        height: 6rem;
+        vertical-align: middle;
+        text-align: center;
+        width: 6rem;
+      }
+    }
+  }
+}

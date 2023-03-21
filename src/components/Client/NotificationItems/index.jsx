@@ -5,9 +5,9 @@ NotificationItem.propTypes = {
     
 };
 
-function NotificationItem({id, title,type,description,thumbnail,date,url}) {
+function NotificationItem({id, title,type,description,thumbnail,date,url,read}) {
     return (
-        <a className='notification-item'href={url}>
+        <a className={`notification-item ${read===1?'read':''}`} href={url}>
             <div className='notification-header'>
                 <img src={thumbnail} alt={title} className='img-thumbnail'/>
             </div>

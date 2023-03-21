@@ -42,6 +42,21 @@
     }
 
 }
+@mixin btn{
+  @include center-in-center;
+  height: 2.4rem;
+  border-radius: var(--task-border-radius);
+  background-color: var(--light);
+  font-weight: bold;
+  padding: 0 1rem;
+  border: 1px solid var(--gray60-color);
+
+  &:hover{
+    cursor: pointer;
+    color: white;
+
+  }
+}
 @mixin btn-ok{
   @include center-in-center;
   height: 2.4rem;

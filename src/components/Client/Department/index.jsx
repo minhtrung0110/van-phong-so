@@ -97,7 +97,7 @@ function DepartmentTable({tableHeader, tableBody}) {
 
             <ConfirmModal title="Xác Nhận Xóa"
                           open={showPopupDelete.show}
-                          content={`Bạn Có Thực Sự Muốn Xóa ${showPopupDelete.name} Này Không ? `}
+                          content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Phòng <strong>${showPopupDelete.name}</strong>  ? `}} />}
                           textOK="Xóa"
                           textCancel="Hủy"
                           onOK={() => handleRemoveDepartment(showPopupDelete.department_id)}

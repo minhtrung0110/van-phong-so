@@ -1,7 +1,7 @@
 import {
     FaBuilding,
     FaCalendar,
-    FaFacebookMessenger, FaHome, FaTasks, FaUsers,
+    FaFacebookMessenger, FaHome, FaLaptop, FaPeopleArrows, FaTasks, FaUsers,
 } from "react-icons/fa";
 import React from "react";
 import {config} from "~/config";
@@ -9,7 +9,7 @@ import {config} from "~/config";
 export const menu_client_items = [
     {
         id: 1,
-        name: 'Overview',
+        name: 'Tổng Quan',
         active: true,
         link: config.routes.overview,
         icon: <FaHome />,
@@ -17,9 +17,9 @@ export const menu_client_items = [
     },
     {
         id: 2,
-        name: 'Công Việc ',
+        name: 'Dự Án ',
         active: false,
-        link: config.routes.task,
+        link: config.routes.project,
         icon: <FaTasks />,
         role: 2,
     },
@@ -47,14 +47,25 @@ export const menu_client_items = [
         icon: <FaBuilding/>,
         role: 4,
     },
-    {
-        id: 6,
-        name: 'Họp',
-        active: false,
-        link:  config.routes.meeting,
-        icon: <FaFacebookMessenger />,
-        role: 5,
-    },
+   
 
 
+];
+function getItem(label, key, icon, children) {
+    return {
+        key,
+        icon,
+        children,
+        label,
+    };
+}
+export  const listMenuClientItems=[
+    getItem('Công Việc', config.routes.task, <FaTasks />,),
+    getItem('Lịch Biểu', config.routes.meeting, <FaCalendar />),
+    getItem('Cuộc Họp', '/communication', <FaFacebookMessenger />, [
+        getItem('Tin Nhắn', '/communication/mess'),
+        getItem('Họp', '/communication/meeting'),
+    ]),
+    getItem('Nhân Sự', '/staff', <FaPeopleArrows />, ),
+    getItem('Văn Phòng Phẩm', '/stationery', <FaLaptop />),
 ];

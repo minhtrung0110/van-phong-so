@@ -1,7 +1,7 @@
 @import "../../../../css/base/mixins";
 .board-content{
   height:var(--board-content-height);
-  background-color:var(--appbar-bg-color) ;
+ // background-color:var(--appbar-bg-color) ;
   display: flex;
   overflow-y: hidden;
   overflow-x: auto;

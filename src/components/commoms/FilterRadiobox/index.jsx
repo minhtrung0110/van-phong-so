@@ -56,12 +56,8 @@ function FilterRadiobox({width, height}) {
                     defaultValue= 'Tất Cả'
                     allowClear
                     size={"large"}
-                    border={false}
                     style={{
                         width: 135,
-                        border:'none',
-
-
                     }}
                     dropdownStyle={{
                         padding:0,
@@ -73,7 +69,7 @@ function FilterRadiobox({width, height}) {
                 >
                     {
                         !!lists && lists.map((item)=>(
-                            <option key={item.id} value={item.key} className={cx('select-item')}>{item.label}</option>
+                            <Select.Option key={item.id} value={item.key} className={cx('select-item')}>{item.label}</Select.Option>
                         ))
                     }
                 </Select>

@@ -10,27 +10,26 @@ import Column from "~/components/Client/Task/Column/Column";
 import {isEmpty} from "lodash";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import TextArea from "antd/es/input/TextArea";
-import {Col, Modal, Row} from "antd";
+import {Badge, Calendar, Col, Modal, Row} from "antd";
 import {useSelector} from "react-redux";
-import {deleteTaskSelector} from "~/redux/selectors/task/taskSelector";
+import {deleteTaskSelector, isViewTimelineSelector} from "~/redux/selectors/task/taskSelector";
+import column from "~/components/Client/Task/Column/Column";
+import dayjs from "dayjs";
+import TimeLine from "~/components/Client/Project/TimeLine";
 
 
-function BoardContent() {
-    const [board,setBoard]=useState({})
-    const [columns,setColumns] = useState([])
+function BoardContent({board,onBoard,columnData,timeLine}) {
+   // console.log({board,onBoard,columnData})
+   // console.log('rendering')
+    const [columns,setColumns] = useState(columnData)
     const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
     const [newColTitle,setNewColTitle]=useState('')
-
+  //  console.log(columns)
     const newColInputRef=useRef()
+        const isViewTimeLine=useSelector(isViewTimelineSelector)
     useEffect(()=>{
-        const boardFromDB=initialData.boards.find(board => board.id==='kltn-01')
-        if(boardFromDB){
-            setBoard(boardFromDB)
-            // sort Column
-
-            setColumns(mapOrder(boardFromDB.columns,boardFromDB.columnOrder,'id'))
-        }
-    },[  ])
+      setColumns(columnData)
+    },[columnData])
 
     const onColumnDrop=(dropResult)=>{
         let newColumns=[...columns]
@@ -42,7 +41,7 @@ function BoardContent() {
         newBoard.columnOrder=newColumns.map(item=>item.id)
         newBoard.columns=newColumns
         setColumns(newColumns)
-        setBoard(newBoard)
+        onBoard(newBoard)
         // console.log(newColumns)
         // console.log(newBoard)
     }
@@ -80,7 +79,7 @@ function BoardContent() {
         newBoard.columnOrder=newColumns.map(item=>item.id)
         newBoard.columns=newColumns
         setColumns(newColumns)
-        setBoard(newBoard)
+        onBoard(newBoard)
 
 
         //clear inout
@@ -108,81 +107,91 @@ function BoardContent() {
         newBoard.columnOrder=newColumns.map(item=>item.id)
         newBoard.columns=newColumns
 
-        setBoard(newBoard)
+        onBoard(newBoard)
       //  console.log(newColUpdate)
     }
+
+
+
 
     return (
         isEmpty(board)?(
             <NotFoundData/>
         ):(
             <div className="board-content ">
-                <Container
-                    orientation="horizontal"
-                    onDrop={onColumnDrop}
-                    getChildPayload={index =>columns[index]}
-                    dragHandleSelector=".column-drag-handle"
-                    dropPlaceholder={{
-                        animationDuration: 150,
-                        showOnTop: true,
-                        className: 'column-drop-preview'
-                    }}
-                >
-                    {
-                        !!columns && columns.map((col,index)=> (
-                            <Draggable
+                {
+                    !isViewTimeLine ? (<>
+                        <Container
+                            orientation="horizontal"
+                            onDrop={onColumnDrop}
+                            getChildPayload={index =>columns[index]}
+                            dragHandleSelector=".column-drag-handle"
+                            dropPlaceholder={{
+                                animationDuration: 150,
+                                showOnTop: true,
+                                className: 'column-drop-preview'
+                            }}
+                        >
+                            {
+                                !!columns && columns.map((col,index)=> (
+                                    <Draggable
 
-                                key={index}>
-                                <Column
-                                    column={col}
-                                    onCardDrop={onCardDrop}
-                                    onUpdateColumn={handleUpdateColumn}
+                                        key={index}>
+                                        <Column
+                                            column={col}
+                                            onCardDrop={onCardDrop}
+                                            onUpdateColumn={handleUpdateColumn}
 
-                                />
-                            </Draggable>
+                                        />
+                                    </Draggable>
 
-                        ))
-                    }
-                </Container>
-                <div className='trello-minhtrung-container'  >
-                    {!isOpenNewColForm && (
-                        <Row>
-                            <Col className='add-new-column'
-                                 onClick={()=>{
-                                     setIsOpenNewColForm(true)
+                                ))
+                            }
+                        </Container>
+                        <div className='trello-minhtrung-container'  >
+                            {!isOpenNewColForm && (
+                                <Row>
+                                    <Col className='add-new-column'
+                                         onClick={()=>{
+                                             setIsOpenNewColForm(true)
 
-                                 }}
-                            >
-                                <FaPlus className='icon-add' />   Tạo Mới
-                            </Col>
-                        </Row>
-                    )}
-                    {
-                        !!isOpenNewColForm  && ( <Row>
-                            <Col className='enter-new-column'>
-                                <TextArea
-                                    size='middle'
-                                    type='text'
-                                    placeholder='Tạo Mới'
-                                    className='input-enter-new-column '
-                                    value={newColTitle}
-                                    onChange={e=>setNewColTitle(e.target.value)}
-                                    ref={newColInputRef}
-                                    onKeyDown={event => (event.key==='Enter')&& handleAddNewColumn()}
-                                />
-                                <div className='ft-btn'>
-                                    <button className='btn-outline-success btn-add-new-column'
-                                            onClick={handleAddNewColumn}
-                                    >Tạo</button>
-                                    <FaTimes className='cancel-new-column'
-                                             onClick={()=>setIsOpenNewColForm(false)}
-                                    />
-                                </div>
+                                         }}
+                                    >
+                                        <FaPlus className='icon-add' />   Tạo Mới
+                                    </Col>
+                                </Row>
+                            )}
+                            {
+                                !!isOpenNewColForm  && ( <Row>
+                                    <Col className='enter-new-column'>
+                                        <TextArea
+                                            size='middle'
+                                            type='text'
+                                            placeholder='Tạo Mới'
+                                            className='input-enter-new-column '
+                                            value={newColTitle}
+                                            onChange={e=>setNewColTitle(e.target.value)}
+                                            ref={newColInputRef}
+                                            onKeyDown={event => (event.key==='Enter')&& handleAddNewColumn()}
+                                        />
+                                        <div className='ft-btn'>
+                                            <button className='btn-outline-success btn-add-new-column'
+                                                    onClick={handleAddNewColumn}
+                                            >Tạo</button>
+                                            <FaTimes className='cancel-new-column'
+                                                     onClick={()=>setIsOpenNewColForm(false)}
+                                            />
+                                        </div>
 
-                            </Col>
-                        </Row>)
-                    }
-                </div>
+                                    </Col>
+                                </Row>)
+                            }
+                        </div>
+                    </>):(
+                      <TimeLine board={board} />
+                    )
+                }
+
 
 
             </div>

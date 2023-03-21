@@ -1,14 +1,17 @@
-$height-img:5rem;
+$height-img:3rem;
 .notification-item{
-  background-color: var(--light);
-  border-radius: 3px;
-  box-shadow: 0 0 3px rgba(0,0,0,0.4);
+  background-color: hsl(211, 68%, 94%);;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   height: $height-img + 2rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.8rem;
+  &.read {
+    background-color: #fff;
+    box-shadow: 0 0 2px rgba(0,0,0,0.15);
+  }
   .notification-header{
-      margin: 0 3rem;
+      margin: 0 2rem 0 4rem;
     .img-thumbnail{
       border-radius:50%;
       width: $height-img;
@@ -20,10 +23,12 @@ $height-img:5rem;
   .notification-content{
     color: var(--dark);
     padding: 0 1rem;
+    font-size: var(--14px);
 
 
     .notification-title{
-      font-size: 1rem;
+      font-size: var(--14px);
+      font-weight: bold;
     }
     .notification-description{
 
@@ -32,6 +37,7 @@ $height-img:5rem;
     .notification-date{
       display: block;
       font-style: italic;
+      font-size: var(--12px);
     }
   }
 }
