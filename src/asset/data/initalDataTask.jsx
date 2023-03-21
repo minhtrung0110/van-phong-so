@@ -156,7 +156,7 @@ export const  initialData ={
                     cards:[
                         {
                             id:'task-1',
-                            boardId:'kltn-01',
+                            boardId  :'kltn-01',
                             columnId: 'column-3',
                             title:'UI Login',
                             description: '',

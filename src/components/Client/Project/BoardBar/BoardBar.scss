@@ -32,6 +32,23 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
+    .sprint-name{
+      height: 2rem;
+      background-color: var(--light);
+      padding: 1rem;
+      border-radius: var(--task-border-radius);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin-right: 1.4rem;
+      font-weight: bold;
+      &:after{
+        @include divide;
+        top: 0;
+
+      }
+    }
     .filter-btn{
       height: 2rem;
       background-color: var(--light);
@@ -42,6 +59,7 @@
       align-items: center;
       position: relative;
       margin-right: 1.4rem;
+
       &:hover{
       }
       &:after{

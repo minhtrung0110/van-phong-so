@@ -24,7 +24,7 @@ function Menu({children,items, hideOnClick=false, }) {
     }
     return ( 
         <Tippy
-            visible
+           // visible
             showOnInit={true}
         interactive='true'
         placement="bottom-end"

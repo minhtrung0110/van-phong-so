@@ -5,8 +5,10 @@ import {useDispatch} from "react-redux";
 import {setDetailTask} from "~/redux/reducer/task/taskReducer";
 import {findStyleForStatusTask} from "~/utils/sorts";
 import {listPriority} from "~/asset/data/defaullt_data_task";
+import AvatarCustom from "~/components/commoms/AvatarCustom";
+import {Tooltip} from "antd";
 
-function TaskItem({task, onShowDetail}) {
+function TaskItem({task,type, onShowDetail}) {
    // console.log(task)
     const dispatch = useDispatch()
     const handleShowDetail = () => {
@@ -15,10 +17,25 @@ function TaskItem({task, onShowDetail}) {
     }
     const stylePriority=findStyleForStatusTask(task.priority,listPriority)
     return (
-        <div className='task-item' onClick={handleShowDetail}>
-            <div className='header-task-item'>
+        <div className={`task-item ${type === 'long' ? 'task-long' : ''}`} onClick={handleShowDetail}>
+            <div className={`header-task-item ${type==='long'?'flex-task':''}`}>
                 <div className='task-title'>{`${task.title}`}</div>
-                <div className='description'>
+                <div className={`description ${type==='long'?'space-around':''}`}>
+                    {
+                        type==='long' && (
+                          <>
+                              {
+                                  !!task.members &&  task.members.map((item)=> (
+                                      <AvatarCustom avatar={item.avatar} size={'small'} lastName={item.last_name} />
+                                  ))
+                              }
+                            <span className='status'>{
+                                task.columnId
+                            }</span>
+
+                          </>
+                        )
+                    }
                     <span className='priority'
                           style={{
                               backgroundColor: stylePriority.backgroundColor,

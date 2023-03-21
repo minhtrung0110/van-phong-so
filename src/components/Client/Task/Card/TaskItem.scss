@@ -7,13 +7,21 @@
   box-shadow: var(--bx-sh-task);
   margin-bottom: var(--gap);
   font-size: var(--fs-task-pg);
+  &.task-long{
+    padding-left:  2.5rem;
+    padding-right:  2.5rem;
+  }
 
   &:hover {
     transform: scale(1.0225);
     cursor: pointer;
     // background-color:var(--list-bg-color);
   }
-
+  .flex-task{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   .header-task-item {
 
 
@@ -35,11 +43,25 @@
       justify-content: space-between;
       height: 2rem;
       align-items: center;
+      &.space-around{
+        justify-content: space-around;
+      }
+      .status{
+        font-size: var(--12px);
+        padding:0.4rem;
+        font-weight: 600;
+        border-radius: calc(var(--task-border-radius) - 1px);
+        background-color: var(--gray97-color);
+        margin-left: 1rem;
+        margin-right: 1rem;
+
+      }
       .priority {
         font-size: var(--12px);
         padding:0.4rem;
         font-weight: 600;
         border-radius: calc(var(--task-border-radius) - 1px);
+        margin-right: 1rem;
       }
 
       .id {

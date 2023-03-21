@@ -57,7 +57,7 @@ function ManageTaskPage(props) {
 
         <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
             <HeaderTask onCurrentProject={setCurrentProject}/>
-            <BoardBar boardName={board.name} onFilter={setFilter} onSearch={setSearch}/>
+            <BoardBar boardName={board.name} sprintName={'Week 1-2'} onFilter={setFilter}  onSearch={setSearch}/>
             <BoardContent board={board} onBoard={setBoard} columnData={columns} />
         </div>
     );

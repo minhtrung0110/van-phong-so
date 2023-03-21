@@ -1,0 +1,41 @@
+@import "../../../../css/base/_mixins.scss";
+.container-backlog{
+  background-color: #fff;
+  border-radius:var(--border-radius);
+  padding: 1rem 2.5rem;
+  margin: var(--pd-content);
+  min-height: 650px;
+  .sprint-backlog-header{
+    margin: 1rem 0;
+    height: 3.5rem;
+    display: flex;
+    justify-content: space-between;
+    padding:0.5rem;
+    align-items: center;
+    .sprint-backlog-title{
+      display: flex;
+      align-items: center;
+      font-weight: 550;
+      color : var(--pr-green);
+      .icon{
+
+        margin-right: 1rem;
+      }
+    }
+    .sprint-backlog-actions{
+      display: flex;
+      align-items: center;
+      .filter-btn{
+        @include btn;
+        margin-right: 1rem;
+        &:hover{
+          color: var(--yellow);
+        }
+      }
+      .create-sprint{
+        @include btn-ok;
+      }
+    }
+
+  }
+}
