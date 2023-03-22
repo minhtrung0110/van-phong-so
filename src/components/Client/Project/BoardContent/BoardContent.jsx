@@ -12,7 +12,7 @@ import NotFoundData from "~/components/commoms/NotFoundData";
 import TextArea from "antd/es/input/TextArea";
 import {Badge, Calendar, Col, Modal, Row} from "antd";
 import {useSelector} from "react-redux";
-import {deleteTaskSelector, isViewTimelineSelector} from "~/redux/selectors/task/taskSelector";
+import {deleteTaskSelector, isViewTimelineSelector} from "~/redux/selectors/project/projectSelector";
 import column from "~/components/Client/Task/Column/Column";
 import dayjs from "dayjs";
 import TimeLine from "~/components/Client/Project/TimeLine";
@@ -45,7 +45,7 @@ function BoardContent({board,onBoard,columnData,timeLine}) {
         // console.log(newColumns)
         // console.log(newBoard)
     }
-    // khi kéo thả task qua lai giua cac cột
+    // khi kéo thả project qua lai giua cac cột
     const onCardDrop = (columnId,dropResult) => {
         console.log( 'Dichuyen',dropResult)
         console.log('col -id:',columnId)
@@ -60,7 +60,7 @@ function BoardContent({board,onBoard,columnData,timeLine}) {
             setColumns(newColumns)
 
         }
-        // vấn de: khi kéo thả thì trường column_ID của task bi loi không thay dôi
+        // vấn de: khi kéo thả thì trường column_ID của project bi loi không thay dôi
     }
     const handleAddNewColumn=()=>{
         //    newColInputRef.current.focus();

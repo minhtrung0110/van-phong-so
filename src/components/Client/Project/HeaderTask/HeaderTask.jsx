@@ -4,7 +4,7 @@ import {Dropdown, Modal} from "antd";
 import {FaAngleDown, FaFlipboard, FaListUl, FaPlus} from "react-icons/fa";
 import AddProject from "~/components/Client/Project/Add";
 import {useDispatch} from "react-redux";
-import {setIsCreateProject} from "~/redux/reducer/task/taskReducer";
+import {setIsCreateProject} from "~/redux/reducer/project/projectReducer";
 import {NavLink} from "react-router-dom";
 import {config} from "~/config";
 

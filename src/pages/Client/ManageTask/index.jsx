@@ -6,12 +6,12 @@ import BoardContent from "~/components/Client/Project/BoardContent/BoardContent"
 import HeaderTask from "~/components/Client/Project/HeaderTask/HeaderTask";
 import './style.scss'
 import {useDispatch, useSelector} from "react-redux";
-import {isCreateProjectSelector} from "~/redux/selectors/task/taskSelector";
+import {isCreateProjectSelector, keyProjectSelector} from "~/redux/selectors/project/projectSelector";
 import AddProject from "~/components/Client/Project/Add";
 import {initialData} from "~/asset/data/initalDataTask";
 import {mapOrder} from "~/utils/sorts";
 import backgroundImage from "~/asset/images/backgroundTask01.jpg"
-import {setIsViewTimeline} from "~/redux/reducer/task/taskReducer";
+import {setIsViewTimeline} from "~/redux/reducer/project/projectReducer";
 import {flatten} from "lodash";
 
 ManageTaskPage.propTypes = {};
@@ -25,8 +25,10 @@ function ManageTaskPage(props) {
     const isCreateProject = useSelector(isCreateProjectSelector)
 
     const dispatch=useDispatch()
+    const idProject=useSelector(keyProjectSelector)
     useEffect(() => {
         // console.log
+       // console.log('Call API get Project')
         const boardFromDB = initialData.boards.find(board => board.id === 'kltn-01')
         if (boardFromDB) {
             setBoard(boardFromDB)
@@ -52,7 +54,7 @@ function ManageTaskPage(props) {
         }
         else  dispatch(setIsViewTimeline(false))
         console.log(filter)
-    }, [currentProject, filter, search])
+    }, [idProject,currentProject, filter, search])
     return (
 
         <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>

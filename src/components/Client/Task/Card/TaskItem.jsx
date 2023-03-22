@@ -2,14 +2,14 @@ import React from 'react';
 import "./TaskItem.scss";
 import {FaPen} from "react-icons/fa";
 import {useDispatch} from "react-redux";
-import {setDetailTask} from "~/redux/reducer/task/taskReducer";
+import {setDetailTask} from "~/redux/reducer/project/projectReducer";
 import {findStyleForStatusTask} from "~/utils/sorts";
 import {listPriority} from "~/asset/data/defaullt_data_task";
 import AvatarCustom from "~/components/commoms/AvatarCustom";
 import {Tooltip} from "antd";
 
 function TaskItem({task,type, onShowDetail}) {
-   // console.log(task)
+   // console.log(project)
     const dispatch = useDispatch()
     const handleShowDetail = () => {
         dispatch(setDetailTask(task))
@@ -44,7 +44,7 @@ function TaskItem({task,type, onShowDetail}) {
                     >{stylePriority.label}</span>
                     <span className='id'>{`id: ${task.id}`}</span>
                 </div>
-                {/*<FaPen className='btn-edit-task'/>*/}
+                {/*<FaPen className='btn-edit-project'/>*/}
             </div>
             {!!task.cover && (
                 <div className='thumbnail'>

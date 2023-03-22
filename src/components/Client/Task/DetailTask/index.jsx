@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Avatar, DatePicker, Dropdown, Select, Tooltip, Upload} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import {detailTaskSelector} from "~/redux/selectors/task/taskSelector";
+import {detailTaskSelector} from "~/redux/selectors/project/projectSelector";
 import {
     FaCaretDown,
     FaCheckCircle,
@@ -24,7 +24,7 @@ import {listColorStateDefaults, listPriority} from "~/asset/data/defaullt_data_t
 import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelectModal";
 import GroupMember from "~/components/Client/Task/GroupMember";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
-import {setDeleteTask} from "~/redux/reducer/task/taskReducer";
+import {setDeleteTask} from "~/redux/reducer/project/projectReducer";
 
 DetailTask.propTypes = {};
 
@@ -157,7 +157,7 @@ function DetailTask(onUpdateTask) {
     // MOre Task
     const handleMoreTask = (e) => {
         if (e.key === '1') {
-            // xóa task
+            // xóa project
             setShowConfirmModal(true)
         }
         else if (e.key === '2') {

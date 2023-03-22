@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
-import {FaAngleDown, FaEllipsisH, FaPlus} from "react-icons/fa";
+import {FaAngleDown, FaEllipsisH, FaPlus, FaTimes} from "react-icons/fa";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import {Dropdown, Modal} from "antd";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {getListNameColumn} from "~/utils/sorts";
 import {initialData} from "~/asset/data/initalDataTask";
 import EditSprint from "~/components/Client/Project/EditSprint";
+import TextArea from "antd/es/input/TextArea";
+import {cloneDeep} from "lodash";
 
 SprintItem.propTypes = {};
 
@@ -15,6 +17,8 @@ function SprintItem({sprint,onEdit,onDelete}) {
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete,setShowConfirmDelete] = useState(false)
     const [showEditSprint,setShowEditSprint]=useState(false)
+    const [isCreateTask,setIsCreateTask] = useState(false)
+    const [valueNewTask,setValueNewTask] = useState()
     const listOptions =[
         {
             key: 'edit',
@@ -34,7 +38,37 @@ function SprintItem({sprint,onEdit,onDelete}) {
     const handleDelete=()=>{
         onDelete(sprint)
     }
+    const handleRunSprint=()=>{
+        onEdit({...sprint,status:sprint.status===1?0:1})
+    }
+    const handleCreateTask = () => {
+        // const newCardToAdd = {
+        //     id: Math.random().toString(36).substr(2, 5),
+        //     boardId: column.boardId,
+        //     columnId: column.id,
+        //     title: valueNewCard,
+        //     description: '',
+        //     startTime:'01/10/2022',
+        //     endTime:'31/12/2022',
+        //     priority:'none',
+        //     members:[],
+        //     todoList:[],
+        //     fileList:[],
+        //     comments:[],
+        // }
+        // let newColumn = cloneDeep(column)
+        // newColumn.cards.push(newCardToAdd)
+        // newColumn.cardOrder.push(newCardToAdd.id)
+        // // truyền lên board Content
+        // onUpdateColumn(newColumn)
+        //
+        // // clear up
+        // setValueNewCard('')
 
+        setValueNewTask('')
+        setIsCreateTask(false)
+
+    }
     const listStatus=[
         {
             id:'column-1',
@@ -68,7 +102,7 @@ function SprintItem({sprint,onEdit,onDelete}) {
                             ))
                         }
                     </div>
-                    <button className='action-sprint'>
+                    <button className={`action-sprint ${sprint.status===1?'on':'off'}`} onClick={handleRunSprint}>
                         {sprint.status === 1 ? 'Bắt Đầu' : 'Kết Thúc'}
                     </button>
                     <Dropdown
@@ -94,11 +128,37 @@ function SprintItem({sprint,onEdit,onDelete}) {
 
                     </div>
 
+                    {
+                        isCreateTask && (
+                            <div className='create-new-task-area'>
+                                <TextArea rows={3}
+                                          placeholder='Nhập công việc'
+                                          className='input-enter-card'
+                                          value={valueNewTask}
+                                          onChange={e => setValueNewTask(e.target.value)}
+                                         // ref={newCardRef}
+                                          onKeyDown={event => (event.key === 'Enter') && handleCreateTask()}
+                                />
 
-                    <button className='add-task'>
-                        <FaPlus className={'icon-add'}/>
-                        Thêm Công Việc
-                    </button>
+
+                                <div className='box-btn'>
+                                    <button className='btn-create-task'
+                                            onClick={handleCreateTask}
+                                    >Tạo</button>
+                                    <FaTimes className='cancel-new-task'
+                                             onClick={() => setIsCreateTask(false)}
+                                    />
+                                </div>
+                            </div>
+                        )
+                    }
+                    {
+                        !isCreateTask &&
+                        <button className='add-task' onClick={()=>setIsCreateTask(true)} >
+                            <FaPlus className={'icon-add'}/>
+                            Thêm Công Việc
+                        </button>
+                    }
                 </div>
             )}
             <Modal title="Cập Nhât" open={showEditSprint}

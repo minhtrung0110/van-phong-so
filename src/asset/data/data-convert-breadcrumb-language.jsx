@@ -15,6 +15,7 @@ export  const dataConvertBreadcrumbLanguage=[
     {href:config.routes.changePassword,label:'Đổi Mật Khẩu'},
     {href:config.routes.config,label:'Cấu Hình'},
     {href:config.routes.backlog,label:'Danh Sách Công Việc'},
+    {href:config.routes.allProject,label:'Tất Cả Dự Án'},
 
 
 ]

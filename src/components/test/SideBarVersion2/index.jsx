@@ -26,7 +26,7 @@ function getItem(label, key, icon, children) {
     };
 }
 export  const listMenuClientItems=[
-    getItem('Công Việc', '/task', <FaTasks />,),
+    getItem('Công Việc', '/project', <FaTasks />,),
     getItem('Lịch Biểu', '/schedule', <FaCalendar />),
     getItem('Cuộc Họp', '/communication', <FaFacebookMessenger />, [
         getItem('Tin Nhắn', '/communication/mess'),

@@ -13,7 +13,7 @@ import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import DetailTask from "~/components/Client/Task/DetailTask";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {useSelector} from "react-redux";
-import {deleteTaskSelector} from "~/redux/selectors/task/taskSelector";
+import {deleteTaskSelector} from "~/redux/selectors/project/projectSelector";
 
 
 function Column({column, onCardDrop, onUpdateColumn}) {

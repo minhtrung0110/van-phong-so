@@ -6,7 +6,7 @@ import {Input} from "antd/lib";
 import HeaderContent from "~/components/commoms/HeaderContent";
 import {FaArrowLeft, FaCut, FaTrashAlt} from "react-icons/fa";
 import {useDispatch} from "react-redux";
-import {setIsCreateProject} from "~/redux/reducer/task/taskReducer";
+import {setIsCreateProject} from "~/redux/reducer/project/projectReducer";
 import {listDepartments, listStaffs} from "~/asset/data/initDataGlobal";
 import {Select} from "antd";
 import TextArea from "antd/es/input/TextArea";

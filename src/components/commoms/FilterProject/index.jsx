@@ -131,7 +131,7 @@ function FilterProject({listMember = [], onFilter,className}) {
         <div>
             <Menu items={itemsFilter} hideOnClick={false}>
                 <a onClick={(e) => e.preventDefault()} className={className}>
-                    <div className={cx('filter-task')}>
+                    <div className={cx('filter-project')}>
                         <FaFilter className={cx('icon')}/>
                         Bộ lọc
                     </div>
