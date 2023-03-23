@@ -138,6 +138,7 @@ function BoardContent({board,onBoard,columnData,timeLine}) {
 
                                         key={index}>
                                         <Column
+                                            sprint={board}
                                             column={col}
                                             onCardDrop={onCardDrop}
                                             onUpdateColumn={handleUpdateColumn}

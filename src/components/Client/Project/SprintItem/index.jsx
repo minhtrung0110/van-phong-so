@@ -5,15 +5,19 @@ import {FaAngleDown, FaEllipsisH, FaPlus, FaTimes} from "react-icons/fa";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import {Dropdown, Modal} from "antd";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
-import {getListNameColumn} from "~/utils/sorts";
+import {conCatArrayInArray, getListNameColumn, getTotalTaskInColumn} from "~/utils/sorts";
 import {initialData} from "~/asset/data/initalDataTask";
 import EditSprint from "~/components/Client/Project/EditSprint";
 import TextArea from "antd/es/input/TextArea";
 import {cloneDeep} from "lodash";
+import {useNavigate} from "react-router-dom";
+import {config} from "~/config";
+import {useDispatch} from "react-redux";
 
 SprintItem.propTypes = {};
 
 function SprintItem({sprint,onEdit,onDelete}) {
+
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete,setShowConfirmDelete] = useState(false)
     const [showEditSprint,setShowEditSprint]=useState(false)
@@ -38,8 +42,12 @@ function SprintItem({sprint,onEdit,onDelete}) {
     const handleDelete=()=>{
         onDelete(sprint)
     }
+    const navigate=useNavigate()
+    const dispatch=useDispatch()
     const handleRunSprint=()=>{
         onEdit({...sprint,status:sprint.status===1?0:1})
+        if(sprint.status===0)
+        navigate(config.routes.project)
     }
     const handleCreateTask = () => {
         // const newCardToAdd = {
@@ -68,6 +76,7 @@ function SprintItem({sprint,onEdit,onDelete}) {
         setValueNewTask('')
         setIsCreateTask(false)
 
+
     }
     const listStatus=[
         {
@@ -90,20 +99,20 @@ function SprintItem({sprint,onEdit,onDelete}) {
                     <FaAngleDown className={`icon ${isOpen ? 'rotated' : ''}`}/>
                     <div className='sprint-name'>{sprint.name}</div>
                     <div className='sprint-time'>{`${sprint.startTime} - ${sprint.endTime}`}</div>
-                    <div className='total-task'>{`( ${sprint.listTasks.length} công việc )`}</div>
+                    <div className='total-task'>{`( ${getTotalTaskInColumn(sprint.columns)} công việc )`}</div>
 
                 </div>
                 <div className='sprint-action'>
                     <div className='sprint-status'>
                         {
-                            listStatus.map((item)=>(
-                                <span className={`status-${item.id}`}>1</span>
+                            listStatus.map((item,index)=>(
+                                <span key={index} className={`status-${item.id}`}>1</span>
 
                             ))
                         }
                     </div>
                     <button className={`action-sprint ${sprint.status===1?'on':'off'}`} onClick={handleRunSprint}>
-                        {sprint.status === 1 ? 'Bắt Đầu' : 'Kết Thúc'}
+                        {sprint.status === 0 ? 'Bắt Đầu' : 'Hoàn Thành'}
                     </button>
                     <Dropdown
                         menu={{
@@ -119,10 +128,10 @@ function SprintItem({sprint,onEdit,onDelete}) {
             </div>
             {!!isOpen && (<div className='sprint-content'>
 
-                    <div className={`list-task ${sprint.listTasks.length>0 ?'':'dashed'}`}>
+                    <div className={`list-task ${sprint.columns.length>0 ?'':'dashed'}`}>
                         {
-                            sprint.listTasks.map(task =>(
-                                <TaskItem task={task} type={'long'} />
+                            conCatArrayInArray(sprint.columns).map((task,index) =>(
+                                <TaskItem key={index} task={task} type={'long'} />
                             ))
                         }
 

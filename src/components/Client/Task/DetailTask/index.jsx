@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, DatePicker, Dropdown, Select, Tooltip, Upload} from "antd";
+import {Avatar, DatePicker, Dropdown, InputNumber, Select, Tooltip, Upload} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {detailTaskSelector} from "~/redux/selectors/project/projectSelector";
 import {
@@ -18,7 +18,13 @@ import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
 import ToDoList from "~/components/commoms/ToDoList";
 import {isEmpty} from "lodash";
-import {getListNameColumn, getNameColumn} from "~/utils/sorts";
+import {
+    getListNameColumn,
+    getListStatusProjecTask,
+    getListStatusTaskProject,
+    getNameColumn,
+    getStatusTaskProject
+} from "~/utils/sorts";
 import {initialData} from "~/asset/data/initalDataTask";
 import {listColorStateDefaults, listPriority} from "~/asset/data/defaullt_data_task";
 import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelectModal";
@@ -28,12 +34,12 @@ import {setDeleteTask} from "~/redux/reducer/project/projectReducer";
 
 DetailTask.propTypes = {};
 
-function DetailTask(onUpdateTask) {
+function DetailTask({sprint,onUpdateTask}) {
 
     const data = useSelector(detailTaskSelector)
     const [errorDescription, setErrorDescription] = useState('');
     const [priority, setPriority] = useState(data.priority);
-    const [status, setStatus] = useState(getNameColumn(initialData.boards, data.columnId, data.boardId))
+    const [status, setStatus] = useState(getStatusTaskProject(sprint, data.columnId))
     const [listFile, setListFile] = useState([])
 
     const [rangeValueTime, setRangeValueTime] = useState(
@@ -86,7 +92,7 @@ function DetailTask(onUpdateTask) {
         setErrorDescription('');
     };
 
-    const listState = getListNameColumn(initialData.boards, data.boardId)
+    const listState = getListStatusTaskProject(sprint)
     const listStateRender = listState.map((item, index) => ({
         label: item.label,
         value: item.id,
@@ -270,7 +276,8 @@ function DetailTask(onUpdateTask) {
 
                     </div>
                     <div className='notification'>
-
+                        <p>Điểm :</p>
+                        <InputNumber min={1} max={20} defaultValue={3}  />
                     </div>
 
                 </div>

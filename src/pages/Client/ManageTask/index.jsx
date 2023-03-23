@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {isCreateProjectSelector, keyProjectSelector} from "~/redux/selectors/project/projectSelector";
 import AddProject from "~/components/Client/Project/Add";
 import {initialData} from "~/asset/data/initalDataTask";
-import {mapOrder} from "~/utils/sorts";
+import {getSprintActive, mapOrder} from "~/utils/sorts";
 import backgroundImage from "~/asset/images/backgroundTask01.jpg"
 import {setIsViewTimeline} from "~/redux/reducer/project/projectReducer";
 import {flatten} from "lodash";
@@ -18,10 +18,11 @@ ManageTaskPage.propTypes = {};
 
 function ManageTaskPage(props) {
     const [board, setBoard] = useState({})
-    const [columns, setColumns] = useState()
+    const [columns, setColumns] = useState([])
     const [currentProject, setCurrentProject] = useState('')
     const [filter, setFilter] = useState()
     const [search, setSearch] = useState()
+    const [sprint,setSprint] = useState({})
     const isCreateProject = useSelector(isCreateProjectSelector)
 
     const dispatch=useDispatch()
@@ -30,9 +31,12 @@ function ManageTaskPage(props) {
         // console.log
        // console.log('Call API get Project')
         const boardFromDB = initialData.boards.find(board => board.id === 'kltn-01')
+        console.log(boardFromDB.sprints)
         if (boardFromDB) {
+            const currentSprint=getSprintActive(boardFromDB.sprints);
             setBoard(boardFromDB)
-            setColumns(mapOrder(boardFromDB.columns, boardFromDB.columnOrder, 'id'))
+            setSprint(currentSprint)
+            setColumns(mapOrder(currentSprint.columns, currentSprint.columnOrder, 'id'))
 
 
             // const data=   boardFromDB.columns.map((column) =>{
@@ -59,8 +63,8 @@ function ManageTaskPage(props) {
 
         <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
             <HeaderTask onCurrentProject={setCurrentProject}/>
-            <BoardBar boardName={board.name} sprintName={'Week 1-2'} onFilter={setFilter}  onSearch={setSearch}/>
-            <BoardContent board={board} onBoard={setBoard} columnData={columns} />
+            <BoardBar boardName={board.name} sprintName={sprint.name} onFilter={setFilter}  onSearch={setSearch}/>
+            <BoardContent board={sprint} onBoard={setSprint} columnData={columns} />
         </div>
     );
 }

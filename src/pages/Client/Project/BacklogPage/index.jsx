@@ -4,7 +4,7 @@ import './style.scss'
 import SprintItem from "~/components/Client/Project/SprintItem";
 import {FaAngleRight, FaArrowLeft, FaList} from "react-icons/fa";
 import FilterProject from "~/components/commoms/FilterProject";
-import {listMembersForTask} from "~/asset/data/initalDataTask";
+import {initialData, listMembersForTask} from "~/asset/data/initalDataTask";
 import {Breadcrumb, Modal} from "antd";
 import AddSprint from "~/components/Client/Project/AddSprint";
 import {NavLink} from "react-router-dom";
@@ -253,13 +253,19 @@ const data = [
 ]
 function BacklogPage(props) {
    // const project=useSelector(boardSelector)
-    const [filter,setFilter]=useState()
+    const [filter,setFilter]=useState([])
     const [showAddSprint,setShowAddSprint]=useState(false)
-    const [listSprints,setListSprints]=useState(data)
+    const [listSprints,setListSprints]=useState([])
 
     useEffect(()=>{
         // call API get sprint task lên
-        console.log(filter)
+        const boardFromDB = initialData.boards.find(board => board.id === 'kltn-01')
+        if (boardFromDB){
+         //   console.log(boardFromDB.sprints)
+            setListSprints(boardFromDB.sprints)
+        }
+
+
     },[filter])
     const handleCreateSprint=(data)=>{
         console.log(data)
@@ -290,7 +296,7 @@ function BacklogPage(props) {
                         Danh sách công việc
                     </div>
                     <div className= 'sprint-backlog-actions'>
-                        <FilterProject onFilter={setFilter} listMember={listMembersForTask} className='filter-btn' />
+                        <FilterProject onFilter={setFilter} listmember={listMembersForTask} className='filter-btn' />
                         <button className='create-sprint' onClick={()=>setShowAddSprint(true)}>
                             Tạo mới phiên dự án
                         </button>
@@ -302,7 +308,7 @@ function BacklogPage(props) {
 
                 {
                     !!listSprints && listSprints.map((item) =>(
-                        <SprintItem sprint={item} onEdit={handleUpdateSprint} onDelete={handleUpdateSprint} />
+                        <SprintItem key={item.id} sprint={item} onEdit={handleUpdateSprint} onDelete={handleUpdateSprint} />
                     ))
                 }
 

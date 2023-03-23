@@ -43,7 +43,7 @@ function BoardBar({boardName, sprintName, onFilter}) {
             </div>
             <div className="board-filter">
                 <div className="sprint-name">{sprintName}</div>
-                <FilterProject onFilter={onFilter} listMember={listMembersForTask} className={'filter-btn'}/>
+                <FilterProject onFilter={onFilter} listmember={listMembersForTask} className={'filter-btn'}/>
                 <GroupMember addMember={true}/>
                 <div>
                     <Dropdown

@@ -14,13 +14,13 @@ FilterProject.propTypes = {
 };
 const cx = classNames.bind(styles)
 
-function FilterProject({listMember = [], onFilter,className}) {
+function FilterProject({listmember = [], onFilter,className}) {
     const [checkedListMember, setCheckedListMember] = useState([]);
     const [checkedListDuration, setCheckedListDuration] = useState([]);
     const [checkedListPriority, setCheckedListPriority] = useState([]);
     const [listMemberMore, setListMemberMore] = useState([]);
     const [searchValue, setSearchValue] = useState('')
-    const optionsSelectMember = listMember.map((d) => ({
+    const optionsSelectMember = listmember.map((d) => ({
         value: d.id,
         label: `${d.first_name} ${d.last_name}`,
     }))
@@ -59,7 +59,7 @@ function FilterProject({listMember = [], onFilter,className}) {
         style: {
             width: '100%',
         },
-        listMember,
+        listmember,
         options:optionsSelectMember,
         onChange: (newValue) => {
             setListMemberMore(newValue);

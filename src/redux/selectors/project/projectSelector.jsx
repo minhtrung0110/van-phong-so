@@ -7,4 +7,5 @@ export const deleteTaskSelector= state => state.project.deleteTask
 export const isCreateProjectSelector= state => state.project.isCreateProject
 export const isViewTimelineSelector= state => state.project.isViewTimeline
 export const boardSelector= state => state.project.board
+export const sprintSelector= state => state.project.sprint
 export const keyProjectSelector= state => state.project.key

@@ -16,7 +16,7 @@ import {useSelector} from "react-redux";
 import {deleteTaskSelector} from "~/redux/selectors/project/projectSelector";
 
 
-function Column({column, onCardDrop, onUpdateColumn}) {
+function Column({sprint,column, onCardDrop, onUpdateColumn}) {
     // console.log(column )
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [columnTitle, setColumnTitle] = useState('')
@@ -226,7 +226,7 @@ function Column({column, onCardDrop, onUpdateColumn}) {
                 open={isOpenDetailTask}
                 destroyOnClose={true}
             >
-              <DetailTask/>
+              <DetailTask sprint={sprint}/>
             </Modal>
             <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html:`Bạn Có Thực Sự Muốn Xóa Cột <strong>${columnTitle}</strong> Này ? `}} />}
