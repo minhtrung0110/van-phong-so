@@ -31,7 +31,7 @@ function ManageTaskPage(props) {
         // console.log
        // console.log('Call API get Project')
         const boardFromDB = initialData.boards.find(board => board.id === 'kltn-01')
-        console.log(boardFromDB.sprints)
+        //console.log(boardFromDB.sprints)
         if (boardFromDB) {
             const currentSprint=getSprintActive(boardFromDB.sprints);
             setBoard(boardFromDB)
@@ -57,14 +57,26 @@ function ManageTaskPage(props) {
             dispatch(setIsViewTimeline(true))
         }
         else  dispatch(setIsViewTimeline(false))
-        console.log(filter)
+
     }, [idProject,currentProject, filter, search])
+    const handleUpdateColumn = (value)=>{
+        // Create and Update:  API post Sprint to server
+        console.log(value)
+        // Delete Column : FE return a new Sprint, which  was deleted 1 column Status.
+    }
+    const handleDeleteTask=(value)=>{
+        console.log('Delete Task: ', value)
+    }
+    const handleUpdateTask=(value)=>{
+        console.log('Update Task: ', value)
+    }
+
     return (
 
         <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
             <HeaderTask onCurrentProject={setCurrentProject}/>
             <BoardBar boardName={board.name} sprintName={sprint.name} onFilter={setFilter}  onSearch={setSearch}/>
-            <BoardContent board={sprint} onBoard={setSprint} columnData={columns} />
+            <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns} onDeleteTask={handleDeleteTask} />
         </div>
     );
 }

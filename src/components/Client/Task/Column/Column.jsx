@@ -16,7 +16,7 @@ import {useSelector} from "react-redux";
 import {deleteTaskSelector} from "~/redux/selectors/project/projectSelector";
 
 
-function Column({sprint,column, onCardDrop, onUpdateColumn}) {
+function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdateTask}) {
     // console.log(column )
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [columnTitle, setColumnTitle] = useState('')
@@ -47,6 +47,7 @@ function Column({sprint,column, onCardDrop, onUpdateColumn}) {
             title: columnTitle
         }
         onUpdateColumn(newColumn)
+
     }
     const handleAddCard = () => {
         const newCardToAdd = {
@@ -74,19 +75,25 @@ function Column({sprint,column, onCardDrop, onUpdateColumn}) {
         setIsAddCard(false)
 
     }
+    const handleDuplicateTask = (task) =>{
+        const taskDuplicate = {
+          ...task,
+            id: Math.random().toString(36).substr(2, 5),
+        }
+        let newColumn = cloneDeep(column)
+        newColumn.cards.push(taskDuplicate)
+        newColumn.cardOrder.push(taskDuplicate.id)
+        // truyền lên board Content
+        onUpdateColumn(newColumn)
+
+
+    }
     const items = [
         {
             label: 'Xóa Cột',
             key: '1',
         },
-        {
-            label: 'Lọc',
-            key: '2',
-        },
-        {
-            label: 'Sắp xếp',
-            key: '3',
-        }
+
     ];
     const [open, setOpen] = useState(false);
     const handleMenuClick = (e) => {
@@ -108,6 +115,28 @@ function Column({sprint,column, onCardDrop, onUpdateColumn}) {
         setIsOpenDetailTask(value);
 
     }
+    const handleUpdateTask=(value) => {
+        console.log(value)
+    }
+    const myFormRef = useRef(null); // khởi tạo ref
+
+    const handleCancel = () => {
+        // Truy cập dữ liệu từ form thông qua ref
+        // const formValues = myFormRef.current.getFieldsValue();
+        // console.log(formValues);
+
+        // Gọi hàm onCancel
+        setShowConfirmModal(false)
+       // onCancel();
+    };
+
+    const handleSubmit = () => {
+        const formValues = myFormRef.current.getFieldsValue();
+        console.log(formValues);
+
+        // Thực hiện xử lý khi form được submit
+        // ...
+    };
     return (
         <div className="column">
 
@@ -225,8 +254,9 @@ function Column({sprint,column, onCardDrop, onUpdateColumn}) {
                 style={{ top: 80 }}
                 open={isOpenDetailTask}
                 destroyOnClose={true}
+               // afterClose={()=>handleUpdateTask}
             >
-              <DetailTask sprint={sprint}/>
+              <DetailTask isOpen={isOpenDetailTask} sprint={sprint} onDeleteTask={onDeleteTask} onUpdateTask={onUpdateTask} onDuplicate={handleDuplicateTask}/>
             </Modal>
             <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html:`Bạn Có Thực Sự Muốn Xóa Cột <strong>${columnTitle}</strong> Này ? `}} />}

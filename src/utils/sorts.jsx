@@ -20,6 +20,5 @@ export const getListStatusTaskProject=(array) =>{
     return array.columns.map((item,index)=>({id:item.id,label:item.title}))
 }
 export const findStyleForStatusTask=(status,list)=>{
-    console.log(status)
     return list.find((item)=>item.value===status)
 }

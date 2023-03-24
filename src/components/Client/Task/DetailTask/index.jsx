@@ -34,7 +34,7 @@ import {setDeleteTask} from "~/redux/reducer/project/projectReducer";
 
 DetailTask.propTypes = {};
 
-function DetailTask({sprint,onUpdateTask}) {
+function DetailTask({sprint,isOpen,onUpdateTask,onDeleteTask,onDuplicate}) {
 
     const data = useSelector(detailTaskSelector)
     const [errorDescription, setErrorDescription] = useState('');
@@ -143,7 +143,7 @@ function DetailTask({sprint,onUpdateTask}) {
     }
     const items = [
         {
-            key: '1',
+            key: 'remove-task',
             label: (
                 <span>
                     Xóa Công Việc
@@ -151,7 +151,7 @@ function DetailTask({sprint,onUpdateTask}) {
             ),
         },
         {
-            key: '2',
+            key: 'duplicate',
             label: (
                 <span>
                     Tao Bản Sao Công Việc
@@ -162,21 +162,38 @@ function DetailTask({sprint,onUpdateTask}) {
     ];
     // MOre Task
     const handleMoreTask = (e) => {
-        if (e.key === '1') {
+        if (e.key === 'remove-task') {
             // xóa project
-            setShowConfirmModal(true)
+            setShowConfirmModal(true);
+
+
         }
-        else if (e.key === '2') {
+        else if (e.key === 'duplicate') {
+            // hiện tai dang duplicate dựa trên task chưa onChange
+            onDuplicate(data)
         }
         else {
 
         }
     };
     const handleRemoveTask = () => {
-        dispatch(setDeleteTask({id:data.id,columnId:data.columnId,boardId:data.boardId}))
+
+        dispatch(setDeleteTask({id:data.id,sprintId:sprint.id,columnId:data.columnId,boardId:data.boardId}))
         setShowConfirmModal(false)
     }
+    const handleChangeStatus=(value) => {
+        setStatus({...status, value})
+        // post API Update Task
+        console.log('Post API :',{...data, columnId:value})
+        //onUpdateTask({...data, columnId:value})
+    }
+    useEffect(()=>{
+        // post API Update Task
+        console.log('Open: ',isOpen)
+
+    },[isOpen])
     // DEBUG HERE
+   // console.log(status)
     return (
         <div className='detail-task'>
             <div className='header'>
@@ -208,7 +225,7 @@ function DetailTask({sprint,onUpdateTask}) {
                             padding: 5,
                             fontSize: '0.9rem',
                         }}
-                        onChange={(e) => setStatus({...status, value: e})}
+                        onChange={handleChangeStatus}
                     >
                         {!!listStateRender && listStateRender.map((item) => (
                             <Select.Option key={item.value}

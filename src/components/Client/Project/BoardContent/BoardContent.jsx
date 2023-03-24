@@ -18,7 +18,7 @@ import dayjs from "dayjs";
 import TimeLine from "~/components/Client/Project/TimeLine";
 
 
-function BoardContent({board,onBoard,columnData,timeLine}) {
+function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeLine}) {
    // console.log({board,onBoard,columnData})
    // console.log('rendering')
     const [columns,setColumns] = useState(columnData)
@@ -142,6 +142,8 @@ function BoardContent({board,onBoard,columnData,timeLine}) {
                                             column={col}
                                             onCardDrop={onCardDrop}
                                             onUpdateColumn={handleUpdateColumn}
+                                            onDeleteTask={onDeleteTask}
+                                            onUpdateTask={onUpdateTask}
 
                                         />
                                     </Draggable>
