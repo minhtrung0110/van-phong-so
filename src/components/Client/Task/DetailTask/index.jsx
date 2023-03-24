@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, DatePicker, Dropdown, InputNumber, Select, Tooltip, Upload} from "antd";
+import {Avatar, DatePicker, Dropdown, Input, InputNumber, Select, Tooltip, Upload} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {detailTaskSelector} from "~/redux/selectors/project/projectSelector";
 import {
@@ -34,26 +34,28 @@ import {setDeleteTask} from "~/redux/reducer/project/projectReducer";
 
 DetailTask.propTypes = {};
 
-function DetailTask({sprint,isOpen,onUpdateTask,onDeleteTask,onDuplicate}) {
+function DetailTask({sprint, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
 
     const data = useSelector(detailTaskSelector)
     const [errorDescription, setErrorDescription] = useState('');
     const [priority, setPriority] = useState(data.priority);
     const [status, setStatus] = useState(getStatusTaskProject(sprint, data.columnId))
     const [listFile, setListFile] = useState([])
+    const [point, setPoint] = useState(data.point)
+    const [taskTitle, setTaskTitle] = useState(data.title)
 
     const [rangeValueTime, setRangeValueTime] = useState(
         [dayjs(data.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(data.endTime, "DD/MM/YYYY HH:mm:ss")]);
     const [members, setMembers] = useState([])
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     const {RangePicker} = DatePicker;
-  // console.log(priority)
-   //  useEffect(()=>{
-   //          setPriority(data.priority)
-   //      return () =>{
-   //              setPriority('')
-   //      }
-   //  },[data])
+    // console.log(priority)
+    //  useEffect(()=>{
+    //          setPriority(data.priority)
+    //      return () =>{
+    //              setPriority('')
+    //      }
+    //  },[data])
     const rangePresets = [
         {
             label: 'Trong 7 ngày',
@@ -85,7 +87,7 @@ function DetailTask({sprint,isOpen,onUpdateTask,onDeleteTask,onDuplicate}) {
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
         } else
             console.log('Clear');
-            setRangeValueTime([dates[0],dates[1]])
+        setRangeValueTime([dates[0], dates[1]])
     }
     const editorDescription = (value) => {
         //  setValue('description', value);nay2y2 cho form
@@ -167,46 +169,64 @@ function DetailTask({sprint,isOpen,onUpdateTask,onDeleteTask,onDuplicate}) {
             setShowConfirmModal(true);
 
 
-        }
-        else if (e.key === 'duplicate') {
+        } else if (e.key === 'duplicate') {
             // hiện tai dang duplicate dựa trên task chưa onChange
             onDuplicate(data)
-        }
-        else {
+        } else {
 
         }
     };
     const handleRemoveTask = () => {
 
-        dispatch(setDeleteTask({id:data.id,sprintId:sprint.id,columnId:data.columnId,boardId:data.boardId}))
+        dispatch(setDeleteTask({id: data.id, sprintId: sprint.id, columnId: data.columnId, boardId: data.boardId}))
         setShowConfirmModal(false)
     }
-    const handleChangeStatus=(value) => {
+    const handleChangeStatus = (value) => {
         setStatus({...status, value})
         // post API Update Task
-        console.log('Post API :',{...data, columnId:value})
+        console.log('Post API :', {...data, columnId: value})
         //onUpdateTask({...data, columnId:value})
     }
-    useEffect(()=>{
+    useEffect(() => {
         // post API Update Task
-        console.log('Open: ',isOpen)
+        // console.log('Open: ',isOpen)
+        onUpdateTask({
+            ...data,
+            title: taskTitle,
+            columnId: status.value,
+            priority:priority,
+            point,
+            startTime: dayjs(rangeValueTime[0], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
+            , endTime: dayjs(rangeValueTime[1], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
+        })
 
-    },[isOpen])
+    }, [taskTitle,status,priority,rangeValueTime,point])
     // DEBUG HERE
-   // console.log(status)
+    // console.log(status)
     return (
         <div className='detail-task'>
             <div className='header'>
                 <div className='name-task'>
                     <FaDesktop className='icon'/>
-                    <h4>{data.title}</h4>
+                    <Input
+                        size='middle'
+                        type='text'
+                        placeholder='Điền tên công việc'
+                        className='input-title-task'
+                        value={taskTitle}
+                        spellCheck={false}
+                        onChange={(e) => setTaskTitle(e.target.value)}
+                        onClick={ e=>e.target.focus()}
+                        onMouseDown={e => e.preventDefault()}
+
+                    />
                 </div>
-                <Dropdown className='dropdown-more'   menu={{
+                <Dropdown className='dropdown-more' menu={{
                     items,
                     onClick: handleMoreTask,
                 }}
-                          placement="bottomRight" >
-                    <div ><FaEllipsisH/></div>
+                          placement="bottomRight">
+                    <div><FaEllipsisH/></div>
                 </Dropdown>
 
 
@@ -294,13 +314,14 @@ function DetailTask({sprint,isOpen,onUpdateTask,onDeleteTask,onDuplicate}) {
                     </div>
                     <div className='notification'>
                         <p>Điểm :</p>
-                        <InputNumber min={1} max={20} defaultValue={3}  />
+                        <InputNumber min={1} max={20} defaultValue={3} value={point} onChange={e=>setPoint(e.target.value)}/>
                     </div>
 
                 </div>
                 <div className='description'>
                     <p>Nội Dung Công Việc:</p>
-                    <CustomEditor id="description"  editorDescription={editorDescription} defaultValues={data.description}/>
+                    <CustomEditor id="description" editorDescription={editorDescription}
+                                  defaultValues={data.description}/>
                 </div>
                 <div className='todo-list'>
 
@@ -335,8 +356,10 @@ function DetailTask({sprint,isOpen,onUpdateTask,onDeleteTask,onDuplicate}) {
 
 
             <div className='footer'></div>
-            <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa' content={`Bạn Có Thực Sự Muốn Xóa Công Việc Này ? `}
-                          textCancel='Hủy' textOK='Xóa' onCancel={()=>setShowConfirmModal(false)} onOK={handleRemoveTask}/>
+            <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
+                          content={`Bạn Có Thực Sự Muốn Xóa Công Việc Này ? `}
+                          textCancel='Hủy' textOK='Xóa' onCancel={() => setShowConfirmModal(false)}
+                          onOK={handleRemoveTask}/>
         </div>
     )
         ;

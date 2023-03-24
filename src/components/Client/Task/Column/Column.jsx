@@ -24,6 +24,8 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
     const [valueNewCard, setValueNewCard] = useState('')
     const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
 
+    const [taskUpdate, setTaskUpdate] = useState({})
+
     const newCardRef = useRef()
     useEffect(() => {
         setColumnTitle(column.title)
@@ -39,7 +41,7 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
     }
     const selectAllInlineTex = (e) => {
         e.target.focus();
-        e.target.select()
+       // e.target.select()
     }
     const handleColumnTitleBlur = () => {
         const newColumn = {
@@ -137,6 +139,10 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
         // Thực hiện xử lý khi form được submit
         // ...
     };
+    const handleCloseDetailTask=() => {
+        setIsOpenDetailTask(false)
+        onUpdateTask(taskUpdate)
+    }
     return (
         <div className="column">
 
@@ -248,7 +254,7 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
             {/*    onAction={handleRemoveColumn} />*/}
             <Modal
                 title=""
-                onCancel={()=>setIsOpenDetailTask(false)}
+                onCancel={handleCloseDetailTask}
                 footer={null}
                 width={800}
                 style={{ top: 80 }}
@@ -256,7 +262,7 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
                 destroyOnClose={true}
                // afterClose={()=>handleUpdateTask}
             >
-              <DetailTask isOpen={isOpenDetailTask} sprint={sprint} onDeleteTask={onDeleteTask} onUpdateTask={onUpdateTask} onDuplicate={handleDuplicateTask}/>
+              <DetailTask isOpen={isOpenDetailTask} sprint={sprint} onDeleteTask={onDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
             </Modal>
             <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html:`Bạn Có Thực Sự Muốn Xóa Cột <strong>${columnTitle}</strong> Này ? `}} />}
