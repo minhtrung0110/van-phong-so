@@ -7,7 +7,7 @@ import {Dropdown, Modal} from "antd";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {conCatArrayInArray, getListNameColumn, getTotalTaskInColumn} from "~/utils/sorts";
 import {initialData} from "~/asset/data/initalDataTask";
-import EditSprint from "~/components/Client/Project/EditSprint";
+import EditSprint from "~/components/Client/Sprint/EditSprint";
 import TextArea from "antd/es/input/TextArea";
 import {cloneDeep} from "lodash";
 import {useNavigate} from "react-router-dom";

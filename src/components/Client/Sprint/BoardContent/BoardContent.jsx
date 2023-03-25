@@ -15,7 +15,7 @@ import {useSelector} from "react-redux";
 import {deleteTaskSelector, isViewTimelineSelector} from "~/redux/selectors/project/projectSelector";
 import column from "~/components/Client/Task/Column/Column";
 import dayjs from "dayjs";
-import TimeLine from "~/components/Client/Project/TimeLine";
+import TimeLine from "~/components/Client/Sprint/TimeLine";
 
 
 function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeLine}) {

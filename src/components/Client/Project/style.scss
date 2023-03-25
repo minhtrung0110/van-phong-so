@@ -1,0 +1,114 @@
+@mixin btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: var(--bs-gray-100);
+  border-radius: var(--6px);
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+  width: var(--48px);
+  height: var(--48px);
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-danger-rgb), var(--bs-text-opacity));
+  cursor: pointer;
+  &:hover {
+    background-color: var(--gray97-color);
+  }
+}
+.table-project {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+
+  .row-data {
+    overflow: hidden;
+    font-size: var(--14px);
+
+    .col-info {
+      min-height: 100%;
+      .avatar {
+        margin-left: 2.5rem;
+      }
+      .info {
+        display: inline-block;
+        font-weight: bold;
+        color: var(--dark);
+        margin-left: 2rem;
+        vertical-align: middle;
+      }
+    }
+
+    .col-txt {
+      font-weight: bold;
+      color: var(--dark);
+      text-align: center;
+    }
+
+    .sub-txt {
+      display: block;
+      font-style: italic;
+      color: var(--dark-50);
+      margin-top: 5px;
+    }
+
+    .col-txt-md {
+      font-style: italic;
+      font-weight: lighter;
+      margin-top: 5px;
+    }
+
+
+
+    .col-action {
+
+      .btn-edit {
+        float: left;
+        width: 33.33%;
+        @include btn-action;
+
+        .icon-edit {
+          font-size: var(--20px);
+          color: var(--bs-success-500);
+        }
+
+      }
+
+      .btn-show {
+        float: left;
+        width: 33.33%;
+        @include btn-action;
+
+        .icon-show {
+          font-size: var(--20px);
+          color: var(--blue);
+        }
+      }
+
+      .btn-delete {
+        float: left;
+        width: 33.33%;
+        @include btn-action;
+
+        .icon-delete {
+          font-size: var(--20px);
+          color: var(--bs-danger);
+        }
+      }
+    }
+
+
+  }
+}
+
+.box-confirmation {
+  display: flex;
+  align-items: center;
+  margin: 1rem;
+
+  .icon {
+    font-size: var(--28px);
+    color: #f3d206;
+    margin-right: 2rem;
+  }
+}

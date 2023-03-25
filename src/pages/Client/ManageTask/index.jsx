@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import AppBar from "~/components/Client/Project/HeaderTask/HeaderTask";
-import BoardBar from "~/components/Client/Project/BoardBar/BoardBar";
-import BoardContent from "~/components/Client/Project/BoardContent/BoardContent";
-import HeaderTask from "~/components/Client/Project/HeaderTask/HeaderTask";
+import AppBar from "~/components/Client/Sprint/HeaderTask/HeaderTask";
+import BoardBar from "~/components/Client/Sprint/BoardBar/BoardBar";
+import BoardContent from "~/components/Client/Sprint/BoardContent/BoardContent";
+import HeaderTask from "~/components/Client/Sprint/HeaderTask/HeaderTask";
 import './style.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {isCreateProjectSelector, keyProjectSelector} from "~/redux/selectors/project/projectSelector";

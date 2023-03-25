@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
-import SprintItem from "~/components/Client/Project/SprintItem";
+import SprintItem from "~/components/Client/Sprint/SprintItem";
 import {FaAngleRight, FaArrowLeft, FaList} from "react-icons/fa";
 import FilterProject from "~/components/commoms/FilterProject";
 import {initialData, listMembersForTask} from "~/asset/data/initalDataTask";
 import {Breadcrumb, Modal} from "antd";
-import AddSprint from "~/components/Client/Project/AddSprint";
+import AddSprint from "~/components/Client/Sprint/AddSprint";
 import {NavLink} from "react-router-dom";
 import {config} from "~/config";
 import {useSelector} from "react-redux";
