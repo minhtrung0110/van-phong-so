@@ -16,10 +16,11 @@ function EditProject({project,onCancel,onSave}) {
  //   console.log(project)
     const [listStaff, setListStaff] = useState()
     const defaultMembers=project.listMembers.map(item=>({value: item.mail, label: item.username}))
+    const defaultStatus=project.status===1?'Hoàn Thành':(project.status===0?'Đang Triển Khai':'Chờ')
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
     } = useForm({
-        defaultValues:{...project,listMembers:defaultMembers}
+        defaultValues:{...project,listMembers:defaultMembers,status:defaultStatus}
     });
 
 
@@ -38,6 +39,11 @@ function EditProject({project,onCancel,onSave}) {
             return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
         else return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     }
+    const listStatus=[
+        {label:'Hoàn Thành',value:'1'},
+        {label:'Đang Triển Khai',value:'0'},
+        {label:'Chờ',value:'-1'},
+    ]
     return (
         <div className="container-update-project">
             <Form
@@ -99,6 +105,37 @@ function EditProject({project,onCancel,onSave}) {
 
                         )}
                     />
+
+
+                </div>
+                <div className='status'>
+                    <h4>Trạng Thái: </h4>
+                    <Controller
+                        name="status"
+                        control={control}
+                        defaultValue={''}
+                        rules={{required: true}}
+                        render={({field}) => (
+                            <Form.Item
+                                hasFeedback
+                                validateStatus={errors.status ? 'error' : 'success'}
+                                help={errors.status ? 'Vui lòng chọn trạng thái' : null}>
+                                <Select
+                                    {...field}
+
+                                    size={'large'}
+                                    placeholder="Chọn trạng thái ..."
+
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                    options={listStatus}
+                                />
+                            </Form.Item>
+
+                        )}
+                    />
+
 
                 </div>
                 <div className="box-footer">
