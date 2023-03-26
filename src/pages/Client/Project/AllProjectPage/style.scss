@@ -1,0 +1,47 @@
+@import "../../../../css/base/_mixins.scss";
+.container-list-project{
+  background-color: #fff;
+  border-radius:var(--border-radius);
+  padding: 1rem 2.5rem;
+  margin: var(--pd-content);
+  min-height:40rem;
+  .header-list-project{
+    padding: 1rem 2.5rem;
+    .title{
+      height: 4rem;
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      svg{
+        margin-right: 1.5rem;
+      }
+    }
+
+    .filter-list-project{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 3rem;
+      .create-project{
+      @include btn;
+        font-size: var(--14px);
+        svg{
+          font-size:0.9rem;
+        }
+        color: var(--primary-color-btn);
+
+        &:hover{
+          cursor: pointer;
+          color: #fff;
+          border-color: var(--primary-color-btn) !important;
+          background-color: var(--primary-color);
+        }
+      }
+    }
+
+  }
+  .content-list-project{
+    padding: 0 2.5rem;
+  }
+}

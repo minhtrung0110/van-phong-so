@@ -20,6 +20,7 @@ import {setIsLogin, setUser} from "~/redux/reducer/auth/authReducer";
 import ManageMyAccount from "~/pages/Client/ManageMyAccount";
 import {Switch} from "antd";
 import BacklogPage from "~/pages/Client/Project/BacklogPage";
+import AllProjectPage from "~/pages/Client/Project/AllProjectPage";
 
 function ProtectedRoutes(props) {
     return null;
@@ -65,6 +66,7 @@ function ClientRouter(props) {
 
                 <Route path={config.routes.project} element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
                 <Route path={config.routes.backlog} element={<ClientLayout slot={<BacklogPage key={'a'}/>}/>}/>
+                <Route path={config.routes.allProject} element={<ClientLayout slot={<AllProjectPage key={'a'}/>}/>}/>
 
 
             </Route>

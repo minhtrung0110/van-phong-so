@@ -8,7 +8,7 @@ TaskItemLong.propTypes = {
 const cx=classNames.bind(styles)
 function TaskItemLong(props) {
     return (
-        <div className={cx('task-item')}>
+        <div className={cx('project-item')}>
                 <
         </div>
     );

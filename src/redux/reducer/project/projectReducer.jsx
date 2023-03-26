@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 
-export const taskReducer = createSlice({
-    name: 'task',
+export const projectReducer = createSlice({
+    name: 'project',
     initialState: {
         key: 0,
+        board: {},
+        sprint:{},
         detailTask:{},
         deleteTask:{},
         isCreateProject:false,
@@ -15,8 +17,14 @@ export const taskReducer = createSlice({
         task: {},
     },
     reducers: {
-        setKey: (state, action) => {
+        setKeyProject: (state, action) => {
             state.key = action.payload;
+        },
+        setBoard: (state, action) => {
+            state.board = action.payload;
+        },
+        setSprint: (state, action) => {
+            state.sprint = action.payload;
         },
         setDetailTask: (state, action) => {
             state.detailTask = action.payload;
@@ -45,6 +53,6 @@ export const taskReducer = createSlice({
     },
 });
 
-export const { setIsAdd,setIsEdit, setTask,setIsReset,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = taskReducer.actions;
+export const { setKeyProject,setIsAdd,setIsEdit, setTask,setSprint,setIsReset,setBoard,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = projectReducer.actions;
 
-export default taskReducer.reducer;
+export default projectReducer.reducer;

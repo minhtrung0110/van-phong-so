@@ -14,6 +14,7 @@ const routes = {
     logout:"/logout",
     config:'/config',
     backlog:'/project/backlog',
+    allProject:'/project/all',
 
 }
 

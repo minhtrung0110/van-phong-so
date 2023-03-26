@@ -13,16 +13,18 @@ import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import DetailTask from "~/components/Client/Task/DetailTask";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {useSelector} from "react-redux";
-import {deleteTaskSelector} from "~/redux/selectors/task/taskSelector";
+import {deleteTaskSelector} from "~/redux/selectors/project/projectSelector";
 
 
-function Column({column, onCardDrop, onUpdateColumn}) {
+function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdateTask}) {
     // console.log(column )
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [columnTitle, setColumnTitle] = useState('')
     const [isAddCard, setIsAddCard] = useState(false)
     const [valueNewCard, setValueNewCard] = useState('')
     const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
+
+    const [taskUpdate, setTaskUpdate] = useState({})
 
     const newCardRef = useRef()
     useEffect(() => {
@@ -39,7 +41,7 @@ function Column({column, onCardDrop, onUpdateColumn}) {
     }
     const selectAllInlineTex = (e) => {
         e.target.focus();
-        e.target.select()
+       // e.target.select()
     }
     const handleColumnTitleBlur = () => {
         const newColumn = {
@@ -47,6 +49,7 @@ function Column({column, onCardDrop, onUpdateColumn}) {
             title: columnTitle
         }
         onUpdateColumn(newColumn)
+
     }
     const handleAddCard = () => {
         const newCardToAdd = {
@@ -74,19 +77,25 @@ function Column({column, onCardDrop, onUpdateColumn}) {
         setIsAddCard(false)
 
     }
+    const handleDuplicateTask = (task) =>{
+        const taskDuplicate = {
+          ...task,
+            id: Math.random().toString(36).substr(2, 5),
+        }
+        let newColumn = cloneDeep(column)
+        newColumn.cards.push(taskDuplicate)
+        newColumn.cardOrder.push(taskDuplicate.id)
+        // truyền lên board Content
+        onUpdateColumn(newColumn)
+
+
+    }
     const items = [
         {
             label: 'Xóa Cột',
             key: '1',
         },
-        {
-            label: 'Lọc',
-            key: '2',
-        },
-        {
-            label: 'Sắp xếp',
-            key: '3',
-        }
+
     ];
     const [open, setOpen] = useState(false);
     const handleMenuClick = (e) => {
@@ -107,6 +116,32 @@ function Column({column, onCardDrop, onUpdateColumn}) {
     const handleShowDetailTask=(value) => {
         setIsOpenDetailTask(value);
 
+    }
+    const handleUpdateTask=(value) => {
+        console.log(value)
+    }
+    const myFormRef = useRef(null); // khởi tạo ref
+
+    const handleCancel = () => {
+        // Truy cập dữ liệu từ form thông qua ref
+        // const formValues = myFormRef.current.getFieldsValue();
+        // console.log(formValues);
+
+        // Gọi hàm onCancel
+        setShowConfirmModal(false)
+       // onCancel();
+    };
+
+    const handleSubmit = () => {
+        const formValues = myFormRef.current.getFieldsValue();
+        console.log(formValues);
+
+        // Thực hiện xử lý khi form được submit
+        // ...
+    };
+    const handleCloseDetailTask=() => {
+        setIsOpenDetailTask(false)
+        onUpdateTask(taskUpdate)
     }
     return (
         <div className="column">
@@ -219,14 +254,15 @@ function Column({column, onCardDrop, onUpdateColumn}) {
             {/*    onAction={handleRemoveColumn} />*/}
             <Modal
                 title=""
-                onCancel={()=>setIsOpenDetailTask(false)}
+                onCancel={handleCloseDetailTask}
                 footer={null}
                 width={800}
                 style={{ top: 80 }}
                 open={isOpenDetailTask}
                 destroyOnClose={true}
+               // afterClose={()=>handleUpdateTask}
             >
-              <DetailTask/>
+              <DetailTask isOpen={isOpenDetailTask} sprint={sprint} onDeleteTask={onDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
             </Modal>
             <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html:`Bạn Có Thực Sự Muốn Xóa Cột <strong>${columnTitle}</strong> Này ? `}} />}

@@ -1,4 +1,5 @@
-@mixin btn {
+@import "../../../../css/base/mixins";
+@mixin btn-sprint {
   -webkit-box-align: baseline;
   align-items: center;
   box-sizing: border-box;
@@ -145,12 +146,20 @@ $spacing: 0.5rem;
       }
 
       .action-sprint {
-        @include btn;
+        @include btn-sprint;
         margin-left: $spacing;
+        &.on{
+          background-color: #1aa0da;
+          color: #fff !important;
+        }
+        &.off{
+          background-color: #e7357a;
+          color: #ffffff !important;
+        }
       }
 
       .btn-action {
-        @include btn;
+        @include btn-sprint;
         margin-left: $spacing;
       }
     }
@@ -171,14 +180,28 @@ $spacing: 0.5rem;
         margin-right: 1rem;
       }
       width: 100% !important;
-      @include btn;
+      @include btn-sprint;
       &:hover{
       background-color: rgb(225, 225, 225);
     }
     }
   }
+  .create-new-task-area{
+    .box-btn{
+      margin:0.5rem ;
+      display: flex;
+      .btn-create-task{
+        @include btn-add-task;
+      }
+      .cancel-new-task{
+        @include btn-cancel-task;
+        margin-left: 1rem;
+      }
+    }
+  }
 
 }
+
 @keyframes rotate {
   0% {
     transform: rotate(0deg);

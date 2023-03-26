@@ -5,37 +5,51 @@
   padding: 1rem 2.5rem;
   margin: var(--pd-content);
   min-height: 650px;
-  .sprint-backlog-header{
-    margin: 1rem 0;
-    height: 3.5rem;
-    display: flex;
-    justify-content: space-between;
-    padding:0.5rem;
-    align-items: center;
-    .sprint-backlog-title{
+  .header-backlog{
+    .breadcrumb{
       display: flex;
       align-items: center;
-      font-weight: 550;
-      color : var(--pr-green);
-      .icon{
-
-        margin-right: 1rem;
+      height: 2.5rem;
+      .ant-breadcrumb a:hover{
+        font-weight: 600;
       }
     }
-    .sprint-backlog-actions{
+    .sprint-backlog-header{
+      margin: 1.5rem 0;
+      height: 3.5rem;
       display: flex;
+      justify-content: space-between;
+      padding:0.5rem;
       align-items: center;
-      .filter-btn{
-        @include btn;
-        margin-right: 1rem;
-        &:hover{
-          color: var(--yellow);
+      .sprint-backlog-title{
+        display: flex;
+        align-items: center;
+        font-weight: 550;
+        color : var(--pr-green);
+        .icon{
+
+          margin-right: 1rem;
         }
       }
-      .create-sprint{
-        @include btn-ok;
+      .sprint-backlog-actions{
+        display: flex;
+        align-items: center;
+        .filter-btn{
+          @include btn;
+          margin-right: 1rem;
+          &:hover{
+            color: var(--yellow);
+          }
+        }
+        .create-sprint{
+          @include btn-ok;
+        }
       }
+
     }
+  }
+
+  .content-backlog{
 
   }
 }
