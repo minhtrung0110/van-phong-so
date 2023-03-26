@@ -767,6 +767,7 @@ export const initialData = {
                 id: 1,
                 first_name: 'Nguyễn Đức Minh',
                 last_name: 'Trung',
+                username:'Trung Nguyeng',
                 phone_number: '09744148784',
                 gender: 'nam',
                 birth_date: '01-10-2001',

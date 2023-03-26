@@ -4,41 +4,40 @@ import './style.scss'
 import TableLayout from "~/components/commoms/Table";
 import {FaPen, FaTimesCircle} from "react-icons/fa";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {Modal} from "antd";
+import AddProject from "~/components/Client/Project/Add";
+import EditProject from "~/components/Client/Project/EditProject";
 ProjectTable.propTypes = {
 
 };
 
-function ProjectTable({tableHeader, tableBody}) {
-    console.log(tableBody)
+function ProjectTable({tableHeader, tableBody,onUpdate,onDelete}) {
+
     const [showPopupDelete, setShowPopupDelete] = useState({
         project_id: null,
+        show: false,
+    });
+    const [showPopupUpdate, setShowPopupUpdate] = useState({
+        project: null,
         show: false,
     });
     const showConfirmDeleteProject = (e, id) => {
         e.stopPropagation();
         setShowPopupDelete({project_id: id, show: true});
     };
-    const handleEditProject= async (e, id) => {
-
+    const handleEditProject=  (item) => {
+        setShowPopupUpdate({
+            project: item,
+            show: true
+        })
 
     };
-    const handleRemoveProject = async (id) => {
-        //e.stopPropagation();
-        // const result = await deleteStaff(id);
-        // console.log('result', result);
-        // if (result === 200) {
-        //     SuccessToast('Remove staff successfully', 3000);
-        // } else if (result === 404) {
-        //     ErrorToast('Remove staffs unsuccessfully', 3000);
-        //     Notiflix.Block.remove('#root');
-        // } else if (result === 401) {
-        //     Notiflix.Block.remove('#root');
-        // } else {
-        //     Notiflix.Block.remove('#root');
-        //     ErrorToast('Something went wrong. Please try again', 3000);
-        // }
+    const handleCancelUpdateProject=()=>{
+        setShowPopupUpdate({...showPopupUpdate,show: false});
+    }
+    const handleRemoveProject = (id) => {
         setShowPopupDelete({...showPopupDelete, show: false});
-        // dispatch(setIsReset(Math.random()));
+        onDelete(showPopupDelete.project_id)
     };
     const renderTableBody = () => {
         return tableBody.map((item) => {
@@ -53,16 +52,14 @@ function ProjectTable({tableHeader, tableBody}) {
                     <td className="col-txt">{`${item.leader.first_name} ${item.leader.last_name}`}</td>
                     <td className="col-action">
                         <button
-                            id="edit-project"
                             onClick={
-                          (e) => handleEditProject(e, item.id)
+                          (e) => handleEditProject(item)
                                 }
                             className=" btn-edit"
                         >
                             <FaPen className="icon-edit"/>
                         </button>
                         <button
-                            id="disabled-user"
                             onClick={(e) => {
                                showConfirmDeleteProject(e, item.id);
                             }}
@@ -79,7 +76,19 @@ function ProjectTable({tableHeader, tableBody}) {
     return (
         <div className="table-project">
             <TableLayout tableHeader={tableHeader} tableBody={renderTableBody()}/>
+            <Modal
+                title="Cập Nhật Dự Án"
+                onCancel={handleCancelUpdateProject}
+                footer={null
+                }
+                width={500}
+                style={{ top: 100   }}
+                bodyStyle={{height: "400px"}}
 
+                open={showPopupUpdate.show}
+            >
+                <EditProject project={showPopupUpdate.project} onCancel={handleCancelUpdateProject} onSave={onUpdate} />
+            </Modal>
             <ConfirmModal title="Xác Nhận Xóa"
                           open={showPopupDelete.show}
                           content={`Bạn Có Thực Sự Muốn Xóa Dự Án Này Không ? `}

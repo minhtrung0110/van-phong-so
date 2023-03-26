@@ -61,10 +61,11 @@
 
 
     .col-action {
-
+      display: flex;
+      justify-content: center;
+      align-items: center;
       .btn-edit {
-        float: left;
-        width: 33.33%;
+
         @include btn-action;
 
         .icon-edit {
@@ -73,21 +74,8 @@
         }
 
       }
-
-      .btn-show {
-        float: left;
-        width: 33.33%;
-        @include btn-action;
-
-        .icon-show {
-          font-size: var(--20px);
-          color: var(--blue);
-        }
-      }
-
       .btn-delete {
-        float: left;
-        width: 33.33%;
+
         @include btn-action;
 
         .icon-delete {

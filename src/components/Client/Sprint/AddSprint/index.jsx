@@ -61,6 +61,7 @@ function AddSprint({onClose,onSave}) {
             wrapperCol={{
                 span: 18,
             }}
+            labelAlign={"left"}
             layout="horizontal"
             onFinish={handleSubmit(onSubmit)}
             style={{

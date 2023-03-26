@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {Dropdown} from "antd";
+import {Dropdown, Modal} from "antd";
 import {FaAngleDown, FaFlipboard, FaListUl, FaPlus} from "react-icons/fa";
 import styles from './SelectHeaderProject.module.scss'
 import classNames from "classnames/bind";
@@ -9,6 +9,7 @@ import './customOverlay.scss'
 import {config} from "~/config";
 import {useDispatch} from "react-redux";
 import {setKeyProject} from "~/redux/reducer/project/projectReducer";
+import AddProject from "~/components/Client/Project/Add";
 SelectHeaderProject.propTypes = {
 
 };
@@ -38,15 +39,23 @@ const data=[
 ]
 function SelectHeaderProject() {
     const [listProject,setListProject]=useState([])
+    const [openAddProject,setOpenAddProject] = useState(false)
     useEffect(()=>{
         // calll API get ALL Project
         const convertData=data.map((item)=>({label:item.name,key:item.id}))
         setListProject(convertData)
     },[])
+    const handleCreateNewProject=(data) => {
+        console.log('Create new project:',data)
+        setOpenAddProject(false)
+    }
+    const handleCancelCreateNewProject=() => {
+        setOpenAddProject(false)
+    }
     const handleClickMenu = ({ key }) => {
         //  onCurrentProject(key)
        if(key==='create-project'){
-
+            setOpenAddProject(true)
        }
        else if(key==='all-projects'){
 
@@ -99,7 +108,19 @@ function SelectHeaderProject() {
                     <FaAngleDown  className={cx('icon-down')}/>
                 </div>
             </Dropdown>
+            <Modal
+                title="Tạo Dự Án Mới"
+                onCancel={handleCancelCreateNewProject}
+                footer={null
+                }
+                width={500}
+                style={{ top: 100   }}
+                bodyStyle={{height: "400px"}}
 
+                open={openAddProject}
+            >
+                <AddProject onCancel={handleCancelCreateNewProject} onSave={handleCreateNewProject} />
+            </Modal>
         </div>
     );
 }

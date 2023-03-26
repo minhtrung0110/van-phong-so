@@ -6,16 +6,23 @@ import {listDepartments, listStaffs} from "~/asset/data/initDataGlobal";
 import {Form, Select} from "antd";
 import {Controller, useForm} from "react-hook-form";
 
-AddProject.propTypes = {
+EditProject.propTypes = {
+    project: PropTypes.object.isRequired,
     onCancel: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired,
 };
 
-function AddProject({onCancel,onSave}) {
+function EditProject({project,onCancel,onSave}) {
+ //   console.log(project)
     const [listStaff, setListStaff] = useState()
+    const defaultMembers=project.listMembers.map(item=>({value: item.mail, label: item.username}))
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
-    } = useForm({});
+    } = useForm({
+        defaultValues:{...project,listMembers:defaultMembers}
+    });
+
+
     useEffect(() => {
         // call API
         const data = listStaffs.map((item) => ({value: item.mail, label: item.username}))
@@ -32,7 +39,7 @@ function AddProject({onCancel,onSave}) {
         else return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     }
     return (
-        <div className="container-create-project">
+        <div className="container-update-project">
             <Form
 
                 layout="horizontal"
@@ -53,9 +60,9 @@ function AddProject({onCancel,onSave}) {
                                 hasFeedback
                                 validateStatus={errors.name ? 'error' : 'success'}
                                 help={errors.name ? 'Vui lòng nhập tên dự án' : null}>
-                            <Input
-                               {...field}  className='input' size="large"
-                               placeholder="Nhập tên dự án ..."/>
+                                <Input
+                                    {...field}  className='input' size="large"
+                                    placeholder="Nhập tên dự án ..."/>
                             </Form.Item>
                         )}
                     />
@@ -66,28 +73,28 @@ function AddProject({onCancel,onSave}) {
                     <Controller
                         name="listMembers"
                         control={control}
-                        defaultValue=""
+                        defaultValue={''}
                         rules={{required: true}}
                         render={({field}) => (
                             <Form.Item
                                 hasFeedback
                                 validateStatus={errors.listMembers ? 'error' : 'success'}
                                 help={errors.listMembers ? 'Vui lòng chọn thành viên' : null}>
-                            <Select
-                                {...field}
-                                showSearch
-                                mode="multiple"
-                                size={'large'}
-                                placeholder="Email, tên đăng nhập ..."
-                                filterOption={filterOption}
-                                filterSort={(optionA, optionB) =>
-                                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                                }
-                                style={{
-                                    width: '100%',
-                                }}
-                                options={listStaff}
-                            />
+                                <Select
+                                    {...field}
+                                    showSearch
+                                    mode="multiple"
+                                    size={'large'}
+                                    placeholder="Email, tên đăng nhập ..."
+                                    filterOption={filterOption}
+                                    filterSort={(optionA, optionB) =>
+                                        (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                    }
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                    options={listStaff}
+                                />
                             </Form.Item>
 
                         )}
@@ -104,4 +111,4 @@ function AddProject({onCancel,onSave}) {
     );
 }
 
-export default AddProject;
+export default EditProject;

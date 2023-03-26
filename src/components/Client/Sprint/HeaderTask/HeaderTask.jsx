@@ -13,42 +13,12 @@ HeaderTask.prototype={
 
 }
 function HeaderTask({onCurrentProject}) {
-    const [openAddProject,setOpenAddProject] = useState(false)
-
-    const dispatch=useDispatch()
-    const handleCreateNewProject=() => {
-        setOpenAddProject(true)
-    }
-    const handleCancelCreateProject=()=>{
-       setOpenAddProject(false)
-    }
     return (
         <div className="navbar-app">
             <NavLink className='list-task'  to={config.routes.backlog}>
                 <FaListUl className='icon' />
                 <span className='text' >Danh Sách Công Việc</span>
             </NavLink>
-            <div className='add-board' onClick={handleCreateNewProject}>
-                <FaPlus className='icon' />
-                <span className='text' >Tạo Dự Án</span>
-            </div>
-            <Modal
-                title="Tạo Dự Án Mới"
-                onCancel={handleCancelCreateProject}
-                footer={
-                    <div className='footer-create-project'>
-                        <button className='btn-cancel' onClick={handleCancelCreateProject}>Hủy</button>
-                        <button className='btn-add' type='submit'>Thêm</button>
-                    </div>
-                }
-                width={500}
-                style={{ top: 100   }}
-                bodyStyle={{height: "400px"}}
-
-                open={openAddProject}
-            >
-                <AddProject  />
-            </Modal>
         </div>
     );
 }

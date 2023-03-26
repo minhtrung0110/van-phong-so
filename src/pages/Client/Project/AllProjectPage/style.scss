@@ -4,14 +4,17 @@
   border-radius:var(--border-radius);
   padding: 1rem 2.5rem;
   margin: var(--pd-content);
+  min-height:40rem;
   .header-list-project{
-    padding: 1rem;
+    padding: 1rem 2.5rem;
     .title{
-      height: 3rem;
+      height: 4rem;
       display: flex;
       align-items: center;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
       svg{
-        margin-right: 1rem;
+        margin-right: 1.5rem;
       }
     }
 
@@ -39,6 +42,6 @@
 
   }
   .content-list-project{
-
+    padding: 0 2.5rem;
   }
 }

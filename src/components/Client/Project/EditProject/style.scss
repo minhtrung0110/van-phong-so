@@ -1,5 +1,6 @@
+
 @import "../../../../css/base/_mixins.scss";
-.container-create-project{
+.container-update-project{
   height: 500px !important;
 
   .form-add-project{
@@ -21,9 +22,9 @@
     }
 
     .members{
-     .lable{
-       margin: 1rem 0;
-     }
+      .lable{
+        margin: 1rem 0;
+      }
     }
     .box-footer{
       display: flex;
