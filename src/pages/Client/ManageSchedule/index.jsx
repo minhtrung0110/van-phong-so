@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import './style.scss'
 import {Calendar, momentLocalizer, Views} from "react-big-calendar";
 import moment from "moment";
+import 'moment/locale/vi';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import {Modal} from "antd";
 import EditProject from "~/components/Client/Project/EditProject";
-import EventItem from "~/components/Client/Schedule/EventItem";
+import EventItem from "~/components/Client/Schedule/AddEvent";
+import AddEvent from "~/components/Client/Schedule/AddEvent";
+import EditEvent from "~/components/Client/Schedule/EditEvent";
 ManageSchedule.propTypes = {
 
 };
@@ -14,35 +17,47 @@ ManageSchedule.propTypes = {
 function ManageSchedule(props) {
     const [myEvents, setEvents] = useState([])
     const [showEvent,setShowEvent] = useState({event:null,show:false})
+    const [showAddEvent,setShowAddEvent] = useState({start:null,end:null,show:false})
     const handleCancelShowEvent = ()=>{
         setShowEvent({...showEvent,show: false})
     }
+    const handleCancelShowAddEvent = ()=>{
+        setShowAddEvent({...showAddEvent,show: false})
+    }
     const events = [
         {
-            title: 'Sự kiện A',
-            start: new Date(),
-            end: new Date(),
-            description: 'Mô tả sự kiện A'
+            title: 'Chơi Gái',
+            type: 'reminder',
+            notification:'1',
+            repeat:0,
+            start: new Date(2023, 2, 18, 10, 0),
+            end: new Date(2023, 2, 20, 12, 0),
         },
         {
             title: 'Họp Dự Án ',
             type: 'event',
-            description: '',
+            description: 'Làm nhanh đi',
             file:'',
             members: [],
-            notifications:true,
-            repeats:true,
-            start: new Date(),
-            end: new Date(),
+            notification:'120',
+            repeat:1,
+            start: new Date(2023, 2, 21, 10, 0),
+            end: new Date(2023, 2, 28, 12, 0),
         },
         {
-            title: 'Sự kiện B',
-            start: new Date(),
-            end: new Date(),
+            title: 'Đánh Cầu Lông',
+            type: 'schedule',
+            notification:'3',
+            repeat:0,
+            start: new Date(2023, 2, 28, 10, 0),
+            end: new Date(2023, 2, 28, 12, 0),
             description: 'Mô tả sự kiện B'
         },
         {
-            title: 'Sự kiện lặp lại',
+            title: 'Sự kiện bắn súng',
+            type: 'reminder',
+            notification:'60',
+            repeat:1,
             start: new Date(2023, 2, 1, 10, 0), // Ngày bắt đầu
             end: new Date(2023, 2, 12, 12, 0), // Ngày kết thúc
             rrule: {
@@ -56,52 +71,23 @@ function ManageSchedule(props) {
         // ...
     ];
 
-    // const events = [
-    //     {
-    //         title: 'Họp Dự Án ',
-    //         type: 'event',
-    //         description: '',
-    //         file:'',
-    //         members: [],
-    //         notifications:true,
-    //         repeats:true,
-    //         start: moment('2023-02-25 09:00:00'),
-    //         end: moment('2023-02-25 10:00:00'),
-    //     },
-    //     {
-    //         title: 'Hoàn Thành Lịch Biểu ',
-    //         type: 'todo',
-    //         description: '',
-    //         notifications:true,
-    //         repeats:true,
-    //         start: moment('2023-02-25 09:00:00'),
-    //         end: moment('2023-02-25 10:00:00'),
-    //     },
-    //     {
-    //         title: 'Đóng Tiền Nước ',
-    //         type: 'reminder',
-    //         notifications:true,
-    //         repeats:true,
-    //         start: moment('2023-02-25 09:00:00'),
-    //         end: moment('2023-02-25 10:00:00'),
-    //     },
-    // ];
     const localizer = momentLocalizer(moment);
 
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
-            const title = window.prompt('New Event Name')
-            if (title) {
-                setEvents((prev) => [...prev, { start, end, title, allDay:true }])
-            }
+            setShowAddEvent({start,end,show: true})
+           // const title = window.prompt('New Event Name')
+           //  if (title) {
+           //      setEvents((prev) => [...prev, { start, end, title, allDay:true }])
+           //  }
         },
         [setEvents]
     )
 
     const handleSelectEvent = useCallback(
         (event) => {
-            setShowEvent({event: event,show: true})
-            console.log(event)
+
+            setShowEvent({event, show: true})
         },
         []
     )
@@ -112,6 +98,12 @@ function ManageSchedule(props) {
         }),
         []
     )
+    const handleCreateEvent=(data) => {
+        console.log('Create event: ', data)
+    }
+    const handleUpdateEvent=(data) => {
+        console.log('Update event: ', data)
+    }
     const eventStyleGetter = (event, start, end, isSelected) => {
         const style = {
             backgroundColor: event.color,
@@ -151,16 +143,29 @@ function ManageSchedule(props) {
             />
             <Modal
                 title="Sư Kiện"
+                onCancel={handleCancelShowAddEvent}
+                footer={null
+                }
+                width={650}
+                style={{ top: 100   }}
+                bodyStyle={{height: "auto"}}
+                destroyOnClose={true}
+                open={showAddEvent.show}
+            >
+                <AddEvent start={showAddEvent.start} end={showAddEvent.end} onCancel={handleCancelShowAddEvent} onSave={handleCreateEvent} />
+            </Modal>
+            <Modal
+                title="Cập Nhật Sư Kiện"
                 onCancel={handleCancelShowEvent}
                 footer={null
                 }
-                width={600}
+                width={650}
                 style={{ top: 100   }}
-                bodyStyle={{height: "500px"}}
-
+                bodyStyle={{height: "auto"}}
+                destroyOnClose={true}
                 open={showEvent.show}
             >
-                <EventItem event={showEvent.event} />
+                <EditEvent event={showEvent.event} onCancel={handleCancelShowEvent} onSave={handleUpdateEvent} />
             </Modal>
         </div>
     );
