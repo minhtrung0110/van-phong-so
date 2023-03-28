@@ -19,7 +19,70 @@ import {isEmpty} from "lodash";
 import moment from "moment";
 
 AddEvent.propTypes = {};
+const optionsLoopDuration = [
+    {
+        value: '0',
+        label: 'Không lặp lại',
+    },
+    {
+        value: '1',
+        label: 'Lặp lại',
+    },
 
+]
+const optionsNotifyDuration = [
+    {
+        value: '0',
+        label: 'Không nhắc',
+    },
+    {
+        value: '1',
+        label: 'Nhắc trước 1 ngày ',
+    },
+    {
+        value: '2',
+        label: 'Nhắc trước 2 ngày ',
+    },
+    {
+        value: '3',
+        label: 'Nhắc trước 3 ngày ',
+    },
+    {
+        value: '30',
+        label: 'Nhắc trước 30 phút ',
+    },
+    {
+        value: '60',
+        label: 'Nhắc trước 1 giờ ',
+    },
+    {
+        value: '120',
+        label: 'Nhắc trước 2 giờ ',
+    },
+
+]
+const rangePresets = [
+    {
+        label: 'Trong 7 ngày',
+        value: [dayjs().add(-7, 'd'), dayjs()],
+    },
+    {
+        label: 'Trong 14 ngày',
+        value: [dayjs().add(-14, 'd'), dayjs()],
+    },
+    {
+        label: 'Trong 21 ngày',
+        value: [dayjs().add(-21, 'd'), dayjs()],
+    },
+    {
+        label: 'Trong 30 ngàys',
+        value: [dayjs().add(-30, 'd'), dayjs()],
+    },
+    {
+        label: 'Trong 90 ngày',
+        value: [dayjs().add(-90, 'd'), dayjs()],
+    },
+];
 function AddEvent({start,end,onSave,onCancel}) {
     const [typeEvent, setTypeEvent] = useState('event')
     const [errorDescription, setErrorDescription] = useState('');
@@ -31,54 +94,12 @@ function AddEvent({start,end,onSave,onCancel}) {
     }
     console.log(errors)
     const {RangePicker} = DatePicker;
-    const rangePresets = [
-        {
-            label: 'Trong 7 ngày',
-            value: [dayjs().add(-7, 'd'), dayjs()],
-        },
-        {
-            label: 'Trong 14 ngày',
-            value: [dayjs().add(-14, 'd'), dayjs()],
-        },
-        {
-            label: 'Trong 21 ngày',
-            value: [dayjs().add(-21, 'd'), dayjs()],
-        },
-        {
-            label: 'Trong 30 ngàys',
-            value: [dayjs().add(-30, 'd'), dayjs()],
-        },
-        {
-            label: 'Trong 90 ngày',
-            value: [dayjs().add(-90, 'd'), dayjs()],
-        },
-    ];
+
     const editorDescription = (value) => {
         //  setValue('description', value);nay2y2 cho form
         setErrorDescription('');
     };
-    const optionsLoopDuration = [
-        {
-            value: 'not-repeat',
-            label: 'Không lặp lại',
-        },
-        {
-            value: 'repeat',
-            label: 'Lặp lại',
-        },
 
-    ]
-    const optionsNotifyDuration = [
-        {
-            value: 'not-notify',
-            label: 'Không lặp lại',
-        },
-        {
-            value: 'before-1-day',
-            label: 'Nhắc trước 1 ngày ',
-        },
-
-    ]
     return (
         <Form
 

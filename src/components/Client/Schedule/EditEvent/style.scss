@@ -5,13 +5,15 @@
   color: var(--dark);
 }
 
-.event-item{
+.edit-event-item{
 
-  .type-event-item{
+  .header-event-item{
     height: 2.5rem;
     margin: 1rem 0;
+    padding: 0 1rem;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     .type-item{
       border-radius: 20px;
       font-weight: 600;
@@ -32,20 +34,35 @@
       &:focus{
         outline: 1px auto #7dadd9!important;
       }
+      &.event{
+        background-color: var(--informativeSecondary);
+        color: var(--blue);
+      }
+      &.schedule{
+        background-color: var(--criticalSecondary);
+        color: var(--orange);
+      }
+      &.reminder{
+        background-color: var(--negativeSecondary);
+        color: var(--red);
+      }
 
     }
 
-    .event.active{
-      background-color: var(--informativeSecondary);
-      color: var(--blue);
-    }
-    .schedule.active{
-      background-color: var(--criticalSecondary);
-      color: var(--orange);
-    }
-    .reminder.active{
-      background-color: var(--negativeSecondary);
-      color: var(--red);
+    .btn-delete{
+      height: 2rem;
+      width: 2rem;
+      border-radius: var(--task-border-radius);
+      font-weight: bold;
+      padding: 0.5rem;
+      border: 1px solid var(--gray60-color);
+      color: var(--gray46-color);
+      cursor: pointer;
+      &:hover{
+        border: 1px solid var(--red);
+        background-color: var(--red);
+        color: #fff;
+      }
     }
 
 

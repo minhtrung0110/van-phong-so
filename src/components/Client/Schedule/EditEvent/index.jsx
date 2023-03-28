@@ -10,13 +10,14 @@ import {
     FaCheck,
     FaCheckCircle,
     FaMoneyCheckAlt, FaPaperclip,
-    FaRecycle,
+    FaRecycle, FaTrash, FaTrashAlt,
     FaUserClock
 } from "react-icons/fa";
 import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
 import {isEmpty} from "lodash";
 import moment from "moment";
+import ConfirmModal from "~/components/commoms/ConfirmModal";
 
 EditEvent.propTypes = {};
 const optionsLoopDuration = [
@@ -33,7 +34,7 @@ const optionsLoopDuration = [
 const optionsNotifyDuration = [
     {
         value: '0',
-        label: 'Không lặp lại',
+        label: 'Không nhắc',
     },
     {
         value: '1',
@@ -61,12 +62,13 @@ const optionsNotifyDuration = [
     },
 
 ]
-function EditEvent({event,onSave,onCancel}) {
+function EditEvent({event,onSave,onCancel,onDelete}) {
     const [typeEvent, setTypeEvent] = useState(event.type)
     const [rangeValueTime, setRangeValueTime] = useState(
         [dayjs(event.start),dayjs(event.end)]);
     const [errorDescription, setErrorDescription] = useState('');
-    console.log(optionsNotifyDuration.find(item=>item.value===event.notification))
+   // console.log(optionsNotifyDuration.find(item=>item.value===event.notification))
+    const [showConfirm,setShowConfirm]=useState(false)
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
     } = useForm({
@@ -119,7 +121,10 @@ function EditEvent({event,onSave,onCancel}) {
         //  setValue('description', value);nay2y2 cho form
         setErrorDescription('');
     };
-
+    const handleDeleteEvent=() => {
+        onDelete(event.id)
+        setShowConfirm(false)
+    }
     return (
         <Form
 
@@ -127,22 +132,14 @@ function EditEvent({event,onSave,onCancel}) {
             style={{}}
             onFinish={handleSubmit(onSave)}
             labelAlign={"left"}
-            className='event-item'
+            className='edit-event-item'
         >
-            <div className='type-event-item'>
-                <span className={`type-item event ${typeEvent === 'event' ? 'active' : ''}`}
+            <div className='header-event-item'>
+                <span className={`type-item ${typeEvent}`}
                       onClick={() => setTypeEvent('event')}
                 >
-                   <FaCalendarAlt className='icon'/> Sự kiện</span>
-                <span className={`type-item schedule ${typeEvent === 'schedule' ? 'active' : ''}`}
-                      onClick={() => setTypeEvent('schedule')}
-                >
-                <FaUserClock
-                    className='icon'/> Cần làm</span>
-                <span className={`type-item reminder ${typeEvent === 'reminder' ? 'active' : ''}`}
-                      onClick={() => setTypeEvent('reminder')}
-                ><FaCheckCircle
-                    className='icon'/> Nhắc nhở</span>
+                   <FaCalendarAlt className='icon'/> {event.type==='event'?'Sự kiện':(event.type==='schedule'?'Cần làm':'Nhắc nhở')}</span>
+                <FaTrashAlt  className='btn-delete ' onClick={()=>setShowConfirm(true)}/>
             </div>
             <Controller
                 name="title"
@@ -295,6 +292,15 @@ function EditEvent({event,onSave,onCancel}) {
                 <button className='btn-cancel' onClick={onCancel}>Hủy</button>
                 <button className={`btn-save ${!isDirty ?'disabled':''}`} type='submit'>Lưu</button>
             </div>
+            <ConfirmModal
+                open={showConfirm}
+                title="Xác Nhận Xóa"
+                content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Sự Kiện <strong>${event.title}</strong>  ? `}} />}
+                textOK="Xóa"
+                textCancel="Hủy"
+                onOK={handleDeleteEvent}
+                onCancel={(e) => setShowConfirm(false)}
+            />
 
         </Form>
     );

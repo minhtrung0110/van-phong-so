@@ -26,6 +26,7 @@ function ManageSchedule(props) {
     }
     const events = [
         {
+            id:'1KL578as',
             title: 'Chơi Gái',
             type: 'reminder',
             notification:'1',
@@ -35,6 +36,7 @@ function ManageSchedule(props) {
         },
         {
             title: 'Họp Dự Án ',
+            id:'13232as',
             type: 'event',
             description: 'Làm nhanh đi',
             file:'',
@@ -46,6 +48,7 @@ function ManageSchedule(props) {
         },
         {
             title: 'Đánh Cầu Lông',
+            id:'1aas',
             type: 'schedule',
             notification:'3',
             repeat:0,
@@ -55,12 +58,13 @@ function ManageSchedule(props) {
         },
         {
             title: 'Sự kiện bắn súng',
+            id:'1as',
             type: 'reminder',
             notification:'60',
             repeat:1,
             start: new Date(2023, 2, 1, 10, 0), // Ngày bắt đầu
             end: new Date(2023, 2, 12, 12, 0), // Ngày kết thúc
-            rrule: {
+            rule: {
                 freq: 'weekly',
                 interval: 1,
                 byweekday: [moment.weekdays().indexOf('Wednesday')],
@@ -104,26 +108,32 @@ function ManageSchedule(props) {
     const handleUpdateEvent=(data) => {
         console.log('Update event: ', data)
     }
+    const handleDeleteEvent=(data) => {
+        console.log('Delete event: ', data)
+    }
     const eventStyleGetter = (event, start, end, isSelected) => {
         const style = {
             backgroundColor: event.color,
             borderRadius: '5px',
+            fontSize:'14px',
+            padding: '10px',
+            fontWeight:'600',
             opacity: 0.8,
             color: 'white',
             border: '0px',
-            display: 'block',
-            width:'100%',
-            verticalAlign: 'middle'
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
         };
         return {
             style: style,
             title: event.title,
             type:event.type,
             description: event.description,
-            files:event.files,
+            file:event.files,
             members:event.members,
             notification:event.notification,
-            repeats:event.repeat,
+            repeat:event.repeat,
         };
     };
     return (
@@ -144,10 +154,12 @@ function ManageSchedule(props) {
             <Modal
                 title="Sư Kiện"
                 onCancel={handleCancelShowAddEvent}
+
                 footer={null
                 }
                 width={650}
-                style={{ top: 100   }}
+                style={{ top: 100
+                }}
                 bodyStyle={{height: "auto"}}
                 destroyOnClose={true}
                 open={showAddEvent.show}
@@ -160,12 +172,13 @@ function ManageSchedule(props) {
                 footer={null
                 }
                 width={650}
-                style={{ top: 100   }}
+                style={{ top: 100 ,
+                }}
                 bodyStyle={{height: "auto"}}
                 destroyOnClose={true}
                 open={showEvent.show}
             >
-                <EditEvent event={showEvent.event} onCancel={handleCancelShowEvent} onSave={handleUpdateEvent} />
+                <EditEvent event={showEvent.event} onCancel={handleCancelShowEvent} onSave={handleUpdateEvent} onDelete={handleDeleteEvent} />
             </Modal>
         </div>
     );
