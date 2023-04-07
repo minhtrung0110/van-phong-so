@@ -1,12 +1,12 @@
 import {
     FaBuilding,
-    FaCalendar,
+    FaCalendar, FaCogs,
     FaFacebookMessenger, FaHome, FaLaptop, FaPeopleArrows, FaTasks, FaUsers,
 } from "react-icons/fa";
 import React from "react";
 import {config} from "~/config";
 
-export const menu_client_items = [
+export const menu_function_client_items = [
     {
         id: 1,
         name: 'Tổng Quan',
@@ -48,6 +48,19 @@ export const menu_client_items = [
         role: 4,
     },
    
+
+
+];
+export const menu_config_client_items = [
+    {
+        id: 1,
+        name: 'Phân Quyền',
+        active: true,
+        link: config.routes.decentralize,
+        icon: <FaCogs />,
+        role: 1,
+    },
+
 
 
 ];

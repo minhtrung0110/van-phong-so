@@ -58,6 +58,9 @@ function ManageStaff(props) {
         //     // Notiflix.Block.remove('#root');
         // }, 300);
     };
+    const handleEditStaff=(data) => {
+        console.log('EditStaff', data);
+    }
 
         console.log(isEmpty(detailStaff))
     return (
@@ -66,7 +69,7 @@ function ManageStaff(props) {
                 !!isAddStaff ?
                     (<AddStaff/>)
                     : (
-                        !!isEditStaff ? (<EditStaff/>) : (
+                        !!isEditStaff ? (<EditStaff onSave={handleEditStaff}/>) : (
                             isEmpty(detailStaff) ? (
 
                                         !!loading ?(<ListTableSkeleton column={6} lengthItem={5}/>):
