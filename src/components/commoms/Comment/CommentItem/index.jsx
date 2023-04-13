@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './CommentItem.module.scss'
 import classNames from "classnames/bind";
@@ -11,22 +11,20 @@ CommentItem.propTypes = {
 const cx=classNames.bind(styles)
 function CommentItem({comment, replies, setActiveComment, activeComment, updateComment, deleteComment,
                          addComment, parentId = null, currentUserId}) {
-    const isEditing =
-        activeComment &&
-        activeComment.id === comment.id &&
-        activeComment.type === "editing";
-    const isReplying =
-        activeComment &&
-        activeComment.id === comment.id &&
-        activeComment.type === "replying";
+    const [isReplying,setIsReplying] =useState( false)
     const fiveMinutes = 300000;
     const timePassed = new Date() - new Date(comment.createdAt) > fiveMinutes;
-    console.log(isEditing)
     const canDelete =currentUserId === comment.user.id && replies.length === 0; //&& !timePassed;
     const canReply =Boolean(currentUserId)
     const canEdit = currentUserId === comment.user.id; //&& !timePassed;
     const replyId = parentId ? parentId : comment.id;
     const createdAt = new Date(comment.createdAt).toLocaleDateString();
+
+    const handleReply=(text)=>{
+
+        addComment(text, replyId)
+        setIsReplying(false)
+    }
     return (
         <div className={cx('comment')}>
             <div key={comment.id} className={cx("comment-item")}>
@@ -36,14 +34,14 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
                 <div className={cx("comment-right-part")}>
                     <div className={cx("comment-content")}>
                         <div className={cx("comment-author")}>{`${comment.user.first_name} ${comment.user.last_name}`}</div>
-                        {!isEditing && <div className={cx("comment-text")}>{comment.body}</div>}
+                       <div className={cx("comment-text")}>{comment.description}</div>
+
                     </div>
                     <div className={cx("comment-actions")}>
                         {canReply && (
                             <div
                                 className={cx("comment-action")}
-                                onClick={() =>
-                                    setActiveComment({ id: comment.id, type: "replying" })
+                                onClick={() =>                                    setIsReplying(true)
                                 }
                             >
                                 <FaReply />
@@ -52,8 +50,7 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
                         {canEdit && (
                             <div
                                 className={cx("comment-action")}
-                                onClick={() =>
-                                    setActiveComment({ id: comment.id, type: "editing" })
+                                onClick={() => setActiveComment(comment)
                                 }
                             >
                                 Chỉnh sửa
@@ -71,36 +68,9 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
                             {createdAt}
                         </div>
                     </div>
-
-                    {/*{isReplying && (*/}
-                    {/*    <CommentForm*/}
-                    {/*        submitLabel="Reply"*/}
-                    {/*        handleSubmit={(text) => addComment(text, replyId)}*/}
-                    {/*    />*/}
-                    {/*)}*/}
-                    {/*{replies.length > 0 && (*/}
-                    {/*    <div className="replies">*/}
-                    {/*        {replies.map((reply) => (*/}
-                    {/*            <CommentItem*/}
-                    {/*                comment={reply}*/}
-                    {/*                key={reply.id}*/}
-                    {/*                setActiveComment={setActiveComment}*/}
-                    {/*                activeComment={activeComment}*/}
-                    {/*                updateComment={updateComment}*/}
-                    {/*                deleteComment={deleteComment}*/}
-                    {/*                addComment={addComment}*/}
-                    {/*                parentId={comment.id}*/}
-                    {/*                replies={[]}*/}
-                    {/*                currentUserId={currentUserId}*/}
-                    {/*            />*/}
-                    {/*        ))}*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
                 </div>
-
-
             </div>
-            {isEditing && (
+            {isReplying && (
                 <CommentForm
                     className={cx('form')}
                     user={{
@@ -116,7 +86,26 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
                     avatar: 'https://i.ibb.co/mvybfht/C-i-n-3-1.jpg',
                     address: 'Tan Quy Tây, Bình Chanh,HCM',
                     status: 1,
-                }}              />
+                }}
+                onSubmit={handleReply}
+                />
+            )}
+            {replies.length > 0 && (
+                <div className={cx("replies")}>
+                    {replies.map((reply) => (
+                        <CommentItem
+                            comment={reply}
+                            key={reply.id}
+                            setActiveComment={setActiveComment}
+                            updateComment={updateComment}
+                            deleteComment={deleteComment}
+                            addComment={addComment}
+                            parentId={comment.id}
+                            replies={[]}
+                            currentUserId={currentUserId}
+                        />
+                    ))}
+                </div>
             )}
         </div>
 

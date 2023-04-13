@@ -9,7 +9,7 @@
 
     }
     .comment-right-part{
-
+      width: 100%;
       margin-left: 1rem;
 
       .comment-content{
@@ -42,6 +42,10 @@
         }
       }
     }
+
+  }
+  .replies{
+    padding:0.3rem  2rem;
   }
 }
 

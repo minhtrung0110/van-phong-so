@@ -13,7 +13,8 @@ const cx=classNames.bind(styles)
 const listCmT= [
     {
         id: "1",
-        body: "Tin này chuẩn không. Diễn ra khi nao ?. Có yêu cầu gì không ạ",
+        description: "Tin này chuẩn không. Diễn ra khi nao ?. Có yêu cầu gì không ạ",
+        file:null,
         user:  {
             id: 1,
             first_name: 'Nguyễn Đức Minh',
@@ -34,7 +35,8 @@ const listCmT= [
     },
     {
         id: "2",
-        body: "Second comment",
+        description: "Second comment",
+        file:null,
         user:  {
             id: 1,
             first_name: 'Nguyễn Đức Minh',
@@ -55,7 +57,8 @@ const listCmT= [
     },
     {
         id: "3",
-        body: "First comment first child",
+        description: "First comment first child",
+        file:null,
         user:  {
             id: 4,
             first_name: 'Lê Phạm',
@@ -75,7 +78,8 @@ const listCmT= [
     },
     {
         id: "4",
-        body: "Second comment second child",
+        description: "Second comment second child",
+        file:null,
         user:  {
             id: 3,
             first_name: 'Đặng Mỹ',
@@ -96,19 +100,58 @@ const listCmT= [
 ];
 
 function Comment({user,listComment=listCmT}) {
-    const [activeComment, setActiveComment] = useState(null);
+    const [activeComment, setActiveComment] = useState({});
     const handleSubmitComment=(data) => {
         console.log('Comment: ', data)
     }
+    const handAddComment = (data,replyID) =>{
+        console.log('Comment Add: ', data,replyID)
+    }
+    const handleUpdateComment = (comment)=>{
+        setActiveComment(comment)
+
+    }
+    console.log('Comment Update: ', activeComment)
     return (
         <div className={cx('container-comment')}>
-            <CommentForm  user={user} onSubmit={handleSubmitComment}/>
+            {
+                !!activeComment ?(
+                    <CommentForm  user={activeComment.user} onSubmit={handleSubmitComment} initialText={activeComment.description} fileAttached={activeComment.file}/>
+                ):(
+                    <CommentForm  user={user} onSubmit={handleSubmitComment} />
+                )
+            }
+
             <div className={cx('list-comments')}>
                 {!isEmpty(listComment) && listComment.map(item =>(
                     <CommentItem comment={item} key={item.id}
-                                 replies={[]}
+                                 replies={[
+                                     {
+                                         id: "2",
+                                         description: "Tôi đồng ý vói bạn",
+                                         file:null,
+                                         user:  {
+                                             id: 1,
+                                             first_name: 'Phạm Minh',
+                                             last_name: 'Trang',
+                                             username:'NPhamTrang',
+                                             phone_number: '09744148784',
+                                             gender: 'nam',
+                                             birth_date: '01-10-2001',
+                                             mail: 'minhtrung@gmail.com',
+                                             role: 'CEO',
+                                             avatar: 'https://i.ibb.co/mvybfht/C-i-n-3-1.jpg',
+                                             address: 'Tan Quy Tây, Bình Chanh,HCM',
+                                             status: 1,
+                                         },
+                                         userId: "2",
+                                         parentId: null,
+                                         createdAt: "2021-08-16T23:00:33.010+02:00",
+                                     },]}
                                  activeComment={activeComment}
                                  setActiveComment={setActiveComment}
+                                 addComment={handAddComment}
+
                     currentUserId={1}
                     />
                 ))}

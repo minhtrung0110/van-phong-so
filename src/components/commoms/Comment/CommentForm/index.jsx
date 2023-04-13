@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import AvatarCustom from "~/components/commoms/AvatarCustom";
 import styles from './CommentForm.module.scss'
@@ -18,26 +18,28 @@ const getBase64 = (file) => new Promise((resolve, reject) => {
     reader.onerror = (error) => reject(error);
 });
 
-function CommentForm({
-                         user, onSubmit, submitLabel,
-                         hasCancelButton = false,
-                         handleCancel,
-                         initialText = "",className
-                     }) {
+function CommentForm({user=null, onSubmit, initialText = "",fileAttached=null,className}) {
     const [value, setValue] = useState()
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
+    const [listFile, setListFile] = useState()
+    console.log(value)
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
     } = useForm({});
+    useEffect(() => {
+        setValue(initialText);
+        setListFile(fileAttached)
+    }, [initialText,fileAttached]);
     const onSave = () => {
+        // validate Value
         onSubmit({comment: value, file: listFile})
         setValue('')
         setListFile([])
     }
 
-    const [listFile, setListFile] = useState([])
+
     const handleChangeUpload = (info) => {
         setListFile(info.fileList)
     }
@@ -53,8 +55,8 @@ function CommentForm({
     return (
         <form className={cx(`component-editor`,className)} onSubmit={handleSubmit(onSave)} >
             <div className={cx('comment-input')}>
-                <AvatarCustom lastName={user.last_name} avatar={user.avatar} className={cx('post-avatar')}
-                              size={'small'}/>
+                {!!user &&  <AvatarCustom lastName={user.last_name} avatar={user.avatar} className={cx('post-avatar')}
+                              size={'small'}/> }
                 <div className={cx('editor')}>
                     <input className={cx('input-comment')}
                            value={value}
