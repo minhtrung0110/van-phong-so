@@ -85,8 +85,8 @@ function EditStaff({onSave}) {
                     span: 16,
                 }}
                 layout="horizontal"
-                onFinish={handleSubmit(submit)}
-                style={{}}
+                onFinish={handleSubmit(onSave)}
+
                 labelAlign={"left"}
                 className='row-frame'>
                 <Row className='basic-info'>
@@ -102,7 +102,6 @@ function EditStaff({onSave}) {
                             render={({field}) => (
                                 <Form.Item
                                     label="Họ"
-                                    name="firstName"
                                     hasFeedback
                                     validateStatus={errors.firstName ? 'error' : 'success'}
                                     help={errors.firstName ? 'Vui lòng nhập họ' : null}>
@@ -119,7 +118,6 @@ function EditStaff({onSave}) {
                             render={({field}) => (
                                 <Form.Item
                                     label="Tên"
-                                    name="lastName"
                                     hasFeedback
                                     validateStatus={errors.lastName ? 'error' : 'success'}
                                     help={errors.lastName ? 'Vui lòng nhập tên ' : null}>
@@ -271,7 +269,6 @@ function EditStaff({onSave}) {
                         <Controller
                             control={control}
                             name="avatar"
-                            rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Ảnh Đại Diện">
@@ -456,92 +453,91 @@ function EditStaff({onSave}) {
                         <span className='title'>Thông Tin Đối Với Doanh Nghiệp</span>
                     </Col>
                     <Col className='col-left' xs={{span: 24}} lg={{span: 12}}>
-                        <Form.Item
+                        <Controller
+                            control={control}
                             name="role"
-                            label="Chức Vụ"
-                            tooltip=" "
-                            className='gr-ip-e-s'
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Chọn giới tính!',
-                                },
-                            ]}
-                        >
-                            <Select placeholder="Chọn chức vụ" size="middle" name=''>
-                                <Select.Option value="male">CEO</Select.Option>
-                                <Select.Option value="female">CTO</Select.Option>
-                                <Select.Option value="other">Other</Select.Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+                                    label="Chức Vụ"
+                                    hasFeedback
+                                    validateStatus={errors.role ? 'error' : 'success'}
+                                    help={errors.role ? 'Vui lòng chọn chức vụ ' : null}>
+                                    <Select {...field} placeholder="Chọn chức vụ" size="middle">
+                                        <Select.Option value="male">CEO</Select.Option>
+                                        <Select.Option value="female">CTO</Select.Option>
+                                        <Select.Option value="other">Other</Select.Option>
+                                    </Select>
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            control={control}
                             name="job_title"
-                            label="Tên công việc"
-                            tooltip=" "
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền ...!',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name="job_title" render={({field}) =>
-                                <Input {...field} size="middle"/>}/>
-                        </Form.Item>
-                        <Form.Item
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+
+                                    label="Tên công việc"
+                                    hasFeedback
+                                    validateStatus={errors.job_title ? 'error' : 'success'}
+                                    help={errors.job_title ? 'Vui lòng chọn công việc ' : null}>
+                                    <Input {...field} size="middle"/>
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            control={control}
                             name="date_of_joining"
-                            label="Ngày vào làm"
-                            tooltip=" "
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền ...!',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name="date_of_joining" render={({field}) =>
-                                <DatePicker/>}/>
-                        </Form.Item>
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+                                    label="Ngày vào làm"
+                                    hasFeedback
+                                    validateStatus={errors.date_of_joining ? 'error' : 'success'}
+                                    help={errors.date_of_joining ? 'Vui lòng điền ngày vào làm ' : null}>
+                                    <Input {...field} size="middle"/>
+                                </Form.Item>
+                            )}
+                        />
 
                     </Col>
                     <Col className='col-right' xs={{span: 24}} lg={{span: 12}}>
-                        <Form.Item
+                        <Controller
+                            control={control}
                             name="dapartment"
-                            label="Phòng ban"
-                            tooltip=" "
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền ...!',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='department' render={({field}) =>
-                                <Select {...field} />}/>
-                        </Form.Item>
-                        <Form.Item
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+
+                                    label="Phòng ban"
+                                    hasFeedback
+                                    validateStatus={errors.dapartment ? 'error' : 'success'}
+                                    help={errors.dapartment ? 'Vui lòng chọn phòng ban ' : null}>
+                                    <Select {...field} options={[
+                                        {key:'a',value:'Mada'}
+                                    ]} />
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            control={control}
                             name="group"
-                            label="Nhóm làm việc"
-                            tooltip=" "
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền ...!',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='group' render={({field}) =>
-                                <Select {...field} size="middle"/>}/>
-                        </Form.Item>
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+
+                                    label="Nhóm làm việc"
+                                    hasFeedback
+                                    validateStatus={errors.group ? 'error' : 'success'}
+                                    help={errors.group ? 'Vui lòng chọn nhóm ' : null}>
+                                    <Select {...field} options={[
+                                        {key:'a',value:'Team 1'}
+                                    ]}size="middle"/>
+                                </Form.Item>
+                            )}
+                        />
+
                     </Col>
                 </Row>
                 <Row className='info-advance'>
@@ -549,183 +545,162 @@ function EditStaff({onSave}) {
                         <span className='title'>Thông Tin Liên Hệ</span>
                     </Col>
                     <Col className='col-left' xs={{span: 24}} lg={{span: 12}}>
-                        <Form.Item
+                        <Controller
+                            control={control}
                             name="per_residence"
-                            label="Địa chỉ thừơng trú"
-                            tooltip=" "
-                            className='gr-ip-e-s'
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    type: 'array',
-                                    required: true,
-                                    message: 'Vui lòng chọn địa chỉ nhà !',
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='per_residence' render={({field}) =>
-                                <Cascader options={residences} {...field} size="middle" name=''
-                                          className='ant-input-no-radius '/>}/>
-
-                        </Form.Item>
-                        <Form.Item
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+                                    label="Địa chỉ thường trú"
+                                    hasFeedback
+                                    validateStatus={errors.per_residence ? 'error' : 'success'}
+                                    help={errors.per_residence ? 'Vui lòng điền địa chỉ thừơng trú ' : null}>
+                                    <Cascader options={residences} {...field} size="middle" name=''
+                                              className='ant-input-no-radius '/>
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            control={control}
                             name="per_address"
-                            label="Số nhà thường trú"
-                            tooltip=" "
-                            className='gr-ip-e-s'
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền số nhà - tên đường ...!',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='per_address' render={({field}) =>
-                                <Input {...field} size="middle" className='ant-input-no-radius '/>}/>
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+                                    label="Số nhà thường trú"
+                                    hasFeedback
+                                    validateStatus={errors.per_address ? 'error' : 'success'}
+                                    help={errors.per_address ? 'Vui lòng điền số nhà thường trú ' : null}>
+                                    <Input {...field} size="middle"/>
+                                </Form.Item>
+                            )}
+                        />
 
-                        </Form.Item>
-                        <Form.Item
-                            name="per_residence"
-                            label="Địa chỉ tạm trú"
-                            tooltip=" "
-                            className='gr-ip-e-s'
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    type: 'array',
-                                    required: true,
-                                    message: 'Vui lòng chọn địa chỉ nhà !',
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='per_residence' render={({field}) =>
-                                <Cascader options={residences} {...field} size="middle" name=''
-                                          className='ant-input-no-radius '/>}/>
+                        <Controller
+                            control={control}
+                            name="tmp_residence"
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+                                    label="Địa chỉ thường trú"
+                                    hasFeedback
+                                    validateStatus={errors.tmp_residence ? 'error' : 'success'}
+                                    help={errors.tmp_residence ? 'Vui lòng điền địa chỉ tạm trú ' : null}>
+                                    <Cascader options={residences} {...field} size="middle" name=''
+                                              className='ant-input-no-radius '/>
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            control={control}
+                            name="tmp_address"
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
 
-                        </Form.Item>
-                        <Form.Item
-                            name="temp_address"
-                            label="Số nhà tạm trú "
-                            tooltip=" "
-                            className='gr-ip-e-s'
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền số nhà - tên đường ...!',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='temp_address' render={({field}) =>
-                                <Input {...field} size="middle" className='ant-input-no-radius '/>}/>
-
-                        </Form.Item>
-
+                                    label="Số nhà tạm trú "
+                                    hasFeedback
+                                    validateStatus={errors.tmp_address ? 'error' : 'success'}
+                                    help={errors.tmp_address ? 'Vui lòng điền số nhà tạm trú ' : null}>
+                                    <Input {...field} size="middle"/>
+                                </Form.Item>
+                            )}
+                        />
                     </Col>
                     <Col className='col-right' xs={{span: 24}} lg={{span: 12}}>
-                        <Form.Item
+                        <Controller
+                            control={control}
                             name="emergency_contact"
-                            label="Liên hệ khẩn cấp"
-                            tooltip=" "
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền ...!',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='emergency_contact' render={({field}) =>
-                                <Input {...field} size="middle"/>}/>
-                        </Form.Item>
-                        <Form.Item
+                                                        rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+                                    label="Liên hệ khẩn cấp"
+                                    hasFeedback
+                                    validateStatus={errors.emergency_contact ? 'error' : 'success'}
+                                    help={errors.emergency_contact ? 'Vui lòng điền số điện thoại ' : null}>
+                                    <Input {...field} size="middle"/>
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            control={control}
                             name="tax_code"
-                            label="Mã số thuế"
-                            tooltip=" "
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền ...!',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='tax_code' render={({field}) =>
-                                <Input {...field} size="middle"/>}/>
-                        </Form.Item>
-                        <Form.Item
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+                                    label="Mã số thuế"
+                                    hasFeedback
+                                    validateStatus={errors.tax_code ? 'error' : 'success'}
+                                    help={errors.tax_code ? 'Vui lòng điền ma số thuế ' : null}>
+                                    <Input {...field} size="middle"/>
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            control={control}
                             name="bank_name"
-                            label="Ngân hảng"
-                            tooltip=" "
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui chọn ngân hàng !',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='bank_name' render={({field}) =>
-                                <Select {...field}
-                                        options={[{
-                                            key: 'VCB',
-                                            value: 'Ngân hàng TMCP Ngoại Thương Việt Nam'
-                                        }, {key: 'CTG', value: 'Ngân hàng TMCP Công Thương Việt Nam'}, {
-                                            key: 'BIDV',
-                                            value: 'Ngân hàng TMCP Đầu tư và Phát triển Việt Nam'
-                                        }, {key: 'ACB', value: 'Ngân hàng TMCP Á Châu'}, {
-                                            key: 'MB',
-                                            value: 'Ngân hàng TMCP Quân Đội'
-                                        }, {key: 'TCB', value: 'Ngân hàng TMCP Kỹ Thương Việt Nam'}, {
-                                            key: 'VPB',
-                                            value: 'Ngân hàng TMCP Việt Nam Thịnh Vượng'
-                                        }, {
-                                            key: 'Techcombank',
-                                            value: 'Ngân hàng TMCP Kỹ Thương Việt Nam'
-                                        }, {key: 'SHB', value: 'Ngân hàng TMCP Sài Gòn - Hà Nội'}, {
-                                            key: 'HDBank',
-                                            value: 'Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh'
-                                        }, {
-                                            key: 'AGRIBANK',
-                                            value: 'Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam'
-                                        }, {
-                                            key: 'Vietcombank',
-                                            value: 'Ngân hàng TMCP Ngoại Thương Việt Nam'
-                                        }, {key: 'OceanBank', value: 'Ngân hàng TMCP Đại Dương'}, {
-                                            key: 'PVcomBank',
-                                            value: 'Ngân hàng TMCP Đại Chúng Việt Nam'
-                                        }, {key: 'SCB', value: 'Ngân hàng TMCP Sài Gòn'}, {
-                                            key: 'SeABank',
-                                            value: 'Ngân hàng TMCP Đông Nam Á'
-                                        }, {key: 'VIB', value: 'Ngân hàng TMCP Quốc tế'}, {
-                                            key: 'VietinBank',
-                                            value: 'Ngân hàng TMCP Công Thương Việt Nam'
-                                        }]
-                                        }
-                                        size="middle"/>}/>
-                        </Form.Item>
-                        <Form.Item
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+
+                                    label="Ngân hàng"
+                                    hasFeedback
+                                    validateStatus={errors.bank_name ? 'error' : 'success'}
+                                    help={errors.bank_name ? 'Vui lòng chọn ngân hàng ' : null}>
+                                    <Select {...field}
+                                            options={[{
+                                                key: 'VCB',
+                                                value: 'Ngân hàng TMCP Ngoại Thương Việt Nam'
+                                            }, {key: 'CTG', value: 'Ngân hàng TMCP Công Thương Việt Nam'}, {
+                                                key: 'BIDV',
+                                                value: 'Ngân hàng TMCP Đầu tư và Phát triển Việt Nam'
+                                            }, {key: 'ACB', value: 'Ngân hàng TMCP Á Châu'}, {
+                                                key: 'MB',
+                                                value: 'Ngân hàng TMCP Quân Đội'
+                                            }, {key: 'TCB', value: 'Ngân hàng TMCP Kỹ Thương Việt Nam'}, {
+                                                key: 'VPB',
+                                                value: 'Ngân hàng TMCP Việt Nam Thịnh Vượng'
+                                            }, {
+                                                key: 'Techcombank',
+                                                value: 'Ngân hàng TMCP Kỹ Thương Việt Nam'
+                                            }, {key: 'SHB', value: 'Ngân hàng TMCP Sài Gòn - Hà Nội'}, {
+                                                key: 'HDBank',
+                                                value: 'Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh'
+                                            }, {
+                                                key: 'AGRIBANK',
+                                                value: 'Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam'
+                                            }, {
+                                                key: 'Vietcombank',
+                                                value: 'Ngân hàng TMCP Ngoại Thương Việt Nam'
+                                            }, {key: 'OceanBank', value: 'Ngân hàng TMCP Đại Dương'}, {
+                                                key: 'PVcomBank',
+                                                value: 'Ngân hàng TMCP Đại Chúng Việt Nam'
+                                            }, {key: 'SCB', value: 'Ngân hàng TMCP Sài Gòn'}, {
+                                                key: 'SeABank',
+                                                value: 'Ngân hàng TMCP Đông Nam Á'
+                                            }, {key: 'VIB', value: 'Ngân hàng TMCP Quốc tế'}, {
+                                                key: 'VietinBank',
+                                                value: 'Ngân hàng TMCP Công Thương Việt Nam'
+                                            }]
+                                            }
+                                            size="middle"/>
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller
+                            control={control}
                             name="bank_account_number"
-                            label="Số tài khoản"
-                            tooltip=" "
-                            labelAlign='left'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng điền số tài khoản !',
-                                    whitespace: true,
-                                },
-                            ]}
-                        >
-                            <Controller control={control} name='bank_account_number' render={({field}) =>
-                                <Input {...field} size="middle"/>}/>
-                        </Form.Item>
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item
+
+                                    label="Số tài khoản"
+                                    hasFeedback
+                                    validateStatus={errors.bank_account_number ? 'error' : 'success'}
+                                    help={errors.bank_account_number ? 'Vui lòng điền số tài khoản ' : null}>
+                                    <Input {...field} size="middle"/>
+                                </Form.Item>
+                            )}
+                        />
                     </Col>
                 </Row>
 

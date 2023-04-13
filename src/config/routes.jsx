@@ -16,6 +16,7 @@ const routes = {
     backlog:'/project/backlog',
     allProject:'/project/all',
     decentralize:'/decentralize',
+    post:'/posts',
 
 }
 

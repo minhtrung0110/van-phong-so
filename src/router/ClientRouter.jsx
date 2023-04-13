@@ -22,6 +22,7 @@ import {Switch} from "antd";
 import BacklogPage from "~/pages/Client/Project/BacklogPage";
 import AllProjectPage from "~/pages/Client/Project/AllProjectPage";
 import Decentralize from "~/pages/Client/Decentralize";
+import PostManagement from "~/pages/Client/ManagePosts";
 
 function ProtectedRoutes(props) {
     return null;
@@ -70,6 +71,7 @@ function ClientRouter(props) {
                 <Route path={config.routes.allProject} element={<ClientLayout slot={<AllProjectPage key={'a'}/>}/>}/>
 
                 <Route path={config.routes.decentralize} element={<ClientLayout slot={<Decentralize key={'a'}/>}/>}/>
+                <Route path={config.routes.post} element={<ClientLayout slot={<PostManagement key={'a'}/>}/>}/>
 
 
             </Route>

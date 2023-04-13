@@ -1,0 +1,22 @@
+.container-post{
+  position: relative;
+  width: 100%;
+
+  .list-posts{
+    position: absolute;
+    height: 500px;
+    top: 0;
+    left: 0;
+    width: calc(100% - 350px); ;
+    background-color: #f5f5f5;
+    padding: 2rem 6rem ;
+  }
+  .list-groups{
+    position: absolute;
+    width:350px ;
+    right: 0;
+    top: 0;
+    height: 500px;
+    background-color: #fff;
+  }
+}
