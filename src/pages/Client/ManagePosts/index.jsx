@@ -1,86 +1,70 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import PostItem from "~/components/commoms/PostItem";
-PostManagement.propTypes = {
-    
-};
-const listPosts=[
-    {
-        id:1,
-        author: {
-            id: 3,
-            first_name: 'Hà',
-            last_name: 'Nhi',
-            phone_number: '08844148784',
-            gender: 'nữ',
-            birth_date: '08-02-1994',
-            mail: 'nhixinhdep@gmail.com',
-            role: '1',
-            avatar: 'https://images2.thanhnien.vn/Uploaded/thynhm/2022_08_08/ha-nhi-7-8636.jpg',
-            address: 'HCM',
-            status: 1,
-        },
-        category:'',
-        title:'Bảng tin sáng 08.04',
-        content:{
-            description:'Chào mọi người',
-            background: '',
-            images:[],
-        },
-        date:'2023-08-04',
-        comments:[
-            {id:1, title: 'Ah2 ha'}
-        ],
-        like:'',
-        status:true
+import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {listDepartments, listPosts} from "~/asset/data/initDataGlobal";
+import SearchHidenButton from "~/components/commoms/SearchHideButton";
+import {NavLink} from "react-router-dom";
+import {config} from "~/config";
+import {FaChalkboard, FaList} from "react-icons/fa";
 
-    },
-    {
-        id:2,
-        author: {
-            id: 3,
-            first_name: 'Tần nguyễn hồ nam Hà',
-            last_name: 'Nhi',
-            phone_number: '08844148784',
-            gender: 'nữ',
-            birth_date: '08-02-1994',
-            mail: 'nhixinhdep@gmail.com',
-            role: 'nhan vien',
-            avatar: 'https://images2.thanhnien.vn/Uploaded/thynhm/2022_08_08/ha-nhi-7-8636.jpg',
-            address: 'HCM',
-            status: 1,
-        },
-        category:'',
-        title:'Bảng tin sáng 08.04',
-        content:{
-            description:'Chào mọi người',
-            background: '',
-            images:[],
-        },
-        date:'2023-04-01',
-        comments:[
-            {id:1, title: 'Ah2 ha'}
-        ],
-        like:'',
-        status:true
+PostManagement.propTypes = {};
 
-    }
-]
+
 function PostManagement(props) {
+    const [showConfirm,setShowConfirm]=useState({id:null,show:false})
+    const handleDeletePost=(id)=>{
+              console.log('Delete post ',showConfirm.id)
+    }
+    const handleOpenConfirm=(id)=>{
+        setShowConfirm({id:id,show:true})
+    }
+    const handleUpdatePost=(post)=>{
+        console.log('Update post ',post)
+    }
     return (
         <div className='container-post'>
-            <div className='list-posts'>
-                {listPosts  && listPosts.map(item=> (
-                    <PostItem post={item} />
-                ))}
+            <div className='gr-left'>
+                <div className='list-posts'>
+                    {!!listPosts && listPosts.map(item => (
+                        <PostItem post={item}
+                        onUpdate={handleUpdatePost}
+                                  onDelete={handleOpenConfirm}
+                        />
+                    ))}
+
+                </div>
+            </div>
+            <div className='gr-right'>
+                <div className='filter-posts'>
+                    <SearchHidenButton width={'15rem'}/>
+                    <span className='title'>
+                        <FaList className={'icon'} />
+                        Danh sách nhóm</span>
+                    <div className='list-groups'>
+
+                        {
+                            listDepartments.map(department =>(
+                                <NavLink className='department-item'
+                                to={`${config.routes.post}/${department.id}`}
+                                >
+                                    <FaChalkboard className='icon'></FaChalkboard>
+                                    {department.name}
+                                </NavLink>
+                            ))
+                        }
+                    </div>
+                </div>
 
             </div>
-            <div className='list-groups'>
-
-
-            </div>
-
+            <ConfirmModal title="Xác Nhận Xóa"
+                          open={showConfirm.show}
+                          content={`Bạn Có Thực Sự Muốn Xóa Bài Viết Này Không ? `}
+                          textOK="Xóa"
+                          textCancel="Hủy"
+                          onOK={handleDeletePost}
+                          onCancel={(e) => setShowConfirm({...showConfirm, show: false})}/>
         </div>
     );
 }

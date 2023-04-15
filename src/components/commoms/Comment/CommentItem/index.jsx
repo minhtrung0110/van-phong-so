@@ -5,6 +5,8 @@ import classNames from "classnames/bind";
 import CommentForm from "~/components/commoms/Comment/CommentForm";
 import AvatarCustom from "~/components/commoms/AvatarCustom";
 import {FaReply} from "react-icons/fa";
+import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {Button} from "antd";
 CommentItem.propTypes = {
 
 };
@@ -12,6 +14,11 @@ const cx=classNames.bind(styles)
 function CommentItem({comment, replies, setActiveComment, activeComment, updateComment, deleteComment,
                          addComment, parentId = null, currentUserId}) {
     const [isReplying,setIsReplying] =useState( false)
+    const [visibleComments, setVisibleComments] = useState(0);
+    const handleShowMoreComments = () => {
+        setVisibleComments(visibleComments + 5);
+    };
+    const displayedComments = replies.slice(0, visibleComments);
     const fiveMinutes = 300000;
     const timePassed = new Date() - new Date(comment.createdAt) > fiveMinutes;
     const canDelete =currentUserId === comment.user.id && replies.length === 0; //&& !timePassed;
@@ -92,7 +99,7 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
             )}
             {replies.length > 0 && (
                 <div className={cx("replies")}>
-                    {replies.map((reply) => (
+                    {displayedComments.map((reply) => (
                         <CommentItem
                             comment={reply}
                             key={reply.id}
@@ -105,8 +112,14 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
                             currentUserId={currentUserId}
                         />
                     ))}
+                    {visibleComments < replies.length && (
+                      <div className={cx("replies-more")}>
+                          <Button className={cx('view-more')} onClick={handleShowMoreComments}>Xem thêm</Button>
+                      </div>
+                    )}
                 </div>
             )}
+
         </div>
 
     );

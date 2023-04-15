@@ -1,7 +1,7 @@
 import React from 'react'
 
 const routes = {
-    overview:"/",
+    home:"/",
     project:"/project",
     addProject:"/project/add",
     profile:"/@:nickname",

@@ -18,8 +18,8 @@ function ClientLayout({slot}) {
 
     return (
         <>
-            <SideBarCustom/>
-            {/*<SideBarVersion2 />*/}
+            {/*<SideBarCustom/>*/}
+            <SideBarVersion2 />
             <section id="content">
 
                 <HeaderBar/>

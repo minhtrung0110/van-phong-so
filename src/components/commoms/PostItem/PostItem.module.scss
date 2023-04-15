@@ -1,8 +1,21 @@
+$breakpoints: (
+        mobile: 480px,
+        tablet: 768px,
+        laptop: 1024px,
+        desktop: 1200px,
+);
+@keyframes like {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.7); }
+  100% { transform: scale(1.2); }
+
+}
 .post-item{
   border-radius: var(--border-radius);
-  background-color:var(--white);
+  background-color:#fff;
   padding: 1.5rem 0;
   margin-bottom: 2rem;
+  width: 42rem;
   .post-head{
     padding: 0 2rem;
     display: flex;
@@ -50,7 +63,7 @@
   .post-content{
     padding:1rem  2rem;
     .description{
-
+      margin-bottom: 0.5rem;
     }
 
   }
@@ -95,6 +108,21 @@
         cursor: pointer;
       }
     }
+    .like-btn{
+
+      &:hover {
+        .icon{
+          transform: scale(1.75);
+          color: var(--blue);
+
+          animation: like 0.5s ease-in-out;
+        }
+        .title{
+          color: var(--blue);
+          font-weight: 700;
+        }
+      }
+    }
 
   }
   .post-comments{
@@ -108,4 +136,14 @@
       }
   }
 }
+//
+//@media (max-width: $breakpoints[tablet] - 1) {
+//  .post-item{
+//    width: 30rem;
+//  }
+//}
+//
+//@media (min-width: $breakpoints[tablet]) and (max-width: $breakpoints[laptop] - 1) {
+//  width: 30rem;
+//}
 

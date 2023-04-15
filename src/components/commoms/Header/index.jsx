@@ -58,7 +58,7 @@ function HeaderBar({onCollapse}) {
                 <div className={cx('box-config')}>
                     <input type="checkbox" id="switch-mode" hidden onChange={(e) => handleSwitchMode(e)}/>
                     <label htmlFor="switch-mode" className={cx("switch-mode")}></label>
-                    <DropdownNotify/>
+                    {/*<DropdownNotify/>*/}
 
                     <InfoUser firstName={user.firstName} lastName={user.lastName} role={user.role}
                               email={user.email} avatar={user.avatar}/>

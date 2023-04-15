@@ -23,6 +23,8 @@ import BacklogPage from "~/pages/Client/Project/BacklogPage";
 import AllProjectPage from "~/pages/Client/Project/AllProjectPage";
 import Decentralize from "~/pages/Client/Decentralize";
 import PostManagement from "~/pages/Client/ManagePosts";
+import HomePage from "~/pages/Client/HomePage";
+import LayoutGroup from "~/layouts/Client/LayoutGroup";
 
 function ProtectedRoutes(props) {
     return null;
@@ -57,21 +59,24 @@ function ClientRouter(props) {
             <Route path="/login" element={<LoginPage/>}/>
             {/* Requỉed login */}
             <Route element={<AuthRouter/>}>
-                <Route path={config.routes.overview} element={<ClientLayout slot={<Overview key={'a'}/>}/>}/>
-                <Route path={config.routes.schedule} element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
-                <Route path={config.routes.meeting} element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
+                <Route path={config.routes.home} element={<ClientLayout slot={<HomePage key={'a'} s/>}/>}/>
+                <Route path={config.routes.post} element={<ClientLayout slot={<PostManagement key={'a'} s/>}/>}/>
                 <Route path={config.routes.staff} element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>
-                <Route path={config.routes.department} element={<ClientLayout slot={<ManageDepartment key={'a'}/>}/>}/>
+                <Route path={config.routes.department} element={<ClientLayout  slot={<ManageDepartment key={'a'}/>}/>}/>
+                <Route path={config.routes.decentralize} element={<ClientLayout slot={<Decentralize key={'a'}/>}/>}/>
+
                 <Route path={config.routes.profile} element={<ClientLayout slot={<Profile key={'a'}/>}/>}/>
                 <Route path={config.routes.changePassword} element={<ClientLayout slot={<ManageMyAccount key={'a'}/>}/>}/>
                 <Route path={config.routes.notification} element={<ClientLayout slot={<NotificationsPage key={'a'}/>}/>}/>
+
+                <Route path={config.routes.schedule} element={<ClientLayout slot={<ManageSchedule key={'a'}/>}/>}/>
+                <Route path={config.routes.meeting} element={<ClientLayout slot={<ManageMeeting key={'a'}/>}/>}/>
+
 
                 <Route path={config.routes.project} element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
                 <Route path={config.routes.backlog} element={<ClientLayout slot={<BacklogPage key={'a'}/>}/>}/>
                 <Route path={config.routes.allProject} element={<ClientLayout slot={<AllProjectPage key={'a'}/>}/>}/>
 
-                <Route path={config.routes.decentralize} element={<ClientLayout slot={<Decentralize key={'a'}/>}/>}/>
-                <Route path={config.routes.post} element={<ClientLayout slot={<PostManagement key={'a'}/>}/>}/>
 
 
             </Route>
