@@ -25,9 +25,7 @@ import {listStaffs} from "~/asset/data/initDataGlobal";
 ManageStaff.propTypes = {};
 
 function ManageStaff(props) {
-
     const data_staff_table_header = [...staff_table_header];
-
     const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState(listStaffs);
     const isAddStaff = useSelector(isAddStaffSelector);

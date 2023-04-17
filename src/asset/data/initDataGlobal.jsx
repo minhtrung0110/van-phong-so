@@ -486,3 +486,38 @@ export const listPosts = [
 
     }
 ]
+export const listDecentralize = [
+    {
+        id: 1,
+        name: 'Giám ĐỐc',
+        status: 1,
+
+    },
+    {
+        id: 2,
+        name: 'Quản Lý Nhân Sự',
+        status: 0,
+    },
+    {
+        id: 3,
+        name: 'Quản Lý Bài Viết',
+        status: 1,
+
+    },
+    {
+        id: 4,
+        name: 'Quản Lý Dự Án',
+        status: 0,
+    },
+    {
+        id: 5,
+        name: 'Nhân viên dự án',
+        status: 1,
+
+    },
+    {
+        id: 6,
+        name: 'Nhân viên',
+        status: 0,
+    }
+]
