@@ -95,12 +95,12 @@ function AddRole({onSubmit, onBack}) {
                     <GroupPermission setSwitchGroupSate={setProject} switchGroupState={project} title={'dự án'} />
                     <GroupPermission setSwitchGroupSate={setSprint} switchGroupState={sprint} title={'sprint'} />
                     <GroupPermission setSwitchGroupSate={setTask} switchGroupState={task} title={'công việc'} />
-                    <GroupPermission setSwitchGroupSate={setColumn} switchGroupState={sprint} title={'trạng thái công việc'} />
+                    <GroupPermission setSwitchGroupSate={setColumn} switchGroupState={column} title={'trạng thái công việc'} />
 
                 </Col>
                 <Col className='col-title' xs={{span: 24}} lg={{span: 10}}>
                     <GroupPermission setSwitchGroupSate={setStaff} switchGroupState={staff} title={'nhân viên'} />
-                    <GroupPermission setSwitchGroupSate={setSprint} switchGroupState={sprint} title={'phòng ban'} />
+                    <GroupPermission setSwitchGroupSate={setDepartment} switchGroupState={department} title={'phòng ban'} />
                     <GroupPermission setSwitchGroupSate={setCalendar} switchGroupState={calendar} title={'lịch biểu'} />
                 </Col>
             </Row>

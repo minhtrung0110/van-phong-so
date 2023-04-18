@@ -2,8 +2,9 @@ import React from 'react'
 
 const routes = {
     home:"/",
+    setting:"/setting",
+    post:'/posts',
     project:"/project",
-    addProject:"/project/add",
     profile:"/@:nickname",
     meeting:"/meeting",
     staff:"/staff",
@@ -16,7 +17,7 @@ const routes = {
     backlog:'/project/backlog',
     allProject:'/project/all',
     decentralize:'/decentralize',
-    post:'/posts',
+
 
 }
 

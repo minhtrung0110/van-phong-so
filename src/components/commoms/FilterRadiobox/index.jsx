@@ -10,7 +10,7 @@ FilterRadiobox.propTypes = {
 };
 const cx = classNames.bind(styles)
 
-function FilterRadiobox({width, height}) {
+function FilterRadiobox({width, height,backGround='#0d6efd',onFilter}) {
     const [selectedItem, setSelectedItem] = useState()
     const lists = [
         {
@@ -32,7 +32,8 @@ function FilterRadiobox({width, height}) {
 
     ]
     const handleChange = (value) => {
-        console.log(`selected ${value}`);
+      //  console.log(`selected ${value}`);
+        onFilter(value)
     };
     return (
         <div className={cx('filter-box')}>
@@ -46,7 +47,7 @@ function FilterRadiobox({width, height}) {
                         width: '44%',
                         fontWeight: 'bold',
                         color: 'white',
-                        backgroundColor:'#0d6efd',
+                        backgroundColor:backGround,
                         cursor: 'pointer'
                     }}
                     disabled

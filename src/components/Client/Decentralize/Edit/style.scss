@@ -1,0 +1,51 @@
+
+@import "../../../../css/base/_mixins.scss";
+.form-update-role{
+  padding:  2rem 6.5rem;
+  background-color: var(--white);
+  margin:var(--pd-content);
+  border-radius:var(--border-radius);
+  .list-group-permissions{
+    display: flex;
+    justify-content: space-between;
+
+    .group-permission{
+      border-radius: var(--border-radius);
+      border: 1px dashed var(--text-color);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      .permission-title{
+        font-weight: 700;
+      }
+      .list{
+        padding: 0.5rem 1rem;
+        .list-title{
+          text-transform: capitalize;
+        }
+        .permission-item{
+          display: flex;
+          margin: 0.8rem;
+          .title{
+            font-size: var(--14px);
+            margin-left: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .box-footer{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding-right: 2rem;
+    margin-top: 2rem;
+    .btn-confirm{
+      @include btn-ok;
+      margin-left: 0.2rem;
+    }
+    .btn-cancel{
+      @include btn-cancel;
+    }
+  }
+}

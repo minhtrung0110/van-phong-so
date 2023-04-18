@@ -490,7 +490,31 @@ export const listDecentralize = [
     {
         id: 1,
         name: 'Giám ĐỐc',
+        listPermission: {
+            "add_staff": false,
+            "update_staff": false,
+            "delete_staff": false,
+            "add_department": false,
+            "update_department": false,
+            "delete_department": false,
+            "add_project": false,
+            "update_project": false,
+            "delete_project": false,
+            "add_sprint": false,
+            "update_sprint": false,
+            "delete_sprint": false,
+            "add_task": false,
+            "update_task": false,
+            "delete_task": false,
+            "add_column": false,
+            "update_column": false,
+            "delete_column": false,
+            "add_calendar": false,
+            "update_calendar": false,
+            "delete_calendar": false
+        },
         status: 1,
+
 
     },
     {

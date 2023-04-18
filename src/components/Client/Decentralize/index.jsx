@@ -10,7 +10,7 @@ import {setDecentralize,setIsEdit} from "~/redux/reducer/decentralize/decentrali
 
 DecentralizeTable.propTypes = {};
 
-function DecentralizeTable({tableHeader, tableBody}) {
+function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
     const [showPopupDelete, setShowPopupDelete] = useState({
         department_id: null,
         name:'',
@@ -22,24 +22,11 @@ function DecentralizeTable({tableHeader, tableBody}) {
         dispatch(setIsEdit(true));
         dispatch(setDecentralize(item));
     };
-    const handleRemoveDecentralize = async (id) => {
-        //e.stopPropagation();
-        // const result = await deleteDecentralize(id);
-        // console.log('result', result);
-        // if (result === 200) {
-        //     SuccessToast('Remove department successfully', 3000);
-        // } else if (result === 404) {
-        //     ErrorToast('Remove departments unsuccessfully', 3000);
-        //     Notiflix.Block.remove('#root');
-        // } else if (result === 401) {
-        //     Notiflix.Block.remove('#root');
-        // } else {
-        //     Notiflix.Block.remove('#root');
-        //     ErrorToast('Something went wrong. Please try again', 3000);
-        // }
+    const handleConfirmDelete=(id)=>{
         setShowPopupDelete({...showPopupDelete, show: false});
-        // dispatch(setIsReset(Math.random()));
-    };
+        onDelete(id);
+    }
+
 
     const showConfirmDeleteDecentralize = (e, item) => {
         e.stopPropagation();
@@ -100,7 +87,7 @@ function DecentralizeTable({tableHeader, tableBody}) {
                           content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Quyền <strong>${showPopupDelete.name}</strong>  ? `}} />}
                           textOK="Xóa"
                           textCancel="Hủy"
-                          onOK={() => handleRemoveDecentralize(showPopupDelete.department_id)}
+                          onOK={() => handleConfirmDelete(showPopupDelete.department_id)}
                           onCancel={(e) => setShowPopupDelete({...showPopupDelete, show: false})}/>
         </div>
     );
