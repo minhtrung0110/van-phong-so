@@ -1,15 +1,104 @@
+@import "../../../css/base/_mixins.scss";
 .container-setting{
 
   .box-title{
     background-color: #fff;
     border-radius:var(--border-radius);
-    padding: 1.5rem 5rem;
+    padding: 0;
     margin: var(--pd-content);
+    .header{
+      font-weight: 550;
+      border-bottom: 1px solid #eee;
+      padding: 0 4rem;
+      display: flex;
+      height: 4.5rem;
+      justify-content: space-between;
+      align-items: center;
+      span{
+
+      }
+      .editor{
+        .btn-edit{
+          @include btn;
+          &.hidden{
+            display: none;
+          }
+          &:hover{
+            color: var(--text-color);
+            background-color: var(--gray100-color);
+          }
+        }
+        .group-edit{
+          display: flex;
+          .btn-save{
+            @include btn-ok;
+            margin-left: 1rem;
+          }
+          .btn-cancel{
+            @include btn-cancel;
+          }
+        }
+      }
+    }
+    .group-input{
+      padding: 0 4rem;
+      .input-editable{
+        background-color: inherit;
+        padding-left: 0.5rem;
+        font-size: inherit;
+        font-weight: inherit;
+        cursor: pointer;
+        height: 2.8rem;
+        margin: 1rem 0;
+        width: 45rem;
+        &.active{
+          border:2px solid var(--bs-focus-input);
+          border-radius:var(--task-border-radius);
+        }
+
+
+      }
+      .name{
+        font-weight: 600;
+        font-size: var(--22px);
+        display: flex;
+        align-items: center;
+        height: 3.8rem;
+      }
+    }
+
+
   }
   .box-avatar{
     background-color: #fff;
     border-radius:var(--border-radius);
-    padding: 1.5rem 5rem;
+    padding: 0;
     margin: var(--pd-content);
+    .header{
+      width: 100%;
+      font-weight: 550;
+      border-bottom: 1px solid #eee;
+      padding: 0 4rem;
+      display: flex;
+      height: 4rem;
+      justify-content: flex-start;
+      align-items: center;
+      span{
+
+      }
+    }
+    .avatar{
+      display: flex;
+      justify-content: flex-start;
+      padding: 1rem 4rem;
+      .btn-upload{
+
+      }
+      .image-logo{
+        width: 20rem;
+        object-fit: cover;
+        border: 1px solid #eee;
+      }
+    }
   }
 }
