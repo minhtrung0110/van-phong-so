@@ -545,3 +545,18 @@ export const listDecentralize = [
         status: 0,
     }
 ]
+
+export const userLogin= {
+    id: 1,
+    first_name: 'Nguyễn Đức Minh',
+    last_name: 'Trung',
+    username:'NguyenTrung',
+    phone_number: '09744148784',
+    gender: 'nam',
+    birth_date: '01-10-2001',
+    mail: 'minhtrung@gmail.com',
+    role: 'CEO',
+    avatar: 'https://i.ibb.co/mvybfht/C-i-n-3-1.jpg',
+    address: 'Tan Quy Tây, Bình Chanh,HCM',
+    status: 1,
+}

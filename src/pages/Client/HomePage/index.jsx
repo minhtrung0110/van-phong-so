@@ -7,34 +7,54 @@ import {
     menu_home_client_items
 } from "~/asset/data/menu-client-item";
 import {NavLink} from "react-router-dom";
-import {listDepartments, listPosts} from "~/asset/data/initDataGlobal";
+import {listDepartments, listPosts, userLogin} from "~/asset/data/initDataGlobal";
 import PostItem from "~/components/commoms/PostItem";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import {FaChalkboard, FaList} from "react-icons/fa";
 import {config} from "~/config";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import AddPost from "~/components/Client/Post/Add";
+import {Modal} from "antd";
+import {isEmpty} from "lodash";
+import EditPost from "~/components/Client/Post/Edit";
+import {useDispatch} from "react-redux";
+import {setPost} from "~/redux/reducer/post/postReducer";
 HomePage.propTypes = {
 
 };
 
 function HomePage({slot}) {
     const [showConfirm,setShowConfirm]=useState({id:null,show:false})
+    const [postEdit,setPostEdit]=useState(false)
+    const dispatch=useDispatch()
     const handleDeletePost=(id)=>{
         console.log('Delete post ',showConfirm.id)
     }
     const handleOpenConfirm=(id)=>{
         setShowConfirm({id:id,show:true})
     }
+    const handleOpenUpdatePost=(post)=>{
+        setPostEdit(true)
+        dispatch(setPost(post))
+       // console.log('Update post ',post)
+    }
+    const handleCreatePost=(post)=>{
+        console.log('Create post ',post)
+    }
     const handleUpdatePost=(post)=>{
         console.log('Update post ',post)
     }
     return (
-        <div className='container-post'>
+        <div className='container-newsfeed'>
             <div className='gr-left'>
+
                 <div className='list-posts'>
+                    <div className='create-post'>
+                        <AddPost  author={userLogin} onSave={handleCreatePost} />
+                    </div>
                     {!!listPosts && listPosts.map(item => (
                         <PostItem post={item}
-                                  onUpdate={handleUpdatePost}
+                                  onUpdate={handleOpenUpdatePost}
                                   onDelete={handleOpenConfirm}
                         />
                     ))}
@@ -63,6 +83,16 @@ function HomePage({slot}) {
                 </div>
 
             </div>
+            <Modal title="" open={postEdit}
+                   maskClosable={true}
+                   destroyOnClose={true}
+                   onCancel={()=>setPostEdit(null)}
+                   footer={null}
+                   width={700}
+                   style={{top: 50}}
+            >
+                <EditPost  author={userLogin} onSave={handleUpdatePost} />
+            </Modal>
             <ConfirmModal title="Xác Nhận Xóa"
                           open={showConfirm.show}
                           content={`Bạn Có Thực Sự Muốn Xóa Bài Viết Này Không ? `}

@@ -17,7 +17,6 @@ PostItem.propTypes = {
 };
 const cx=classNames.bind(styles);
 function PostItem({post,onUpdate,onDelete}) {
-
     const [showComment,setShowComment]=useState(false)
     const date=dayjs(post.date,'YYYY-MM-DD').locale('vi').format('HH:mm, DD [tháng] M, YYYY');
     const listActions=[

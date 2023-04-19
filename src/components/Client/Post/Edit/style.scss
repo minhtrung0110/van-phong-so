@@ -1,0 +1,92 @@
+@import "../../../../css/base/_mixins.scss";
+
+.form-update-post{
+  .post-head{
+    padding: 0 2rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    .post-user{
+      display: flex;
+
+    }
+    .post-name-author{
+      display: flex;
+      height: 2.5rem;
+      align-items: flex-start;
+      font-weight: 700;
+      font-size: var(--14px);
+      margin-left: 0.8rem;
+    }
+  }
+  .post-content{
+    padding: 1rem 2rem;
+    .attach-file{
+      //display: flex;
+      //justify-content: space-between;
+      //align-items: center;
+      position: relative;
+      .btn-upload{
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 2.4rem;
+        background-color: transparent;
+        color: var(--pr-green);
+        border-radius: (--task-border-radius);
+        border: none;
+        padding: 0 1.5rem 0 1rem;
+        &:hover{
+          background-color: var(--gray97-color);
+          border-radius: 6px;
+          cursor: pointer;
+        }
+        .icon{
+          font-size: var(--16px);
+        }
+        .title{
+          margin-left: 0.5rem;
+          font-size: var(--14px);
+          font-weight: bold;
+        }
+      }
+      .title-upload{
+        font-size: var(--14px);
+        font-weight: bold;
+        margin-right: 2rem;
+        position: absolute;
+        right: 0.5rem;
+        top:1.5rem;
+        display: flex;
+        align-items: center;
+        .icon{
+          font-size: var(--22px);
+          color: var(--blue);
+          margin-left: 0.5rem;
+          transform-origin: center;
+          transition: transform 0.3s ease;
+          &:hover{
+            color: var(--red);
+
+          }
+        }
+        .icon.rotate {
+          transform: rotate(180deg);
+        }
+
+      }
+    }
+  }
+  .footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+    .btn-save{
+      width: 10rem;
+      @include btn-ok;
+    }
+  }
+}

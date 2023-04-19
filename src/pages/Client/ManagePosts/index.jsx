@@ -25,39 +25,7 @@ function PostManagement(props) {
     }
     return (
         <div className='container-post'>
-            <div className='gr-left'>
-                <div className='list-posts'>
-                    {!!listPosts && listPosts.map(item => (
-                        <PostItem post={item}
-                        onUpdate={handleUpdatePost}
-                                  onDelete={handleOpenConfirm}
-                        />
-                    ))}
 
-                </div>
-            </div>
-            <div className='gr-right'>
-                <div className='filter-posts'>
-                    <SearchHidenButton width={'15rem'}/>
-                    <span className='title'>
-                        <FaList className={'icon'} />
-                        Danh sách nhóm</span>
-                    <div className='list-groups'>
-
-                        {
-                            listDepartments.map(department =>(
-                                <NavLink className='department-item'
-                                to={`${config.routes.post}/${department.id}`}
-                                >
-                                    <FaChalkboard className='icon'></FaChalkboard>
-                                    {department.name}
-                                </NavLink>
-                            ))
-                        }
-                    </div>
-                </div>
-
-            </div>
             <ConfirmModal title="Xác Nhận Xóa"
                           open={showConfirm.show}
                           content={`Bạn Có Thực Sự Muốn Xóa Bài Viết Này Không ? `}
