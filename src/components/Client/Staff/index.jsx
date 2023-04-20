@@ -135,7 +135,6 @@ function StaffTable({tableHeader, tableBody}) {
             <TableLayout tableHeader={tableHeader} tableBody={renderTableBody()}/>
 
             <Modal title="Thông Tin Nhân Viên" open={isModalOpen}
-
                    maskClosable={true}
                    onCancel={handleCancel}
                    footer={null}

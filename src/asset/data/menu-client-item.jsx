@@ -1,17 +1,17 @@
 import {
     FaBuilding,
-    FaCalendar,
-    FaFacebookMessenger, FaHome, FaLaptop, FaPeopleArrows, FaTasks, FaUsers,
+    FaCalendar, FaCogs,
+    FaFacebookMessenger, FaHome, FaLaptop, FaPeopleArrows, FaRegNewspaper, FaTasks, FaUsers,
 } from "react-icons/fa";
 import React from "react";
 import {config} from "~/config";
 
-export const menu_client_items = [
+export const menu_function_client_items = [
     {
         id: 1,
-        name: 'Tổng Quan',
+        name: 'Trang Chủ',
         active: true,
-        link: config.routes.overview,
+        link: config.routes.home,
         icon: <FaHome />,
         role: 1,
     },
@@ -31,8 +31,50 @@ export const menu_client_items = [
         icon: <FaCalendar />,
         role: 3,
     },
+    // {
+    //     id: 4,
+    //     name: 'Nhân Sự',
+    //     active: false,
+    //     link:  config.routes.staff,
+    //     icon: <FaUsers />,
+    //     role: 4,
+    // },
+    // {
+    //     id: 5,
+    //     name: 'Phòng Ban',
+    //     active: false,
+    //     link:  config.routes.department,
+    //     icon: <FaBuilding/>,
+    //     role: 4,
+    // },
+   
+
+
+];
+export const menu_config_client_items = [
     {
-        id: 4,
+        id: 1,
+        name: 'Phân Quyền',
+        active: true,
+        link: config.routes.decentralize,
+        icon: <FaCogs />,
+        role: 1,
+    },
+
+
+
+];
+export const menu_home_client_items = [
+    {
+        id: 1,
+        name: 'Bài Viêt',
+        active: true,
+        link: config.routes.post,
+        icon: <FaRegNewspaper />,
+        role: 1,
+    },
+    {
+        id: 2,
         name: 'Nhân Sự',
         active: false,
         link:  config.routes.staff,
@@ -40,14 +82,14 @@ export const menu_client_items = [
         role: 4,
     },
     {
-        id: 5,
+        id: 3,
         name: 'Phòng Ban',
         active: false,
         link:  config.routes.department,
         icon: <FaBuilding/>,
         role: 4,
     },
-   
+
 
 
 ];

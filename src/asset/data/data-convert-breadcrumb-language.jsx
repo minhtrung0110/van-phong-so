@@ -15,6 +15,10 @@ export  const dataConvertBreadcrumbLanguage=[
     {href:config.routes.config,label:'Cấu Hình'},
     {href:config.routes.backlog,label:'Danh Sách Công Việc'},
     {href:config.routes.allProject,label:(<SelectHeaderProject/>)},
-
+    {href:config.routes.decentralize,label:'Cấu Hình Phân Quyền'},
+    {href:config.routes.post,label:'Bảng Tin'},
+    {href:config.routes.home,label:'Bài Viết'},
+    {href:config.routes.setting,label:'Thông Tin Tổ Chức'},
+    {href:config.routes.group,label:'Nhóm'},
 
 ]

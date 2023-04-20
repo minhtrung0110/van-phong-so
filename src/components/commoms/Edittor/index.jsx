@@ -21,6 +21,7 @@ export default function CustomEditor(props) {
         formats={CustomEditor.formats}
         bounds={'.app'}
         onChange={handleChangeEditor}
+          {...props}
         // readOnly={true}
         // placeholder={this.props.placeholder}
       />

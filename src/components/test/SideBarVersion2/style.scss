@@ -1,8 +1,8 @@
-.sidebar-version2{
+.sidebar-version2 {
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px ;
+  width: 200px;
   height: 100%;
   background: var(--light);
   z-index: 900;
@@ -11,7 +11,49 @@
   overflow-x: hidden;
   scrollbar-width: none;
   box-shadow: 1px 1px 2px 3px rgba(204, 202, 202, 0.2);
+
   &.hide {
     width: 80px;
+  }
+
+  .ant-menu-submenu-open .ant-menu-submenu-title {
+    color: var(--primary-color-btn);
+
+    &:hover {
+      color: var(--red);
+    }
+    .ant-menu-title-content a {
+      font-weight: bold;
+      color: var(--primary-color-btn) !important;
+    }
+  }
+  .ant-menu-submenu{
+    color: var(--text-color);
+    .ant-menu-title-content a {
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+  }
+
+  .ant-menu-item {
+    font-weight: bold;
+    &:hover svg,
+    &:hover a {
+      color: var(--red);
+    }
+  }
+
+  .ant-menu-item-selected {
+    background-color: var(--primary-color);
+    .ant-menu-title-content a {
+      color: #fff !important;
+    }
+    color: #fff;
+    font-weight: bold;
+    &:hover svg,
+    &:hover a {
+      color: #fff !important;
+    }
   }
 }

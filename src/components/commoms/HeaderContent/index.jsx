@@ -7,7 +7,7 @@ HeaderContent.propTypes = {
 
 };
 const cx=classNames.bind(styles)
-function HeaderContent({title,slot}) {
+function HeaderContent({title,icon,slot}) {
     return (
         <div className={cx('header-content')}>
             <div className={cx('header-left')}>

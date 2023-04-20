@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import StaffTable from "~/components/Client/Staff";
@@ -18,11 +18,12 @@ import AddDepartment from "~/components/Client/Department/Add";
 import {setIsAdd, setIsEdit} from "~/redux/reducer/department/departmentReducer";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {listDepartments} from "~/asset/data/initDataGlobal";
+import {useNavigate} from "react-router-dom";
+import {config} from "~/config";
 
 ManageDepartment.propTypes = {};
 
 function ManageDepartment(props) {
-
     const [data, setData] = useState(listDepartments)
     const [page, setPage] = React.useState(1);
     const [totalRecord, setTotalRecord] = React.useState(data.length);
@@ -30,6 +31,8 @@ function ManageDepartment(props) {
     const dispatch = useDispatch()
     const isEdit = useSelector(isEditDepartmentSelector)
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [search,setSearch] = React.useState('')
+    const [filter, setFilter] = React.useState('')
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
@@ -47,25 +50,28 @@ function ManageDepartment(props) {
     const handleOpenAddDepartment = () => {
         setIsModalOpen(true);
     }
-    const handleAddDepartment=(data)=>{
-       // setIsModalOpen(false);
-        console.log(data)
-        //call api
-    }
-    const handleEditDepartment=(data)=>{
-        // setIsModalOpen(false);
-        console.log(data)
-        //call api
-    }
     const handleCancelAdd = () => {
         setIsModalOpen(false);
     };
     const handleCancelEdit = () => {
        dispatch(setIsEdit(false))
     };
+    useEffect(()=>{
+        console.log('Search - Filter: ',search,filter)
+    },[data,search,filter])
+    const handleCreateDepartment = (data)=>{
+        console.log('Create Department: ',data)
+    }
+    const handleUpdateDepartment = (data)=>{
+        console.log('Update Department: ',data)
+    }
+    const handleDeleteDepartment = (data)=>{
+        console.log('Delete Department: ',data)
+    }
+
     return (
         <>
-            {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit} onSave={handleEditDepartment}   />):(
+            {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit} onSave={handleUpdateDepartment}   />):(
                 (
                   !!loading ?(<ListPageSkeleton column={5} lengthItem={5} /> ):
                       (  <div className='container-department'>
@@ -76,12 +82,12 @@ function ManageDepartment(props) {
                               </div>
                               <div className='filter-department-page'>
                                   <div className='filter-group'>
-                                      <FilterRadiobox width='15.2rem'/>
+                                      <FilterRadiobox width='15.2rem' backGround={'#479f87'} onFilter={setFilter}/>
 
                                   </div>
                                   <div className='search-excel'>
                                       <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
-                                                         backgroundButton='#479f87'/>
+                                          onSearch={setSearch}               backgroundButton='#479f87'/>
                                       <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>
                                           <Button className='btn'><FaFileUpload className='icon'/></Button>
                                       </Tooltip>
@@ -99,7 +105,7 @@ function ManageDepartment(props) {
                           <div className='content-department-page'>
                               {
                                   data.length > 0 ? (
-                                      <DepartmentTable tableHeader={department_table_header} tableBody={data}/>
+                                      <DepartmentTable tableHeader={department_table_header} tableBody={data} onDelete={handleDeleteDepartment} />
                                   ) : (
                                       <NotFoundData/>
                                   )
@@ -127,7 +133,7 @@ function ManageDepartment(props) {
                    width={700}
                    style={{top: 150}}
             >
-              <AddDepartment onCancel={handleCancelAdd} onSave={handleAddDepartment} />
+              <AddDepartment onCancel={handleCancelAdd} onSave={handleCreateDepartment} />
             </Modal>
 
         </>

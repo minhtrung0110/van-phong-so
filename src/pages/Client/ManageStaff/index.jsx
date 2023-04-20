@@ -25,9 +25,7 @@ import {listStaffs} from "~/asset/data/initDataGlobal";
 ManageStaff.propTypes = {};
 
 function ManageStaff(props) {
-
     const data_staff_table_header = [...staff_table_header];
-
     const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState(listStaffs);
     const isAddStaff = useSelector(isAddStaffSelector);
@@ -58,6 +56,9 @@ function ManageStaff(props) {
         //     // Notiflix.Block.remove('#root');
         // }, 300);
     };
+    const handleEditStaff=(data) => {
+        console.log('EditStaff', data);
+    }
 
         console.log(isEmpty(detailStaff))
     return (
@@ -66,7 +67,7 @@ function ManageStaff(props) {
                 !!isAddStaff ?
                     (<AddStaff/>)
                     : (
-                        !!isEditStaff ? (<EditStaff/>) : (
+                        !!isEditStaff ? (<EditStaff onSave={handleEditStaff}/>) : (
                             isEmpty(detailStaff) ? (
 
                                         !!loading ?(<ListTableSkeleton column={6} lengthItem={5}/>):
