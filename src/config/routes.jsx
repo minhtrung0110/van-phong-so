@@ -11,6 +11,7 @@ const routes = {
     schedule:"/schedule",
     notification:"/notification",
     department:"/department",
+    group:"/department/group",
     changePassword:"/change-password",
     logout:"/logout",
     config:'/config',

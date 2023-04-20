@@ -60,7 +60,7 @@ function PostItem({post,onUpdate,onDelete}) {
 
             </div>
             <div className={cx('post-content')}>
-                <div className={cx('description')}>{post.content.description}</div>
+                <div className={cx('description')}>{post.description}</div>
                 {
                     <Gallery photos={post.files} limitNodeSearch={4} />
                 }

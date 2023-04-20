@@ -1,20 +1,43 @@
 @import "../../../css/base/_mixins.scss";
-
-.container-department{
-    margin:var( --pd-content);
+.header-group{
+  width: 100%;
+  height: 4rem;
+  background-color: var(--white);
+  border-top: 1px solid var(--gray97-color);
+  padding: 0 4rem ;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .btn-back{
+    font-size: var(--14px);
+    color: var(--text-color);
+    @include btn;
+    svg{
+      margin-right: 0.8rem;
+    }
+    &:hover{
+      background-color: var(--primary-color-btn);
+      color: var(--white)
+    }
+  }
+}
+.container-group{
+  margin:var( --pd-content);
   padding: 1.56rem 4.5rem;
   background-color: #fff;
   border-radius:var(--border-radius);
-  .header-department-page{
+  min-height:700px;
+  .header-group-page{
     margin-top: var(--16px);
     .title{
       display: flex;
       align-items: center;
       .icon{
-        margin-right: var(--16px);
+        font-size: var(--16px);
+        margin-right: var(--14px);
       }
     }
-    .filter-department-page{
+    .filter-group-page{
       display: flex;
       justify-content: space-between;
       align-items: center;

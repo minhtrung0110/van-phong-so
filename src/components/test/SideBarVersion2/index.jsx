@@ -8,7 +8,7 @@ import {
     FaDesktop,
     FaFacebookMessenger,
     FaHome, FaLaptop, FaLayerGroup, FaNewspaper,
-    FaPeopleArrows,
+    FaPeopleArrows, FaRegObjectGroup,
     FaTasks, FaUserCog
 } from "react-icons/fa";
 import {useSelector} from "react-redux";

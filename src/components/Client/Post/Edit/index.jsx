@@ -16,8 +16,8 @@ function EditPost({author,onSave}) {
     const post=useSelector(postSelector)
     const [showEdit,setShowEdit]=useState(false)
     const [errorDescription, setErrorDescription] = useState('');
-    const [description,setDescription] = useState('')
-    const [listFile, setListFile] = useState(post.listFile)
+    const [description,setDescription] = useState(post.description)
+    const [listFile, setListFile] = useState(post.files)
     const editorDescription = (value) => {
         setDescription(value);
         setErrorDescription('');

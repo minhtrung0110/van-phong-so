@@ -160,6 +160,40 @@ export const listStaffs = [
         status: 0,
     },
 ]
+export const listGroups = [
+    {
+        id: 1,
+        name: 'Nhóm Ferrari',
+        status: 1,
+
+    },
+    {
+        id: 2,
+        name: 'Nhóm Mascha',
+        status: 1,
+    },
+    {
+        id: 3,
+        name: 'Nhóm Mascha',
+        status: 0,
+    },
+    {
+        id: 4,
+        name: 'Nhóm Mascha',
+        status: 1,
+    },
+    {
+        id: 5,
+        name: 'Nhóm Mascha',
+        status: 1,
+    },
+    {
+        id: 6,
+        name: 'Nhóm Mascha',
+        status: 0,
+    },
+
+]
 export const listCounties=[
     { key: 'Afghanistan', value: 'Afghanistan' },
     { key: 'Albania', value: 'Albania' },
@@ -240,11 +274,7 @@ export const listPosts = [
         },
         category: '',
         title: 'Bảng tin sáng 08.04',
-        content: {
-            description: 'Chào mọi người',
-            background: '',
-            images: [],
-        },
+        description: 'Chào mọi người',
         date: '2023-08-04',
         comments:  [
             {
@@ -356,11 +386,7 @@ export const listPosts = [
         },
         category: '',
         title: 'Bảng tin sáng 08.04',
-        content: {
-            description: 'Chào mọi người',
-            background: '',
-            images: [],
-        },
+        description: 'Chào mọi người',
         date: '2023-04-01',
         comments:  [
             {

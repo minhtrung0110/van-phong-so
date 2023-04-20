@@ -13,10 +13,10 @@
   color: rgba(var(--bs-danger-rgb), var(--bs-text-opacity));
   cursor: pointer;
   &:hover {
-    background-color: var(--gray100-color);
+    background-color: var(--gray97-color);
   }
 }
-.table-department {
+.table-group {
   display: flex;
   justify-content: center;
   padding: 0;
@@ -61,22 +61,12 @@
     .col-action {
       display: flex;
       justify-content: center;
-      .btn-show {
-        float: left;
-        width: 33.33%;
-        @include btn-action;
-
-        .icon-show {
-          font-size: var(--20px);
-          color: var(--blue);
-        }
-      }
       .btn-edit {
         @include btn-action;
         display: inline-block;
         .icon-edit {
           font-size: var(--20px);
-          color: var(--yellow);
+          color: var(--bs-success-500);
         }
 
       }

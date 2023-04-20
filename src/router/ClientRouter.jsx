@@ -26,6 +26,7 @@ import PostManagement from "~/pages/Client/ManagePosts";
 import HomePage from "~/pages/Client/HomePage";
 import LayoutGroup from "~/layouts/Client/LayoutGroup";
 import ManageCompany from "~/pages/Client/ManageCompany";
+import ManageGroup from "~/pages/Client/ManageGroup";
 
 function ProtectedRoutes(props) {
     return null;
@@ -64,6 +65,7 @@ function ClientRouter(props) {
                 <Route path={config.routes.post} element={<ClientLayout slot={<PostManagement key={'a'} s/>}/>}/>
                 <Route path={config.routes.staff} element={<ClientLayout slot={<ManageStaff key={'a'}/>}/>}/>
                 <Route path={config.routes.department} element={<ClientLayout  slot={<ManageDepartment key={'a'}/>}/>}/>
+                <Route path={config.routes.group} element={<ClientLayout  slot={<ManageGroup key={'a'}/>}/>}/>
                 <Route path={config.routes.decentralize} element={<ClientLayout slot={<Decentralize key={'a'}/>}/>}/>
                 <Route path={config.routes.setting} element={<ClientLayout slot={<ManageCompany key={'a'} s/>}/>}/>
 

@@ -2,18 +2,19 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import TableLayout from "~/components/commoms/Table";
-import {FaPen,FaTimesCircle} from "react-icons/fa";
+import {FaEye, FaPen, FaTimesCircle} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {setDepartment, setIsEdit} from "~/redux/reducer/department/departmentReducer";
+import {config} from "~/config";
+import {useNavigate} from "react-router-dom";
 
 
 DepartmentTable.propTypes = {};
 
-function DepartmentTable({tableHeader, tableBody}) {
+function DepartmentTable({tableHeader, tableBody,onDelete}) {
     const [showPopupDelete, setShowPopupDelete] = useState({
         department_id: null,
-        name:'',
         show: false,
     });
     const dispatch = useDispatch()
@@ -39,12 +40,19 @@ function DepartmentTable({tableHeader, tableBody}) {
         // }
         setShowPopupDelete({...showPopupDelete, show: false});
         // dispatch(setIsReset(Math.random()));
+        onDelete(showPopupDelete.department_id)
     };
 
     const showConfirmDeleteDepartment = (e, item) => {
         e.stopPropagation();
         setShowPopupDelete({department_id: item.id,name:item.name, show: true});
     };
+    const navigate=useNavigate();
+    const navigateGroupPage = (item) => {
+        dispatch(setDepartment(item))
+        navigate(config.routes.group)
+
+    }
     const renderTableBody = () => {
         return tableBody.map((item) => {
             return (
@@ -67,6 +75,13 @@ function DepartmentTable({tableHeader, tableBody}) {
                         </p>
                     </td>
                     <td className="col-action">
+                        <button
+                            id="show-user"
+                           onClick={() => navigateGroupPage(item)}
+                            className="btn-show"
+                        >
+                            <FaEye className="icon-show"/>
+                        </button>
                         <button
                             id="edit-department"
                             onClick={(e) => handleEditDepartment(e,item)}
