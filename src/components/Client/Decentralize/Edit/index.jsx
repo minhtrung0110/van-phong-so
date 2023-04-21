@@ -1,19 +1,21 @@
-import React, {useRef, useState} from 'react';
+import React, { useState} from 'react';
 import PropTypes from 'prop-types';
 import {useForm, Controller} from "react-hook-form";
-import {Checkbox, Col, Form, Input, Row, Switch,} from "antd";
+import {message, Col, Form, Input, Row, } from "antd";
 import './style.scss'
 import HeaderContent from "~/components/commoms/HeaderContent";
 import GroupPermission from "~/components/Client/Decentralize/GroupPermission";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {decentralizeSelector} from "~/redux/selectors/decentralize/decentralizeSelector";
+import { setIsEdit} from "~/redux/reducer/decentralize/decentralizeReducer";
 
 EditRole.propTypes = {};
 
-function EditRole({onSubmit, onBack}) {
+function EditRole({ onBack}) {
     const data=useSelector(decentralizeSelector)
     const {control, handleSubmit, setValue, register,getValues, formState: {errors}} = useForm();
-    const [selectAll, setSelectAll] = useState(false);
+    const [messageApi, contextHolder] = message.useMessage();
+    const dispatch=useDispatch()
     const [project,setProject]=useState({
         add_project: false,
         update_project: false,
@@ -59,11 +61,18 @@ function EditRole({onSubmit, onBack}) {
             ...project,...sprint,...task,...column,
             ...calendar
         }
-        // console.log(result);
-        onSubmit(result)
+        // thanh con
+        console.log('Update role:', result)
+        messageApi.open({
+            type: 'success',
+            content: 'Cập nhật thành công',
+            duration: 1.3,
+        });
+        setTimeout(()=> dispatch(setIsEdit(false)),1400)
     }
 
     return (<div className={'container-edit-role'}>
+        {contextHolder}
         <HeaderContent title='Cập nhật nhóm quyền mới'/>
         <Form
             labelCol={{

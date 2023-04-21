@@ -1,28 +1,38 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import HeaderContent from "~/components/commoms/HeaderContent";
 import './style.scss'
 import {Controller, useForm} from "react-hook-form";
-import {Form, Input, Radio, Select} from "antd";
-import {useSelector} from "react-redux";
+import {Form, Input, Radio, message} from "antd";
+import {useDispatch, useSelector} from "react-redux";
 import {departmentSelector} from "~/redux/selectors/department/departmenrSelector";
-import {Option} from "antd/es/mentions";
+import {setIsEdit} from "~/redux/reducer/department/departmentReducer";
 
-EditDepartment.propTypes = {};
+EditDepartment.propTypes = {
+    onCancel: PropTypes.func.isRequired,
+};
 
-function EditDepartment({onCancel, onSave}) {
+function EditDepartment({onCancel}) {
     const department = useSelector(departmentSelector)
+    const dispatch=useDispatch()
+    const [messageApi, contextHolder] = message.useMessage();
     const {
         control, handleSubmit, formState: { errors, isDirty, dirtyFields },
     } = useForm({
         defaultValues: {...department}
     });
-
-    const onSubmit = (data) => console.log({ data,errors, isDirty, dirtyFields });
-
+    const handleUpdateDepartment = (data)=>{
+        console.log('Update Department: ',data)
+        messageApi.open({
+            type: 'success',
+            content: 'Cập nhật thành công',
+            duration: 1.3,
+        });
+        setTimeout(()=> dispatch(setIsEdit(false)),1350)
+    }
     return (
         <div className="edit-department-container">
-
+            {contextHolder}
             <HeaderContent title={'Cập Nhật Thông tin Phòng Ban'} />
             <Form
                 labelCol={{
@@ -34,7 +44,7 @@ function EditDepartment({onCancel, onSave}) {
                 layout="horizontal"
                 encType="multipart/form-data"
                 style={{}}
-                onFinish={handleSubmit(onSave)}
+                onFinish={handleSubmit(handleUpdateDepartment)}
                 labelAlign={"left"}
                 className='frame-edit-department'>
                <div className="content">

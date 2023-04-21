@@ -7,12 +7,12 @@ HeaderContent.propTypes = {
 
 };
 const cx=classNames.bind(styles)
-function HeaderContent({title,icon,slot}) {
+function HeaderContent({title,icon:Icon=FaUsers,slot}) {
     return (
         <div className={cx('header-content')}>
             <div className={cx('header-left')}>
                 <div className={cx('title')}>
-                    <FaUsers className={cx('icon')}/>
+                    <Icon className={cx('icon')}/>
                     <h4>{title}</h4>
                 </div>
             </div>

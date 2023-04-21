@@ -7,8 +7,7 @@ import {Select, Input, DatePicker, Checkbox} from "antd";
 FilterCheckbox.propTypes = {};
 const cx = classNames.bind(styles)
 
-function FilterCheckbox(props) {
-    const [selectedItem, setSelectedItem] = useState()
+function FilterCheckbox({onFilter}) {
     const lists = [
         {
             label: 'Quản Lý',
@@ -29,6 +28,7 @@ function FilterCheckbox(props) {
     ]
     const handleChange = (value) => {
         console.log(`selected ${value}`);
+        onFilter(value)
     };
     return (
         <div className={cx('filter-box')}>

@@ -1,6 +1,6 @@
 
 import { Button, Menu } from 'antd';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import {
     FaBars,
     FaBuilding,
@@ -47,13 +47,26 @@ const SideBarVersion2 = () => {
     // const toggleCollapsed = () => {
     //     setCollapsed(!collapsed);
     // };
+    const location=useLocation();
     const collapsed=useSelector(isCollapseSideBar)
+    const [openKeys, setOpenKeys] = useState(location.pathname);
     const handleonClick=(item)=>{
-        console.log(item)
+        setOpenKeys(item.key)
+        console.log(item,openKeys)
+       // console.log(location)
+        //if(!!location.pathname) setOpenKeys(location.pathname)
 
     //   useNavigate(item.key)
     }
-    const location=useLocation();
+
+    // useEffect(() => {
+    //     // const pathSnippets = location.pathname.split('/').filter(i => i);
+    //     // if (pathSnippets.length > 1) {
+    //     //     setOpenKeys([pathSnippets[0]]);
+    //     // }
+    //
+    // }, [location.pathname]);
+
     return (
         <Sider  collapsed={collapsed}
                className={`sidebar-version2 ${collapsed?'hide':''}`}
