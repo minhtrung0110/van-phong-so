@@ -38,7 +38,7 @@ export const listMenuClientItems = [
             getItem(<NavLink to={config.routes.setting}>Cài Đặt</NavLink>, config.routes.setting, <FaCogs/>),
         ]
     ),
-    getItem(<NavLink to={config.routes.project}>Dự Án</NavLink>, config.routes.project, <FaTasks/>),
+    getItem(<NavLink to={config.routes.allProject}>Dự Án</NavLink>, config.routes.allProject, <FaTasks/>),
     getItem(<NavLink to={config.routes.schedule}>Lịch Biểu</NavLink>, config.routes.schedule, <FaCalendar/>),
 
 

@@ -19,7 +19,7 @@ export const initialData = {
                             cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
                             cards: [
                                 {
-                                    id: 'project-1',
+                                    id: 'card-1',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
                                     title: 'Lập Kế Hoạch',

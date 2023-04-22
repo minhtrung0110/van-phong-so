@@ -7,12 +7,12 @@ import HeaderTask from "~/components/Client/Sprint/HeaderTask/HeaderTask";
 import './style.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {isCreateProjectSelector, keyProjectSelector} from "~/redux/selectors/project/projectSelector";
-import AddProject from "~/components/Client/Project/Add";
 import {initialData} from "~/asset/data/initalDataTask";
 import {getSprintActive, mapOrder} from "~/utils/sorts";
 import backgroundImage from "~/asset/images/backgroundTask01.jpg"
 import {setIsViewTimeline} from "~/redux/reducer/project/projectReducer";
-import {flatten} from "lodash";
+import {flatten, isEmpty} from "lodash";
+import {useLocation} from "react-router-dom";
 
 ManageTaskPage.propTypes = {};
 
@@ -27,17 +27,21 @@ function ManageTaskPage(props) {
 
     const dispatch=useDispatch()
     const idProject=useSelector(keyProjectSelector)
+    const location=useLocation()
     useEffect(() => {
         // console.log
-       // console.log('Call API get Project')
-        const boardFromDB = initialData.boards.find(board => board.id === 'kltn-01')
-        //console.log(boardFromDB.sprints)
-        if (boardFromDB) {
-            const currentSprint=getSprintActive(boardFromDB.sprints);
+       console.log('Call API get Project')
+        const project=JSON.parse(localStorage.getItem('project'))
+
+        const boardFromDB = initialData.boards.find(board => board.id === project.projectId)
+        if (!isEmpty(boardFromDB)) {
+            const currentSprint= boardFromDB.sprints.find(item=>item.id===project.currentSprint)//getSprintActive(boardFromDB.sprints);
+
             setBoard(boardFromDB)
             setSprint(currentSprint)
+            console.log('SprintActive: ',currentSprint)
             setColumns(mapOrder(currentSprint.columns, currentSprint.columnOrder, 'id'))
-
+            console.log('SprintActive: ',currentSprint)
 
             // const data=   boardFromDB.columns.map((column) =>{
             //   return  column.cards.map((card)=>({id:card.id,title:card.title,endTime:card.endTime}))
@@ -58,7 +62,7 @@ function ManageTaskPage(props) {
         }
         else  dispatch(setIsViewTimeline(false))
 
-    }, [idProject,currentProject, filter, search])
+    }, [currentProject, filter, search])
     const handleUpdateColumn = (value)=>{
         // Create and Update:  API post Sprint to server
         console.log(value)

@@ -2,15 +2,15 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import SprintItem from "~/components/Client/Sprint/SprintItem";
-import {FaAngleRight, FaArrowLeft, FaList} from "react-icons/fa";
+import { FaList} from "react-icons/fa";
 import FilterProject from "~/components/commoms/FilterProject";
 import {initialData, listMembersForTask} from "~/asset/data/initalDataTask";
-import {Breadcrumb, Modal} from "antd";
+import {Breadcrumb, Modal,message} from "antd";
 import AddSprint from "~/components/Client/Sprint/AddSprint";
 import {NavLink} from "react-router-dom";
 import {config} from "~/config";
-import {useSelector} from "react-redux";
-import {boardSelector} from "~/redux/selectors/project/projectSelector";
+import {useDispatch} from "react-redux";
+
 
 BacklogPage.propTypes = {};
 const data = [
@@ -256,35 +256,54 @@ function BacklogPage(props) {
     const [filter,setFilter]=useState([])
     const [showAddSprint,setShowAddSprint]=useState(false)
     const [listSprints,setListSprints]=useState([])
-
+    const [messageApi, contextHolder] = message.useMessage();
+    const dispatch = useDispatch()
     useEffect(()=>{
         // call API get sprint task lên
-        const boardFromDB = initialData.boards.find(board => board.id === 'kltn-01')
+        const project=JSON.parse(localStorage.getItem('project'))
+        const boardFromDB = initialData.boards.find(board => board.id === project.projectId)
         if (boardFromDB){
          //   console.log(boardFromDB.sprints)
             setListSprints(boardFromDB.sprints)
         }
-
+        console.log('Filter: ',filter)
 
     },[filter])
     const handleCreateSprint=(data)=>{
-        console.log(data)
+        console.log('Create Sprint: ',data)
+        messageApi.open({
+            type: 'success',
+            content: 'Tạo thành công',
+            duration: 1.5,
+        });
+        setTimeout(()=>{setShowAddSprint(false)},800)
     }
     const handleUpdateSprint=(data)=>{
-        console.log(data)
+        console.log('Update sprint:',data)
+        messageApi.open({
+            type: 'success',
+            content: 'Cập nhật thành công',
+            duration: 1.3,
+        });
     }
     const handleDeleteSprint=(data)=>{
-        console.log(data)
+        console.log('Delete sprint:',data)
+        messageApi.open({
+            type: 'success',
+            content: 'Xóa thành công',
+            duration: 1.5,
+        });
     }
     const handleRunSprint=(data)=>{
         handleDeleteSprint(data)
     }
     return (
         <div className='container-backlog'>
+            {contextHolder}
             <div className='header-backlog'>
                 <div className='breadcrumb'>
                     <Breadcrumb>
-                        <Breadcrumb.Item><NavLink to={config.routes.project}>Dự Án</NavLink></Breadcrumb.Item>
+                        <Breadcrumb.Item><NavLink to={config.routes.allProject}>Dự Án</NavLink></Breadcrumb.Item>
                         <Breadcrumb.Item><NavLink to={config.routes.backlog}>Danh sách công việc</NavLink></Breadcrumb.Item>
 
                     </Breadcrumb>
@@ -308,7 +327,7 @@ function BacklogPage(props) {
 
                 {
                     !!listSprints && listSprints.map((item) =>(
-                        <SprintItem key={item.id} sprint={item} onEdit={handleUpdateSprint} onDelete={handleUpdateSprint} />
+                        <SprintItem key={item.id} sprint={item} onEdit={handleUpdateSprint} onDelete={handleDeleteSprint} />
                     ))
                 }
 
@@ -318,7 +337,6 @@ function BacklogPage(props) {
                    maskClosable={true}
                    onCancel={()=>setShowAddSprint(false)}
                    footer={null}
-
                    width={700}
                    style={{top: 150}}
             >

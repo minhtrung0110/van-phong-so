@@ -8,6 +8,7 @@ export const conCatArrayInArray = (array) => {
     return array.reduce((acc, item) => acc.concat(item.cards), []);
 }
 export const mapOrder =(array,order,key) =>{
+    console.log('cchecking ',array,order,key)
     array.sort((a,b) => order.indexOf(a[key]) - order.indexOf(b[key]));
     return array
 }
