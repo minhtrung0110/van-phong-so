@@ -30,7 +30,7 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
     useEffect(() => {
         setColumnTitle(column.title)
     }, [column.title])
-    const cards = mapOrder(column.cards, column.cardOrder, 'id')
+    const cards = column.cards;//mapOrder(column.cards, column.cardOrder, 'id')
     const handleRemoveColumn = () => {
             const newColumn = {
                 ...column,

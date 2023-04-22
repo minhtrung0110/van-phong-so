@@ -35,12 +35,12 @@ function ManageTaskPage(props) {
 
         const boardFromDB = initialData.boards.find(board => board.id === project.projectId)
         if (!isEmpty(boardFromDB)) {
-            const currentSprint= boardFromDB.sprints.find(item=>item.id===project.currentSprint)//getSprintActive(boardFromDB.sprints);
+            let currentSprint= boardFromDB.sprints.find(item=>item.id===project.currentSprint)//getSprintActive(boardFromDB.sprints);
 
             setBoard(boardFromDB)
             setSprint(currentSprint)
             console.log('SprintActive: ',currentSprint)
-            setColumns(mapOrder(currentSprint.columns, currentSprint.columnOrder, 'id'))
+            setColumns(mapOrder([...currentSprint.columns], currentSprint.columnOrder, 'id'))
             console.log('SprintActive: ',currentSprint)
 
             // const data=   boardFromDB.columns.map((column) =>{
