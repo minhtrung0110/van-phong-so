@@ -22,6 +22,7 @@ export const initialData = {
                                     id: 'card-1',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-1',
                                     title: 'Lập Kế Hoạch',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -46,9 +47,10 @@ export const initialData = {
                                     comments: [],
                                 },
                                 {
-                                    id: 'project-2',
+                                    id: 'card-dsg',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-1',
                                     title: 'Hoc React JS',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -73,9 +75,10 @@ export const initialData = {
                                     comments: [],
                                 }
                                 , {
-                                    id: 'project-3',
+                                    id: 'card-t-3',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-1',
                                     title: 'Xem Redux',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -103,6 +106,7 @@ export const initialData = {
                                     id: 'project-4',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-1',
                                     title: 'Nắm Yêu Cầu',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -118,6 +122,7 @@ export const initialData = {
                                     id: 'project-5',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-1',
                                     title: 'Lên Bảng Màu',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -133,6 +138,7 @@ export const initialData = {
                                     id: 'project-6',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-1',
                                     title: 'Xem Redux',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -154,9 +160,10 @@ export const initialData = {
                             cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
                             cards: [
                                 {
-                                    id: 'project-1',
+                                    id: 'card-11',
                                     boardId: 'kltn-01',
                                     columnId: 'column-2',
+                                    sprintID:'VPS-1',
                                     title: 'Xây Nhân Sự',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -169,9 +176,10 @@ export const initialData = {
                                     comments: [],
                                 },
                                 {
-                                    id: 'project-2',
+                                    id: 'card-12',
                                     boardId: 'kltn-01',
                                     columnId: 'column-2',
+                                    sprintID:'VPS-1',
                                     title: 'Thiê Kế Lich Trình',
                                     description: '',
                                     startTime: '01/01/2023 00:10:00',
@@ -185,9 +193,10 @@ export const initialData = {
                                     comments: [],
                                 }
                                 , {
-                                    id: 'project-3',
+                                    id: 'card-13',
                                     boardId: 'kltn-01',
                                     columnId: 'column-2',
+                                    sprintID:'VPS-1',
                                     title: 'Tạo Dụ Án Github',
                                     description: '',
                                     startTime: '01/01/2023 00:10:00',
@@ -208,10 +217,11 @@ export const initialData = {
                             cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
                             cards: [
                                 {
-                                    id: 'project-1',
+                                    id: 'card-21',
                                     boardId: 'kltn-01',
                                     columnId: 'column-3',
-                                    title: 'UI Login',
+                                    sprintID:'VPS-1',
+                                    title: 'Chạy Chạy',
                                     description: '',
                                     startTime: '01/01/2023 00:10:00',
                                     endTime: '11/03/2023 21:00:00',
@@ -223,7 +233,7 @@ export const initialData = {
                                     comments: [],
                                 },
                                 {
-                                    id: 'project-2',
+                                    id: 'card-22',
                                     boardId: 'kltn-01',
                                     columnId: 'column-3',
                                     title: 'UIBase DashBoard',
@@ -238,9 +248,10 @@ export const initialData = {
                                     comments: [],
                                 }
                                 , {
-                                    id: 'project-3',
+                                    id: 'card-23',
                                     boardId: 'kltn-01',
                                     columnId: 'column-3',
+                                    sprintID:'VPS-1',
                                     title: 'Đề Cương Khóa Luận',
                                     description: 'Chú Ý xác định đúng đối tượng và tập trung vào quy trình doanh nghiệp',
                                     startTime: '01/02/2023 00:10:00 ',
@@ -256,9 +267,10 @@ export const initialData = {
                                     comments: [],
                                 },
                                 {
-                                    id: 'project-3',
+                                    id: 'card-93',
                                     boardId: 'kltn-01',
                                     columnId: 'column-3',
+                                    sprintID:'VPS-1',
                                     title: 'Tham Khảo UI',
                                     description: '',
                                     startTime: '01/1/2023 00:10:00',
@@ -291,10 +303,11 @@ export const initialData = {
                             cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
                             cards: [
                                 {
-                                    id: 'project-1',
+                                    id: 'card-241',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
-                                    title: 'Kiểm Thử Đăng Nhập',
+                                    sprintID:'VPS-2',
+                                    title: 'Bắn SÚngp',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
                                     endTime: '12/03/2022 21:00:00',
@@ -305,81 +318,6 @@ export const initialData = {
                                     fileList: [],
                                     comments: [],
                                 },
-                                {
-                                    id: 'project-2',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-1',
-                                    title: 'Hoc React JS',
-                                    description: '',
-                                    startTime: '01/10/2022 00:10:00',
-                                    endTime: '15/03/2022 21:00:00',
-                                    priority: 'none',
-                                    point: 4,
-                                    members: [],
-                                    todoList: [],
-                                    fileList: [],
-                                    comments: [],
-                                }
-                                , {
-                                    id: 'project-3',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-1',
-                                    title: 'Xem Redux',
-                                    description: '',
-                                    startTime: '01/10/2022 00:10:00',
-                                    endTime: '21/03/2022 21:00:00',
-                                    priority: 'none',
-                                    point: 3,
-                                    members: [],
-                                    todoList: [],
-                                    fileList: [],
-                                    comments: [],
-                                }
-                                , {
-                                    id: 'project-4',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-1',
-                                    title: 'Nắm Yêu Cầu',
-                                    description: '',
-                                    startTime: '01/10/2022 00:10:00',
-                                    endTime: '17/03/2022 21:00:00',
-                                    priority: 'none',
-                                    point: 2,
-                                    members: [],
-                                    todoList: [],
-                                    fileList: [],
-                                    comments: [],
-                                },
-                                {
-                                    id: 'project-5',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-1',
-                                    title: 'Lên Bảng Màu',
-                                    description: '',
-                                    startTime: '01/10/2022 00:10:00',
-                                    endTime: '17/03/2022 21:00:00',
-                                    priority: 'none',
-                                    point: 1,
-                                    members: [],
-                                    todoList: [],
-                                    fileList: [],
-                                    comments: [],
-                                }
-                                , {
-                                    id: 'project-6',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-1',
-                                    title: 'Xem Redux',
-                                    description: '',
-                                    startTime: '01/10/2022 00:10:00',
-                                    endTime: '21/04/2022 21:00:00',
-                                    priority: 'none',
-                                    point: 4,
-                                    members: [],
-                                    todoList: [],
-                                    fileList: [],
-                                    comments: [],
-                                }
 
                             ]
                         },
@@ -390,10 +328,11 @@ export const initialData = {
                             cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
                             cards: [
                                 {
-                                    id: 'project-1',
+                                    id: 'card-721',
                                     boardId: 'kltn-01',
                                     columnId: 'column-2',
-                                    title: 'Xây Nhân Sự',
+                                    sprintID:'VPS-2',
+                                    title: 'Dưng xác thưc',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
                                     endTime: '15/03/2022 21:00:00',
@@ -404,37 +343,7 @@ export const initialData = {
                                     fileList: [],
                                     comments: [],
                                 },
-                                {
-                                    id: 'project-2',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-2',
-                                    title: 'Thiê Kế Lich Trình',
-                                    description: '',
-                                    startTime: '01/01/2023 00:10:00',
-                                    endTime: '15/04/2023 21:00:00',
-                                    priority: 'middle',
-                                    point: 3,
 
-                                    members: [],
-                                    todoList: [],
-                                    fileList: [],
-                                    comments: [],
-                                }
-                                , {
-                                    id: 'project-3',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-2',
-                                    title: 'Tạo Dụ Án Github',
-                                    description: '',
-                                    startTime: '01/01/2023 00:10:00',
-                                    endTime: '20/03/2023 21:00:00',
-                                    priority: 'low',
-                                    point: 2,
-                                    members: [],
-                                    todoList: [],
-                                    fileList: [],
-                                    comments: [],
-                                }
                             ]
                         },
                         {
@@ -444,10 +353,11 @@ export const initialData = {
                             cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
                             cards: [
                                 {
-                                    id: 'project-1',
+                                    id: 'card-521',
                                     boardId: 'kltn-01',
                                     columnId: 'column-3',
-                                    title: 'UI Login',
+                                    sprintID:'VPS-2',
+                                    title: 'Chạy Docker',
                                     description: '',
                                     startTime: '01/01/2023 00:10:00',
                                     endTime: '11/03/2023 21:00:00',
@@ -458,54 +368,6 @@ export const initialData = {
                                     fileList: [],
                                     comments: [],
                                 },
-                                {
-                                    id: 'project-2',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-3',
-                                    title: 'UIBase DashBoard',
-                                    description: '',
-                                    startTime: '01/01/2023 00:10:00',
-                                    endTime: '20/03/2023 21:00:00',
-                                    priority: 'highly',
-                                    point: 2,
-                                    members: [],
-                                    todoList: [],
-                                    fileList: [],
-                                    comments: [],
-                                }
-                                , {
-                                    id: 'project-3',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-3',
-                                    title: 'Đề Cương Khóa Luận',
-                                    description: 'Chú Ý xác định đúng đối tượng và tập trung vào quy trình doanh nghiệp',
-                                    startTime: '01/02/2023 00:10:00 ',
-                                    endTime: '20/04/2023 20:00:00 ',
-                                    priority: 'highly',
-                                    point: 2,
-                                    members: [],
-                                    todoList: [
-                                        {id: 1, name: 'Lập Kịch Bản', status: false, isNew: false},
-                                        {id: 2, name: 'Viết Mục Tiêu', status: false, isNew: false}
-                                    ],
-                                    fileList: [],
-                                    comments: [],
-                                },
-                                {
-                                    id: 'project-3',
-                                    boardId: 'kltn-01',
-                                    columnId: 'column-3',
-                                    title: 'Tham Khảo UI',
-                                    description: '',
-                                    startTime: '01/1/2023 00:10:00',
-                                    endTime: '01/03/2023 21:00:00',
-                                    priority: 'middle',
-                                    point: 2,
-                                    members: [],
-                                    todoList: [],
-                                    fileList: [],
-                                    comments: [],
-                                }
 
 
                             ]
@@ -527,9 +389,10 @@ export const initialData = {
                             cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
                             cards: [
                                 {
-                                    id: 'project-1',
+                                    id: 'card-251',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-3',
                                     title: 'Lập Kế Hoạch',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -542,9 +405,10 @@ export const initialData = {
                                     comments: [],
                                 },
                                 {
-                                    id: 'project-2',
+                                    id: 'card-252',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-3',
                                     title: 'Hoc React JS',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -557,9 +421,10 @@ export const initialData = {
                                     comments: [],
                                 }
                                 , {
-                                    id: 'project-3',
+                                    id: 'card-253',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-3',
                                     title: 'Xem Redux',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -572,9 +437,10 @@ export const initialData = {
                                     comments: [],
                                 }
                                 , {
-                                    id: 'project-4',
+                                    id: 'card-254',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-3',
                                     title: 'Nắm Yêu Cầu',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -587,9 +453,10 @@ export const initialData = {
                                     comments: [],
                                 },
                                 {
-                                    id: 'project-5',
+                                    id: 'card-255',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-3',
                                     title: 'Lên Bảng Màu',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -602,9 +469,10 @@ export const initialData = {
                                     comments: [],
                                 }
                                 , {
-                                    id: 'project-6',
+                                    id: 'card-256',
                                     boardId: 'kltn-01',
                                     columnId: 'column-1',
+                                    sprintID:'VPS-3',
                                     title: 'Xem Redux',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -626,9 +494,10 @@ export const initialData = {
                             cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
                             cards: [
                                 {
-                                    id: 'project-1',
+                                    id: 'card-451',
                                     boardId: 'kltn-01',
                                     columnId: 'column-2',
+                                    sprintID:'VPS-3',
                                     title: 'Xây Nhân Sự',
                                     description: '',
                                     startTime: '01/10/2022 00:10:00',
@@ -641,9 +510,10 @@ export const initialData = {
                                     comments: [],
                                 },
                                 {
-                                    id: 'project-2',
+                                    id: 'card-42',
                                     boardId: 'kltn-01',
                                     columnId: 'column-2',
+                                    sprintID:'VPS-3',
                                     title: 'Thiê Kế Lich Trình',
                                     description: '',
                                     startTime: '01/01/2023 00:10:00',
@@ -657,9 +527,10 @@ export const initialData = {
                                     comments: [],
                                 }
                                 , {
-                                    id: 'project-3',
+                                    id: 'card-43',
                                     boardId: 'kltn-01',
                                     columnId: 'column-2',
+                                    sprintID:'VPS-3',
                                     title: 'Tạo Dụ Án Github',
                                     description: '',
                                     startTime: '01/01/2023 00:10:00',
@@ -680,9 +551,10 @@ export const initialData = {
                             cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
                             cards: [
                                 {
-                                    id: 'project-1',
+                                    id: 'card-41',
                                     boardId: 'kltn-01',
                                     columnId: 'column-3',
+                                    sprintID:'VPS-3',
                                     title: 'UI Login',
                                     description: '',
                                     startTime: '01/01/2023 00:10:00',
@@ -695,9 +567,10 @@ export const initialData = {
                                     comments: [],
                                 },
                                 {
-                                    id: 'project-2',
+                                    id: 'card-82',
                                     boardId: 'kltn-01',
                                     columnId: 'column-3',
+                                    sprintID:'VPS-3',
                                     title: 'UIBase DashBoard',
                                     description: '',
                                     startTime: '01/01/2023 00:10:00',
@@ -710,9 +583,10 @@ export const initialData = {
                                     comments: [],
                                 }
                                 , {
-                                    id: 'project-3',
+                                    id: 'card-83',
                                     boardId: 'kltn-01',
                                     columnId: 'column-3',
+                                    sprintID:'VPS-3',
                                     title: 'Đề Cương Khóa Luận',
                                     description: 'Chú Ý xác định đúng đối tượng và tập trung vào quy trình doanh nghiệp',
                                     startTime: '01/02/2023 00:10:00 ',
@@ -728,9 +602,10 @@ export const initialData = {
                                     comments: [],
                                 },
                                 {
-                                    id: 'project-3',
+                                    id: 'card-88',
                                     boardId: 'kltn-01',
                                     columnId: 'column-3',
+                                    sprintID:'VPS-3',
                                     title: 'Tham Khảo UI',
                                     description: '',
                                     startTime: '01/1/2023 00:10:00',
@@ -748,6 +623,38 @@ export const initialData = {
                         }
                     ],
                     status: 0,
+                },
+                {
+                    id: 'Backlog',
+                    name: 'Lưu Trữ',
+                    startTime: '18/05/2023 00:00:00',
+                    endTime: '13/06/2023 00:00:00',
+                    columnOrder: ['column-1', 'column-2', 'column-3'],
+                    columns: [
+                        {
+                            id: 'column-1',
+                            boardId: 'kltn-01',
+                            title: 'Chuẩn Bị',
+                            cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
+                            cards: [
+                            ]
+                        },
+                        {
+                            id: 'column-2',
+                            boardId: 'kltn-01',
+                            title: 'Đang Tiến Hành',
+                            cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
+                            cards: [                            ]
+                        },
+                        {
+                            id: 'column-3',
+                            boardId: 'kltn-01',
+                            title: 'Đã Hoàn Thành',
+                            cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
+                            cards: [                            ]
+                        }
+                    ],
+                    status: -1,
                 }
             ],
             leader:{

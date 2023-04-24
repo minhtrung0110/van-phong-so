@@ -35,7 +35,7 @@ function ManageGroup(props) {
     const [data, setData] = useState(listGroups)
     const [page, setPage] = React.useState(1);
     const [totalRecord, setTotalRecord] = React.useState(data.length);
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
     const dispatch = useDispatch()
     const isEdit = useSelector(isEditGroupSelector)
     const [isModalOpen, setIsModalOpen] = useState(false);

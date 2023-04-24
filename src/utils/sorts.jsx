@@ -23,3 +23,29 @@ export const getListStatusTaskProject=(array) =>{
 export const findStyleForStatusTask=(status,list)=>{
     return list.find((item)=>item.value===status)
 }
+export const splitArrayByKey = (array, key) => {
+    const grouped = array.reduce((acc, item) => {
+        if (!acc[item[key]]) {
+            acc[item[key]] = {
+                id: item[key],
+                cards: []
+            };
+        }
+        acc[item[key]].cards.push(item);
+        return acc;
+    }, {});
+
+    return Object.values(grouped);
+};
+export const remakeSprintFromSlide = (array,sprint) => {
+    const mData=splitArrayByKey(array,'columnId');
+    // return {...sprint,columns:newColumns}
+    return sprint.columns.map((col => {
+        let item = mData.find(item => item.id === col.id)
+        return {
+            ...col,
+            cards: item.cards
+        }
+    }));
+
+};

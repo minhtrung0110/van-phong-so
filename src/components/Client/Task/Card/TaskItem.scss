@@ -8,12 +8,22 @@
   margin-bottom: var(--gap);
   font-size: var(--fs-task-pg);
   &.task-long{
-    padding-left:  2.5rem;
-    padding-right:  2.5rem;
+    vertical-align: middle;
+    height: 2.3rem;
+    padding: 0 2.5rem;
+    min-height: 1.5rem;
+    .header-task-item {
+      height: 2.3rem;
+      .task-title {
+        display: flex;
+        align-items: center;
+
+      }
+    }
   }
 
   &:hover {
-    transform: scale(1.0225);
+    transform: scale(1.0125);
     cursor: pointer;
     // background-color:var(--list-bg-color);
   }

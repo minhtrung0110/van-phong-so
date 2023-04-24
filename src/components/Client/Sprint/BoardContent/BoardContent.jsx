@@ -54,10 +54,12 @@ function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeL
         {
             let newColumns=[...columns]
             let currentColumn=newColumns.find((item=>item.id===columnId))
-
+            console.log('New column:',newColumns,currentColumn)
             currentColumn.cards=applyDrag(currentColumn.cards,dropResult,currentColumn.id)
             currentColumn.cardOrder=currentColumn.cards.map(i=>i.id)
+
             setColumns(newColumns)
+
 
         }
         // vấn de: khi kéo thả thì trường column_ID của project bi loi không thay dôi
