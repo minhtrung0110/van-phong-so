@@ -44,10 +44,10 @@
 $spacing: 0.5rem;
 .sprint-item {
   min-width: 626px;
-  margin: 8px 0px 40px;
+  margin: 0.8rem 0;
   background-color: var(--ds-surface-sunken, #F4F5F7);
   border-radius: 8px;
-  padding: 1rem 3rem;
+  padding: 0.8rem 3rem;
   &.backlog{
     background-color: #fff;
     border: 1px dashed var(--gray60-color);
@@ -173,7 +173,8 @@ $spacing: 0.5rem;
     .list-task{
       margin: 0.5rem 0;
       height: auto;
-      min-height:3rem
+      min-height:3rem;
+
     }
     .dashed {
       border:1.5px dashed #a19f9f;

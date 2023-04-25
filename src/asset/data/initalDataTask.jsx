@@ -8,6 +8,7 @@ export const initialData = {
                 {
                     id: 'VPS-1',
                     name: 'Sprint 1',
+                    boardId: 'kltn-01',
                     startTime: '18/03/2023 00:00:00',
                     endTime: '13/04/2023 00:00:00',
                     columnOrder: ['column-1', 'column-2', 'column-3'],
@@ -292,6 +293,7 @@ export const initialData = {
                 {
                     id: 'VPS-2',
                     name: 'Sprint 2',
+                    boardId: 'kltn-01',
                     startTime: '18/04/2023 00:00:00',
                     endTime: '13/05/2023 00:00:00',
                     columnOrder: ['column-1', 'column-2', 'column-3'],
@@ -378,6 +380,7 @@ export const initialData = {
                 {
                     id: 'VPS-3',
                     name: 'Sprint 3',
+                    boardId: 'kltn-01',
                     startTime: '18/05/2023 00:00:00',
                     endTime: '13/06/2023 00:00:00',
                     columnOrder: ['column-1', 'column-2', 'column-3'],
@@ -627,6 +630,7 @@ export const initialData = {
                 {
                     id: 'Backlog',
                     name: 'Lưu Trữ',
+                    boardId: 'kltn-01',
                     startTime: '18/05/2023 00:00:00',
                     endTime: '13/06/2023 00:00:00',
                     columnOrder: ['column-1', 'column-2', 'column-3'],
@@ -635,7 +639,7 @@ export const initialData = {
                             id: 'column-1',
                             boardId: 'kltn-01',
                             title: 'Chuẩn Bị',
-                            cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
+                            cardOrder: [],
                             cards: [
                             ]
                         },
@@ -643,14 +647,14 @@ export const initialData = {
                             id: 'column-2',
                             boardId: 'kltn-01',
                             title: 'Đang Tiến Hành',
-                            cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
+                            cardOrder: [],
                             cards: [                            ]
                         },
                         {
                             id: 'column-3',
                             boardId: 'kltn-01',
                             title: 'Đã Hoàn Thành',
-                            cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5'],
+                            cardOrder: [],
                             cards: [                            ]
                         }
                     ],

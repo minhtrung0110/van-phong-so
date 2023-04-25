@@ -12,7 +12,7 @@ BoardSprint.propTypes = {
 
 };
 
-function BoardSprint({board,onBoard,columnData,onEdit,  onDeleteTask,onUpdateTask,timeLine}) {
+function BoardSprint({columnData,onEdit, onDelete,onCreateTask, onDeleteTask,onUpdateTask}) {
    // console.log(columnData)
     const [columns,setColumns] = useState(columnData)
     const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
@@ -47,66 +47,20 @@ function BoardSprint({board,onBoard,columnData,onEdit,  onDeleteTask,onUpdateTas
             let currentColumn=newColumns.find((item=>item.id===columnId)) // là cái cột chô sẽ duoc chuyển vào
             const listCardSprint= conCatArrayInArray(currentColumn.columns);
            // console.log('ccheccked',listCardSprint)
-            currentColumn.columns=remakeSprintFromSlide(applyDragSprint(listCardSprint, dropResult, currentColumn.id), currentColumn);
             console.log('Đang Tesst: ',currentColumn,newColumns)
+            currentColumn.columns=remakeSprintFromSlide(applyDragSprint(listCardSprint, dropResult, currentColumn.id), currentColumn);
+
            // currentColumn.cardOrder=currentColumn.cards.map(i=>i.id)
           flushSync(()=>setColumns(newColumns))
         }
        // vấn de: khi kéo thả thì trường column_ID của project bi loi không thay dôi
     }
-    const handleAddNewColumn=()=>{
-        //    newColInputRef.current.focus();
-        const newColumnToAdd={
-            id:Math.random().toString(36).substr(2,5),
-            boardId:board.id,
-            title:newColTitle.trim(),
-            cardOrder:[],
-            cards:[]
-        }
-        let newColumns=[...columns]
-        newColumns.push(newColumnToAdd)
-        //  console.log(newColumns)
-        let newBoard={...board}
-        // cập nhật columnnOrder bang các id sau khi keo tha
-        newBoard.columnOrder=newColumns.map(item=>item.id)
-        newBoard.columns=newColumns
-        setColumns(newColumns)
-        onBoard(newBoard)
 
 
-        //clear inout
-        setNewColTitle('')
-        setIsOpenNewColForm(false)
-
-
-    }
-
-    const handleUpdateColumn=(newColUpdate)=>{
-        const columnIdToUpdate=newColUpdate.id
-        let newColumns=[...columns]
-        const columnIndexToUpdate=newColumns.findIndex(i=>i.id===newColUpdate.id)
-        //console.log('xóa ở: ',columnIndexToUpdate)
-        if(newColUpdate._destroy){
-            newColumns.splice(columnIndexToUpdate,1)
-            setColumns(newColumns)
-        }else{
-            newColumns.splice(columnIndexToUpdate,1,newColUpdate)
-            setColumns(newColumns)
-        }
-
-        // console.log(columns)
-        let newBoard={...board}
-        newBoard.columnOrder=newColumns.map(item=>item.id)
-        newBoard.columns=newColumns
-
-        onBoard(newBoard)
-        //  console.log(newColUpdate)
-    }
     return (
         <div>
             <Container
                 orientation="vertical"
-              //  onDrop={onSprintDrop}
                 getChildPayload={index =>columns[index]}
              //   dragHandleSelector=".column-drag-handle"
                 dropPlaceholder={{
@@ -123,10 +77,12 @@ function BoardSprint({board,onBoard,columnData,onEdit,  onDeleteTask,onUpdateTas
                                 sprint={sprint}
                                 column={sprint}
                                 onCardDrop={onCardDropSprint}
-                                onUpdateColumn={handleUpdateColumn}
+                                onEdit={onEdit}
+                                onDelete={onDelete}
+
+                                onCreateTask={onCreateTask}
                                 onDeleteTask={onDeleteTask}
                                 onUpdateTask={onUpdateTask}
-                                onEdit={onEdit}
 
                             />
                         </Draggable>

@@ -306,13 +306,11 @@ function BacklogPage(props) {
     const handleRunSprint=(data)=>{
         handleDeleteSprint(data)
     }
-    const handleUpdateColumn = (value)=>{
-        // Create and Update:  API post Sprint to server
-        console.log(value)
-        // Delete Column : FE return a new Sprint, which  was deleted 1 column Status.
-    }
     const handleDeleteTask=(value)=>{
         console.log('Delete Task: ', value)
+    }
+    const handleCreateTask=(value)=>{
+        console.log('Create Task: ', value)
     }
     const handleUpdateTask=(value)=>{
         console.log('Update Task: ', value)
@@ -346,6 +344,10 @@ function BacklogPage(props) {
                 <BoardSprint
                     board={project} onBoard={handleUpdateSprint} columnData={listSprints}
                     onEdit={handleUpdateSprint}
+                    onDelete={handleDeleteSprint}
+                    onDeleteTask={handleDeleteTask}
+                    onCreateTask={handleCreateTask}
+                    onUpdateTask={handleUpdateTask}
                 />
                 {/*{*/}
                 {/*    !!listSprints && listSprints.map((item) =>(*/}

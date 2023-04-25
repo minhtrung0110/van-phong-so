@@ -1,3 +1,4 @@
+import {isEmpty} from "lodash";
 
 export const getSprintActive=(array) =>(
 
@@ -39,12 +40,13 @@ export const splitArrayByKey = (array, key) => {
 };
 export const remakeSprintFromSlide = (array,sprint) => {
     const mData=splitArrayByKey(array,'columnId');
+    console.log('kiem tra item: ',mData,sprint)
     // return {...sprint,columns:newColumns}
     return sprint.columns.map((col => {
         let item = mData.find(item => item.id === col.id)
         return {
             ...col,
-            cards: item.cards
+            cards: !!item ? item.cards:[]
         }
     }));
 
