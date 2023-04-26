@@ -34,19 +34,21 @@ import {setDeleteTask} from "~/redux/reducer/project/projectReducer";
 
 DetailTask.propTypes = {};
 
-function DetailTask({sprint, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
+function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
 
     const data = useSelector(detailTaskSelector)
     const [errorDescription, setErrorDescription] = useState('');
+    const [description,setDescription]=useState(data.description);
+    const [todoList,setTodoList] = useState(data.todoList)
     const [priority, setPriority] = useState(data.priority);
     const [status, setStatus] = useState(getStatusTaskProject(sprint, data.columnId))
-    const [listFile, setListFile] = useState([])
+    const [listFile, setListFile] = useState(data.fileList)
     const [point, setPoint] = useState(data.point)
     const [taskTitle, setTaskTitle] = useState(data.title)
 
     const [rangeValueTime, setRangeValueTime] = useState(
         [dayjs(data.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(data.endTime, "DD/MM/YYYY HH:mm:ss")]);
-    const [members, setMembers] = useState([])
+    const [members, setMembers] = useState(data.members)
     const dispatch = useDispatch()
     const {RangePicker} = DatePicker;
     // console.log(priority)
@@ -90,7 +92,8 @@ function DetailTask({sprint, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
         setRangeValueTime([dates[0], dates[1]])
     }
     const editorDescription = (value) => {
-        //  setValue('description', value);nay2y2 cho form
+
+        setDescription(value)
         setErrorDescription('');
     };
 
@@ -195,12 +198,16 @@ function DetailTask({sprint, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
             title: taskTitle,
             columnId: status.value,
             priority:priority,
+            description,
+            todoList,
+            fileList:todoList,
+            members,
             point,
             startTime: dayjs(rangeValueTime[0], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
             , endTime: dayjs(rangeValueTime[1], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
         })
 
-    }, [taskTitle,status,priority,rangeValueTime,point])
+    }, [taskTitle,status,priority,rangeValueTime,point,description,listFile,todoList,members])
     // DEBUG HERE
     // console.log(status)
     return (
@@ -309,7 +316,7 @@ function DetailTask({sprint, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
                 <div className='gr-02'>
                     <div className='members'>
                         <p>Thực Hiện :</p>
-                        <GroupMember onMembers={setMembers}/>
+                        <GroupMember onMembers={setMembers} defaultMembers={members} addMember={true} listMembersForTask={listMembers}/>
 
                     </div>
                     <div className='notification'>
@@ -325,13 +332,14 @@ function DetailTask({sprint, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
                 </div>
                 <div className='todo-list'>
 
-                    <ToDoList list={data.todoList}/>
+                    <ToDoList list={todoList} onUpdate={setTodoList}/>
                 </div>
                 <div className='attach-file'>
                     <Upload
                         action="http://localhost:3000/"
                         listType="picture"
                         defaultFileList={listFile}
+                        fileList={listFile}
                         multiple
                         onChange={handleChangeUpload}
                     >

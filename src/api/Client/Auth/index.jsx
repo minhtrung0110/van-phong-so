@@ -38,7 +38,8 @@ export const configHeadersAuthenticate = () => {
 };
 
 export const handleLogin = async (body) => {
-  const url = 'api/admin/login';
+  console.log('Data login received',body)
+  const url = 'api/login';
   const response = await axiosClient.post(url, body);
   return response;
 };

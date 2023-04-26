@@ -7,6 +7,7 @@ import iconBG from '~/asset/images/icon_loginv4.png'
 import wave from '~/asset/images/wave.png'
 import {FaLock, FaUser} from "react-icons/fa";
 import {useForm} from "react-hook-form";
+import {handleLogin, setCookies} from "~/api/Client/Auth";
 
 LoginPage.propTypes = {};
 
@@ -22,7 +23,39 @@ function LoginPage(props) {
     const handleBlurPassWord = (e) => {
         e.target.value === "" && setIsFocusedPass(false)
     }
-    const onSubmit = data => console.log(data);
+    const onSubmit =async (data) => {
+        const result = await handleLogin(data);
+        console.log(result);
+        if (result.status === 403 || result.status === 422) {
+          //  ErrorToast('Email or password is incorrect. Please try again', 3500);
+          //  Notiflix.Block.remove('.sl-box');
+            return;
+        }
+        if (result.status === 401) {
+          //  ErrorToast('Your account has been locked.', 3500);
+          //  Notiflix.Block.remove('.sl-box');
+            return;
+        }
+        if (result.data.status === 200) {
+           // SuccessToast('Logged in successfully', 2000);
+            setCookies('token', result.data.token, 1);
+            const response = await handleGetInformation();
+            if (response === 401) {
+              //  SuccessToast('Error server ... ', 2000);
+              //  Notiflix.Block.remove('.sl-box');
+            } else {
+                // if (response.role_id === 2) {
+                //
+                // }
+                if (response.role_id === 2) {
+                    window.location.href = '/admin/warehouse';
+                }else{
+                    window.location.href = '/admin/';
+                }
+                return;
+            }
+        }
+    }
     console.log(errors)
     return (
         <>
