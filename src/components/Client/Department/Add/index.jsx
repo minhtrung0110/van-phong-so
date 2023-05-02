@@ -4,11 +4,13 @@ import './style.scss'
 import { Form, Input,} from "antd";
 import {useForm, Controller} from "react-hook-form";
 
-AddDepartment.propTypes = {};
+AddDepartment.propTypes = {
+    onCancel: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
+};
 
 function AddDepartment({onCancel, onSave}) {
     const { control, handleSubmit, formState: { errors } } = useForm();
-    const [value, setValue] = useState('')
 
     return (
         <div className="add-department-container">

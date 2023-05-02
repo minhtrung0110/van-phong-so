@@ -7,7 +7,7 @@ import {FaPlus} from "react-icons/fa";
 import ToDoItem from "~/components/commoms/ToDoList/ToDoItem";
 
 const cx=classNames.bind(styles)
-function TodoList({list}) {
+function TodoList({list,onUpdate}) {
     // const list=[
     //     {id:1,name:'Lập Kịch Bản',status:false,isNew:false},
     //     {id:2,name:'Mua Đao Cu',status:false,isNew:false}
@@ -28,7 +28,8 @@ function TodoList({list}) {
             return obj
         })
         setListToDo(newListToDo)
-        console.log('New TodoList: ',newListToDo)
+        onUpdate(newListToDo)
+       // console.log('New TodoList: ',newListToDo)
 
     }
     const handleRemoveToDoItem=(item)=>{

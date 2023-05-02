@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImgCrop from 'antd-img-crop';
 import './style.scss'
 import HeaderContent from "~/components/commoms/HeaderContent";
-import Avatar from "react-avatar-edit";
 import {Upload} from "antd";
 import ImageCustom from "~/components/commoms/Image";
 ManageCompany.propTypes = {
@@ -49,10 +48,10 @@ function ManageCompany() {
                 reader.onload = () => resolve(reader.result);
             });
         }
-        const image = new Image();
-        image.src = src;
-        const imgWindow = window.open(src);
-        imgWindow?.document.write(image.outerHTML);
+        // const image = new Image();
+        // image.src = src;
+        // const imgWindow = window.open(src);
+        // imgWindow?.document.write(image.outerHTML);
     };
 
     return (

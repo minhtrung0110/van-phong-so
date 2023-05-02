@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
-import {AutoComplete, Button, Cascader, Col, DatePicker, Form, Input, Modal, Radio, Row, Select, Upload} from "antd";
-import {Option} from "antd/es/mentions";
-import {FaCut, FaLock, FaPlus, FaTrashAlt} from "react-icons/fa";
+import {AutoComplete, message, Cascader, Col, DatePicker, Form, Input, Modal, Radio, Row, Select, Upload} from "antd";
+import { FaPlus,} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import {setIsEdit} from "~/redux/reducer/staff/staffReducer";
 import {provinceVn} from "~/asset/data/provinces-vn"
 import HeaderContent from "~/components/commoms/HeaderContent";
-import AddProject from "~/components/Client/Project/Add";
 import {useForm, Controller} from "react-hook-form";
 import {listCounties} from "~/asset/data/initDataGlobal";
-import dayjs from "dayjs";
 
 EditStaff.propTypes = {};
 const getBase64 = (file) =>
@@ -22,14 +19,13 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-function EditStaff({onSave}) {
+function EditStaff({}) {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
+    const [messageApi, contextHolder] = message.useMessage();
     const dispatch = useDispatch();
-    const onFormLayoutChange = ({disabled}) => {
 
-    };
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
@@ -70,12 +66,19 @@ function EditStaff({onSave}) {
         setPreviewOpen(true);
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
     };
-    console.log(errors, dirtyFields)
-    const submit = (data) => {
-        console.log(data)
+    const onSave = (data) => {
+        console.log('Update Staff:',data)
+        // thành công
+        messageApi.open({
+            type: 'success',
+            content: 'Cập nhật thành công',
+            duration: 1.3,
+        });
+        setTimeout(()=>handleCancel,1400)
     }
     return (
         <div className="edit-staff-container">
+            {contextHolder}
             <HeaderContent title='Cập Nhật Nhân Viên'/>
             <Form
                 labelCol={{

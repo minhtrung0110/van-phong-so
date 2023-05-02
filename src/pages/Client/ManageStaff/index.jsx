@@ -28,13 +28,15 @@ function ManageStaff(props) {
     const data_staff_table_header = [...staff_table_header];
     const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState(listStaffs);
+    const [search, setSearch] = React.useState('')
+    const [filter, setFilter] = React.useState()
     const isAddStaff = useSelector(isAddStaffSelector);
     const isEditStaff = useSelector(isEditStaffSelector);
     const detailStaff = useSelector(staffSelector)
     const dispatch = useDispatch();
     const [totalRecord, setTotalRecord] = React.useState(data.length);
     const [page, setPage] = React.useState(1);
-    console.log(data.length)
+
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
@@ -60,7 +62,17 @@ function ManageStaff(props) {
         console.log('EditStaff', data);
     }
 
-        console.log(isEmpty(detailStaff))
+    useEffect(()=>{
+        console.log('Search:',search,' - Filter:',filter)
+    },[data,search,filter])
+    const handleFilterStatus=(value) => {
+        const stt={status:value}
+        setFilter(prev=>({...prev,...stt}))
+    }
+    const handleFilterRole=(value) => {
+        const role={role:value}
+        setFilter(prev=>({...prev,...role}))
+    }
     return (
         <>
             {
@@ -82,21 +94,22 @@ function ManageStaff(props) {
                                                         !isAddStaff && !isEditStaff && (
                                                             <div className='filter-staff-page'>
                                                                 <div className='filter-group'>
-                                                                    <FilterRadiobox width='15.2rem'/>
-                                                                    <FilterCheckbox/>
+                                                                    <FilterRadiobox width='15.2rem' onFilter={handleFilterStatus}/>
+                                                                    <FilterCheckbox onFilter={handleFilterRole} />
 
                                                                 </div>
                                                                 <div className='search-excel'>
                                                                     <SearchHidenButton height='2.4rem' width='20rem'
-                                                                                       backgroundButton='#1477DAFF'/>
+                                                                      onSearch={setSearch}                 backgroundButton='#1477DA'/>
+
                                                                     <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>
                                                                         <Button className='btn'><FaFileUpload className='icon'/></Button>
                                                                     </Tooltip>
                                                                     <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>
                                                                         <Button className='btn'><FaFileDownload className='icon'/></Button>
                                                                     </Tooltip>
-                                                                    <Button className='btn-outline-primary btn-add'
-                                                                            onClick={goToPageAddStaff}>Thêm </Button>
+                                                                    <Button className='btn-add'
+                                                                            onClick={goToPageAddStaff}>Tạo Mới</Button>
 
 
                                                                 </div>

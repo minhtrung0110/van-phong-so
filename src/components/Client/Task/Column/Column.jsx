@@ -13,7 +13,7 @@ import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import DetailTask from "~/components/Client/Task/DetailTask";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {useSelector} from "react-redux";
-import {deleteTaskSelector} from "~/redux/selectors/project/projectSelector";
+import { projectSelector} from "~/redux/selectors/project/projectSelector";
 
 
 function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdateTask}) {
@@ -23,14 +23,14 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
     const [isAddCard, setIsAddCard] = useState(false)
     const [valueNewCard, setValueNewCard] = useState('')
     const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
-
     const [taskUpdate, setTaskUpdate] = useState({})
-
+    const project=useSelector(projectSelector)
+    console.log(project)
     const newCardRef = useRef()
     useEffect(() => {
         setColumnTitle(column.title)
     }, [column.title])
-    const cards = mapOrder(column.cards, column.cardOrder, 'id')
+    const cards = column.cards;//mapOrder(column.cards, column.cardOrder, 'id')
     const handleRemoveColumn = () => {
             const newColumn = {
                 ...column,
@@ -262,7 +262,7 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
                 destroyOnClose={true}
                // afterClose={()=>handleUpdateTask}
             >
-              <DetailTask isOpen={isOpenDetailTask} sprint={sprint} onDeleteTask={onDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
+              <DetailTask isOpen={isOpenDetailTask} listMembers={project.listMembers} sprint={sprint} onDeleteTask={onDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
             </Modal>
             <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html:`Bạn Có Thực Sự Muốn Xóa Cột <strong>${columnTitle}</strong> Này ? `}} />}

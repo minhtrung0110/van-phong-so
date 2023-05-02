@@ -13,6 +13,7 @@ import {cloneDeep} from "lodash";
 import {useNavigate} from "react-router-dom";
 import {config} from "~/config";
 import {useDispatch} from "react-redux";
+import {setSprint} from "~/redux/reducer/project/projectReducer";
 
 SprintItem.propTypes = {};
 
@@ -41,13 +42,25 @@ function SprintItem({sprint,onEdit,onDelete}) {
     }
     const handleDelete=()=>{
         onDelete(sprint)
+        setShowConfirmDelete(false)
     }
     const navigate=useNavigate()
     const dispatch=useDispatch()
     const handleRunSprint=()=>{
         onEdit({...sprint,status:sprint.status===1?0:1})
-        if(sprint.status===0)
-        navigate(config.routes.project)
+        if(sprint.status===0){
+            navigate(config.routes.project)
+            const project=JSON.parse(localStorage.getItem("project"))
+            project.currentSprint=sprint.id
+            localStorage.setItem('project',JSON.stringify(project))
+            dispatch(setSprint(sprint))
+        }
+
+        setShowEditSprint(false)
+    }
+    const handleUpdateSprint=(data)=>{
+        onEdit(data)
+        setShowEditSprint(false)
     }
     const handleCreateTask = () => {
         // const newCardToAdd = {
@@ -178,7 +191,7 @@ function SprintItem({sprint,onEdit,onDelete}) {
                    width={700}
                    style={{top: 150}}
             >
-                <EditSprint sprint={sprint} onClose={()=>setShowEditSprint(false)} onSave={onEdit} />
+                <EditSprint sprint={sprint} onClose={()=>setShowEditSprint(false)} onSave={handleUpdateSprint} />
             </Modal>
             <ConfirmModal open={showConfirmDelete} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Phiên <strong>${sprint.name}</strong>  ? `}} />}

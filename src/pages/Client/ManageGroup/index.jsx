@@ -25,6 +25,7 @@ import {config} from "~/config";
 import {departmentSelector} from "~/redux/selectors/department/departmenrSelector";
 import AddDepartment from "~/components/Client/Department/Add";
 import AddGroup from "~/components/Client/Group/Add";
+import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 ManageGroup.propTypes = {
 
 };
@@ -90,60 +91,66 @@ function ManageGroup(props) {
                    <FaArrowLeft />
                    Quay Về</NavLink>
            </div>
-           <div className={'container-group'}>
-               <div className='header-group-page'>
-                   <div className='title '>
-                       <FaRegBuilding className='icon'/>
-                       <h4>{` Danh Sách Nhóm Thuộc  ${department.name}`}</h4>
-                   </div>
-                   <div className='filter-group-page'>
-                       <div className='filter-group'>
-                           <FilterRadiobox width='15.2rem' onFilter={setFilter}/>
+           {
+               !!loading ?(
+                   <ListPageSkeleton column={5} />
+               ):(
+                   <div className={'container-group'}>
+                       <div className='header-group-page'>
+                           <div className='title '>
+                               <FaRegBuilding className='icon'/>
+                               <h4>{` Danh Sách Nhóm Thuộc  ${department.name}`}</h4>
+                           </div>
+                           <div className='filter-group-page'>
+                               <div className='filter-group'>
+                                   <FilterRadiobox width='15.2rem' onFilter={setFilter}/>
+
+                               </div>
+                               <div className='search-excel'>
+                                   <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
+                                                      onSearch={setSearch}                backgroundButton='#479f87'/>
+                                   <Button className='btn-add'
+                                           onClick={handleOpenAddGroup}>Tạo Mới </Button>
+
+
+                               </div>
+                           </div>
 
                        </div>
-                       <div className='search-excel'>
-                           <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
-                              onSearch={setSearch}                backgroundButton='#479f87'/>
-                           <Button className='btn-add'
-                                   onClick={handleOpenAddGroup}>Tạo Mới </Button>
+                       <div className='content-group-page'>
+                           {
+                               data.length > 0 ? (
+                                   <GroupTable tableHeader={group_table_header} tableBody={data}
+                                               onDelete={handleDeleteGroup} onUpdate={handleUpdateGroup}
+                                   />
+                               ) : (
+                                   <NotFoundData/>
+                               )
 
+                           }
+                           {totalRecord >= 5 && (
+                               <PaginationUI
+                                   handlePageChange={handlePageChange}
+                                   perPage={5}
+                                   totalRecord={totalRecord}
+                                   currentPage={page}
+                               />
+                           )}
 
                        </div>
+                       <Modal title="Tạo Mới Nhóm" open={isModalOpen}
+                              maskClosable={true}
+                              onCancel={(handleCancelAdd)}
+                              footer={null}
+                              width={700}
+                              style={{top: 150}}
+                       >
+                           <AddGroup onCancel={handleCancelAdd} onSave={handleCreateNewGroup} />
+                       </Modal>
+
                    </div>
-
-               </div>
-               <div className='content-group-page'>
-                   {
-                       data.length > 0 ? (
-                           <GroupTable tableHeader={group_table_header} tableBody={data}
-                           onDelete={handleDeleteGroup} onUpdate={handleUpdateGroup}
-                           />
-                       ) : (
-                           <NotFoundData/>
-                       )
-
-                   }
-                   {totalRecord >= 5 && (
-                       <PaginationUI
-                           handlePageChange={handlePageChange}
-                           perPage={5}
-                           totalRecord={totalRecord}
-                           currentPage={page}
-                       />
-                   )}
-
-               </div>
-               <Modal title="Tạo Mới Nhóm" open={isModalOpen}
-                      maskClosable={true}
-                      onCancel={(handleCancelAdd)}
-                      footer={null}
-                      width={700}
-                      style={{top: 150}}
-               >
-                   <AddGroup onCancel={handleCancelAdd} onSave={handleCreateNewGroup} />
-               </Modal>
-
-           </div>
+               )
+           }
 
        </div>
     );

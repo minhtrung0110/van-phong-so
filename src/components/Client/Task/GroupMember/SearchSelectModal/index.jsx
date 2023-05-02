@@ -12,6 +12,7 @@ const cx = classNames.bind(styles)
 
 function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], placeholder, top = '10rem'}) {
     const [value, setValue] = useState([]);
+    console.log(listOptions)
     const options = listOptions.map((d) => ({
         value: d.id,
         label: `${d.first_name} ${d.last_name}`,
@@ -26,7 +27,12 @@ function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], pl
         },
         value,
         options,
+        defaultActiveFirstOption:true,
         onChange: (newValue) => {
+            if (newValue?.length > 1) {
+                // if you want only one element :).
+                newValue.pop();
+            }
             setValue(newValue);
         },
         placeholder: 'Chọn thành viên...',
@@ -34,7 +40,7 @@ function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], pl
     };
     const handleOnClose = () => {
         const listMemberChosen = value.map((id) => {
-            const item = listMembersForTask.find((member) => id === member.id)
+            const item = listOptions.find((member) => id === member.id)
             if (!isEmpty(item)) return item;
         })
         onSubmit(listMemberChosen);

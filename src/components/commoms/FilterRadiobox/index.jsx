@@ -11,7 +11,6 @@ FilterRadiobox.propTypes = {
 const cx = classNames.bind(styles)
 
 function FilterRadiobox({width, height,backGround='#0d6efd',onFilter}) {
-    const [selectedItem, setSelectedItem] = useState()
     const lists = [
         {
             id: 1,

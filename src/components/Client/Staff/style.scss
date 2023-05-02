@@ -259,7 +259,7 @@
     }
 
     .col-txt {
-      font-weight: bold;
+      font-weight: 600;
       color: var(--dark);
       text-align: center;
     }
@@ -273,8 +273,8 @@
 
     .col-txt-md {
       font-style: italic;
-      font-weight: lighter;
-      margin-top: 5px;
+      font-weight: 400;
+      margin-top: 0.2rem;
     }
 
     .text-status {

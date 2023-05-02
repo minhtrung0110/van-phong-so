@@ -4,12 +4,13 @@ import {Dropdown, Modal} from "antd";
 import {FaAngleDown, FaFlipboard, FaListUl, FaPlus} from "react-icons/fa";
 import styles from './SelectHeaderProject.module.scss'
 import classNames from "classnames/bind";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import './customOverlay.scss'
 import {config} from "~/config";
 import {useDispatch} from "react-redux";
 import {setKeyProject} from "~/redux/reducer/project/projectReducer";
 import AddProject from "~/components/Client/Project/Add";
+import project from "~/components/Client/Project";
 SelectHeaderProject.propTypes = {
 
 };
@@ -17,12 +18,12 @@ SelectHeaderProject.propTypes = {
 const cx=classNames.bind(styles)
 const data=[
     {
-        name: 'Phát triển ứng dụng đinh tuyến',
-        id: '1-1',
+        name: 'Khóa Luận Tốt Nghiêp',
+        id: 'ktln-01',
     },
     {
-        name: 'Phát triển ứng dụng mạng xã hội',
-        id: '1-2',
+        name: 'Phần mềm thi trắc nghiệm đa nền tảng',
+        id: 'quiz1',
     },
     {
         name: 'Phát triển ứng dụng đinh tuyến',
@@ -40,6 +41,7 @@ const data=[
 function SelectHeaderProject() {
     const [listProject,setListProject]=useState([])
     const [openAddProject,setOpenAddProject] = useState(false)
+    const navigate=useNavigate()
     useEffect(()=>{
         // calll API get ALL Project
         const convertData=data.map((item)=>({label:item.name,key:item.id}))
@@ -60,7 +62,13 @@ function SelectHeaderProject() {
        else if(key==='all-projects'){
 
        }
-       else dispatch(setKeyProject(key))
+       else {
+           const storage=JSON.parse(localStorage.getItem('project'))
+           const newCurrentProject={...storage,projectId:key}
+           localStorage.setItem('project',JSON.stringify(newCurrentProject))
+           dispatch(setKeyProject(key))
+           navigate(config.routes.backlog)
+       }
     };
     const dispatch =useDispatch()
     const items = [

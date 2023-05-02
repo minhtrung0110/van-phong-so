@@ -4,7 +4,7 @@ import {Route, Routes} from "react-router-dom";
 import * as PropTypes from "prop-types";
 import {AuthRouter} from "~/router/AuthRouter";
 import ClientLayout from "~/layouts/Client";
-import ManageTaskPage from "~/pages/Client/ManageTask";
+import ManageTaskPage from "~/pages/Client/Project/ManageTask";
 import ManageSchedule from "~/pages/Client/ManageSchedule";
 import ManageMeeting from "~/pages/Client/ManageMeeting";
 import ManageStaff from "~/pages/Client/ManageStaff";

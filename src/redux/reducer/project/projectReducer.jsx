@@ -5,7 +5,7 @@ export const projectReducer = createSlice({
     name: 'project',
     initialState: {
         key: 0,
-        board: {},
+        project: {},
         sprint:{},
         detailTask:{},
         deleteTask:{},
@@ -20,8 +20,8 @@ export const projectReducer = createSlice({
         setKeyProject: (state, action) => {
             state.key = action.payload;
         },
-        setBoard: (state, action) => {
-            state.board = action.payload;
+        setProject: (state, action) => {
+            state.project = action.payload;
         },
         setSprint: (state, action) => {
             state.sprint = action.payload;
@@ -53,6 +53,6 @@ export const projectReducer = createSlice({
     },
 });
 
-export const { setKeyProject,setIsAdd,setIsEdit, setTask,setSprint,setIsReset,setBoard,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = projectReducer.actions;
+export const { setKeyProject,setIsAdd,setIsEdit, setTask,setSprint,setIsReset,setProject,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = projectReducer.actions;
 
 export default projectReducer.reducer;

@@ -1,0 +1,241 @@
+@import "../../../../../css/base/mixins";
+@mixin btn-sprint {
+  -webkit-box-align: baseline;
+  align-items: center;
+  box-sizing: border-box;
+  display: inline-flex;
+  font-size: inherit;
+  font-style: normal;
+  font-family: inherit;
+  font-weight: 500;
+  max-width: 100%;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  height: 2.28571em;
+  line-height: 2.28571em;
+  vertical-align: middle;
+  width: auto;
+  -webkit-box-pack: center;
+  justify-content: center;
+  color: var(--ds-text, #42526E) !important;
+  border-width: 0px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: background 0.1s ease-out 0s, box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
+  background: var(--ds-background-neutral, rgba(9, 30, 66, 0.08));
+  padding: 0px 10px;
+  outline: none;
+
+}
+
+@mixin dot {
+  padding: 0.3rem;
+  border-radius: var(--task-border-radius);
+  margin-right: 0.2rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+$spacing: 0.5rem;
+.sprint-item {
+  min-width: 626px;
+  margin: 0.8rem 0;
+  background-color: var(--ds-surface-sunken, #F4F5F7);
+  border-radius: 8px;
+  padding: 0.8rem 3rem;
+  &.backlog{
+    background-color: #fff;
+    border: 1px dashed var(--gray60-color);
+  }
+
+  .sprint-header {
+    font-size: var(--14px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 2.5rem;
+
+    .sprint-info {
+      cursor: pointer;
+      font-size: var(--16px);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      .icon{
+        transition: transform 0.2s ease-in-out;
+        animation-duration: 1s;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+        transform-origin: center;
+      }
+      .rotated {
+        transform: rotate(180deg);
+      }
+      .sprint-name {
+        font-weight: 550;
+        margin-left: $spacing;
+      }
+
+      .sprint-time {
+        margin-left: $spacing;
+      }
+      .total-task{
+        font-size: var(--14px);
+        font-weight: lighter;
+        font-style: italic;
+        margin-left: $spacing;
+      }
+    }
+
+    .sprint-action {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      .sprint-status {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        .status-column-1  {
+          @include dot;
+          color: #a9a8a8;
+          background-color: #faf9f9;
+        }
+        .status-column-2  {
+          @include dot;
+          color: #fa8c16;
+          background-color: rgba(250,140,22,.12);
+
+        }
+        .status-column-3 {
+          @include dot;
+          color: #3ab67b;
+          background-color: #56ca7629;
+
+        }
+        .status-column-4 {
+          @include dot;
+          color: #18baff;
+          background-color: rgba(24,186,255,.12);
+
+        }
+        .status-column-5  {
+          @include dot;
+          color: #e94040;
+          background-color: rgba(233, 64, 64, .12);
+
+        }
+        .status-column-6 {
+          @include dot;
+          color: #760ae7;
+          background-color: rgba(115,59,238,0.12);
+
+        }
+        .status-column-7  {
+          @include dot;
+          color: #43f5f5;
+          background-color: rgba(54,245,229,0.12);
+        }
+        .status-column-8  {
+          @include dot;
+          color: #f326d0;
+          background-color: rgba(219,37,239,0.12);
+
+        }
+      }
+
+      .action-sprint {
+        @include btn-sprint;
+        margin-left: $spacing;
+        &.on{
+          background-color: #1aa0da;
+          color: #fff !important;
+        }
+        &.off{
+          background-color: #e7357a;
+          color: #ffffff !important;
+        }
+      }
+
+      .btn-action {
+        @include btn-sprint;
+        margin-left: $spacing;
+      }
+    }
+
+  }
+  .sprint-content {
+    .list-task{
+      margin: 0.5rem 0;
+      height: auto;
+      min-height:3rem;
+
+    }
+    .dashed {
+      border:1.5px dashed #a19f9f;
+      border-radius: var(--task-border-radius);
+    }
+    .add-task{
+      .icon-add{
+        margin-right: 1rem;
+      }
+      width: 100% !important;
+      @include btn-sprint;
+      &:hover{
+        background-color: rgb(225, 225, 225);
+      }
+    }
+  }
+  .create-new-task-area{
+    .box-btn{
+      margin:0.5rem ;
+      display: flex;
+      .btn-create-task{
+        @include btn-add-task;
+      }
+      .cancel-new-task{
+        @include btn-cancel-task;
+        margin-left: 1rem;
+      }
+    }
+  }
+
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+// DND
+.card-ghost {
+  transition: transform 0.18s ease;
+  transform: rotateZ(2deg);
+  font-weight: bold;
+}
+
+.card-ghost-drop {
+  transition: transform 0.18s ease-in-out;
+  transform: rotateZ(0deg);
+  font-weight: bold;
+}
+
+.drop-preview {
+  background-color: rgba(150, 150, 200, 0.1);
+  border: 1px dashed #abc;
+  margin: 5px;
+}
+
+.cards-drop-preview {
+  background-color: rgba(150, 150, 200, 0.1);
+  border: 1px dashed #abc;
+  margin: 5px 45px 5px 5px;
+}

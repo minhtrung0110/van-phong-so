@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Button, Col, Image, Modal} from "antd";
-import Avatar from "react-avatar-edit";
 import './style.scss'
 import {FaCamera} from "react-icons/fa";
 BoxAvatar.propTypes = {
@@ -67,15 +66,15 @@ function BoxAvatar(props) {
                     disabled: !!!preview,
                 }}
             >
-                <Avatar
-                    width={470}
-                    height={230}
-                    onCrop={(view)=>setPreview(view)}
-                    onClose={()=>setPreview(null)}
-                    onBeforeFileLoad={handleBeforeFileUpload}
-                    src={null}
+                {/*<Avatar*/}
+                {/*    width={470}*/}
+                {/*    height={230}*/}
+                {/*    onCrop={(view)=>setPreview(view)}*/}
+                {/*    onClose={()=>setPreview(null)}*/}
+                {/*    onBeforeFileLoad={handleBeforeFileUpload}*/}
+                {/*    src={null}*/}
 
-                />
+                {/*/>*/}
             </Modal>
 
         </div>

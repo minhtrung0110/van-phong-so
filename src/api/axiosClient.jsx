@@ -23,19 +23,20 @@ axiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    switch (error.response.status) {
-      case 500:
-        console.log('Server error');
-        break;
-      default:
-        console.log('Something went wrong');
-        console.log('--------------------');
-        console.log(`URL: ${error.response.config.url}`);
-        console.log(`HTTP Code: ${error.response.status}`);
-        console.log(`HTTP Message: ${error.response.statusText}`);
-        console.log('-------------------- ');
-        return error.response;
-    }
+    //console.log(error)
+    // switch (error.response.status) {
+    //   case 500:
+    //     console.log('Server error');
+    //     break;
+    //   default:
+    //     console.log('Something went wrong');
+    //     console.log('--------------------');
+    //     console.log(`URL: ${error.response.config.url}`);
+    //     console.log(`HTTP Code: ${error.response.status}`);
+    //     console.log(`HTTP Message: ${error.response.statusText}`);
+    //     console.log('-------------------- ');
+    //     return error.response;
+    // }
 
     return Promise.reject(error);
   }

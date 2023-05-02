@@ -1,25 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
-import StaffTable from "~/components/Client/Staff";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import DepartmentTable from "~/components/Client/Department";
 import {department_table_header} from "~/asset/data/department-table-header";
 import PaginationUI from "~/components/commoms/Pagination";
-import {FaFileDownload, FaFileUpload, FaRegBuilding, FaSearch, FaUsers} from "react-icons/fa";
+import {FaFileDownload, FaFileUpload, FaRegBuilding, FaSearch} from "react-icons/fa";
 import FilterRadiobox from "~/components/commoms/FilterRadiobox";
-import FilterCheckbox from "~/components/commoms/FilterCheckbox";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
-import {Button, Modal, Tooltip} from "antd";
+import {Button, Modal, Tooltip,message} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import {isAddDepartmentSelector, isEditDepartmentSelector} from "~/redux/selectors/department/departmenrSelector";
+import { isEditDepartmentSelector} from "~/redux/selectors/department/departmenrSelector";
 import EditDepartment from "~/components/Client/Department/Edit";
 import AddDepartment from "~/components/Client/Department/Add";
 import {setIsAdd, setIsEdit} from "~/redux/reducer/department/departmentReducer";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {listDepartments} from "~/asset/data/initDataGlobal";
-import {useNavigate} from "react-router-dom";
-import {config} from "~/config";
 
 ManageDepartment.propTypes = {};
 
@@ -33,6 +29,7 @@ function ManageDepartment(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [search,setSearch] = React.useState('')
     const [filter, setFilter] = React.useState('')
+    const [messageApi, contextHolder] = message.useMessage();
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
@@ -61,17 +58,22 @@ function ManageDepartment(props) {
     },[data,search,filter])
     const handleCreateDepartment = (data)=>{
         console.log('Create Department: ',data)
+        messageApi.open({
+            type: 'success',
+            content: 'Thêm thành công',
+            duration: 1.45,
+        });
+        setIsModalOpen(false);
+
     }
-    const handleUpdateDepartment = (data)=>{
-        console.log('Update Department: ',data)
-    }
+
     const handleDeleteDepartment = (data)=>{
         console.log('Delete Department: ',data)
     }
 
     return (
         <>
-            {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit} onSave={handleUpdateDepartment}   />):(
+            {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit}    />):(
                 (
                   !!loading ?(<ListPageSkeleton column={5} lengthItem={5} /> ):
                       (  <div className='container-department'>
@@ -131,10 +133,12 @@ function ManageDepartment(props) {
                    onCancel={handleCancelAdd}
                    footer={null}
                    width={700}
+                   destroyOnClose={true}
                    style={{top: 150}}
             >
               <AddDepartment onCancel={handleCancelAdd} onSave={handleCreateDepartment} />
             </Modal>
+            {contextHolder}
 
         </>
     )

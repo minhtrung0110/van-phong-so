@@ -64,6 +64,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      .btn-show {
+        float: left;
+        width: 33.33%;
+        @include btn-action;
+
+        .icon-show {
+          font-size: var(--20px);
+          color: var(--yellow);
+        }
+      }
       .btn-edit {
 
         @include btn-action;

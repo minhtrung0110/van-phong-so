@@ -2,31 +2,26 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import TableLayout from "~/components/commoms/Table";
-import {FaExclamationTriangle, FaEye, FaPen, FaQuestionCircle, FaTimesCircle} from "react-icons/fa";
+import {FaEye, FaPen, FaTimesCircle} from "react-icons/fa";
 import ImageCustom from "~/components/commoms/Image";
-import {Button, Modal} from "antd";
+import {message, Modal} from "antd";
 import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import {useDispatch} from "react-redux";
 import {setIsEdit, setStaff} from "~/redux/reducer/staff/staffReducer";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {getStaffById} from "~/api/Client/Staff/staffAPI";
 
 StaffTable.propTypes = {};
 
 function StaffTable({tableHeader, tableBody}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [detailStaff, setDetailStaff] = useState({});
-    const [isColoseModal, setIsColoseModal] = useState(false);
     const [showPopupDelete, setShowPopupDelete] = useState({
         staff_id: null,
         show: false,
     });
+    const [messageApi, contextHolder] = message.useMessage();
     const dispatch = useDispatch()
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
     const handleCancel = () => {
         setIsModalOpen(false);
     };
@@ -36,17 +31,22 @@ function StaffTable({tableHeader, tableBody}) {
         dispatch(setStaff(user))
     }
     const handleEditStaff = async (e, id) => {
-        // e.stopPropagation();
-        // const data = await getStaffById(id);
-        // if (Object.keys(data).length > 0) {
-        //     dispatch(setStaff(data));
+        e.stopPropagation();
+        const data = await getStaffById(id);
+        console.log('Data nhận :',data)
+        if (Object.keys(data).length > 0) {
+            dispatch(setStaff(data));
         dispatch(setIsEdit(true));
-        // } else if (data === 401) {
-        //     Notiflix.Block.remove('#root');
-        // } else {
-        //     Notiflix.Block.remove('#root');
-        //     ErrorToast('Something went wrong. Please try again', 3000);
-        // }
+        } else if (data === 401) {
+          //  Notiflix.Block.remove('#root');
+        } else {
+           // Notiflix.Block.remove('#root');
+            messageApi.open({
+                type: 'error',
+                content: 'Cập nhật thất bại',
+                duration: 1.3,
+            });
+        }
     };
     const handleRemoveStaff = async (id) => {
         //e.stopPropagation();
@@ -64,7 +64,12 @@ function StaffTable({tableHeader, tableBody}) {
         //     ErrorToast('Something went wrong. Please try again', 3000);
         // }
         setShowPopupDelete({...showPopupDelete, show: false});
-        // dispatch(setIsReset(Math.random()));
+        console.log('Delete Staff: ',showPopupDelete.staff_id)
+        messageApi.open({
+            type: 'success',
+            content: 'Xóa thành công',
+            duration: 1.3,
+        });
     };
 
     const showConfirmDeleteStaff = (e, id) => {
@@ -81,14 +86,14 @@ function StaffTable({tableHeader, tableBody}) {
                         <ImageCustom type="avatar" src={item.avatar} className={'avatar'}/>
                         <div className="info">
                             {`${item.first_name} ${item.last_name}`}
-                            <small className="sub-txt">Gender: {item.gender}</small>
+                            <small className="sub-txt">Giới tính: {item.gender}</small>
                         </div>
                     </td>
                     <td className="col-txt">{item.role}</td>
 
                     <td className="col-txt">
                         Email:<span className="col-txt-md">{`  ${item.mail} `}</span> <br/>
-                        Phone: <span className="col-txt-md">{`  ${item.phone_number} `}</span>
+                        Điện Thoại: <span className="col-txt-md">{`  ${item.phone_number} `}</span>
                     </td>
 
                     <td className={'text-status'}>
@@ -132,6 +137,7 @@ function StaffTable({tableHeader, tableBody}) {
     };
     return (
         <div className="table-staff">
+            {contextHolder}
             <TableLayout tableHeader={tableHeader} tableBody={renderTableBody()}/>
 
             <Modal title="Thông Tin Nhân Viên" open={isModalOpen}

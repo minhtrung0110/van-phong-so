@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Col, Row} from "antd";
 import './style.scss'
-import Avatar from "react-avatar-edit";
+
 import BoxAvatar from "~/components/Client/Profile/BoxAvatar";
 import BoxInfo from "~/components/Client/Profile/BoxInfo";
 import BoxSocial from "~/components/Client/Profile/BoxSocial";

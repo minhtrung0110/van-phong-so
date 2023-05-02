@@ -1,3 +1,4 @@
+import {isEmpty} from "lodash";
 
 export const getSprintActive=(array) =>(
 
@@ -8,6 +9,7 @@ export const conCatArrayInArray = (array) => {
     return array.reduce((acc, item) => acc.concat(item.cards), []);
 }
 export const mapOrder =(array,order,key) =>{
+    console.log('cchecking ',array,order,key)
     array.sort((a,b) => order.indexOf(a[key]) - order.indexOf(b[key]));
     return array
 }
@@ -22,3 +24,30 @@ export const getListStatusTaskProject=(array) =>{
 export const findStyleForStatusTask=(status,list)=>{
     return list.find((item)=>item.value===status)
 }
+export const splitArrayByKey = (array, key) => {
+    const grouped = array.reduce((acc, item) => {
+        if (!acc[item[key]]) {
+            acc[item[key]] = {
+                id: item[key],
+                cards: []
+            };
+        }
+        acc[item[key]].cards.push(item);
+        return acc;
+    }, {});
+
+    return Object.values(grouped);
+};
+export const remakeSprintFromSlide = (array,sprint) => {
+    const mData=splitArrayByKey(array,'columnId');
+    console.log('kiem tra item: ',mData,sprint)
+    // return {...sprint,columns:newColumns}
+    return sprint.columns.map((col => {
+        let item = mData.find(item => item.id === col.id)
+        return {
+            ...col,
+            cards: !!item ? item.cards:[]
+        }
+    }));
+
+};

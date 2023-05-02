@@ -1,15 +1,13 @@
-
+import  React from "react"
 import Tippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper } from '~/components/commoms/Popper';
-import {forwardRef, useRef, useState} from 'react'
 import styles from './Menu.module.scss';
 import classNames from 'classnames/bind';
-import MenuItem from './MenuItem';
 
 const cx = classNames.bind(styles);
 
 
-function Menu({children,items, hideOnClick=false, }) {
+function Menu({children,items, hideOnClick=false,delay=600 }) {
 
     const renderItems=()=>{
         return items.map((item,index)=>{
@@ -30,7 +28,7 @@ function Menu({children,items, hideOnClick=false, }) {
         placement="bottom-end"
         hideOnClick={hideOnClick}
             zIndex={999}
-        delay={[0,700]}
+        delay={[0,delay]}
         offset={[12, 2]}
         render={(attrs) => (
             <div className={cx('menu-list')}

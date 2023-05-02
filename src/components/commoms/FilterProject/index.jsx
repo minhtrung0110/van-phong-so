@@ -129,7 +129,7 @@ function FilterProject({listmember = [], onFilter,className}) {
     }, [searchValue,checkedListMember,listMemberMore, checkedListDuration, checkedListPriority])
     return (
         <div>
-            <Menu items={itemsFilter} hideOnClick={false}>
+            <Menu items={itemsFilter} hideOnClick={false} delay={400}>
                 <a onClick={(e) => e.preventDefault()} className={className}>
                     <div className={cx('filter-project')}>
                         <FaFilter className={cx('icon')}/>
