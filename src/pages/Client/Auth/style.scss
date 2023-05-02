@@ -1,4 +1,34 @@
+.message-custom-success-message-error {
 
+
+
+  .ant-message-notice-content {
+    font-size: var(--16px);
+    font-weight: 700;
+    height: 3rem;
+    vertical-align: middle;
+    padding-left:  2rem;
+    padding-right: 2rem;
+    color: var(--red);
+    background-color: var(--negativeSecondary);
+  }
+
+}
+.message-custom-success-message-success {
+
+
+
+  .ant-message-notice-content {
+    font-size: var(--16px);
+    font-weight: 650;
+    height: 3rem;
+    vertical-align: middle;
+    padding-left:  2rem;
+    padding-right: 2rem;
+    color: var(--primary-color-btn);
+  }
+
+}
 .wave {
   position: fixed;
   bottom: 0;

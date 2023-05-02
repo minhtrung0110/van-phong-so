@@ -39,23 +39,23 @@ ProtectedRoutes.propTypes = {
 
 function ClientRouter(props) {
     const dispatch = useDispatch();
-    const isAuthenticate = useSelector(isLoginSelector);
-    useEffect(() => {
-        handleVerifyUserLogin().then((result) => {
-            if (result === 401) {
-                const token = getCookies('token');
-                dispatch(setIsLogin(false));
-                if (token) {
-                    deleteCookie('token');
-                }
-            } else {
-                dispatch(setIsLogin(true));
-                dispatch(setUser(result));
-
-            }
-        });
-    }, [dispatch]);
-    const user = useSelector(getUserSelector);
+    // const isAuthenticate = useSelector(isLoginSelector);
+    // useEffect(() => {
+    //     handleVerifyUserLogin().then((result) => {
+    //         if (result === 401) {
+    //             const token = getCookies('token');
+    //             dispatch(setIsLogin(false));
+    //             if (token) {
+    //                 deleteCookie('token');
+    //             }
+    //         } else {
+    //             dispatch(setIsLogin(true));
+    //             dispatch(setUser(result));
+    //
+    //         }
+    //     });
+    // }, [dispatch]);
+    // const user = useSelector(getUserSelector);
     return (
         <Routes>
             <Route path="/login" element={<LoginPage/>}/>

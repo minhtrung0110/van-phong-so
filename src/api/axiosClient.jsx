@@ -23,7 +23,7 @@ axiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    //console.log(error)
+    console.log(error)
     // switch (error.response.status) {
     //   case 500:
     //     console.log('Server error');

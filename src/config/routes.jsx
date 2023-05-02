@@ -2,6 +2,7 @@ import React from 'react'
 
 const routes = {
     home:"/",
+    login:"/login",
     setting:"/setting",
     post:'/posts',
     project:"/project",

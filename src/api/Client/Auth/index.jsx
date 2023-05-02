@@ -4,7 +4,8 @@ import jwt from 'jwt-decode'
 
 export const setCookies = (cname, cvalue, exdays) => {
     const d = new Date();
-    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    d.setTime(d.getTime() + exdays);
+    //console.log('Ngày hết hạn',d,exdays)
     let expires = 'expires=' + d.toUTCString();
     document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
 };
@@ -30,7 +31,7 @@ export const deleteCookie = (name) => {
     document.cookie = setCookies(name, '', -1);
 };
 export const configHeadersAuthenticate = () => {
-    const token = getCookies('token');
+    const token = getCookies('vps_token');
     return {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -48,9 +49,13 @@ export const handleLogin = async (body) => {
     //       console.log(error);
     //     });
     const response = await axiosClient.post(url, body)
-    const token = response.data.result.token
-    const decodedToken = jwt(token);
-    return {...response,data:{user:decodedToken.user,token,expire:decodedToken.exp,created:decodedToken.iat}}
+    if(response.status===1){
+        const token = response.data.result.token
+        const decodedToken = jwt(token);
+        return {...response,data:{user:decodedToken.user,token,expire:decodedToken.exp,created:decodedToken.iat}}
+    }
+    return response
+
 };
 export const handleVerifyUserLogin = async () => {
     const response = await axiosClient.get('api/admin/me', configHeadersAuthenticate());

@@ -21,7 +21,7 @@ InfoUser.propTypes = {
 
 const cx = classNames.bind(styles);
 
-function InfoUser({firstName, lastName, email, role, avatar}) {
+function InfoUser({firstName, lastName, email, role, avatar,onLogout}) {
     const [showImage, setShowImage] = useState(false);
     const checkImageUrl = (url) => {
         // /\.(jpeg|jpg|png|gif)\b/i.test(url);
@@ -31,6 +31,7 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
         img.onerror = () => setShowImage(false)
     }
    // checkImageUrl(avatar)
+
     const userMenu = [
         {
             icon: <FaLock/>,
@@ -73,11 +74,11 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
         {
             key: '3',
             label: (
-                    <NavLink className={cx('dropdown-item')} to={config.routes.logout}>
+                    <div className={cx('dropdown-item')} onClick={()=>onLogout(true)} >
                         <FaSignOutAlt className={cx('dropdown-icon')} />
                         <span className={cx('dropdown-title')}>Đăng Xuất</span>
 
-                    </NavLink>
+                    </div>
 
             ),
         },
