@@ -9,6 +9,7 @@ import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import {useDispatch} from "react-redux";
 import {setIsEdit, setStaff} from "~/redux/reducer/staff/staffReducer";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {getStaffById} from "~/api/Client/Staff/staffAPI";
 
 StaffTable.propTypes = {};
 
@@ -30,17 +31,22 @@ function StaffTable({tableHeader, tableBody}) {
         dispatch(setStaff(user))
     }
     const handleEditStaff = async (e, id) => {
-        // e.stopPropagation();
-        // const data = await getStaffById(id);
-        // if (Object.keys(data).length > 0) {
-        //     dispatch(setStaff(data));
+        e.stopPropagation();
+        const data = await getStaffById(id);
+        console.log('Data nhận :',data)
+        if (Object.keys(data).length > 0) {
+            dispatch(setStaff(data));
         dispatch(setIsEdit(true));
-        // } else if (data === 401) {
-        //     Notiflix.Block.remove('#root');
-        // } else {
-        //     Notiflix.Block.remove('#root');
-        //     ErrorToast('Something went wrong. Please try again', 3000);
-        // }
+        } else if (data === 401) {
+          //  Notiflix.Block.remove('#root');
+        } else {
+           // Notiflix.Block.remove('#root');
+            messageApi.open({
+                type: 'error',
+                content: 'Cập nhật thất bại',
+                duration: 1.3,
+            });
+        }
     };
     const handleRemoveStaff = async (id) => {
         //e.stopPropagation();

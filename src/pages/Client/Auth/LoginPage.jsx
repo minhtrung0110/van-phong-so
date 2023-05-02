@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
+
 import './style.scss'
+import {message} from 'antd'
 import ImageCustom from "~/components/commoms/Image";
 import avatar from '~/asset/images/avatar.svg'
 import iconBG from '~/asset/images/icon_loginv4.png'
@@ -8,6 +10,10 @@ import wave from '~/asset/images/wave.png'
 import {FaLock, FaUser} from "react-icons/fa";
 import {useForm} from "react-hook-form";
 import {handleLogin, setCookies} from "~/api/Client/Auth";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {setIsLogin, setUser} from "~/redux/reducer/auth/authReducer";
+import {config} from "~/config";
 
 LoginPage.propTypes = {};
 
@@ -15,8 +21,9 @@ function LoginPage(props) {
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
     const [isFocusedPass, setIsFocusedPass] = useState(false);
     const [isFocusedEmail, setIsFocusedEmail] = useState(false);
-    const [userName, setUserName] = useState();
-    const [password, setPassword] = useState()
+    const [messageApi, contextHolder] = message.useMessage();
+    const dispatch=useDispatch()
+    const navigate=useNavigate()
     const handleBlurEmail = (e) => {
         e.target.value === "" && setIsFocusedEmail(false)
     }
@@ -25,40 +32,54 @@ function LoginPage(props) {
     }
     const onSubmit =async (data) => {
         const result = await handleLogin(data);
-        console.log(result);
-        if (result.status === 403 || result.status === 422) {
+        console.log('Data received',result)
+        if (result.status === 0) {
           //  ErrorToast('Email or password is incorrect. Please try again', 3500);
           //  Notiflix.Block.remove('.sl-box');
+            messageApi.open({
+                type: 'error',
+                content: 'Đăng nhập thất bại ! Thông tin sai',
+                duration: 1.65,
+            });
             return;
         }
-        if (result.status === 401) {
-          //  ErrorToast('Your account has been locked.', 3500);
-          //  Notiflix.Block.remove('.sl-box');
-            return;
-        }
-        if (result.data.status === 200) {
+
+        if (result.status === 1) {
            // SuccessToast('Logged in successfully', 2000);
-            setCookies('token', result.data.token, 1);
-            const response = await handleGetInformation();
-            if (response === 401) {
-              //  SuccessToast('Error server ... ', 2000);
-              //  Notiflix.Block.remove('.sl-box');
-            } else {
-                // if (response.role_id === 2) {
-                //
-                // }
-                if (response.role_id === 2) {
-                    window.location.href = '/admin/warehouse';
-                }else{
-                    window.location.href = '/admin/';
-                }
-                return;
+            messageApi.open({
+                type: 'success',
+                content: 'Đăng nhập thành công',
+                duration: 1.55,
+            });
+            setCookies('token', result.data.token, result.data.expire);
+            if(!!result.data.user){
+                    dispatch(setUser(result.data.user))
+                    dispatch(setIsLogin(true))
             }
+            setTimeout(()=>{
+                navigate(config.routes.home)
+            },1400)
+            // const response = await handleGetInformation();
+            // if (response === 401) {
+            //   //  SuccessToast('Error server ... ', 2000);
+            //   //  Notiflix.Block.remove('.sl-box');
+            // } else {
+            //     // if (response.role_id === 2) {
+            //     //
+            //     // }
+            //     if (response.role_id === 2) {
+            //         window.location.href = '/admin/warehouse';
+            //     }else{
+            //         window.location.href = '/admin/';
+            //     }
+            //     return;
+            // }
         }
     }
-    console.log(errors)
+   /// console.log(errors)
     return (
         <>
+            {contextHolder}
             <ImageCustom className="wave" src={wave}/>
             <div className="container-login">
                 <div className="img">
@@ -100,10 +121,10 @@ function LoginPage(props) {
                                        onFocus={() => setIsFocusedPass(true)}
                                        {...register("password", {
                                            required: 'Vui lòng nhập mật khẩu',
-                                           pattern: {
-                                               value: /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-                                               message: "Mật khẩu chưa đủ độ mạnh"
-                                           },
+                                           // pattern: {
+                                           //     value: /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+                                           //     message: "Mật khẩu chưa đủ độ mạnh"
+                                           // },
                                            onBlur: (e) => handleBlurPassWord(e)
                                        })}
                                 />

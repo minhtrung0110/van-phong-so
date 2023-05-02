@@ -1,21 +1,16 @@
-import {Button, Menu} from 'antd';
-import {useEffect, useState} from 'react';
+import { Menu} from 'antd';
+import React, {useEffect, useState} from 'react';
 import {
-    FaBars,
-    FaBuilding,
     FaCalendar, FaCogs,
-    FaDesktop,
-    FaFacebookMessenger,
     FaHome, FaLaptop, FaLayerGroup, FaNewspaper,
-    FaPeopleArrows, FaRegObjectGroup,
+    FaPeopleArrows,
     FaTasks, FaUserCog
 } from "react-icons/fa";
 import {useSelector} from "react-redux";
 import {isCollapseSideBar} from "~/redux/selectors/dashboard/dashboardSelector";
 import './style.scss'
 import Sider from "antd/es/layout/Sider";
-import {NavLink, useLocation, useNavigate} from "react-router-dom"
-import {history} from 'react-router-dom';
+import {NavLink, useLocation,} from "react-router-dom"
 import {config} from "~/config";
 
 function getItem(label, key, icon, children) {

@@ -3,6 +3,7 @@ import { Navigate, NavLink } from 'react-router-dom';
 import NotFound from '~/asset/images/not_found.jpg';
 import styles from './NotFound.module.scss'
 import classNames from "classnames/bind";
+import  React from "react"
 
 const cx=classNames.bind(styles)
 export default function NotFoundData(props) {
