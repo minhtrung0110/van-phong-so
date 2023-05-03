@@ -10,10 +10,12 @@ import {useDispatch} from "react-redux";
 import {setIsEdit, setStaff} from "~/redux/reducer/staff/staffReducer";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {getStaffById} from "~/api/Client/Staff/staffAPI";
+import AvatarCustom from "~/components/commoms/AvatarCustom";
 
 StaffTable.propTypes = {};
 
 function StaffTable({tableHeader, tableBody}) {
+    console.log(tableBody)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [detailStaff, setDetailStaff] = useState({});
     const [showPopupDelete, setShowPopupDelete] = useState({
@@ -83,26 +85,27 @@ function StaffTable({tableHeader, tableBody}) {
 
                 >
                     <td className="col-info">
-                        <ImageCustom type="avatar" src={item.avatar} className={'avatar'}/>
+                        <ImageCustom type="avatar" src={item.avatar_url} className={'avatar'}/>
+                        {/*<AvatarCustom avatar={item.avatar_url} lastName={item.full_name} size={'large'} className={'avatar'}/>*/}
                         <div className="info">
-                            {`${item.first_name} ${item.last_name}`}
-                            <small className="sub-txt">Giới tính: {item.gender}</small>
+                            {item.full_name}
+                            <small className="sub-txt">Giới tính: {item.sex==='male'?'nam':'nữ'}</small>
                         </div>
                     </td>
-                    <td className="col-txt">{item.role}</td>
+                    <td className="col-txt">{item.role_name}</td>
 
                     <td className="col-txt">
-                        Email:<span className="col-txt-md">{`  ${item.mail} `}</span> <br/>
+                        Email:<span className="col-txt-md">{`  ${item.email} `}</span> <br/>
                         Điện Thoại: <span className="col-txt-md">{`  ${item.phone_number} `}</span>
                     </td>
 
                     <td className={'text-status'}>
                         <p
                             className={` ${
-                                item.status === 1 ? 'active' : 'negative '
+                                item.status === '1' ? 'active' : 'negative '
                             }`}
                         >
-                            {item.status === 1 ? 'Đang Làm Việc' : 'Thôi Việc'}
+                            {item.status ==='1' ? 'Đang Làm Việc' : 'Thôi Việc'}
                         </p>
                     </td>
                     <td className="col-action">

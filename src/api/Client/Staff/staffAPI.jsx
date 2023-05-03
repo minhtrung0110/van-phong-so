@@ -3,48 +3,49 @@ import React from 'react';
 import { getCookies } from '../Auth';
 import axiosClient from '../../axiosClient';
 import {concatQueryString} from "~/utils/concatQueryString";
+import {titleToSlug} from "~/utils/titleToSlug";
 
 export const configHeadersAuthenticate = () => {
-    const token = getCookies('token');
+    const token = getCookies('vps_token');
     return {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
 };
-//
-// export const getAllStaffs = async ({ sort, filterStatus, filterRole, filter, search, page } = {}) => {
-//     const url = '/api/admin/staff';
-//     const queryString = [];
-//     if (sort && sort.length > 0) {
-//         sort.forEach((item) => {
-//             queryString.push(`sort[${titleToSlug(item.key)}]=${item.value}`);
-//         });
-//     }
-//     if (search) {
-//         queryString.push(`${filter}=${search}`);
-//     }
-//     if (page) {
-//         queryString.push(`page=${page}`);
-//     }
-//
-//     if (filterStatus === 1 || filterStatus === 0) {
-//         queryString.push(`filter[status]=${filterStatus}`);
-//     }
-//     if (filterRole) {
-//         queryString.push(`filter[category_id]=${filterRole}`);
-//     }
-//     const final_url = concatQueryString(queryString, url);
-//
-//     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
-//     if (reponse.status === 401) {
-//         return 401;
-//     } else if (reponse.status === 'success') {
-//         return reponse.data;
-//     } else {
-//         return 500;
-//     }
-// };
+
+export const getListStaffs = async ({ sort, filterStatus, filterRole, filter, search, page } = {}) => {
+    const url = 'employees';
+    const queryString = [];
+    if (sort && sort.length > 0) {
+        sort.forEach((item) => {
+            queryString.push(`sort[${titleToSlug(item.key)}]=${item.value}`);
+        });
+    }
+    if (search) {
+        queryString.push(`${filter}=${search}`);
+    }
+    if (page) {
+        queryString.push(`page=${page}`);
+    }
+
+    if (filterStatus === 1 || filterStatus === 0) {
+        queryString.push(`filter[status]=${filterStatus}`);
+    }
+    if (filterRole) {
+        queryString.push(`filter[category_id]=${filterRole}`);
+    }
+    const final_url = concatQueryString(queryString, url);
+    const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
+
+    if (reponse.status === 401) {
+        return 401;
+    } else if (reponse.status === 1) {
+        return reponse.data;
+    } else {
+        return 500;
+    }
+};
 
 export const getStaffById = async (id) => {
     const url = `employees?id=${id}`;

@@ -21,13 +21,16 @@ import PaginationUI from "~/components/commoms/Pagination";
 import ListStaffSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {listStaffs} from "~/asset/data/initDataGlobal";
+import {getListStaffs} from "~/api/Client/Staff/staffAPI";
+import {deleteCookie, getCookies, setCookies} from "~/api/Client/Auth";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 
 ManageStaff.propTypes = {};
 
 function ManageStaff(props) {
     const data_staff_table_header = [...staff_table_header];
-    const [loading, setLoading] = React.useState(false);
-    const [data, setData] = React.useState(listStaffs);
+    const [loading, setLoading] = React.useState(true);
+    const [data, setData] = React.useState([]);
     const [search, setSearch] = React.useState('')
     const [filter, setFilter] = React.useState()
     const isAddStaff = useSelector(isAddStaffSelector);
@@ -40,15 +43,15 @@ function ManageStaff(props) {
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
-        // const result = await getAllStaffs({
-        //     page,
-        // });
-        // if (result === 401) {
-        // } else if (result === 500) {
-        //     return false;
-        // } else {
-        //     setStaff(result, 'page');
-        // }
+        const result = await getListStaffs({
+            page,
+        });
+        if (result === 401) {
+        } else if (result === 500) {
+            return false;
+        } else {
+            setStaff(result, 'page');
+        }
         setLoading(false);
     };
     const goToPageAddStaff = () => {
@@ -62,9 +65,42 @@ function ManageStaff(props) {
         console.log('EditStaff', data);
     }
 
-    useEffect(()=>{
-        console.log('Search:',search,' - Filter:',filter)
-    },[data,search,filter])
+    useEffect(() => {
+        async function fetchData() {
+            console.log('Search:', search, ' - Filter:', filter)
+            let params = {};
+            if (filter !== 'All') params = { ...params, filter };
+            if (search !== '') params = { ...params, filter, search };
+            const respond = await getListStaffs(params);
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                return false;
+            } else {
+                setStaff(respond, 'reset-page');
+            }
+            setLoading(false);
+        }
+        fetchData();
+    }, [search, filter]);
+
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+    };
+    const setStaff = (respond, value) => {
+        setData(respond.results);
+        if (value !== 'page') {
+            setPage(1);
+        }
+        setTotalRecord(respond.pagination.totalRecords);
+        // setTotalPage(result.meta.);
+    };
     const handleFilterStatus=(value) => {
         const stt={status:value}
         setFilter(prev=>({...prev,...stt}))
@@ -126,10 +162,10 @@ function ManageStaff(props) {
                                                         )
 
                                                     }
-                                                    {totalRecord >= 8 && (
+                                                    {totalRecord >= 1 && (
                                                         <PaginationUI
                                                             handlePageChange={handlePageChange}
-                                                            perPage={8}
+                                                            perPage={1}
                                                             totalRecord={totalRecord}
                                                             currentPage={page}
                                                         />
