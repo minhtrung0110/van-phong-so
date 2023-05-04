@@ -14,7 +14,8 @@ export const configHeadersAuthenticate = () => {
     };
 };
 
-export const getListStaffs = async ({ sort, filterStatus, filterRole, filter, search, page } = {}) => {
+export const getListStaffs = async ({ sort,filter, search,keySearch, page } = {}) => {
+    console.log({ sort,filter, search, page })
     const url = 'employees';
     const queryString = [];
     if (sort && sort.length > 0) {
@@ -23,21 +24,25 @@ export const getListStaffs = async ({ sort, filterStatus, filterRole, filter, se
         });
     }
     if (search) {
-        queryString.push(`${filter}=${search}`);
+       // queryString.push(`${keySearch}=${search}`);
+        queryString.push(search);
     }
     if (page) {
         queryString.push(`page=${page}`);
     }
+    if(!!filter){
+        if (filter.status!== 'all') {
+            queryString.push(`status=${filter.status}`);
+        }
+        if (filter.role!== 'all') {
+            queryString.push(`role_id=${filter.role}`);
+        }
+    }
 
-    if (filterStatus === 1 || filterStatus === 0) {
-        queryString.push(`filter[status]=${filterStatus}`);
-    }
-    if (filterRole) {
-        queryString.push(`filter[category_id]=${filterRole}`);
-    }
+
     const final_url = concatQueryString(queryString, url);
     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
-
+    console.log('request URL: ' + final_url);
     if (reponse.status === 401) {
         return 401;
     } else if (reponse.status === 1) {

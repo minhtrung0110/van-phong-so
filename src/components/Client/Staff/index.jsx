@@ -34,21 +34,21 @@ function StaffTable({tableHeader, tableBody}) {
     }
     const handleEditStaff = async (e, id) => {
         e.stopPropagation();
-        const data = await getStaffById(id);
-        console.log('Data nhận :',data)
-        if (Object.keys(data).length > 0) {
-            dispatch(setStaff(data));
+       // const data = await getStaffById(id);
+       //  console.log('Data nhận :',data)
+       //  if (Object.keys(data).length > 0) {
+       //      dispatch(setStaff(data));
         dispatch(setIsEdit(true));
-        } else if (data === 401) {
-          //  Notiflix.Block.remove('#root');
-        } else {
-           // Notiflix.Block.remove('#root');
-            messageApi.open({
-                type: 'error',
-                content: 'Cập nhật thất bại',
-                duration: 1.3,
-            });
-        }
+        // } else if (data === 401) {
+        //   //  Notiflix.Block.remove('#root');
+        // } else {
+        //    // Notiflix.Block.remove('#root');
+        //     messageApi.open({
+        //         type: 'error',
+        //         content: 'Cập nhật thất bại',
+        //         duration: 1.3,
+        //     });
+        // }
     };
     const handleRemoveStaff = async (id) => {
         //e.stopPropagation();
@@ -81,7 +81,7 @@ function StaffTable({tableHeader, tableBody}) {
     const renderTableBody = () => {
         return tableBody.map((item) => {
             return (
-                <tr key={item.id} className="row-data c-pointer row-item"
+                <tr key={item.ID} className="row-data c-pointer row-item"
 
                 >
                     <td className="col-info">

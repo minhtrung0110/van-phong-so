@@ -18,6 +18,9 @@
     width: 12rem;
     background: var(--primary-color-btn);
     border-radius: var(--rad);
+    &.br-none{
+      border-radius: 0;
+    }
 
   }
   .input-search, .btn-search{

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import { FaSearch, FaUserCog} from "react-icons/fa";
-import FilterRadiobox from "~/components/commoms/FilterRadiobox";
+import FilterRadiobox from "~/components/commoms/FilterSelect";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import { message } from 'antd';
 import NotFoundData from "~/components/commoms/NotFoundData";

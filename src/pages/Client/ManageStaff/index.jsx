@@ -1,38 +1,88 @@
 import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
 import StaffTable from "~/components/Client/Staff";
 import {staff_table_header} from "~/asset/data/staff-table-header";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import './style.scss'
-import {FaFileDownload, FaFileExcel, FaFileUpload, FaUser, FaUsers} from "react-icons/fa";
+import {FaFileDownload,  FaFileUpload,  FaUsers} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
 import {isAddStaffSelector, isEditStaffSelector, staffSelector} from "~/redux/selectors/staff/staffSelector";
 import AddStaff from "~/components/Client/Staff/Add";
 import EditStaff from "~/components/Client/Staff/Edit";
-import {Button, Col, Row, Skeleton, Tooltip} from "antd";
-import SearchSelection from "~/components/commoms/SearchHideButton";
+import {Button,Space, Select, Tooltip} from "antd";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
-import FilterRadiobox from "~/components/commoms/FilterRadiobox";
-import FilterCheckbox from "~/components/commoms/FilterCheckbox";
 import {setIsAdd} from "~/redux/reducer/staff/staffReducer";
 import {isEmpty} from "lodash";
 import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import PaginationUI from "~/components/commoms/Pagination";
-import ListStaffSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
-import {listStaffs} from "~/asset/data/initDataGlobal";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
-import {deleteCookie, getCookies, setCookies} from "~/api/Client/Auth";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import FilterSelect from "~/components/commoms/FilterSelect";
+import SearchSelectKey from "~/components/commoms/SearchSelectKey";
 
 ManageStaff.propTypes = {};
+const listStatus = [
+    {
+        id: '1x',
+        label: 'Hoạt Động',
+        value: 1,
 
+    },
+    {
+        id: '2x',
+        label: 'Thôi Việc',
+        value: 0,
+    },
+    {
+        id: '3x',
+        label: 'Tất Cả',
+        value: 'all',
+    },
+
+]
+const listRole = [
+    {
+        id: 1,
+        label: 'Quản Lý',
+        value: '1',
+    },
+    {
+        id: 2,
+        label: 'Trưởng Phòng',
+        value: '2',
+    },
+    {
+        id: 3,
+        label: 'Kế Toán',
+        value: '3',
+    },
+    {
+        id: 4,
+        label:'Tất Cả',
+        value: 'all',
+    },
+]
+const listKeySearch = [
+    {
+        label: 'Tên',
+        value: 'name',
+    },
+    {
+        label: 'Email',
+        value: 'email',
+    },
+    {
+        label: 'Mã',
+        value: 'id',
+    },
+]
 function ManageStaff(props) {
     const data_staff_table_header = [...staff_table_header];
     const [loading, setLoading] = React.useState(true);
     const [data, setData] = React.useState([]);
     const [search, setSearch] = React.useState('')
-    const [filter, setFilter] = React.useState()
+    const [filter, setFilter] = React.useState({role:'all',status:'all'})
     const isAddStaff = useSelector(isAddStaffSelector);
     const isEditStaff = useSelector(isEditStaffSelector);
     const detailStaff = useSelector(staffSelector)
@@ -49,6 +99,7 @@ function ManageStaff(props) {
         if (result === 401) {
         } else if (result === 500) {
             return false;
+
         } else {
             setStaff(result, 'page');
         }
@@ -61,6 +112,7 @@ function ManageStaff(props) {
         //     // Notiflix.Block.remove('#root');
         // }, 300);
     };
+
     const handleEditStaff=(data) => {
         console.log('EditStaff', data);
     }
@@ -69,14 +121,16 @@ function ManageStaff(props) {
         async function fetchData() {
             console.log('Search:', search, ' - Filter:', filter)
             let params = {};
-            if (filter !== 'All') params = { ...params, filter };
+            if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
             if (search !== '') params = { ...params, filter, search };
+            console.log('Params:', params)
             const respond = await getListStaffs(params);
             console.log('Data respond:', respond)
             if (respond === 401) {
                 handleSetUnthorization();
                 return false;
             } else if (respond === 500) {
+                setData([])
                 return false;
             } else {
                 setStaff(respond, 'reset-page');
@@ -130,14 +184,27 @@ function ManageStaff(props) {
                                                         !isAddStaff && !isEditStaff && (
                                                             <div className='filter-staff-page'>
                                                                 <div className='filter-group'>
-                                                                    <FilterRadiobox width='15.2rem' onFilter={handleFilterStatus}/>
-                                                                    <FilterCheckbox onFilter={handleFilterRole} />
+                                                                    <FilterSelect listOptions={listStatus} width='15.2rem'
+                                                                                  title={'Trạng thái'}
+                                                                                  background={'#de935e'}
+                                                                                  onFilter={handleFilterStatus}/>
+                                                                    <FilterSelect listOptions={listRole} width='15rem'
+                                                                                  title={'Chức vụ'}  background={'#5fc5b2'}
+                                                                                   onFilter={handleFilterRole} />
 
                                                                 </div>
                                                                 <div className='search-excel'>
-                                                                    <SearchHidenButton height='2.4rem' width='20rem'
-                                                                      onSearch={setSearch}                 backgroundButton='#1477DA'/>
+                                                                    <SearchSelectKey listKeys={listKeySearch}
+                                                                        onSearch={setSearch}
+                                                                    />
+                                                                    {/*<Space.Compact>*/}
+                                                                    {/*    <Select defaultValue="Tên" options={listKeySearch}*/}
+                                                                    {/*            onChange={handleSelectKeySearch}*/}
+                                                                    {/*            size={"large"} className={'key-search'} />*/}
+                                                                    {/*    <SearchHidenButton height='2.4rem' width='20rem'*/}
+                                                                    {/*             value={search}          onSearch={setSearch}    backgroundButton='#1477DA'/>*/}
 
+                                                                    {/*</Space.Compact>*/}
                                                                     <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>
                                                                         <Button className='btn'><FaFileUpload className='icon'/></Button>
                                                                     </Tooltip>

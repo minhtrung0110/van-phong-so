@@ -34,6 +34,20 @@
       .search-excel{
         display: flex;
         align-items: center;
+        .key-search{
+            .ant-select-selector{
+              height: 2.4rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 4.9rem;
+              .ant-select-selection-item
+              {
+                font-weight: 700;
+              }
+
+            }
+        }
         .btn-add{
           margin-left: 0.3rem;
           @include  btn-ok;

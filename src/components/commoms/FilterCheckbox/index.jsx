@@ -11,19 +11,19 @@ function FilterCheckbox({onFilter}) {
     const lists = [
         {
             label: 'Quản Lý',
-            value: 'manager',
+            value: '1',
         },
         {
             label: 'Trưởng Phòng',
-            value: 'leader',
+            value: '2',
         },
         {
             label: 'Kế Toán',
-            value: 'Accountant',
+            value: '3',
         },
         {
-            label:'Nhân Viên',
-            value: 'staff',
+            label:'Tất Cả',
+            value: 'all',
         },
     ]
     const handleChange = (value) => {

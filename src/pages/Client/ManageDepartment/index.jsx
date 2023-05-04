@@ -6,7 +6,7 @@ import DepartmentTable from "~/components/Client/Department";
 import {department_table_header} from "~/asset/data/department-table-header";
 import PaginationUI from "~/components/commoms/Pagination";
 import {FaFileDownload, FaFileUpload, FaRegBuilding, FaSearch} from "react-icons/fa";
-import FilterRadiobox from "~/components/commoms/FilterRadiobox";
+import FilterRadiobox from "~/components/commoms/FilterSelect";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import {Button, Modal, Tooltip,message} from "antd";
 import {useDispatch, useSelector} from "react-redux";
