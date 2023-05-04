@@ -2,13 +2,16 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import {AutoComplete, message, Cascader, Col, DatePicker, Form, Input, Modal, Radio, Row, Select, Upload} from "antd";
-import { FaPlus,} from "react-icons/fa";
-import {useDispatch} from "react-redux";
+import {FaPlus, FaUserPlus,} from "react-icons/fa";
+import {useDispatch, useSelector} from "react-redux";
 import {setIsEdit} from "~/redux/reducer/staff/staffReducer";
 import {provinceVn} from "~/asset/data/provinces-vn"
 import HeaderContent from "~/components/commoms/HeaderContent";
 import {useForm, Controller} from "react-hook-form";
 import {listCounties} from "~/asset/data/initDataGlobal";
+import dayjs from "dayjs";
+import {createStaff} from "~/api/Client/Staff/staffAPI";
+import {staffSelector} from "~/redux/selectors/staff/staffSelector";
 
 EditStaff.propTypes = {};
 const getBase64 = (file) =>
@@ -20,6 +23,7 @@ const getBase64 = (file) =>
     });
 
 function EditStaff({}) {
+    const data=useSelector(staffSelector)
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -29,7 +33,11 @@ function EditStaff({}) {
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
-    } = useForm({});
+    } = useForm({
+        defaultValues:{
+            data
+        }
+    });
     const onWebsiteChange = (value) => {
         if (!value) {
             setAutoCompleteResult([]);
@@ -66,20 +74,64 @@ function EditStaff({}) {
         setPreviewOpen(true);
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
     };
-    const onSave = (data) => {
-        console.log('Update Staff:',data)
+    const onSave = async (data) => {
+        const newStaff = {
+            ...data,
+            contact_info: {
+                bank_account_number: data.bank_account_number,
+                bank_name: data.bank_name,
+                emergency_contact: data.emergency_contact,
+                permanent_address: data.permanent_address,
+                tax_code: data.tax_code,
+                temporary_address: data.temporary_address
+            },
+            job_info: {
+                company_id: 1,
+                date_of_joining:dayjs(data.date_of_joining, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                department_id: data.department_id,
+                group_id: data.group_id,
+                job_title: data.job_title
+            },
+            birthday:dayjs(data.birthday, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            date_of_degree:dayjs(data.date_of_degree, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            education_level:+data.education_level,
+            permanent_address: `${data.per_address} ${data.per_residence}`,
+            temporary_address: `${data.tmp_address} ${data.tmp_residence}`,
+            avatar_url: `https://th.bing.com/th/id/R.8a11509003ea4fc583e224…7ebde5?rik=KSGxl77IPIC1Iw&riu=http%3a%2f%2fupload`,
+        }
+        delete newStaff.tmp_address
+        delete newStaff.per_address
+        delete newStaff.tmp_residence
+        delete newStaff.per_residence
+        delete newStaff.social_network
+        console.log('Create Staff:', newStaff)
+
+        const respond = await createStaff(newStaff)
+        console.log(respond)
+        if(respond.status===1){
+            messageApi.open({
+                type: 'success',
+                content: respond.message,
+                duration: 1.3,
+            });
+            //  setTimeout(() => handleCancel, 1300)
+        }
+        else {
+            messageApi.open({
+                type: 'error',
+                content: respond.message,
+                duration: 1.3,
+            });
+        }
+
         // thành công
-        messageApi.open({
-            type: 'success',
-            content: 'Cập nhật thành công',
-            duration: 1.3,
-        });
-        setTimeout(()=>handleCancel,1400)
+
+
     }
     return (
-        <div className="edit-staff-container">
+        <div className="create-staff-container">
             {contextHolder}
-            <HeaderContent title='Cập Nhật Nhân Viên'/>
+            <HeaderContent title='Thêm Nhân Viên' icon={FaUserPlus}/>
             <Form
                 labelCol={{
                     span: 7,
@@ -100,14 +152,14 @@ function EditStaff({}) {
 
                         <Controller
                             control={control}
-                            name="firstName"
+                            name="first_name"
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Họ"
                                     hasFeedback
-                                    validateStatus={errors.firstName ? 'error' : 'success'}
-                                    help={errors.firstName ? 'Vui lòng nhập họ' : null}>
+                                    validateStatus={errors.first_name ? 'error' : 'success'}
+                                    help={errors.first_name ? 'Vui lòng nhập họ' : null}>
 
                                     <Input  {...field} size="middle" className='ant-input-no-radius '/>
                                 </Form.Item>
@@ -116,14 +168,14 @@ function EditStaff({}) {
 
                         <Controller
                             control={control}
-                            name="lastName"
+                            name="last_name"
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Tên"
                                     hasFeedback
-                                    validateStatus={errors.lastName ? 'error' : 'success'}
-                                    help={errors.lastName ? 'Vui lòng nhập tên ' : null}>
+                                    validateStatus={errors.last_name ? 'error' : 'success'}
+                                    help={errors.last_name ? 'Vui lòng nhập tên ' : null}>
 
                                     <Input  {...field} size="middle"/>
                                 </Form.Item>
@@ -131,35 +183,34 @@ function EditStaff({}) {
                         />
                         <Controller
                             control={control}
-                            name='birthDate'
+                            name='birthday'
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Ngày sinh"
-                                    name="lastName"
+                                    name="birthday"
                                     hasFeedback
-                                    validateStatus={errors.birthDate ? 'error' : 'success'}
-                                    help={errors.birthDate ? 'Vui lòng nhập ngày sinh ' : null}>
+                                    validateStatus={errors.birthday ? 'error' : 'success'}
+                                    help={errors.birthday ? 'Vui lòng nhập ngày sinh ' : null}>
 
-                                    <DatePicker {...field} size="middle" placeholder={'Chọn ngày'}/>
+                                    <DatePicker {...field}  format="DD/MM/YYYY" size="middle" placeholder={'Chọn ngày'}/>
                                 </Form.Item>
                             )}
                         />
                         <Controller
                             control={control}
-                            name='gender'
+                            name='sex'
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
-                                    label="Giới tính" name="gender"
+                                    label="Giới tính" name="sex"
                                     hasFeedback
-                                    validateStatus={errors.gender ? 'error' : 'success'}
-                                    help={errors.gender ? 'Vui lòng chọn giới tính' : null}>
+                                    validateStatus={errors.sex ? 'error' : 'success'}
+                                    help={errors.sex ? 'Vui lòng chọn giới tính' : null}>
 
                                     <Radio.Group {...field}>
-                                        <Radio value={1}>Nam</Radio>
-                                        <Radio value={0}>Nữ</Radio>
-                                        <Radio value={-1}>Khác</Radio>
+                                        <Radio value='male'>Nam</Radio>
+                                        <Radio value='female'>Nữ</Radio>
                                     </Radio.Group> </Form.Item>
                             )}
                         />
@@ -180,14 +231,14 @@ function EditStaff({}) {
                         />
                         <Controller
                             control={control}
-                            name='mail'
+                            name='email'
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Mail"
                                     hasFeedback
-                                    validateStatus={errors.mail ? 'error' : 'success'}
-                                    help={errors.mail ? 'Vui lòng nhập mail ' : null}>
+                                    validateStatus={errors.email ? 'error' : 'success'}
+                                    help={errors.email ? 'Vui lòng nhập mail ' : null}>
 
                                     <Input {...field} size="middle"/>
                                 </Form.Item>
@@ -211,15 +262,15 @@ function EditStaff({}) {
 
                         <Controller
                             control={control}
-                            name='phone'
+                            name='phone_number'
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Số điện thoại"
                                     hasFeedback
                                     labelAlign='left'
-                                    validateStatus={errors.phone ? 'error' : 'success'}
-                                    help={errors.phone ? 'Vui lòng nhập số điện thoại ' : null}>
+                                    validateStatus={errors.phone_number ? 'error' : 'success'}
+                                    help={errors.phone_number ? 'Vui lòng nhập số điện thoại ' : null}>
                                     <Input
                                         {...field}
                                         addonBefore={prefixSelector}
@@ -234,14 +285,14 @@ function EditStaff({}) {
                         />
                         <Controller
                             control={control}
-                            name="martial_status"
+                            name="marital_status"
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Tình trạng hôn nhân "
                                     hasFeedback
-                                    validateStatus={errors.martial_status ? 'error' : 'success'}
-                                    help={errors.martial_status ? 'Vui lòng chọn ' : null}>
+                                    validateStatus={errors.marital_status ? 'error' : 'success'}
+                                    help={errors.marital_status ? 'Vui lòng chọn ' : null}>
                                     <Select {...field}
                                             options={[
                                                 {value: 'single', label: 'Độc thân'},
@@ -271,7 +322,7 @@ function EditStaff({}) {
                         />
                         <Controller
                             control={control}
-                            name="avatar"
+                            name="avatar_url"
                             render={({field}) => (
                                 <Form.Item
                                     label="Ảnh Đại Diện">
@@ -458,7 +509,7 @@ function EditStaff({}) {
                     <Col className='col-left' xs={{span: 24}} lg={{span: 12}}>
                         <Controller
                             control={control}
-                            name="role"
+                            name="role_id"
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
@@ -467,9 +518,9 @@ function EditStaff({}) {
                                     validateStatus={errors.role ? 'error' : 'success'}
                                     help={errors.role ? 'Vui lòng chọn chức vụ ' : null}>
                                     <Select {...field} placeholder="Chọn chức vụ" size="middle">
-                                        <Select.Option value="male">CEO</Select.Option>
-                                        <Select.Option value="female">CTO</Select.Option>
-                                        <Select.Option value="other">Other</Select.Option>
+                                        <Select.Option value={1}>CEO</Select.Option>
+                                        <Select.Option value={2}>CTO</Select.Option>
+                                        <Select.Option value={3}>Other</Select.Option>
                                     </Select>
                                 </Form.Item>
                             )}
@@ -499,7 +550,7 @@ function EditStaff({}) {
                                     hasFeedback
                                     validateStatus={errors.date_of_joining ? 'error' : 'success'}
                                     help={errors.date_of_joining ? 'Vui lòng điền ngày vào làm ' : null}>
-                                    <Input {...field} size="middle"/>
+                                    <DatePicker {...field} size="middle" format="DD/MM/YYYY"/>
                                 </Form.Item>
                             )}
                         />
@@ -508,34 +559,34 @@ function EditStaff({}) {
                     <Col className='col-right' xs={{span: 24}} lg={{span: 12}}>
                         <Controller
                             control={control}
-                            name="dapartment"
+                            name="department_id"
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
 
                                     label="Phòng ban"
                                     hasFeedback
-                                    validateStatus={errors.dapartment ? 'error' : 'success'}
-                                    help={errors.dapartment ? 'Vui lòng chọn phòng ban ' : null}>
+                                    validateStatus={errors.department_id ? 'error' : 'success'}
+                                    help={errors.department_id ? 'Vui lòng chọn phòng ban ' : null}>
                                     <Select {...field} options={[
-                                        {key:'a',value:'Mada'}
+                                        {key:'1',value:1}
                                     ]} />
                                 </Form.Item>
                             )}
                         />
                         <Controller
                             control={control}
-                            name="group"
+                            name="group_id"
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
 
                                     label="Nhóm làm việc"
                                     hasFeedback
-                                    validateStatus={errors.group ? 'error' : 'success'}
-                                    help={errors.group ? 'Vui lòng chọn nhóm ' : null}>
+                                    validateStatus={errors.group_id ? 'error' : 'success'}
+                                    help={errors.group_id ? 'Vui lòng chọn nhóm ' : null}>
                                     <Select {...field} options={[
-                                        {key:'a',value:'Team 1'}
+                                        {key:'1',value:1}
                                     ]}size="middle"/>
                                 </Form.Item>
                             )}
@@ -613,7 +664,7 @@ function EditStaff({}) {
                         <Controller
                             control={control}
                             name="emergency_contact"
-                                                        rules={{required: true}}
+                            rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Liên hệ khẩn cấp"

@@ -53,10 +53,9 @@ export const getListStaffs = async ({ sort,filter, search,keySearch, page } = {}
 };
 
 export const getStaffById = async (id) => {
-    const url = `employees?id=${id}`;
-    const response = await axiosClient.get(url,{
-        paramsSerializer: {}
-    });
+    const url = `employees/${id}`;
+    const response = await axiosClient.get(url,configHeadersAuthenticate());
+    console.log(url)
     //console.log('response', response)
     if (response.status === 1) {
         return response.data.result;
@@ -66,28 +65,43 @@ export const getStaffById = async (id) => {
         return {};
     }
 };
-// export const addStaff = async (body) => {
-//     const url = '/api/admin/staff';
-//     //check email and phonenumber existance
-//     const email = body.email;
-//     const phoneNumber = body.phone;
-//     const check_email_existence = await getAllStaffsWithEmailAndPhone({ email, phoneNumber });
-//     if (check_email_existence === 401) return 401;
-//     if (check_email_existence.data.length > 0) return 402;
-//     else {
-//         const response = await axiosClient.post(url, body, configHeadersAuthenticate());
-//         if (response.status === 401) {
-//             return 401;
-//         } else if (response.status === 'success') {
-//             return 200;
-//         } else if (response.status === 500) {
-//             return 500;
-//         } else {
-//             return 404;
-//         }
-//     }
-// };
-//
+export const createStaff = async (body) => {
+    const url = 'employees';
+    const response = await axiosClient.post(url, body, configHeadersAuthenticate());
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,message:'Tạo nhân viên mới thành công'}
+    }
+    else if (response.status ===0){
+        switch (response.code) {
+            case -1009:
+                return {status:0,message:'Thông tin không chính xác'}
+                break
+            case -1010:
+                return {status:0,message:'Email đã tồn tại ! Vui lòng chọn email khác'}
+                break
+            case -1011:
+                return {status:0,message:'Tài khoản đã bị vo hiệu hóa'}
+                break
+            default:
+                break
+        }
+    }
+    console.log(response)
+        // if (response.status === 401) {
+        //     return 401;
+        // } else if (response.status === 1) {
+        //     return 200;
+        // } else if (response.status === 500) {
+        //     return 500;
+        // }
+        // else if (response.message === 'Email has exited') {
+        //         return 500;
+        // } else {
+        //     return 404;
+        // }
+    //}
+};
+
 // export const editStaff = async (id, body) => {
 //     const url = `/api/admin/staff/${id}`;
 //     if (body.email || body.phone) {

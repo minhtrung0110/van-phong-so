@@ -34,21 +34,21 @@ function StaffTable({tableHeader, tableBody}) {
     }
     const handleEditStaff = async (e, id) => {
         e.stopPropagation();
-       // const data = await getStaffById(id);
-       //  console.log('Data nhận :',data)
-       //  if (Object.keys(data).length > 0) {
-       //      dispatch(setStaff(data));
+        const data = await getStaffById(id);
+       console.log('Data nhận :',data)
+       if (Object.keys(data).length > 0) {
+       dispatch(setStaff(data));
         dispatch(setIsEdit(true));
-        // } else if (data === 401) {
+        } else if (data === 401) {
         //   //  Notiflix.Block.remove('#root');
-        // } else {
+         } else {
         //    // Notiflix.Block.remove('#root');
-        //     messageApi.open({
-        //         type: 'error',
-        //         content: 'Cập nhật thất bại',
-        //         duration: 1.3,
-        //     });
-        // }
+            messageApi.open({
+                type: 'error',
+                content: 'Cập nhật thất bại',
+                duration: 1.3,
+            });
+         }
     };
     const handleRemoveStaff = async (id) => {
         //e.stopPropagation();
@@ -118,7 +118,7 @@ function StaffTable({tableHeader, tableBody}) {
                             </button>
                             <button
                                 id="edit-staff"
-                                onClick={(e) => handleEditStaff(e, item.id)}
+                                onClick={(e) => handleEditStaff(e, item.ID)}
                                 className=" btn-edit"
                             >
                                 <FaPen className="icon-edit"/>

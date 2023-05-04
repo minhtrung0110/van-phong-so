@@ -232,7 +232,7 @@ function ManageStaff(props) {
                                                     {totalRecord >= 1 && (
                                                         <PaginationUI
                                                             handlePageChange={handlePageChange}
-                                                            perPage={1}
+                                                            perPage={8}
                                                             totalRecord={totalRecord}
                                                             currentPage={page}
                                                         />
