@@ -12,7 +12,7 @@ BoardSprint.propTypes = {
 
 };
 
-function BoardSprint({columnData,onEdit, onDelete,onCreateTask, onDeleteTask,onUpdateTask}) {
+function BoardSprint({project,columnData,onEdit, onDelete,onCreateTask, onDeleteTask,onUpdateTask}) {
    // console.log(columnData)
     const [columns,setColumns] = useState(columnData)
     const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
@@ -44,18 +44,18 @@ function BoardSprint({columnData,onEdit, onDelete,onCreateTask, onDeleteTask,onU
         if(dropResult.removedIndex !=null || dropResult.addedIndex !=null)
         {
             let newColumns=[...columns]
-            let currentColumn=newColumns.find((item=>item.id===columnId)) // là cái cột chô sẽ duoc chuyển vào
-            const listCardSprint= conCatArrayInArray(currentColumn.columns);
+            let currentColumn=newColumns.find((item=>item.id===columnId)) // là cái sprint chô sẽ duoc chuyển vào
+            const listCardSprint=currentColumn.tasks// conCatArrayInArray(currentColumn.columns);
            // console.log('ccheccked',listCardSprint)
             console.log('Đang Tesst: ',currentColumn,newColumns)
-            currentColumn.columns=remakeSprintFromSlide(applyDragSprint(listCardSprint, dropResult, currentColumn.id), currentColumn);
+            currentColumn.tasks=applyDragSprint(currentColumn.tasks, dropResult, currentColumn.id);
 
            // currentColumn.cardOrder=currentColumn.cards.map(i=>i.id)
           flushSync(()=>setColumns(newColumns))
         }
        // vấn de: khi kéo thả thì trường column_ID của project bi loi không thay dôi
     }
-
+    console.log(columns)
 
     return (
         <div>
@@ -79,7 +79,7 @@ function BoardSprint({columnData,onEdit, onDelete,onCreateTask, onDeleteTask,onU
                                 onCardDrop={onCardDropSprint}
                                 onEdit={onEdit}
                                 onDelete={onDelete}
-
+                                listStatus={project.board_columns}
                                 onCreateTask={onCreateTask}
                                 onDeleteTask={onDeleteTask}
                                 onUpdateTask={onUpdateTask}

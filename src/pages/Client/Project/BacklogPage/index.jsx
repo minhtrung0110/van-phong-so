@@ -16,6 +16,12 @@ import TextArea from "antd/es/input/TextArea";
 
 import BoardSprint from "~/components/Client/Sprint/BoardSprint";
 import {boardSelector} from "~/redux/selectors/project/projectSelector";
+import {getListStaffs} from "~/api/Client/Staff/staffAPI";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import {getProjectById} from "~/api/Client/Project/projectAPI";
+import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
+import {createSprint, deleteSprint, editSprint} from "~/api/Client/Sprint/sprintAPI";
 
 
 BacklogPage.propTypes = {};
@@ -259,6 +265,7 @@ const data = [
 ]
 function BacklogPage(props) {
     const [project,setProject]=useState({})
+    const [loading, setLoading] = React.useState(true);
     const [filter,setFilter]=useState([])
     const [showAddSprint,setShowAddSprint]=useState(false)
     const [listSprints,setListSprints]=useState([])
@@ -267,41 +274,101 @@ function BacklogPage(props) {
     const dispatch = useDispatch()
     useEffect(()=>{
         // call API get sprint task lên
-        const project=JSON.parse(localStorage.getItem('project'))
-        const boardFromDB = initialData.boards.find(board => board.id === project.projectId)
-
-        setProject(boardFromDB)
-        if (boardFromDB){
-         //   console.log(boardFromDB.sprints)
-            setListSprints(boardFromDB.sprints)
+        async function fetchData() {
+            const project=JSON.parse(localStorage.getItem('project'))
+            let params = {};
+            // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
+            // if (search !== '') params = { ...params, filter, search };
+            console.log('Params:', params)
+            const respond = await getProjectById(project.projectId);
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setProject([])
+                return false;
+            } else {
+                setProject(respond, 'reset-page');
+                setListSprints(respond.sprints)
+            }
+            setLoading(false);
         }
-        console.log('Filter: ',filter)
+        fetchData();
+
+
+        // const boardFromDB = initialData.boards.find(board => board.id === project.projectId)
+        //
+        // setProject(boardFromDB)
+        // if (boardFromDB){
+        //  //   console.log(boardFromDB.sprints)
+        //     setListSprints(boardFromDB.sprints)
+        // }
+     //   console.log('Filter: ',filter)
 
     },[filter])
-    const handleCreateSprint=(data)=>{
-        console.log('Create Sprint: ',data)
-        messageApi.open({
-            type: 'success',
-            content: 'Tạo thành công',
-            duration: 1.5,
-        });
-        setTimeout(()=>{setShowAddSprint(false)},800)
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+    };
+    const handleCreateSprint=async (data) => {
+        console.log('Create Sprint: ', data)
+        const result = await createSprint(data);
+        if(result.status===1){
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+        }
+        else if(result.status===0) {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.4,
+            });
+        }
+        setTimeout(() => {
+            setShowAddSprint(false)
+        }, 800)
     }
-    const handleUpdateSprint=(data)=>{
-        console.log('Update sprint:',data)
-        messageApi.open({
-            type: 'success',
-            content: 'Cập nhật thành công',
-            duration: 1.3,
-        });
+    const handleUpdateSprint=async (id,data) => {
+        console.log('Update Sprint: ',id, data)
+        const result = await editSprint(id,data);
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+        } else if (result.status === 0) {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.4,
+            });
+        }
+
     }
-    const handleDeleteSprint=(data)=>{
-        console.log('Delete sprint:',data)
-        messageApi.open({
-            type: 'success',
-            content: 'Xóa thành công',
-            duration: 1.5,
-        });
+    const handleDeleteSprint=async (id) => {
+        console.log('Delete sprint:', id)
+        const result = await deleteSprint(id);
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+        } else if (result.status === 0) {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.4,
+            });
+        }
     }
     const handleRunSprint=(data)=>{
         handleDeleteSprint(data)
@@ -316,60 +383,65 @@ function BacklogPage(props) {
         console.log('Update Task: ', value)
     }
     return (
-        <div className='container-backlog'>
-            {contextHolder}
-            <div className='header-backlog'>
-                <div className='breadcrumb'>
-                    <Breadcrumb>
-                        <Breadcrumb.Item><NavLink to={config.routes.allProject}>Dự Án</NavLink></Breadcrumb.Item>
-                        <Breadcrumb.Item><NavLink to={config.routes.backlog}>Danh sách công việc</NavLink></Breadcrumb.Item>
+       <>
+           {
+               loading ?(<ListPageSkeleton />):(
+                   <div className='container-backlog'>
+                       {contextHolder}
+                       <div className='header-backlog'>
+                           <div className='breadcrumb'>
+                               <Breadcrumb>
+                                   <Breadcrumb.Item><NavLink to={config.routes.allProject}>Dự Án</NavLink></Breadcrumb.Item>
+                                   <Breadcrumb.Item><NavLink to={config.routes.backlog}>Danh sách công việc</NavLink></Breadcrumb.Item>
 
-                    </Breadcrumb>
-                </div>
-                <div className='sprint-backlog-header'>
-                    <div className= 'sprint-backlog-title'>
-                        <FaList className={'icon'} />
-                        Danh sách công việc
-                    </div>
-                    <div className= 'sprint-backlog-actions'>
-                        <FilterProject onFilter={setFilter} listmember={listMembersForTask} className='filter-btn' />
-                        <button className='create-sprint' onClick={()=>setShowAddSprint(true)}>
-                            Tạo mới phiên dự án
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div className='content-backlog'>
+                               </Breadcrumb>
+                           </div>
+                           <div className='sprint-backlog-header'>
+                               <div className= 'sprint-backlog-title'>
+                                   <FaList className={'icon'} />
+                                   Danh sách công việc
+                               </div>
+                               <div className= 'sprint-backlog-actions'>
+                                   <FilterProject onFilter={setFilter} listmember={listMembersForTask} className='filter-btn' />
+                                   <button className='create-sprint' onClick={()=>setShowAddSprint(true)}>
+                                       Tạo mới phiên dự án
+                                   </button>
+                               </div>
+                           </div>
+                       </div>
+                       <div className='content-backlog'>
+                           <BoardSprint
+                               project={project} onBoard={handleUpdateSprint} columnData={listSprints}
+                               onEdit={handleUpdateSprint}
+                               onDelete={handleDeleteSprint}
+                               onDeleteTask={handleDeleteTask}
+                               onCreateTask={handleCreateTask}
+                               onUpdateTask={handleUpdateTask}
+                           />
+                           {/*{*/}
+                           {/*    !!listSprints && listSprints.map((item) =>(*/}
+                           {/*        <SprintItem key={item.id} sprint={item} onEdit={handleUpdateSprint} onDelete={handleDeleteSprint} />*/}
+                           {/*    ))*/}
+                           {/*}*/}
+                           {/*<Backlog />*/}
 
-                <BoardSprint
-                    board={project} onBoard={handleUpdateSprint} columnData={listSprints}
-                    onEdit={handleUpdateSprint}
-                    onDelete={handleDeleteSprint}
-                    onDeleteTask={handleDeleteTask}
-                    onCreateTask={handleCreateTask}
-                    onUpdateTask={handleUpdateTask}
-                />
-                {/*{*/}
-                {/*    !!listSprints && listSprints.map((item) =>(*/}
-                {/*        <SprintItem key={item.id} sprint={item} onEdit={handleUpdateSprint} onDelete={handleDeleteSprint} />*/}
-                {/*    ))*/}
-                {/*}*/}
-                {/*<Backlog />*/}
-
-            </div>
-            <Modal title="Tạo Mới " open={showAddSprint}
-                   destroyOnClose
-                   maskClosable={true}
-                   onCancel={()=>setShowAddSprint(false)}
-                   footer={null}
-                   width={700}
-                   style={{top: 150}}
-            >
-                <AddSprint onClose={()=>setShowAddSprint(false)} onSave={handleCreateSprint} />
-            </Modal>
+                       </div>
+                       <Modal title="Tạo Mới " open={showAddSprint}
+                              destroyOnClose
+                              maskClosable={true}
+                              onCancel={()=>setShowAddSprint(false)}
+                              footer={null}
+                              width={700}
+                              style={{top: 150}}
+                       >
+                           <AddSprint onClose={()=>setShowAddSprint(false)} onSave={handleCreateSprint} />
+                       </Modal>
 
 
-        </div>
+                   </div>
+               )
+           }
+       </>
     );
 }
 

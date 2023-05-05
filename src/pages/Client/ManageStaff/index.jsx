@@ -5,7 +5,12 @@ import NotFoundData from "~/components/commoms/NotFoundData";
 import './style.scss'
 import {FaFileDownload,  FaFileUpload,  FaUsers} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
-import {isAddStaffSelector, isEditStaffSelector, staffSelector} from "~/redux/selectors/staff/staffSelector";
+import {
+    isAddStaffSelector,
+    isEditStaffSelector,
+    isResetStaffSelector,
+    staffSelector
+} from "~/redux/selectors/staff/staffSelector";
 import AddStaff from "~/components/Client/Staff/Add";
 import EditStaff from "~/components/Client/Staff/Edit";
 import {Button,Space, Select, Tooltip} from "antd";
@@ -89,7 +94,7 @@ function ManageStaff(props) {
     const dispatch = useDispatch();
     const [totalRecord, setTotalRecord] = React.useState(data.length);
     const [page, setPage] = React.useState(1);
-
+    const isReset = useSelector(isResetStaffSelector);
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
@@ -113,9 +118,6 @@ function ManageStaff(props) {
         // }, 300);
     };
 
-    const handleEditStaff=(data) => {
-        console.log('EditStaff', data);
-    }
 
     useEffect(() => {
         async function fetchData() {
@@ -138,7 +140,7 @@ function ManageStaff(props) {
             setLoading(false);
         }
         fetchData();
-    }, [search, filter]);
+    }, [search, filter,isReset]);
 
     const handleSetUnthorization = () => {
         dispatch(setExpiredToken(true));
@@ -146,6 +148,16 @@ function ManageStaff(props) {
         if (token) {
             deleteCookie('vps_token');
         }
+    };
+    const backToStaffList = async (value, action) => {
+        setLoading(true);
+        if (action === 'edit') {
+        }
+        const result = await getListStaffs({
+            sort: value,
+        });
+        setStaff(result, 'page');
+        setLoading(false);
     };
     const setStaff = (respond, value) => {
         setData(respond.results);
@@ -167,10 +179,10 @@ function ManageStaff(props) {
         <>
             {
                 !!isAddStaff ?
-                    (<AddStaff/>)
+                    (<AddStaff backToStaffList={backToStaffList} />)
                     : (
-                        !!isEditStaff ? (<EditStaff onSave={handleEditStaff}/>) : (
-                            isEmpty(detailStaff) ? (
+                        !!isEditStaff ? (<EditStaff backToStaffList={backToStaffList} />) :
+                          (
 
                                         !!loading ?(<ListTableSkeleton column={6} lengthItem={5}/>):
                                             (    <div className='container-staff'>
@@ -205,14 +217,14 @@ function ManageStaff(props) {
                                                                     {/*             value={search}          onSearch={setSearch}    backgroundButton='#1477DA'/>*/}
 
                                                                     {/*</Space.Compact>*/}
-                                                                    <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>
-                                                                        <Button className='btn'><FaFileUpload className='icon'/></Button>
-                                                                    </Tooltip>
-                                                                    <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>
-                                                                        <Button className='btn'><FaFileDownload className='icon'/></Button>
-                                                                    </Tooltip>
-                                                                    <Button className='btn-add'
-                                                                            onClick={goToPageAddStaff}>Tạo Mới</Button>
+                                                                    {/*<Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>*/}
+                                                                    {/*    <Button className='btn'><FaFileUpload className='icon'/></Button>*/}
+                                                                    {/*</Tooltip>*/}
+                                                                    {/*<Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>*/}
+                                                                    {/*    <Button className='btn'><FaFileDownload className='icon'/></Button>*/}
+                                                                    {/*</Tooltip>*/}
+                                                                    <button className='btn-add'
+                                                                            onClick={goToPageAddStaff}>Tạo Mới</button>
 
 
                                                                 </div>
@@ -243,8 +255,8 @@ function ManageStaff(props) {
 
 
                                 )
-                                : (<DetailStaff/>)
-                        )
+
+
                     )
 
 

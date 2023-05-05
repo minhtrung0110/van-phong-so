@@ -11,23 +11,26 @@ EditSprint.propTypes = {
 };
 
 function EditSprint({sprint,onClose,onSave}) {
-  // console.log(dayjs(sprint.startTime, "DD/MM/YYYY HH:mm:ss"))
     const [rangeValueTime, setRangeValueTime] = useState(
         [dayjs(sprint.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(sprint.endTime, "DD/MM/YYYY HH:mm:ss")]);
     const {
         control, handleSubmit, formState: { errors, isDirty, dirtyFields },
     } = useForm({
         defaultValues:{
-            name:sprint.name,
-            description:sprint.description,
-            duration:[dayjs(sprint.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(sprint.endTime, "DD/MM/YYYY HH:mm:ss")]
+            title:sprint.title,
+            goal:sprint.goal,
+            duration:[dayjs(dayjs(sprint.startTime).format('DD/MM/YYYY HH:mm:ss')),
+            dayjs(dayjs(sprint.endTime).format('DD/MM/YYYY HH:mm:ss'))
+            ]
         }
 
     });
-
+    const project =JSON.parse(localStorage.getItem('project'));
     const onSubmit=(data)=>{
-        const newDuration=[dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss'),dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss')]
-        onSave({...data,duration:newDuration})
+        onSave(sprint.id,{...data,
+            start_date:dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end_date:dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            project_id:project.projectId,})
     }
     const {RangePicker} = DatePicker;
     const rangePresets = [
@@ -60,7 +63,6 @@ function EditSprint({sprint,onClose,onSave}) {
             //   console.log('Clear');
             setRangeValueTime([dates[0],dates[1]])
     }
-    console.log(isDirty)
     return (
         <Form
             labelCol={{
@@ -77,15 +79,15 @@ function EditSprint({sprint,onClose,onSave}) {
             className='create-sprint'>
             <div className="content">
                 <Controller
-                    name="name"
+                    name="title"
                     control={control}
                     defaultValue=''
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item label="Tên Sprint"
                                    hasFeedback
-                                   validateStatus={errors.name ? 'error' : 'success'}
-                                   help={errors.name ? 'Vui lòng nhập tên sprint ': null}
+                                   validateStatus={errors.title ? 'error' : 'success'}
+                                   help={errors.title ? 'Vui lòng nhập tên sprint ': null}
                         >
 
                             <Input {...field} size="middle" />
@@ -93,15 +95,15 @@ function EditSprint({sprint,onClose,onSave}) {
                     )}
                 />
                 <Controller
-                    name="description"
+                    name="goal"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item label="Mô Tả"
                                    hasFeedback
-                                   validateStatus={errors.description ? 'error' : 'success'}
-                                   help={errors.description ? 'Vui lòng nhập mô tả ': null}
+                                   validateStatus={errors.goal ? 'error' : 'success'}
+                                   help={errors.goal ? 'Vui lòng nhập mô tả ': null}
                         >
 
                             <Input.TextArea  {...field} size="middle" />

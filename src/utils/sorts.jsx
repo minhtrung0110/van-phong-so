@@ -22,7 +22,7 @@ export const getListStatusTaskProject=(array) =>{
     return array.columns.map((item,index)=>({id:item.id,label:item.title}))
 }
 export const findStyleForStatusTask=(status,list)=>{
-    return list.find((item)=>item.value===status)
+    return list.find((item)=>item.id===status)
 }
 export const splitArrayByKey = (array, key) => {
     const grouped = array.reduce((acc, item) => {
@@ -51,3 +51,6 @@ export const remakeSprintFromSlide = (array,sprint) => {
     }));
 
 };
+export const getTitleStatusTask=(id,array) => {
+    return array.find((item) =>item.id === id)
+}

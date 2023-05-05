@@ -18,7 +18,7 @@ import {
 import {FaPlus, FaUserPlus} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import {provinceVn} from "~/asset/data/provinces-vn";
-import {setIsEdit} from "~/redux/reducer/staff/staffReducer";
+import {setIsAdd} from "~/redux/reducer/staff/staffReducer";
 import {Controller, useForm} from "react-hook-form";
 import HeaderContent from "~/components/commoms/HeaderContent";
 import {listCounties} from "~/asset/data/initDataGlobal";
@@ -72,7 +72,7 @@ function AddStaff(props) {
         </Form.Item>
     );
     const handleCancel = () => {
-        dispatch(setIsEdit(false))
+        dispatch(setIsAdd(false))
     }
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -122,7 +122,13 @@ function AddStaff(props) {
                 content: respond.message,
                 duration: 1.3,
             });
-          //  setTimeout(() => handleCancel, 1300)
+            props.backToStaffList([
+                {
+                    key: 'created_at',
+                    value: 'desc',
+                },
+            ]);
+          setTimeout(() => handleCancel(), 1300)
         }
         else {
             messageApi.open({
@@ -196,7 +202,6 @@ function AddStaff(props) {
                             render={({field}) => (
                                 <Form.Item
                                     label="Ngày sinh"
-                                    name="birthday"
                                     hasFeedback
                                     validateStatus={errors.birthday ? 'error' : 'success'}
                                     help={errors.birthday ? 'Vui lòng nhập ngày sinh ' : null}>

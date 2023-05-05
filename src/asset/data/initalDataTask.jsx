@@ -1,7 +1,7 @@
 export const initialData = {
     boards: [
         {
-            id: 'kltn-01',
+            id: 1,
             name: 'Khóa Luận Tốt Nghiệp',
             sprintOrder: ['VPS-1', 'VPS-2', 'VPS-3'],
             sprints: [

@@ -14,9 +14,9 @@ export const configHeadersAuthenticate = () => {
     };
 };
 
-export const getListStaffs = async ({ sort,filter, search,keySearch, page } = {}) => {
+export const getListProjects = async ({ sort,filter, search,keySearch, page } = {}) => {
     console.log({ sort,filter, search, page })
-    const url = 'employees';
+    const url = 'projects';
     const queryString = [];
     if (sort && sort.length > 0) {
         sort.forEach((item) => {
@@ -24,7 +24,7 @@ export const getListStaffs = async ({ sort,filter, search,keySearch, page } = {}
         });
     }
     if (search) {
-       // queryString.push(`${keySearch}=${search}`);
+        // queryString.push(`${keySearch}=${search}`);
         queryString.push(search);
     }
     if (page) {
@@ -52,14 +52,13 @@ export const getListStaffs = async ({ sort,filter, search,keySearch, page } = {}
     }
 };
 
-export const getStaffById = async (id) => {
-    const url = `employees/${id}`;
+export const getProjectById = async (id) => {
+    const url = `projects/${id}`;
     const response = await axiosClient.get(url,configHeadersAuthenticate());
-    console.log(url)
     //console.log('response', response)
     if (response.status === 1) {
         return response.data.result;
-    } else if (response.status === 0) {
+    } else if (response.status === 401) {
         return 401;
     } else {
         return {};
@@ -123,24 +122,4 @@ export const deleteStaff = async (id) => {
         return {status:0,message:'Cho Thôi Việc Thất Bại'}
     }
 };
-// export const getAllStaffsWithEmailAndPhone = async ({ email, phoneNumber } = {}) => {
-//     const url = '/api/admin/staff';
-//     const queryString = [];
-//     if (email) {
-//         queryString.push(`email=${email}`);
-//     }
-//     if (phoneNumber) {
-//         queryString.push(`phone=${phoneNumber}`);
-//     }
-//
-//     const final_url = concatQueryString(queryString, url);
-//     console.log(final_url)
-//     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
-//     if (reponse.status === 401) {
-//         return 401;
-//     } else if (reponse.status === 'success') {
-//         return reponse.data;
-//     } else {
-//         return 500;
-//     }
-// };
+

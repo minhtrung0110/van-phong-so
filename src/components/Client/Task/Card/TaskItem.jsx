@@ -3,12 +3,12 @@ import "./TaskItem.scss";
 import {FaPen} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import {setDetailTask} from "~/redux/reducer/project/projectReducer";
-import {findStyleForStatusTask} from "~/utils/sorts";
+import {findStyleForStatusTask, getTitleStatusTask} from "~/utils/sorts";
 import {listPriority} from "~/asset/data/defaullt_data_task";
 import AvatarCustom from "~/components/commoms/AvatarCustom";
 import {Tooltip} from "antd";
 
-function TaskItem({task,type, onShowDetail}) {
+function TaskItem({task,type,columns, onShowDetail}) {
    // console.log(project)
     const dispatch = useDispatch()
     const handleShowDetail = () => {
@@ -30,7 +30,8 @@ function TaskItem({task,type, onShowDetail}) {
                                   ))
                               }
                             <span className='status'>{
-                                task.columnId
+                                getTitleStatusTask(task.board_column_id,columns).name
+
                             }</span>
 
                           </>

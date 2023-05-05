@@ -16,10 +16,13 @@ function AddSprint({onClose,onSave}) {
         control, handleSubmit, formState: { errors, isDirty, dirtyFields },
     } = useForm({
     });
-
+    const project =JSON.parse(localStorage.getItem('project'));
     const onSubmit=(data)=>{
        const newDuration=[dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss'),dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss')]
-        onSave({...data,duration:newDuration})
+        onSave({...data,
+            start_date:dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end_date:dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            project_id:project.projectId,})
     }
     const {RangePicker} = DatePicker;
     const rangePresets = [
@@ -70,15 +73,15 @@ function AddSprint({onClose,onSave}) {
             className='create-sprint'>
             <div className="content">
                 <Controller
-                    name="name"
+                    name="title"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item label="Tên Sprint"
                                    hasFeedback
-                                   validateStatus={errors.name ? 'error' : 'success'}
-                                   help={errors.name ? 'Vui lòng nhập tên sprint ': null}
+                                   validateStatus={errors.title ? 'error' : 'success'}
+                                   help={errors.title ? 'Vui lòng nhập tên sprint ': null}
                         >
 
                             <Input {...field} size="middle" />
@@ -86,15 +89,15 @@ function AddSprint({onClose,onSave}) {
                     )}
                 />
                 <Controller
-                    name="description"
+                    name="goal"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item label="Mô Tả"
                                    hasFeedback
-                                   validateStatus={errors.description ? 'error' : 'success'}
-                                   help={errors.description ? 'Vui lòng nhập mô tả ': null}
+                                   validateStatus={errors.goal ? 'error' : 'success'}
+                                   help={errors.goal ? 'Vui lòng nhập mô tả ': null}
                         >
 
                             <Input.TextArea  {...field} size="middle" />
@@ -125,6 +128,7 @@ function AddSprint({onClose,onSave}) {
                         </Form.Item>
                     )}
                 />
+
                 <div className="footer-create-sprint">
                     <button className='btn-cancel' onClick={onClose}>Hủy</button>
                     <button type='submit' className='btn-save'>Lưu</button>

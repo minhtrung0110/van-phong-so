@@ -7,10 +7,9 @@ import ImageCustom from "~/components/commoms/Image";
 import {message, Modal} from "antd";
 import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import {useDispatch} from "react-redux";
-import {setIsEdit, setStaff} from "~/redux/reducer/staff/staffReducer";
+import {setIsEdit, setStaff,setIsReset} from "~/redux/reducer/staff/staffReducer";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
-import {getStaffById} from "~/api/Client/Staff/staffAPI";
-import AvatarCustom from "~/components/commoms/AvatarCustom";
+import {deleteStaff, getStaffById} from "~/api/Client/Staff/staffAPI";
 
 StaffTable.propTypes = {};
 
@@ -51,27 +50,23 @@ function StaffTable({tableHeader, tableBody}) {
          }
     };
     const handleRemoveStaff = async (id) => {
-        //e.stopPropagation();
-        // const result = await deleteStaff(id);
-        // console.log('result', result);
-        // if (result === 200) {
-        //     SuccessToast('Remove staff successfully', 3000);
-        // } else if (result === 404) {
-        //     ErrorToast('Remove staffs unsuccessfully', 3000);
-        //     Notiflix.Block.remove('#root');
-        // } else if (result === 401) {
-        //     Notiflix.Block.remove('#root');
-        // } else {
-        //     Notiflix.Block.remove('#root');
-        //     ErrorToast('Something went wrong. Please try again', 3000);
-        // }
+        const result = await deleteStaff(id);
+      //  console.log('result', result);
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+        } else if (result.status === 0) {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3,
+            });
+        }
         setShowPopupDelete({...showPopupDelete, show: false});
-        console.log('Delete Staff: ',showPopupDelete.staff_id)
-        messageApi.open({
-            type: 'success',
-            content: 'Xóa thành công',
-            duration: 1.3,
-        });
+        dispatch(setIsReset(Math.random()));
     };
 
     const showConfirmDeleteStaff = (e, id) => {
@@ -126,7 +121,7 @@ function StaffTable({tableHeader, tableBody}) {
                             <button
                                 id="disabled-user"
                                 onClick={(e) => {
-                                    showConfirmDeleteStaff(e, item.id);
+                                    showConfirmDeleteStaff(e, item.ID);
                                 }}
                                 className="btn-delete"
                             >
@@ -152,9 +147,9 @@ function StaffTable({tableHeader, tableBody}) {
             >
                 {<DetailStaff user={detailStaff}/>}
             </Modal>
-            <ConfirmModal title="Xác Nhận Xóa"
+            <ConfirmModal title="Xác Nhận Thôi Việc"
                           open={showPopupDelete.show}
-                          content={`Bạn Có Thực Sự Muốn Xóa Nhân Viên Này Không ? `}
+                          content={`Bạn Có Thực Sự Muốn Cho Nhân Viên Này Thôi Việc ? `}
                           textOK="Xóa"
                           textCancel="Hủy"
                           onOK={() => handleRemoveStaff(showPopupDelete.staff_id)}

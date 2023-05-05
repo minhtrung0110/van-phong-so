@@ -31,24 +31,28 @@ export const listColorStateDefaults =[
 
 export const listPriority = [
     {
+        id:1,
         label: 'Cao',
         value: 'highly',
         color: '#e94040',
         backgroundColor: 'rgba(233,64,64,.12)'
     },
     {
+        id:2,
         label: 'Trung Bình',
         value: 'middle',
         color: '#fa8c16',
         backgroundColor: 'rgba(250,140,22,.12)'
     },
     {
+        id:3,
         label: 'Thấp',
         value: 'low',
         color: '#18baff',
         backgroundColor: 'rgba(24,186,255,.12)'
     },
     {
+        id:4,
         label: 'Không ưu tiên',
         value: 'none',
         color: '#a9a8a8',

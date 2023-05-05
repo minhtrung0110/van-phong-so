@@ -37,6 +37,7 @@ DetailTask.propTypes = {};
 function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
 
     const data = useSelector(detailTaskSelector)
+    console.log(data);
     const [errorDescription, setErrorDescription] = useState('');
     const [description,setDescription]=useState(data.description);
     const [todoList,setTodoList] = useState(data.todoList)

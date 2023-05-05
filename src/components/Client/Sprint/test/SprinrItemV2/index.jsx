@@ -13,10 +13,14 @@ import EditSprint from "~/components/Client/Sprint/EditSprint";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {Container, Draggable} from "react-smooth-dnd";
 import './SprintItem.scss'
+import dayjs from "dayjs";
 
 SprintItemV2.propTypes = {};
-
-function SprintItemV2({sprint, onEdit, onDelete, column, onCardDrop, onCreateTask, onDeleteTask, onUpdateTask}) {
+// 0: chưa active
+// 1: active
+// 2: complete
+// 3: cancel
+function SprintItemV2({sprint,listStatus, onEdit, onDelete, column, onCardDrop, onCreateTask, onDeleteTask, onUpdateTask}) {
     // console.log('check nè', conCatArrayInArray(sprint.columns))
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -36,16 +40,17 @@ function SprintItemV2({sprint, onEdit, onDelete, column, onCardDrop, onCreateTas
     const handleOnClick = ({key}) => {
         if (key === 'edit') {
             setShowEditSprint(true)
+            dispatch(setSprint(sprint))
         } else setShowConfirmDelete(true)
     }
     const handleDelete = () => {
-        onDelete(sprint)
+        onDelete(sprint.id)
         setShowConfirmDelete(false)
     }
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleRunSprint = () => {
-        onEdit({...sprint, status: sprint.status === 1 ? 0 : 1})
+        onEdit(sprint.id,{...sprint, status: sprint.status === 2 ? 0 : 2})
         if (sprint.status === 0) {
             navigate(config.routes.project)
             const project = JSON.parse(localStorage.getItem("project"))
@@ -55,8 +60,8 @@ function SprintItemV2({sprint, onEdit, onDelete, column, onCardDrop, onCreateTas
         }
         setShowEditSprint(false)
     }
-    const handleUpdateSprint = (data) => {
-        onEdit(data)
+    const handleUpdateSprint = (id,data) => {
+        onEdit(id,data)
         setShowEditSprint(false)
     }
     const handleCreateTask = () => {
@@ -92,33 +97,20 @@ function SprintItemV2({sprint, onEdit, onDelete, column, onCardDrop, onCreateTas
         setIsCreateTask(false)
         onCreateTask(newCardToAdd)
     }
-    const listStatus = [
-        {
-            id: 'column-1',
-            name: 'Chuan bi'
-        },
-        {
-            id: 'column-2',
-            name: 'Chuan bi'
-        },
-        {
-            id: 'column-3',
-            name: 'Chuan bi'
-        },
-    ]
-    const cards = conCatArrayInArray(sprint.columns);
+
+    const cards = sprint.tasks//conCatArrayInArray(sprint.columns);
     return (
         <div className={`sprint-item ${sprint.status === -1 ? 'backlog' : ''}`}>
             <div className='sprint-header'>
                 <div className='sprint-info' onClick={() => setIsOpen(!isOpen)}>
                     <FaAngleDown className={`icon ${isOpen ? 'rotated' : ''}`}/>
-                    <div className='sprint-name'>{sprint.name}</div>
+                    <div className='sprint-name'>{sprint.title}</div>
                     {
                         sprint.status !== -1 && (
-                            <div className='sprint-time'>{`${sprint.startTime} - ${sprint.endTime}`}</div>
+                            <div className='sprint-time'>{`${dayjs(sprint.startTime).format('DD/MM/YYYY')} - ${dayjs(sprint.endTime).format('DD/MM/YYYY')}`}</div>
                         )
                     }
-                    <div className='total-task'>{`( ${conCatArrayInArray(sprint.columns).length} công việc )`}</div>
+                    <div className='total-task'>{`( ${ sprint.tasks.length} công việc )`}</div>
 
                 </div>
                 {
@@ -134,7 +126,7 @@ function SprintItemV2({sprint, onEdit, onDelete, column, onCardDrop, onCreateTas
                             </div>
                             <button className={`action-sprint ${sprint.status === 1 ? 'on' : 'off'}`}
                                     onClick={handleRunSprint}>
-                                {sprint.status === 0 ? 'Bắt Đầu' : 'Hoàn Thành'}
+                                {sprint.status === 0 ?'Bắt Đầu': 'Hoàn Thành'}
                             </button>
                             <Dropdown
                                 menu={{
@@ -152,7 +144,7 @@ function SprintItemV2({sprint, onEdit, onDelete, column, onCardDrop, onCreateTas
             </div>
             {!!isOpen && (<div className='sprint-content'>
 
-                    <div className={`list-task ${sprint.columns.length > 0 ? '' : 'dashed'}`}>
+                    <div className={`list-task ${sprint.tasks.length > 0 ? '' : 'dashed'}`}>
                         <Container
                             groupName="col"
                             onDrop={dropResult => onCardDrop(column.id, dropResult)}
@@ -167,9 +159,9 @@ function SprintItemV2({sprint, onEdit, onDelete, column, onCardDrop, onCreateTas
                             dropPlaceholderAnimationDuration={200}
                         >
                             {
-                                conCatArrayInArray(sprint.columns).map((task, index) => (
+                                sprint.tasks.map((task, index) => (
                                     <Draggable key={index}>
-                                        <TaskItem task={task} type={'long'}/>
+                                        <TaskItem task={task}  columns={listStatus} type={'long'}/>
                                     </Draggable>
                                 ))
                             }
