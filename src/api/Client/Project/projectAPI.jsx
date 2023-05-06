@@ -52,10 +52,14 @@ export const getListProjects = async ({ sort,filter, search,keySearch, page } = 
     }
 };
 
-export const getProjectById = async (id) => {
+export const getProjectById = async (id,search) => {
     const url = `projects/${id}`;
-    const response = await axiosClient.get(url,configHeadersAuthenticate());
-    //console.log('response', response)
+    const queryString = [];
+    if (search) {
+        queryString.push(`search=${search}`);
+    }
+    const final_url = concatQueryString(queryString, url);
+    const response = await axiosClient.get(final_url,configHeadersAuthenticate());
     if (response.status === 1) {
         return response.data.result;
     } else if (response.status === 401) {

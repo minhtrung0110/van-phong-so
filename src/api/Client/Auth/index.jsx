@@ -66,7 +66,15 @@ export const handleVerifyUserLogin = async () => {
         return response.data;
     }
 };
-
+export const handleGetUserInformation = async () => {
+    const response = await axiosClient.get('user/me', configHeadersAuthenticate());
+    if (response.status === 401) {
+        return 401;
+    }
+    if (response.status === 1) {
+        return response.data.result;
+    }
+};
 export const logout = async () => {
     const response = await axiosClient.post('api/admin/logout', {}, configHeadersAuthenticate());
     const {status} = response;

@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 import {config} from "~/config";
 import {setSprint} from "~/redux/reducer/project/projectReducer";
 import {FaAngleDown, FaEllipsisH, FaPlus, FaTimes} from "react-icons/fa";
-import {conCatArrayInArray, getTotalTaskInColumn} from "~/utils/sorts";
+import {conCatArrayInArray, getTotalTaskInColumn, splitArrayByKey} from "~/utils/sorts";
 import {Dropdown, Modal} from "antd";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import TextArea from "antd/es/input/TextArea";
@@ -20,8 +20,18 @@ SprintItemV2.propTypes = {};
 // 1: active
 // 2: complete
 // 3: cancel
-function SprintItemV2({sprint,listStatus, onEdit, onDelete, column, onCardDrop, onCreateTask, onDeleteTask, onUpdateTask}) {
-    // console.log('check nè', conCatArrayInArray(sprint.columns))
+function SprintItemV2({
+                          sprint,
+                          listStatus,
+                          onEdit,
+                          onDelete,
+                          column,
+                          onCardDrop,
+                          onCreateTask,
+                          onDeleteTask,
+                          onUpdateTask
+                      }) {
+    //console.log('check nè', splitArrayByKey(sprint.tasks,'board_column_id'))
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     const [showEditSprint, setShowEditSprint] = useState(false)
@@ -50,7 +60,7 @@ function SprintItemV2({sprint,listStatus, onEdit, onDelete, column, onCardDrop, 
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleRunSprint = () => {
-        onEdit(sprint.id,{...sprint, status: sprint.status === 2 ? 0 : 2})
+        onEdit(sprint.id, {...sprint, status: sprint.status === 2 ? 0 : 2})
         if (sprint.status === 0) {
             navigate(config.routes.project)
             const project = JSON.parse(localStorage.getItem("project"))
@@ -60,39 +70,62 @@ function SprintItemV2({sprint,listStatus, onEdit, onDelete, column, onCardDrop, 
         }
         setShowEditSprint(false)
     }
-    const handleUpdateSprint = (id,data) => {
-        onEdit(id,data)
+    const handleUpdateSprint = (id, data) => {
+        onEdit(id, data)
         setShowEditSprint(false)
     }
     const handleCreateTask = () => {
+        // const newCardToAdd = {
+        //     id: Math.random().toString(36).substr(2, 5),
+        //     boardId: sprint.boardId,
+        //     columnId: 'column-1',
+        //     sprintID: sprint.id,
+        //     title: valueNewTask,
+        //     description: '',
+        //     startTime: null,
+        //     endTime: null,
+        //     priority: 'none',
+        //     members: [],
+        //     todoList: [],
+        //     fileList: [],
+        //     comments: [],
+        // }
         const newCardToAdd = {
             id: Math.random().toString(36).substr(2, 5),
-            boardId: sprint.boardId,
-            columnId: 'column-1',
-            sprintID: sprint.id,
+            sprint_id: 1,
+           project_id: sprint.project_id,
+            employee_id: 0,
+            board_column_id: 1,
+            assignee_employee_id: null,
+            assignee_employee: null,
+            report_employee_id: null,
+            report_employee: null,
             title: valueNewTask,
-            description: '',
-            startTime: null,
-            endTime: null,
-            priority: 'none',
-            members: [],
+            description: "",
+            priority: 3,
             todoList: [],
             fileList: [],
             comments: [],
+            estimate_point: 10,
+            status: 1,
+            sort: 1
         }
         // add new card to Sprint
         const newSprint = {...sprint}
-        const currentColumn = newSprint.columns.map((col) => {
-            if(col.id === newCardToAdd.columnId ){
-                const newCards = col.cards.push(newCardToAdd);
-                const newCardOrder = col.cards.map((card => card.id))
-             return   {...col, cards: newCards, cardOrder: newCardOrder}
-            }
-            else  return col
-
-        })
+        newSprint.tasks.push(newCardToAdd)
+        // const currentColumn = newSprint.columns.map((col) => {
+        //     if(col.id === newCardToAdd.columnId ){
+        //         const newCards = col.cards.push(newCardToAdd);
+        //         const newCardOrder = col.cards.map((card => card.id))
+        //      return   {...col, cards: newCards, cardOrder: newCardOrder}
+        //     }
+        //     else  return col
+        //
+        // })
         //  onSprint(newSprint)
-      //  console.log('Test them task ', currentColumn, newSprint)
+
+        // call  API tạo task
+        console.log('Test them task ', newSprint)
         setValueNewTask('')
         setIsCreateTask(false)
         onCreateTask(newCardToAdd)
@@ -107,10 +140,11 @@ function SprintItemV2({sprint,listStatus, onEdit, onDelete, column, onCardDrop, 
                     <div className='sprint-name'>{sprint.title}</div>
                     {
                         sprint.status !== -1 && (
-                            <div className='sprint-time'>{`${dayjs(sprint.startTime).format('DD/MM/YYYY')} - ${dayjs(sprint.endTime).format('DD/MM/YYYY')}`}</div>
+                            <div
+                                className='sprint-time'>{`${dayjs(sprint.start_date).format('DD/MM/YYYY')} - ${dayjs(sprint.end_date).format('DD/MM/YYYY')}`}</div>
                         )
                     }
-                    <div className='total-task'>{`( ${ sprint.tasks.length} công việc )`}</div>
+                    <div className='total-task'>{`( ${sprint.tasks.length} công việc )`}</div>
 
                 </div>
                 {
@@ -118,15 +152,15 @@ function SprintItemV2({sprint,listStatus, onEdit, onDelete, column, onCardDrop, 
                         <div className='sprint-action'>
                             <div className='sprint-status'>
                                 {
-                                    listStatus.map((item, index) => (
-                                        <span key={index} className={`status-${item.id}`}>1</span>
+                                    splitArrayByKey(sprint.tasks,'board_column_id').map((item, index) => (
+                                        <span key={index} className={`status-${item.id}`}>{!!item.cards.length?item.cards.length:0}</span>
 
                                     ))
                                 }
                             </div>
                             <button className={`action-sprint ${sprint.status === 1 ? 'on' : 'off'}`}
                                     onClick={handleRunSprint}>
-                                {sprint.status === 0 ?'Bắt Đầu': 'Hoàn Thành'}
+                                {sprint.status === 0 ? 'Bắt Đầu' : 'Hoàn Thành'}
                             </button>
                             <Dropdown
                                 menu={{
@@ -161,7 +195,7 @@ function SprintItemV2({sprint,listStatus, onEdit, onDelete, column, onCardDrop, 
                             {
                                 sprint.tasks.map((task, index) => (
                                     <Draggable key={index}>
-                                        <TaskItem task={task}  columns={listStatus} type={'long'}/>
+                                        <TaskItem task={task} columns={listStatus} type={'long'}/>
                                     </Draggable>
                                 ))
                             }

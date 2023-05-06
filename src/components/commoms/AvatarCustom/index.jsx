@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './AvatarCustom.module.scss'
 import classNames from "classnames/bind";
 import {Avatar} from "antd";
+import {isEmpty} from "lodash";
 AvatarCustom.propTypes = {
     avatar: PropTypes.string.isRequired,
     lastName: PropTypes.string.isRequired,
@@ -10,6 +11,8 @@ AvatarCustom.propTypes = {
 const cx=classNames.bind(styles)
 function AvatarCustom({avatar,lastName,size='large'}) {
     const [show, setShow] = useState(false);
+    const array = !isEmpty(lastName) ?lastName.split(" "):[];
+    const name = array[array.length - 1];
     const checkImageUrl = (url) => {
         // /\.(jpeg|jpg|png|gif)\b/i.test(url);
         let img = document.createElement('img');
@@ -25,7 +28,7 @@ function AvatarCustom({avatar,lastName,size='large'}) {
                                        src={avatar} className={cx('avatar')}/>)
                     : (
                         <Avatar style={{backgroundColor: '#f56a00', verticalAlign: 'middle'}} size={size} className={cx('avatar')}>
-                            {lastName}
+                            {name}
                         </Avatar>
                     )
             }

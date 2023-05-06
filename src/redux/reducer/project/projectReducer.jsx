@@ -14,6 +14,8 @@ export const projectReducer = createSlice({
         isViewTimeline:false,
         isEdit: false,
         isReset:'reset-page',
+        isResetSprint:false,
+        isResetTask:false,
         task: {},
     },
     reducers: {
@@ -47,12 +49,18 @@ export const projectReducer = createSlice({
         setIsReset: (state, action) => {
             state.isReset = action.payload;
         },
+        setIsResetSprint: (state, action) => {
+            state.isResetSprint = action.payload;
+        },
+        setIsResetTask: (state, action) => {
+            state.isResetTask = action.payload;
+        },
         setIsViewTimeline: (state, action) => {
             state.isViewTimeline = action.payload;
         },
     },
 });
 
-export const { setKeyProject,setIsAdd,setIsEdit, setTask,setSprint,setIsReset,setProject,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = projectReducer.actions;
+export const { setKeyProject,setIsAdd,setIsEdit, setTask,setSprint,setIsReset,setIsResetSprint,setIsResetTask,setProject,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = projectReducer.actions;
 
 export default projectReducer.reducer;

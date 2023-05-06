@@ -121,6 +121,7 @@ function ManageStaff(props) {
 
     useEffect(() => {
         async function fetchData() {
+          //  setLoading(true)
             console.log('Search:', search, ' - Filter:', filter)
             let params = {};
             if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };

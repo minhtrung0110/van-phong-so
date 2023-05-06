@@ -16,8 +16,8 @@ import styles from './Header.module.scss'
 import {Dropdown} from "antd";
 import SelectHeaderProject from "~/components/commoms/SelectHeaderProject";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
-import {setExpiredToken, setIsLogin} from "~/redux/reducer/auth/authReducer";
-import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import {setUser, setExpiredToken, setIsLogin} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies, handleGetUserInformation} from "~/api/Client/Auth";
 import {config} from "~/config";
 
 HeaderBar.propTypes = {};
@@ -25,14 +25,7 @@ HeaderBar.propTypes = {};
 const cx = classNames.bind(styles)
 
 function HeaderBar({onCollapse}) {
-    const user = {
-        firstName: 'Nguyen Duc Minh',
-        lastName: 'Trung',
-        email: 'lephjamty@gmail.com',
-        phone: '097544646',
-        avatar: 'https://picsum.photos/200',
-        role: 'Sale Person'
-    }
+    const [userLogin,setUserLogin]=useState({})
     const isCollapsed = useSelector(isCollapseSideBar)
     const dispatch = useDispatch();
     const location = useLocation();
@@ -57,8 +50,26 @@ function HeaderBar({onCollapse}) {
         navigate(config.routes.login)
     };
 //Handle Logic
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+    };
     useEffect(()=>{
-        const token=getCookies('vps_token');
+        async function fetchData(){
+            const result=await handleGetUserInformation()
+            if (result===401) {
+                handleSetUnthorization();
+                return false;
+            }
+            else {
+                setUserLogin(result);
+                dispatch(setUser(result));
+            }
+        }
+        fetchData()
 
     },[location.pathname])
 
@@ -79,9 +90,9 @@ function HeaderBar({onCollapse}) {
                     <label htmlFor="switch-mode" className={cx("switch-mode")}></label>
                     {/*<DropdownNotify/>*/}
 
-                    <InfoUser firstName={user.firstName} lastName={user.lastName} role={user.role}
+                    <InfoUser user={userLogin}
                               onLogout={setShowConfirmLogout}
-                              email={user.email} avatar={user.avatar}/>
+                             />
                 </div>
 
 

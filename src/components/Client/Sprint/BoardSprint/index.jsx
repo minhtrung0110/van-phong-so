@@ -70,7 +70,7 @@ function BoardSprint({project,columnData,onEdit, onDelete,onCreateTask, onDelete
                 }}
             >
                 {
-                    !!columns && columns.map((sprint,index)=> (
+                    !!columns && columns.map((sprint,index)=> sprint.status<2 && (
                         <Draggable
                             key={index}>
                             <SprintItemV2

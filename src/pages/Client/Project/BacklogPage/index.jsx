@@ -15,13 +15,15 @@ import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import TextArea from "antd/es/input/TextArea";
 
 import BoardSprint from "~/components/Client/Sprint/BoardSprint";
-import {boardSelector} from "~/redux/selectors/project/projectSelector";
+import {boardSelector, isResetSprintSelector} from "~/redux/selectors/project/projectSelector";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {getProjectById} from "~/api/Client/Project/projectAPI";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {createSprint, deleteSprint, editSprint} from "~/api/Client/Sprint/sprintAPI";
+import {setIsResetSprint} from "~/redux/reducer/project/projectReducer";
+import SearchHidenButton from "~/components/commoms/SearchHideButton";
 
 
 BacklogPage.propTypes = {};
@@ -266,22 +268,21 @@ const data = [
 function BacklogPage(props) {
     const [project,setProject]=useState({})
     const [loading, setLoading] = React.useState(true);
-    const [filter,setFilter]=useState([])
+    const [search,setSearch]=useState([])
     const [showAddSprint,setShowAddSprint]=useState(false)
     const [listSprints,setListSprints]=useState([])
     const [messageApi, contextHolder] = message.useMessage();
-    const [backlog,setBacklog]=useState([])
     const dispatch = useDispatch()
+    const isReset=useSelector(isResetSprintSelector)
     useEffect(()=>{
         // call API get sprint task lên
         async function fetchData() {
             const project=JSON.parse(localStorage.getItem('project'))
             let params = {};
             // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
-            // if (search !== '') params = { ...params, filter, search };
-            console.log('Params:', params)
-            const respond = await getProjectById(project.projectId);
-            console.log('Data respond:', respond)
+            if (search !== '') params = { ...params, search };
+            const respond = await getProjectById(project.projectId,search);
+          //  console.log('Data respond:', respond)
             if (respond === 401) {
                 handleSetUnthorization();
                 return false;
@@ -296,17 +297,7 @@ function BacklogPage(props) {
         }
         fetchData();
 
-
-        // const boardFromDB = initialData.boards.find(board => board.id === project.projectId)
-        //
-        // setProject(boardFromDB)
-        // if (boardFromDB){
-        //  //   console.log(boardFromDB.sprints)
-        //     setListSprints(boardFromDB.sprints)
-        // }
-     //   console.log('Filter: ',filter)
-
-    },[filter])
+    },[search,isReset])
     const handleSetUnthorization = () => {
         dispatch(setExpiredToken(true));
         const token = getCookies('vps_token');
@@ -315,7 +306,7 @@ function BacklogPage(props) {
         }
     };
     const handleCreateSprint=async (data) => {
-        console.log('Create Sprint: ', data)
+       // console.log('Create Sprint: ', data)
         const result = await createSprint(data);
         if(result.status===1){
             messageApi.open({
@@ -323,6 +314,7 @@ function BacklogPage(props) {
                 content: result.message,
                 duration: 1.3,
             });
+            dispatch(setIsResetSprint(true))
         }
         else if(result.status===0) {
             messageApi.open({
@@ -333,7 +325,7 @@ function BacklogPage(props) {
         }
         setTimeout(() => {
             setShowAddSprint(false)
-        }, 800)
+        }, 200)
     }
     const handleUpdateSprint=async (id,data) => {
         console.log('Update Sprint: ',id, data)
@@ -344,6 +336,7 @@ function BacklogPage(props) {
                 content: result.message,
                 duration: 1.3,
             });
+            dispatch(setIsResetSprint(true))
         } else if (result.status === 0) {
             messageApi.open({
                 type: 'error',
@@ -402,7 +395,7 @@ function BacklogPage(props) {
                                    Danh sách công việc
                                </div>
                                <div className= 'sprint-backlog-actions'>
-                                   <FilterProject onFilter={setFilter} listmember={listMembersForTask} className='filter-btn' />
+                                   <SearchHidenButton   width={'15rem'} onSearch={setSearch}/>
                                    <button className='create-sprint' onClick={()=>setShowAddSprint(true)}>
                                        Tạo mới phiên dự án
                                    </button>

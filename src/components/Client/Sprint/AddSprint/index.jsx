@@ -4,6 +4,8 @@ import {DatePicker, Form, Input} from "antd";
 import {Controller, useForm} from "react-hook-form";
 import dayjs from "dayjs";
 import './style.scss'
+import {useSelector} from "react-redux";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 
 AddSprint.propTypes = {
 
@@ -17,12 +19,16 @@ function AddSprint({onClose,onSave}) {
     } = useForm({
     });
     const project =JSON.parse(localStorage.getItem('project'));
+    const userLogin=useSelector(getUserSelector)
     const onSubmit=(data)=>{
        const newDuration=[dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss'),dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss')]
         onSave({...data,
             start_date:dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             end_date:dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            project_id:project.projectId,})
+            project_id:project.projectId,
+            user_id:userLogin.id
+        })
+
     }
     const {RangePicker} = DatePicker;
     const rangePresets = [

@@ -80,8 +80,8 @@ export const createSprint = async (body) => {
 
 export const editSprint = async (id, body) => {
     const url = `sprints`;
-
     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
+    console.log(response)
     if(response.status === 1 || response.message ==="Success") {
         return {status:1,message:'Cập nhật chu kỳ phát triển thành công'}
     }
