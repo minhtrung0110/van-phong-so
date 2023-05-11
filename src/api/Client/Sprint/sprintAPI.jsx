@@ -24,8 +24,7 @@ export const getListProjects = async ({ sort,filter, search,keySearch, page } = 
         });
     }
     if (search) {
-        // queryString.push(`${keySearch}=${search}`);
-        queryString.push(search);
+            queryString.push(`name=${search}`);
     }
     if (page) {
         queryString.push(`page=${page}`);
@@ -33,9 +32,6 @@ export const getListProjects = async ({ sort,filter, search,keySearch, page } = 
     if(!!filter){
         if (filter.status!== 'all') {
             queryString.push(`status=${filter.status}`);
-        }
-        if (filter.role!== 'all') {
-            queryString.push(`role_id=${filter.role}`);
         }
     }
 

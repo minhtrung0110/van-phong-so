@@ -14,16 +14,20 @@ import {useDispatch} from "react-redux";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
-import {getListProjects} from "~/api/Client/Task/taskAPI";
+import {getListProjects} from "~/api/Client/Sprint/sprintAPI";
+import PaginationUI from "~/components/commoms/Pagination";
+import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 AllProjectPage.propTypes = {
 
 };
 
 function AllProjectPage(props) {
-    const [listProject,setListProject] = useState(initialData.boards)
+    const [listProject,setListProject] = useState([])
     const [loading, setLoading] = React.useState(true);
     const [openAddProject,setOpenAddProject] = useState(false)
     const [search,setSearch] = useState('')
+    const [totalRecord, setTotalRecord] = React.useState(0);
+    const [page, setPage] = React.useState(1);
     const [messageApi, contextHolder] = message.useMessage();
     const dispatch = useDispatch()
     const handleCreateNewProject=(data) => {
@@ -54,14 +58,22 @@ function AllProjectPage(props) {
             duration: 1.3,
         });
     }
+    const setProject = (respond, value) => {
+        setListProject(respond.results);
+        if (value !== 'page') {
+            setPage(1);
+        }
+        setTotalRecord(respond.pagination.totalRecords);
+        // setTotalPage(result.meta.);
+    };
     useEffect(()=>{
         async function fetchData() {
             const project=JSON.parse(localStorage.getItem('project'))
             let params = {};
             // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
             if (search !== '') params = { ...params, search };
-            const respond = await getListProjects(search);
-            //  console.log('Data respond:', respond)
+            const respond = await getListProjects(params);
+            console.log('Data respond:', respond)
             if (respond === 401) {
                 handleSetUnthorization();
                 return false;
@@ -69,14 +81,30 @@ function AllProjectPage(props) {
                 setListProject([])
                 return false;
             } else {
-                setListProject(respond, 'reset-page');
+                console.log('Vào')
+                setProject(respond, 'reset-page');
+                setLoading(false);
             }
-            setLoading(false);
         }
         fetchData();
 
         console.log('Search project:',search)
     },[search])
+    const handlePageChange = async (page) => {
+        setPage(page);
+        setLoading(true);
+        const result = await getListStaffs({
+            page,
+        });
+        if (result === 401) {
+        } else if (result === 500) {
+            return false;
+
+        } else {
+            setProject(result, 'reset-page');
+        }
+        setLoading(false);
+    };
     const handleSetUnthorization = () => {
         dispatch(setExpiredToken(true));
         const token = getCookies('vps_token');
@@ -84,6 +112,7 @@ function AllProjectPage(props) {
             deleteCookie('vps_token');
         }
     };
+    console.log(loading )
     return (
       !!loading ?(<ListTableSkeleton column={4} />):(
           <div className={'container-list-project'}>
@@ -110,6 +139,14 @@ function AllProjectPage(props) {
                       )
 
                   }
+                  {totalRecord >= 1 && (
+                      <PaginationUI
+                          handlePageChange={handlePageChange}
+                          perPage={8}
+                          totalRecord={totalRecord}
+                          currentPage={page}
+                      />
+                  )}
               </div>
               <Modal
                   title="Tạo Dự Án Mới"

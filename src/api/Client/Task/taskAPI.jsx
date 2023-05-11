@@ -14,7 +14,7 @@ export const configHeadersAuthenticate = () => {
     };
 };
 
-export const getListProjects = async ({ sort,filter, search,keySearch, page } = {}) => {
+export const getListTasks = async ({ sort,filter, search,keySearch, page } = {}) => {
     console.log({ sort,filter, search, page })
     const url = 'projects';
     const queryString = [];

@@ -16,7 +16,6 @@ ProjectTable.propTypes = {
 };
 
 function ProjectTable({tableHeader, tableBody,onUpdate,onDelete}) {
-
     const [showPopupDelete, setShowPopupDelete] = useState({
         project_id: null,
         show: false,
@@ -67,7 +66,7 @@ function ProjectTable({tableHeader, tableBody,onUpdate,onDelete}) {
                         <div className="info">{item.name}</div>
                     </td>
                     <td className="col-txt">{item.id}</td>
-                    <td className="col-txt">{`${item.leader.first_name} ${item.leader.last_name}`}</td>
+                    <td className="col-txt">{`${item.created_by.first_name} ${item.created_by.last_name}`}</td>
                     <td className="col-action">
                         <button
                             id="show-user"
