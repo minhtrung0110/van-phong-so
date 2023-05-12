@@ -27,6 +27,7 @@ import HomePage from "~/pages/Client/HomePage";
 import LayoutGroup from "~/layouts/Client/LayoutGroup";
 import ManageCompany from "~/pages/Client/ManageCompany";
 import ManageGroup from "~/pages/Client/ManageGroup";
+import ForgotPassword from "~/components/Client/Auth/FormForgotPassword";
 
 function ProtectedRoutes(props) {
     return null;
@@ -58,7 +59,8 @@ function ClientRouter(props) {
     // const user = useSelector(getUserSelector);
     return (
         <Routes>
-            <Route path="/login" element={<LoginPage/>}/>
+            <Route path={config.routes.login} element={<LoginPage/>}/>
+            <Route path={config.routes.forgotPassword} element={<ForgotPassword/>}/>
             {/* Requỉed login */}
             <Route element={<AuthRouter/>}>
                 <Route path={config.routes.home} element={<ClientLayout slot={<HomePage key={'a'} s/>}/>}/>

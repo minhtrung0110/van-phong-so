@@ -1,8 +1,10 @@
 import React from 'react'
+import {forgotPassword} from "~/api/Client/Auth";
 
 const routes = {
     home:"/",
     login:"/login",
+    forgotPassword:'/forgot-password',
     setting:"/setting",
     post:'/posts',
     project:"/project",

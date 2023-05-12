@@ -9,7 +9,7 @@ import wave from '~/asset/images/wave.png'
 import {FaLock, FaUser} from "react-icons/fa";
 import {useForm} from "react-hook-form";
 import {getCookies, handleLogin, setCookies} from "~/api/Client/Auth";
-import {Navigate, useNavigate} from "react-router-dom";
+import {Navigate, NavLink, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {setIsLogin, setUser} from "~/redux/reducer/auth/authReducer";
 import {config} from "~/config";
@@ -61,9 +61,9 @@ function LoginPage(props) {
                 dispatch(setUser(result.data.user))
                 dispatch(setIsLogin(true))
             }
-            setTimeout(() => {
-                navigate(config.routes.home)
-            }, 1400)
+            // setTimeout(() => {
+            //  //   navigate(config.routes.home)
+            // }, 1400)
             // const response = await handleGetInformation();
             // if (response === 401) {
             //   //  SuccessToast('Error server ... ', 2000);
@@ -138,7 +138,7 @@ function LoginPage(props) {
                                     </div>
                                     {errors.password && <span className='error'>{errors.password.message}</span>}
                                 </div>
-                                <span className='forgot'>Quên Mật Khẩu?</span>
+                                <NavLink to={config.routes.forgotPassword} className='forgot'>Quên Mật Khẩu?</NavLink>
                                 <input type="submit" className="btn-login" value="Đăng Nhập"/>
                             </form>
                         </div>

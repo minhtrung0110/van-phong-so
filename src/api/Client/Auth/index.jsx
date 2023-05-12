@@ -95,12 +95,12 @@ export const logout = async () => {
 
 export const senMailOTP = async (body) => {
     const response = await axiosClient.post('api/admin/otp-sendmail', body);
-    if (response.status === 200) {
-        return 200;
+    if (response.status === 1) {
+        return 1;
     } else if (response.status === 404) {
-        return 404;
+        return 0;
     } else if (response.status === 400) {
-        return 400;
+        return 0;
     }
 };
 
