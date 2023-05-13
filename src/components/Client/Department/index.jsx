@@ -5,42 +5,60 @@ import TableLayout from "~/components/commoms/Table";
 import {FaEye, FaPen, FaTimesCircle} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
-import {setDepartment, setIsEdit} from "~/redux/reducer/department/departmentReducer";
+import {setDepartment, setIsEdit,setIsReset} from "~/redux/reducer/department/departmentReducer";
 import {config} from "~/config";
 import {useNavigate} from "react-router-dom";
+import {deleteDepartment, getDepartmentById} from "~/api/Client/Department/departmentAPI";
+import {message} from "antd";
+import {deleteStaff} from "~/api/Client/Staff/staffAPI";
 
 
 DepartmentTable.propTypes = {};
 
 function DepartmentTable({tableHeader, tableBody,onDelete}) {
+    const [messageApi, contextHolder] = message.useMessage();
     const [showPopupDelete, setShowPopupDelete] = useState({
         department_id: null,
         show: false,
     });
     const dispatch = useDispatch()
-    const handleEditDepartment = (e,item) => {
+    const handleEditDepartment = async (e, item) => {
         e.stopPropagation();
-        dispatch(setIsEdit(true));
-        dispatch(setDepartment(item));
+        const data = await getDepartmentById(item.ID);
+        console.log('Data nhận :', data)
+        if (Object.keys(data).length > 0) {
+            dispatch(setDepartment(data));
+            dispatch(setIsEdit(true));
+        } else if (data === 401) {
+            //   //  Notiflix.Block.remove('#root');
+        } else {
+            //    // Notiflix.Block.remove('#root');
+            messageApi.open({
+                type: 'error',
+                content: 'Cập nhật thất bại',
+                duration: 1.3,
+            });
+        }
+
     };
     const handleRemoveDepartment = async (id) => {
-        //e.stopPropagation();
-        // const result = await deleteDepartment(id);
-        // console.log('result', result);
-        // if (result === 200) {
-        //     SuccessToast('Remove department successfully', 3000);
-        // } else if (result === 404) {
-        //     ErrorToast('Remove departments unsuccessfully', 3000);
-        //     Notiflix.Block.remove('#root');
-        // } else if (result === 401) {
-        //     Notiflix.Block.remove('#root');
-        // } else {
-        //     Notiflix.Block.remove('#root');
-        //     ErrorToast('Something went wrong. Please try again', 3000);
-        // }
+        const result = await deleteDepartment(id);
+        //  console.log('result', result);
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+        } else if (result.status === 0) {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3,
+            });
+        }
         setShowPopupDelete({...showPopupDelete, show: false});
-        // dispatch(setIsReset(Math.random()));
-        onDelete(showPopupDelete.department_id)
+        dispatch(setIsReset(Math.random()));
     };
 
     const showConfirmDeleteDepartment = (e, item) => {
@@ -57,11 +75,8 @@ function DepartmentTable({tableHeader, tableBody,onDelete}) {
         return tableBody.map((item) => {
             return (
                 <tr key={item.id} className="row-data c-pointer row-item"
-
                 >
-
                     <td className="col-txt">{item.id}</td>
-
                     <td className="col-txt">
                         {item.name}
                     </td>
@@ -70,8 +85,7 @@ function DepartmentTable({tableHeader, tableBody,onDelete}) {
                             className={` ${
                                 item.status === 1 ? 'active' : 'negative '
                             }`}
-                        >
-                            {item.status === 1 ? 'Đang Hoạt Động' : 'Tạm Dừng'}
+                        >                            {item.status === 1 ? 'Đang Hoạt Động' : 'Tạm Dừng'}
                         </p>
                     </td>
                     <td className="col-action">
@@ -100,6 +114,7 @@ function DepartmentTable({tableHeader, tableBody,onDelete}) {
                         </button>
 
                     </td>
+                    {contextHolder}
                 </tr>
             );
         });

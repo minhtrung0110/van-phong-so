@@ -10,17 +10,38 @@ import FilterRadiobox from "~/components/commoms/FilterSelect";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import {Button, Modal, Tooltip,message} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import { isEditDepartmentSelector} from "~/redux/selectors/department/departmenrSelector";
+import {isEditDepartmentSelector, isResetDepartmentSelector} from "~/redux/selectors/department/departmenrSelector";
 import EditDepartment from "~/components/Client/Department/Edit";
 import AddDepartment from "~/components/Client/Department/Add";
 import {setIsAdd, setIsEdit} from "~/redux/reducer/department/departmentReducer";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {listDepartments} from "~/asset/data/initDataGlobal";
+import FilterSelect from "~/components/commoms/FilterSelect";
+import {createDepartment, getListDepartments} from "~/api/Client/Department/departmentAPI";
+import {getListStaffs} from "~/api/Client/Staff/staffAPI";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
 
 ManageDepartment.propTypes = {};
-
+const listStatus = [
+    {
+        id: '1x',
+        label: 'Hoạt Động',
+        value: 1,
+    },
+    {
+        id: '2x',
+        label: 'Thôi Việc',
+        value: 0,
+    },
+    {
+        id: '3x',
+        label: 'Tất Cả',
+        value: 'all',
+    },
+]
 function ManageDepartment(props) {
-    const [data, setData] = useState(listDepartments)
+    const [data, setData] = useState([])
     const [page, setPage] = React.useState(1);
     const [totalRecord, setTotalRecord] = React.useState(data.length);
     const [loading, setLoading] = React.useState(false);
@@ -30,18 +51,20 @@ function ManageDepartment(props) {
     const [search,setSearch] = React.useState('')
     const [filter, setFilter] = React.useState('')
     const [messageApi, contextHolder] = message.useMessage();
+    const isReset=useSelector(isResetDepartmentSelector)
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
-        // const result = await getAllStaffs({
-        //     page,
-        // });
-        // if (result === 401) {
-        // } else if (result === 500) {
-        //     return false;
-        // } else {
-        //     setStaff(result, 'page');
-        // }
+        const result = await getListDepartments({
+            page,
+        });
+        if (result === 401) {
+        } else if (result === 500) {
+            return false;
+
+        } else {
+            setDepartment(result, 'page');
+        }
         setLoading(false);
     };
     const handleOpenAddDepartment = () => {
@@ -53,18 +76,67 @@ function ManageDepartment(props) {
     const handleCancelEdit = () => {
        dispatch(setIsEdit(false))
     };
-    useEffect(()=>{
-        console.log('Search - Filter: ',search,filter)
-    },[data,search,filter])
-    const handleCreateDepartment = (data)=>{
-        console.log('Create Department: ',data)
-        messageApi.open({
-            type: 'success',
-            content: 'Thêm thành công',
-            duration: 1.45,
-        });
-        setIsModalOpen(false);
+    const handleFilterStatus=(value) => {
+        const stt={status:value}
+        setFilter(prev=>({...prev,...stt}))
+    }
+    useEffect(() => {
+        async function fetchData() {
+            //  setLoading(true)
+            console.log('Search:', search, ' - Filter:', filter)
+            let params = {};
+            if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
+            if (search !== '') params = { ...params, filter, search };
+            console.log('Params:', params)
+            const respond = await getListDepartments(params);
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setData([])
+                return false;
+            } else {
+                setDepartment(respond, 'reset-page');
+            }
+            setLoading(false);
+        }
+        fetchData();
+    }, [search, filter,isReset]);
 
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+    };
+    const setDepartment = (respond, value) => {
+        setData(respond.results);
+        if (value !== 'page') {
+            setPage(1);
+        }
+        setTotalRecord(respond.pagination.totalRecords);
+        // setTotalPage(result.meta.);
+    };
+    const handleCreateDepartment = async (data) => {
+        console.log('Create Department: ', data)
+        const response = await createDepartment(data);
+        if(response.status===1){
+            messageApi.open({
+                type: 'success',
+                content: response.message,
+                duration: 1.35,
+            });
+        }
+        else if(response.status===0){
+            messageApi.open({
+                type: 'error',
+                content: response.message,
+                duration: 1.4,
+            });
+        }
+        setIsModalOpen(false);
     }
 
     const handleDeleteDepartment = (data)=>{
@@ -84,8 +156,10 @@ function ManageDepartment(props) {
                               </div>
                               <div className='filter-department-page'>
                                   <div className='filter-group'>
-                                      <FilterRadiobox width='15.2rem' backGround={'#479f87'} onFilter={setFilter}/>
-
+                                      <FilterSelect listOptions={listStatus} width='15.2rem'
+                                                    title={'Trạng thái'}
+                                                    background={'#de935e'}
+                                                    onFilter={handleFilterStatus}/>
                                   </div>
                                   <div className='search-excel'>
                                       <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
@@ -98,8 +172,6 @@ function ManageDepartment(props) {
                                       </Tooltip>
                                       <Button className='btn-add'
                                               onClick={handleOpenAddDepartment}>Tạo Mới </Button>
-
-
                                   </div>
                               </div>
 
@@ -111,7 +183,6 @@ function ManageDepartment(props) {
                                   ) : (
                                       <NotFoundData/>
                                   )
-
                               }
                               {totalRecord >= 5 && (
                                   <PaginationUI

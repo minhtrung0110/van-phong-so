@@ -7,7 +7,7 @@ import ImageCustom from "~/components/commoms/Image";
 import {message, Modal} from "antd";
 import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import {useDispatch} from "react-redux";
-import {setIsEdit, setStaff,setIsReset} from "~/redux/reducer/staff/staffReducer";
+import {setIsEdit, setStaff, setIsReset} from "~/redux/reducer/staff/staffReducer";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {deleteStaff, getStaffById} from "~/api/Client/Staff/staffAPI";
 
@@ -27,31 +27,31 @@ function StaffTable({tableHeader, tableBody}) {
         setIsModalOpen(false);
     };
     const handleShowDetailStaff = (user) => {
-       // setIsModalOpen(true);
-       // setDetailStaff(user)
+        setIsModalOpen(true);
+        setDetailStaff(user)
         dispatch(setStaff(user))
     }
     const handleEditStaff = async (e, id) => {
         e.stopPropagation();
         const data = await getStaffById(id);
-       console.log('Data nhận :',data)
-       if (Object.keys(data).length > 0) {
-       dispatch(setStaff(data));
-        dispatch(setIsEdit(true));
+        console.log('Data nhận :', data)
+        if (Object.keys(data).length > 0) {
+            dispatch(setStaff(data));
+            dispatch(setIsEdit(true));
         } else if (data === 401) {
-        //   //  Notiflix.Block.remove('#root');
-         } else {
-        //    // Notiflix.Block.remove('#root');
+            //   //  Notiflix.Block.remove('#root');
+        } else {
+            //    // Notiflix.Block.remove('#root');
             messageApi.open({
                 type: 'error',
                 content: 'Cập nhật thất bại',
                 duration: 1.3,
             });
-         }
+        }
     };
     const handleRemoveStaff = async (id) => {
         const result = await deleteStaff(id);
-      //  console.log('result', result);
+        //  console.log('result', result);
         if (result.status === 1) {
             messageApi.open({
                 type: 'success',
@@ -84,7 +84,7 @@ function StaffTable({tableHeader, tableBody}) {
                         {/*<AvatarCustom avatar={item.avatar_url} lastName={item.full_name} size={'large'} className={'avatar'}/>*/}
                         <div className="info">
                             {item.full_name}
-                            <small className="sub-txt">Giới tính: {item.sex==='male'?'nam':'nữ'}</small>
+                            <small className="sub-txt">Giới tính: {item.sex === 'male' ? 'nam' : 'nữ'}</small>
                         </div>
                     </td>
                     <td className="col-txt">{item.role_name}</td>
@@ -100,33 +100,33 @@ function StaffTable({tableHeader, tableBody}) {
                                 item.status === '1' ? 'active' : 'negative '
                             }`}
                         >
-                            {item.status ==='1' ? 'Đang Làm Việc' : 'Thôi Việc'}
+                            {item.status === '1' ? 'Đang Làm Việc' : 'Thôi Việc'}
                         </p>
                     </td>
                     <td className="col-action">
-                            <button
-                                id="show-user"
-                                    onClick={() => handleShowDetailStaff(item)}
-                                className="btn-show"
-                            >
-                                <FaEye className="icon-show"/>
-                            </button>
-                            <button
-                                id="edit-staff"
-                                onClick={(e) => handleEditStaff(e, item.ID)}
-                                className=" btn-edit"
-                            >
-                                <FaPen className="icon-edit"/>
-                            </button>
-                            <button
-                                id="disabled-user"
-                                onClick={(e) => {
-                                    showConfirmDeleteStaff(e, item.ID);
-                                }}
-                                className="btn-delete"
-                            >
-                                <FaTimesCircle className="icon-delete"/>
-                            </button>
+                        <button
+                            id="show-user"
+                            onClick={() => handleShowDetailStaff(item)}
+                            className="btn-show"
+                        >
+                            <FaEye className="icon-show"/>
+                        </button>
+                        <button
+                            id="edit-staff"
+                            onClick={(e) => handleEditStaff(e, item.ID)}
+                            className=" btn-edit"
+                        >
+                            <FaPen className="icon-edit"/>
+                        </button>
+                        <button
+                            id="disabled-user"
+                            onClick={(e) => {
+                                showConfirmDeleteStaff(e, item.ID);
+                            }}
+                            className="btn-delete"
+                        >
+                            <FaTimesCircle className="icon-delete"/>
+                        </button>
 
                     </td>
                 </tr>

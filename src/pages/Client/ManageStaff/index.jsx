@@ -13,11 +13,7 @@ import {
 } from "~/redux/selectors/staff/staffSelector";
 import AddStaff from "~/components/Client/Staff/Add";
 import EditStaff from "~/components/Client/Staff/Edit";
-import {Button,Space, Select, Tooltip} from "antd";
-import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import {setIsAdd} from "~/redux/reducer/staff/staffReducer";
-import {isEmpty} from "lodash";
-import DetailStaff from "~/components/Client/Staff/DetailStaff";
 import PaginationUI from "~/components/commoms/Pagination";
 import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
@@ -184,7 +180,6 @@ function ManageStaff(props) {
                     : (
                         !!isEditStaff ? (<EditStaff backToStaffList={backToStaffList} />) :
                           (
-
                                         !!loading ?(<ListTableSkeleton column={6} lengthItem={5}/>):
                                             (    <div className='container-staff'>
 
@@ -252,8 +247,6 @@ function ManageStaff(props) {
                                                     )}
                                                 </div>
                                             </div>)
-
-
 
                                 )
 

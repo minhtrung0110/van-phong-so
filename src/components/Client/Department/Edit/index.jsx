@@ -7,6 +7,7 @@ import {Form, Input, Radio, message} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {departmentSelector} from "~/redux/selectors/department/departmenrSelector";
 import {setIsEdit} from "~/redux/reducer/department/departmentReducer";
+import {createDepartment, editDepartment} from "~/api/Client/Department/departmentAPI";
 
 EditDepartment.propTypes = {
     onCancel: PropTypes.func.isRequired,
@@ -21,14 +22,23 @@ function EditDepartment({onCancel}) {
     } = useForm({
         defaultValues: {...department}
     });
-    const handleUpdateDepartment = (data)=>{
-        console.log('Update Department: ',data)
-        messageApi.open({
-            type: 'success',
-            content: 'Cập nhật thành công',
-            duration: 1.3,
-        });
-        setTimeout(()=> dispatch(setIsEdit(false)),1350)
+    const handleUpdateDepartment = async (data) => {
+        console.log('Create Department: ', data)
+        const response = await editDepartment(data);
+        if (response.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: response.message,
+                duration: 1.35,
+            });
+        } else if (response.status === 0) {
+            messageApi.open({
+                type: 'error',
+                content: response.message,
+                duration: 1.4,
+            });
+        }
+        setTimeout(() => dispatch(setIsEdit(false)), 1350)
     }
     return (
         <div className="edit-department-container">

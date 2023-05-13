@@ -1,29 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
-import {Button, Col, DatePicker, Form, Input, Row, Select, Tabs} from "antd";
-import AutoSendMail from "~/components/commoms/AutoSendMail";
-import AutoCallPhone from "~/components/commoms/AutoCallPhone";
-import {
-    FaAngleLeft, FaArrowLeft,
-    FaBirthdayCake,
-    FaChair,
-    FaCut, FaDotCircle,
-    FaFemale,
-    FaHome, FaLock,
-    FaMailBulk,
-    FaMap,
-    FaPhone,
-    FaRecycle, FaTrashAlt,
-    FaUser
-} from "react-icons/fa";
-import {Option} from "antd/es/mentions";
+import {Button, Col, Row, Tabs} from "antd";
+import {FaArrowLeft, FaCut, FaDotCircle, FaTrashAlt} from "react-icons/fa";
 import HeaderContent from "~/components/commoms/HeaderContent";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import ImageCustom from "~/components/commoms/Image";
 import {useDispatch, useSelector} from "react-redux";
 import {staffSelector} from "~/redux/selectors/staff/staffSelector";
-import TabPane from "antd/lib/tabs/TabPane";
 import {setStaff} from "~/redux/reducer/staff/staffReducer";
 
 DetailStaff.propTypes = {};
