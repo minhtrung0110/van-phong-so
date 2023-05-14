@@ -83,8 +83,6 @@ function ClientRouter(props) {
                 <Route path={config.routes.backlog} element={<ClientLayout slot={<BacklogPage key={'a'}/>}/>}/>
                 <Route path={config.routes.allProject} element={<ClientLayout slot={<AllProjectPage key={'a'}/>}/>}/>
 
-
-
             </Route>
         </Routes>
     );

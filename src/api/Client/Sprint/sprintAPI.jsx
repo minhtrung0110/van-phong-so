@@ -38,7 +38,7 @@ export const getListProjects = async ({ sort,filter, search,keySearch, page } = 
 
     const final_url = concatQueryString(queryString, url);
     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
-    console.log('request URL: ' + final_url);
+    console.log('request URL: ' + final_url,'respond',reponse);
     if (reponse.status === 401) {
         return 401;
     } else if (reponse.status === 1) {

@@ -6,17 +6,24 @@ import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import ProjectTable from "~/components/Client/Project";
 import {project_table_header} from "~/asset/data/project-table-header";
-import {initialData} from "~/asset/data/initalDataTask";
 import {isEmpty} from "lodash";
-import {Modal,message} from "antd";
+import {message} from "antd";
 import AddProject from "~/components/Client/Project/Add";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {getListProjects} from "~/api/Client/Sprint/sprintAPI";
 import PaginationUI from "~/components/commoms/Pagination";
+import {setIsAdd, setIsReset} from "~/redux/reducer/project/projectReducer";
+import {
+    isAddProjectSelector,
+    isEditProjectSelector,
+    isResetProjectSelector
+} from "~/redux/selectors/project/projectSelector";
+import EditProject from "~/components/Client/Project/EditProject";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
+import {disableProject} from "~/api/Client/Project/projectAPI";
 AllProjectPage.propTypes = {
 
 };
@@ -24,24 +31,15 @@ AllProjectPage.propTypes = {
 function AllProjectPage(props) {
     const [listProject,setListProject] = useState([])
     const [loading, setLoading] = React.useState(true);
-    const [openAddProject,setOpenAddProject] = useState(false)
     const [search,setSearch] = useState('')
     const [totalRecord, setTotalRecord] = React.useState(0);
     const [page, setPage] = React.useState(1);
     const [messageApi, contextHolder] = message.useMessage();
     const dispatch = useDispatch()
-    const handleCreateNewProject=(data) => {
-        console.log('Create new project:',data)
-        setOpenAddProject(false)
-        messageApi.open({
-            type: 'success',
-            content: 'Tạo dự án mới thành công',
-            duration: 1.3,
-        });
-    }
-    const handleCancelCreateNewProject=() => {
-        setOpenAddProject(false)
-    }
+    const isReset=useSelector(isResetProjectSelector)
+    const isAddProject=useSelector(isAddProjectSelector)
+    const isEditProject=useSelector(isEditProjectSelector)
+
     const handleUpdateProject=(data) => {
         console.log('Update project:',data)
         messageApi.open({
@@ -50,13 +48,25 @@ function AllProjectPage(props) {
             duration: 1.3,
         });
     }
-    const handleDeleteProject=(id) => {
-        console.log('Delete project:',id)
-        messageApi.open({
-            type: 'success',
-            content: 'Xóa dự án thành công',
-            duration: 1.3,
-        });
+    const handleDeleteProject=async (id) => {
+        console.log('Delete project:', id)
+        const result = await disableProject(id)
+        if (result.status===1){
+            messageApi.open({
+                type: 'success',
+                content: 'Xóa dự án thành công',
+                duration: 1.3,
+            });
+            dispatch(setIsReset(true))
+        }else {
+            messageApi.open({
+                type: 'error',
+                content: 'Xóa dự án thành công',
+                duration: 1.3,
+            });
+
+        }
+
     }
     const setProject = (respond, value) => {
         setListProject(respond.results);
@@ -89,11 +99,11 @@ function AllProjectPage(props) {
         fetchData();
 
         console.log('Search project:',search)
-    },[search])
+    },[search,isReset])
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
-        const result = await getListStaffs({
+        const result = await getListProjects({
             page,
         });
         if (result === 401) {
@@ -112,58 +122,66 @@ function AllProjectPage(props) {
             deleteCookie('vps_token');
         }
     };
-    console.log(loading )
+    const backToProjectList = async (value, action) => {
+        setLoading(true);
+        if (action === 'edit') {
+        }
+        const result = await getListProjects({
+            sort: value,
+        });
+        setProject(result, 'page');
+        setLoading(false);
+    };
     return (
-      !!loading ?(<ListTableSkeleton column={4} />):(
-          <div className={'container-list-project'}>
-              {contextHolder}
-              <div className={'header-list-project'}>
-                  <div className='title'><FaListAlt/>
-                      Danh Sách Dự Án
-                  </div>
-                  <div className={'filter-list-project'}>
-                      <SearchHidenButton width='20rem' onSearch={setSearch} />
-                      <div className={'create-project '} onClick={()=>setOpenAddProject(true)}>
-                          <FaPlus className='icon' />
-                          <span className='text' >Tạo Dự Án</span>
-                      </div>
-                  </div>
-              </div>
-              <div className={'content-list-project'}>
-                  {
-                      !isEmpty(listProject) ? (
-                          <ProjectTable tableHeader={project_table_header} tableBody={listProject}
-                                        onUpdate={handleUpdateProject} onDelete={handleDeleteProject}/>
-                      ) : (
-                          <NotFoundData/>
-                      )
+     <>
+         {
+             isAddProject ?(
+                 <AddProject onCancel={backToProjectList} />
+             ):(
+                 isEditProject ? (
+                     <EditProject/>
+                 ):(
+                     !!loading ?(<ListTableSkeleton column={4} />):(
+                         <div className={'container-list-project'}>
+                             {contextHolder}
+                             <div className={'header-list-project'}>
+                                 <div className='title'><FaListAlt/>
+                                     Danh Sách Dự Án
+                                 </div>
+                                 <div className={'filter-list-project'}>
+                                     <SearchHidenButton width='20rem' onSearch={setSearch} />
+                                     <div className={'create-project '} onClick={()=>dispatch(setIsAdd(true))}>
+                                         <FaPlus className='icon' />
+                                         <span className='text' >Tạo Dự Án</span>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div className={'content-list-project'}>
+                                 {
+                                     !isEmpty(listProject) ? (
+                                         <ProjectTable tableHeader={project_table_header} tableBody={listProject}
+                                                       onUpdate={handleUpdateProject} onDelete={handleDeleteProject}/>
+                                     ) : (
+                                         <NotFoundData/>
+                                     )
 
-                  }
-                  {totalRecord >= 1 && (
-                      <PaginationUI
-                          handlePageChange={handlePageChange}
-                          perPage={8}
-                          totalRecord={totalRecord}
-                          currentPage={page}
-                      />
-                  )}
-              </div>
-              <Modal
-                  title="Tạo Dự Án Mới"
-                  onCancel={handleCancelCreateNewProject}
-                  footer={null}
-                  destroyOnClose={true}
-                  width={500}
-                  style={{ top: 100   }}
-                  bodyStyle={{height: "400px"}}
+                                 }
+                                 {totalRecord >= 1 && (
+                                     <PaginationUI
+                                         handlePageChange={handlePageChange}
+                                         perPage={8}
+                                         totalRecord={totalRecord}
+                                         currentPage={page}
+                                     />
+                                 )}
+                             </div>
 
-                  open={openAddProject}
-              >
-                  <AddProject onCancel={handleCancelCreateNewProject} onSave={handleCreateNewProject} />
-              </Modal>
-
-          </div>
-      )
+                         </div>
+                     )
+                 )
+             )
+         }
+     </>
     );
 }
 

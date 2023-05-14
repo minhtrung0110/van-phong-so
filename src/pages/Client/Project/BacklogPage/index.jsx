@@ -282,7 +282,7 @@ function BacklogPage(props) {
             // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
             if (search !== '') params = { ...params, search };
             const respond = await getProjectById(project.projectId,search);
-          //  console.log('Data respond:', respond)
+          console.log('Data respond:', respond)
             if (respond === 401) {
                 handleSetUnthorization();
                 return false;

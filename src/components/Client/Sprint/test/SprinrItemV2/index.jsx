@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {config} from "~/config";
 import {setSprint} from "~/redux/reducer/project/projectReducer";
-import {FaAngleDown, FaEllipsisH, FaPlus, FaTimes} from "react-icons/fa";
+import {FaAngleDown, FaEllipsisH, FaPlus, FaTimes, FaTrophy} from "react-icons/fa";
 import {conCatArrayInArray, getTotalTaskInColumn, splitArrayByKey} from "~/utils/sorts";
 import {Dropdown, Modal} from "antd";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
@@ -34,6 +34,7 @@ function SprintItemV2({
     //console.log('check nè', splitArrayByKey(sprint.tasks,'board_column_id'))
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+    const [showCompleteSprint, setShowCompleteSprint]=useState()
     const [showEditSprint, setShowEditSprint] = useState(false)
     const [isCreateTask, setIsCreateTask] = useState(false)
     const [valueNewTask, setValueNewTask] = useState()
@@ -60,15 +61,21 @@ function SprintItemV2({
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleRunSprint = () => {
-        onEdit(sprint.id, {...sprint, status: sprint.status === 2 ? 0 : 2})
-        if (sprint.status === 0) {
-            navigate(config.routes.project)
-            const project = JSON.parse(localStorage.getItem("project"))
-            project.currentSprint = sprint.id
-            localStorage.setItem('project', JSON.stringify(project))
-            dispatch(setSprint(sprint))
+        if (sprint.status===1){
+            setShowCompleteSprint(true)
         }
-        setShowEditSprint(false)
+        else {
+            const newStatus = sprint.status === 0 ? 1 : (sprint.status === 1) ? 2 : 0;
+            onEdit(sprint.id, {...sprint, status: newStatus})
+            if (sprint.status === 0) {
+                navigate(config.routes.project)
+                const project = JSON.parse(localStorage.getItem("project"))
+                project.currentSprint = sprint.id
+                localStorage.setItem('project', JSON.stringify(project))
+                dispatch(setSprint(sprint))
+            }
+            setShowEditSprint(false)
+        }
     }
     const handleUpdateSprint = (id, data) => {
         onEdit(id, data)
@@ -132,6 +139,9 @@ function SprintItemV2({
     }
 
     const cards = sprint.tasks//conCatArrayInArray(sprint.columns);
+    const handleCompleteSprint=()=>{
+        onEdit(sprint.id, {...sprint, status:2})
+    }
     return (
         <div className={`sprint-item ${sprint.status === -1 ? 'backlog' : ''}`}>
             <div className='sprint-header'>
@@ -253,6 +263,36 @@ function SprintItemV2({
                               dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Phiên <strong>${sprint.name}</strong>  ? `}}/>}
                           textCancel='Hủy' textOK='Xóa' onCancel={() => setShowConfirmDelete(false)}
                           onOK={handleDelete}/>
+            <Modal title="Cập Nhât" open={showCompleteSprint}
+                   destroyOnClose
+                   maskClosable={true}
+                   onCancel={() => setShowCompleteSprint(false)}
+                   footer={null}
+                   width={700}
+                   style={{top: 150}}
+            >
+                <div className='notify-complete-sprint'>
+                    <div className='header-complete-sprint'>
+                        <FaTrophy className="icon"/>
+                        <span className={'title'}>Hoàn Thành Chu Kỳ</span>
+                    </div>
+                    <div className='content-complete-sprint'>
+                        <ul className={'statistics'}>
+                            <li className={'statistic-item'}>Tổng Số Công Việc: </li>
+                            <li className={'statistic-item'}>Công Việc Hoàn Thành: </li>
+                            <li className={'statistic-item'}>Thời Gian Triển Khai: </li>
+                        </ul>
+                        <span className={'description'}>
+                            Các công việc chưa hoàn thành sẽ được duy chuyển vào Lưu Trữ.
+                        </span>
+                    </div>
+                    <div className={'footer-complete-sprint'}>
+                        <button className={'btn-complete'} onClick={handleCompleteSprint}>Hoàn Thành</button>
+                        <button className={'btn-cancel'} onClick={() => setShowCompleteSprint(false)}>hủy</button>
+                    </div>
+
+                </div>
+            </Modal>
         </div>
     );
 }

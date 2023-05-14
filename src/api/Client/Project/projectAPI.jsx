@@ -116,6 +116,16 @@ export const editStaff = async (id, body) => {
         }
     }
 };
+export const disableProject = async (id) => {
+    const url = `/projects/${id}`;
+    const response = await axiosClient.delete(url, configHeadersAuthenticate());
+    console.log(response)
+    if (response.status === 1) {
+        return {status:1,message:'Cho Dự Án Dừng Thành Công'}
+    } else if (response.status === 0) {
+        return {status:0,message:'Cho Dự Án Dừng Thất Bại'}
+    }
+};
 export const deleteStaff = async (id) => {
     const url = `/employees/${id}`;
     const response = await axiosClient.delete(url, configHeadersAuthenticate());

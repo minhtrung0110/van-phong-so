@@ -43,6 +43,7 @@ export const getListStaffs = async ({ sort,filter, search,keySearch, page } = {}
     const final_url = concatQueryString(queryString, url);
     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
     console.log('request URL: ' + final_url);
+
     if (reponse.status === 401) {
         return 401;
     } else if (reponse.status === 1) {

@@ -6,11 +6,6 @@ import {listDepartments, listStaffs} from "~/asset/data/initDataGlobal";
 import {Form, Select} from "antd";
 import {Controller, useForm} from "react-hook-form";
 
-EditProject.propTypes = {
-    project: PropTypes.object.isRequired,
-    onCancel: PropTypes.func.isRequired,
-    onSave: PropTypes.func.isRequired,
-};
 
 function EditProject({project,onCancel,onSave}) {
  //   console.log(project)
