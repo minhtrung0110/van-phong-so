@@ -18,10 +18,8 @@ export const getListProjects = async ({ sort,filter, search,keySearch, page } = 
     console.log({ sort,filter, search, page })
     const url = 'projects';
     const queryString = [];
-    if (sort && sort.length > 0) {
-        sort.forEach((item) => {
-            queryString.push(`sort[${titleToSlug(item.key)}]=${item.value}`);
-        });
+    if (sort) {
+            queryString.push(`orderBy=${sort}`);
     }
     if (search) {
             queryString.push(`name=${search}`);
@@ -29,13 +27,6 @@ export const getListProjects = async ({ sort,filter, search,keySearch, page } = 
     if (page) {
         queryString.push(`page=${page}`);
     }
-    if(!!filter){
-        if (filter.status!== 'all') {
-            queryString.push(`status=${filter.status}`);
-        }
-    }
-
-
     const final_url = concatQueryString(queryString, url);
     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
     console.log('request URL: ' + final_url,'respond',reponse);

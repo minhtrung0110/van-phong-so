@@ -40,34 +40,6 @@ function AllProjectPage(props) {
     const isAddProject=useSelector(isAddProjectSelector)
     const isEditProject=useSelector(isEditProjectSelector)
 
-    const handleUpdateProject=(data) => {
-        console.log('Update project:',data)
-        messageApi.open({
-            type: 'success',
-            content: 'Câp nhật dự án thành công',
-            duration: 1.3,
-        });
-    }
-    const handleDeleteProject=async (id) => {
-        console.log('Delete project:', id)
-        const result = await disableProject(id)
-        if (result.status===1){
-            messageApi.open({
-                type: 'success',
-                content: 'Xóa dự án thành công',
-                duration: 1.3,
-            });
-            dispatch(setIsReset(true))
-        }else {
-            messageApi.open({
-                type: 'error',
-                content: 'Xóa dự án thành công',
-                duration: 1.3,
-            });
-
-        }
-
-    }
     const setProject = (respond, value) => {
         setListProject(respond.results);
         if (value !== 'page') {
@@ -77,10 +49,9 @@ function AllProjectPage(props) {
         // setTotalPage(result.meta.);
     };
     useEffect(()=>{
-        async function fetchData() {
+        async function fetchDataProject() {
             const project=JSON.parse(localStorage.getItem('project'))
             let params = {};
-            // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
             if (search !== '') params = { ...params, search };
             const respond = await getListProjects(params);
             console.log('Data respond:', respond)
@@ -96,25 +67,62 @@ function AllProjectPage(props) {
                 setLoading(false);
             }
         }
-        fetchData();
-
-        console.log('Search project:',search)
-    },[search,isReset])
+        fetchDataProject();
+    },[search])
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
-        const result = await getListProjects({
+        const respond= await getListProjects({
             page,
         });
-        if (result === 401) {
-        } else if (result === 500) {
+        if (respond === 401) {
+            handleSetUnthorization();
             return false;
-
+        } else if (respond === 500) {
+            setListProject([])
+            return false;
         } else {
-            setProject(result, 'reset-page');
+            setProject(respond, 'reset-page');
+            setLoading(false);
         }
-        setLoading(false);
     };
+    const handleLoading = async (value='desc', action) => {
+        setLoading(true);
+        const obSort=(action==='add')?`created_at ${value}`:`updated_at ${value}`
+        const respond = await getListProjects({
+            sort: obSort
+        });
+        if (respond === 401) {
+            handleSetUnthorization();
+            return false;
+        } else if (respond === 500) {
+            setListProject([])
+            return false;
+        } else {
+            setProject(respond, 'reset-page');
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteProject=async (item) => {
+        console.log('Delete project:', {...item,status:-1})
+        const result = await disableProject({...item,status:-1})
+        if (result.status===1){
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+            await handleLoading('desc', 'edit')
+        }else {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3,
+            });
+
+        }
+    }
     const handleSetUnthorization = () => {
         dispatch(setExpiredToken(true));
         const token = getCookies('vps_token');
@@ -122,24 +130,14 @@ function AllProjectPage(props) {
             deleteCookie('vps_token');
         }
     };
-    const backToProjectList = async (value, action) => {
-        setLoading(true);
-        if (action === 'edit') {
-        }
-        const result = await getListProjects({
-            sort: value,
-        });
-        setProject(result, 'page');
-        setLoading(false);
-    };
     return (
      <>
          {
              isAddProject ?(
-                 <AddProject onCancel={backToProjectList} />
+                 <AddProject onBack={handleLoading()} />
              ):(
                  isEditProject ? (
-                     <EditProject/>
+                     <EditProject onBack={handleLoading}/>
                  ):(
                      !!loading ?(<ListTableSkeleton column={4} />):(
                          <div className={'container-list-project'}>
@@ -160,7 +158,7 @@ function AllProjectPage(props) {
                                  {
                                      !isEmpty(listProject) ? (
                                          <ProjectTable tableHeader={project_table_header} tableBody={listProject}
-                                                       onUpdate={handleUpdateProject} onDelete={handleDeleteProject}/>
+                                                       onDelete={handleDeleteProject}/>
                                      ) : (
                                          <NotFoundData/>
                                      )

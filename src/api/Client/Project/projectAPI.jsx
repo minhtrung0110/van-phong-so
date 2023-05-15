@@ -38,8 +38,6 @@ export const getListProjects = async ({ sort,filter, search,keySearch, page } = 
             queryString.push(`role_id=${filter.role}`);
         }
     }
-
-
     const final_url = concatQueryString(queryString, url);
     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
     console.log('request URL: ' + final_url);
@@ -60,65 +58,41 @@ export const getProjectById = async (id,search) => {
     }
     const final_url = concatQueryString(queryString, url);
     const response = await axiosClient.get(final_url,configHeadersAuthenticate());
-    if (response.status === 1) {
-        return response.data.result;
-    } else if (response.status === 401) {
-        return 401;
-    } else {
-        return {};
-    }
-};
-export const createStaff = async (body) => {
-    const url = 'employees';
-    const response = await axiosClient.post(url, body, configHeadersAuthenticate());
-    if(response.status === 1 || response.message ==="Success") {
-        return {status:1,message:'Tạo nhân viên mới thành công'}
-    }
-    else if (response.status ===0){
-        switch (response.code) {
-            case -1009:
-                return {status:0,message:'Thông tin không chính xác'}
-                break
-            case -1010:
-                return {status:0,message:'Email đã tồn tại ! Vui lòng chọn email khác'}
-                break
-            case -1011:
-                return {status:0,message:'Tài khoản đã bị vo hiệu hóa'}
-                break
-            default:
-                break
-        }
-    }
     console.log(response)
-
-};
-
-export const editStaff = async (id, body) => {
-    const url = `employees`;
-
-    const response = await axiosClient.put(url, body, configHeadersAuthenticate());
     if(response.status === 1 || response.message ==="Success") {
-        return {status:1,message:'Cập nhật nhân viên mới thành công'}
+        return {status:1,data:response.data.result,message:'Lấy thông tin dự án thành công'}
     }
-    else if (response.status ===0){
-        switch (response.code) {
-            case -1009:
-                return {status:0,message:'Thông tin không chính xác'}
-                break
-            case -1010:
-                return {status:0,message:'Email đã tồn tại ! Vui lòng chọn email khác'}
-                break
-            case -1011:
-                return {status:0,message:'Tài khoản đã bị vo hiệu hóa'}
-                break
-            default:
-                break
-        }
+    else if (response.status===401)   return {status:401,message:'Không thể xác thực'}
+    else {
+        return {status:0,data:[],message:'Không thể lấy thông tin dự án.'}
     }
 };
-export const disableProject = async (id) => {
-    const url = `/projects/${id}`;
-    const response = await axiosClient.delete(url, configHeadersAuthenticate());
+export const createProject = async (body) => {
+    const url = 'projects';
+    const response = await axiosClient.post(url, body, configHeadersAuthenticate());
+    console.log(response)
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,message:'Tạo dự án mới thành công'}
+    }
+    else  return {status:0,message:'Tạo dự án mới thành công'}
+    // xac thuc 401
+
+
+};
+
+export const editProject = async (body) => {
+    const url = `projects`;
+    const response = await axiosClient.put(url, body, configHeadersAuthenticate());
+    console.log(response,body)
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,message:'Cập nhật dự án thành công'}
+    }
+    else  return {status:0,message:'Cập nhật dự án thành công'}
+    // xac thuc 401
+}
+export const disableProject = async (body) => {
+    const url = `/projects`;
+    const response = await axiosClient.put(url, body, configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {
         return {status:1,message:'Cho Dự Án Dừng Thành Công'}

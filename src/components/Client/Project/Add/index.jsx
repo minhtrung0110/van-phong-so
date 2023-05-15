@@ -9,15 +9,17 @@ import HeaderContent from "~/components/commoms/HeaderContent";
 import {FaFolderPlus} from 'react-icons/fa'
 import {Option} from "antd/es/mentions";
 import AvatarCustom from "~/components/commoms/AvatarCustom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setIsAdd} from "~/redux/reducer/project/projectReducer";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 
 
-function AddProject({onCancel}) {
+function AddProject({onBack}) {
     const [listStaff, setListStaff] = useState([])
     const [listRoom, setListRoom] = useState([])
     const [messageApi, contextHolder] = message.useMessage();
     const dispatch =useDispatch()
+    const userLogin=useSelector(getUserSelector)
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
     } = useForm({});
@@ -29,7 +31,10 @@ function AddProject({onCancel}) {
         setListStaff(data)
     }, [])
     const onSubmit = (data) => {
-        console.log(data)
+        const newProject={...data,created_by:userLogin,}
+        console.log(newProject)
+
+        onBack('desc','add')
     }
     const mixDataDepartments =(data)=>{
         return data.map(item=>({value:item.id, label:item.name}))
@@ -44,7 +49,6 @@ function AddProject({onCancel}) {
     }
     const handleCancel=()=>{
         dispatch(setIsAdd(false))
-        onCancel()
     }
     return (
         <>

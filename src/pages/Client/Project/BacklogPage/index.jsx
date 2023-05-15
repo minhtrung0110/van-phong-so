@@ -283,15 +283,21 @@ function BacklogPage(props) {
             if (search !== '') params = { ...params, search };
             const respond = await getProjectById(project.projectId,search);
           console.log('Data respond:', respond)
-            if (respond === 401) {
+            if (respond.status === 401) {
+                messageApi.open({
+                    type: 'error',
+                    content: respond.message,
+                    duration: 1.3,
+                });
                 handleSetUnthorization();
                 return false;
-            } else if (respond === 500) {
+            } else if (respond.status === 1) {
+                setProject(respond.data, 'reset-page');
+                setListSprints(respond.data.sprints)
+
+            } else {
                 setProject([])
                 return false;
-            } else {
-                setProject(respond, 'reset-page');
-                setListSprints(respond.sprints)
             }
             setLoading(false);
         }

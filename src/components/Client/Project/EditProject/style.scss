@@ -1,7 +1,11 @@
 
 @import "../../../../css/base/_mixins.scss";
 .container-update-project{
-  height: 500px !important;
+  background-color: #fff;
+  border-radius:var(--border-radius);
+  padding: 2rem 10rem;
+  margin: var(--pd-content) calc(var(--pd-content) *5);
+  min-height:50rem;
 
   .form-add-project{
     background-color: #fff;
@@ -45,5 +49,10 @@
         @include btn-cancel;
       }
     }
+  }
+}
+.select-member-custom{
+  .ant-select-item-option-content{
+    padding: 0 4rem;
   }
 }
