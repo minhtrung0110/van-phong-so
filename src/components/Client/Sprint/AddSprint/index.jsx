@@ -95,15 +95,15 @@ function AddSprint({onClose,onSave}) {
                     )}
                 />
                 <Controller
-                    name="goal"
+                    name="goals"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item label="Mô Tả"
                                    hasFeedback
-                                   validateStatus={errors.goal ? 'error' : 'success'}
-                                   help={errors.goal ? 'Vui lòng nhập mô tả ': null}
+                                   validateStatus={errors.goals ? 'error' : 'success'}
+                                   help={errors.goals ? 'Vui lòng nhập mô tả ': null}
                         >
 
                             <Input.TextArea  {...field} size="middle" />

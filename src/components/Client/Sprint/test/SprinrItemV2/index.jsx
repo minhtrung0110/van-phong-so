@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {config} from "~/config";
 import {setSprint} from "~/redux/reducer/project/projectReducer";
-import {FaAngleDown, FaEllipsisH, FaPlus, FaTimes, FaTrophy} from "react-icons/fa";
+import {FaAngleDown, FaChartLine, FaEllipsisH, FaPlus, FaStarOfDavid, FaTimes, FaTrophy} from "react-icons/fa";
 import {conCatArrayInArray, getTotalTaskInColumn, splitArrayByKey} from "~/utils/sorts";
-import {Dropdown, Modal} from "antd";
+import {Dropdown, message, Modal} from "antd";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import TextArea from "antd/es/input/TextArea";
 import EditSprint from "~/components/Client/Sprint/EditSprint";
@@ -14,6 +14,8 @@ import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {Container, Draggable} from "react-smooth-dnd";
 import './SprintItem.scss'
 import dayjs from "dayjs";
+import {createTask} from "~/api/Client/Task/taskAPI";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 
 SprintItemV2.propTypes = {};
 // 0: chưa active
@@ -37,7 +39,9 @@ function SprintItemV2({
     const [showCompleteSprint, setShowCompleteSprint]=useState()
     const [showEditSprint, setShowEditSprint] = useState(false)
     const [isCreateTask, setIsCreateTask] = useState(false)
+    const [messageApi, contextHolder] = message.useMessage();
     const [valueNewTask, setValueNewTask] = useState()
+    const userLogin=useSelector(getUserSelector)
     const listOptions = [
         {
             key: 'edit',
@@ -55,7 +59,7 @@ function SprintItemV2({
         } else setShowConfirmDelete(true)
     }
     const handleDelete = () => {
-        onDelete(sprint.id)
+        onDelete(sprint)
         setShowConfirmDelete(false)
     }
     const navigate = useNavigate()
@@ -65,9 +69,8 @@ function SprintItemV2({
             setShowCompleteSprint(true)
         }
         else {
-            const newStatus = sprint.status === 0 ? 1 : (sprint.status === 1) ? 2 : 0;
-            onEdit(sprint.id, {...sprint, status: newStatus})
             if (sprint.status === 0) {
+                onEdit(sprint.id, {...sprint, status: 1})
                 navigate(config.routes.project)
                 const project = JSON.parse(localStorage.getItem("project"))
                 project.currentSprint = sprint.id
@@ -81,42 +84,29 @@ function SprintItemV2({
         onEdit(id, data)
         setShowEditSprint(false)
     }
-    const handleCreateTask = () => {
-        // const newCardToAdd = {
-        //     id: Math.random().toString(36).substr(2, 5),
-        //     boardId: sprint.boardId,
-        //     columnId: 'column-1',
-        //     sprintID: sprint.id,
-        //     title: valueNewTask,
-        //     description: '',
-        //     startTime: null,
-        //     endTime: null,
-        //     priority: 'none',
-        //     members: [],
-        //     todoList: [],
-        //     fileList: [],
-        //     comments: [],
-        // }
+    console.log(userLogin)
+    const handleCreateTask = async () => {
         const newCardToAdd = {
-            id: Math.random().toString(36).substr(2, 5),
-            sprint_id: 1,
-           project_id: sprint.project_id,
-            employee_id: 0,
+            // id: Math.random().toString(36).substr(2, 5),
+            employee_id:userLogin.id,
+            sprint_id: sprint.id,
+            project_id: sprint.project_id,
             board_column_id: 1,
-            assignee_employee_id: null,
             assignee_employee: null,
-            report_employee_id: null,
-            report_employee: null,
+            report_employee: userLogin,
+           // report_employee: null,
             title: valueNewTask,
             description: "",
-            priority: 3,
-            todoList: [],
-            fileList: [],
+            priority: 1,
+            subtasks: [],
+            attachments: [],
             comments: [],
-            estimate_point: 10,
+            estimate_point: 3,
             status: 1,
-            sort: 1
+            task_histories:[],
+            sort:1,
         }
+
         // add new card to Sprint
         const newSprint = {...sprint}
         newSprint.tasks.push(newCardToAdd)
@@ -132,10 +122,24 @@ function SprintItemV2({
         //  onSprint(newSprint)
 
         // call  API tạo task
+        const result = await createTask(newCardToAdd)
+        if(result.status===1){
+            setValueNewTask('')
+            setIsCreateTask(false)
+           // onCreateTask(newCardToAdd)
+        }
+        else {
+            messageApi.open({
+                type:'error',
+                message:result.message,
+                duration:1.3,
+            })
+            setIsCreateTask(false)
+            setValueNewTask('')
+
+        }
         console.log('Test them task ', newSprint)
-        setValueNewTask('')
-        setIsCreateTask(false)
-        onCreateTask(newCardToAdd)
+
     }
 
     const cards = sprint.tasks//conCatArrayInArray(sprint.columns);
@@ -144,6 +148,7 @@ function SprintItemV2({
     }
     return (
         <div className={`sprint-item ${sprint.status === -1 ? 'backlog' : ''}`}>
+            {contextHolder}
             <div className='sprint-header'>
                 <div className='sprint-info' onClick={() => setIsOpen(!isOpen)}>
                     <FaAngleDown className={`icon ${isOpen ? 'rotated' : ''}`}/>
@@ -263,32 +268,35 @@ function SprintItemV2({
                               dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Phiên <strong>${sprint.name}</strong>  ? `}}/>}
                           textCancel='Hủy' textOK='Xóa' onCancel={() => setShowConfirmDelete(false)}
                           onOK={handleDelete}/>
-            <Modal title="Cập Nhât" open={showCompleteSprint}
+            <Modal title="" open={showCompleteSprint}
                    destroyOnClose
                    maskClosable={true}
                    onCancel={() => setShowCompleteSprint(false)}
                    footer={null}
-                   width={700}
-                   style={{top: 150}}
+                   width={450}
+                   style={{top: 80}}
             >
                 <div className='notify-complete-sprint'>
                     <div className='header-complete-sprint'>
-                        <FaTrophy className="icon"/>
-                        <span className={'title'}>Hoàn Thành Chu Kỳ</span>
+                      <div className='info-title'>
+                          <FaTrophy className="icon"/>
+                          <span className={'title'}>Hoàn Thành Chu Kỳ</span>
+                      </div>
                     </div>
                     <div className='content-complete-sprint'>
+                        <h4 className={'title'}><FaChartLine className='icon' />Thống Kê</h4>
                         <ul className={'statistics'}>
-                            <li className={'statistic-item'}>Tổng Số Công Việc: </li>
-                            <li className={'statistic-item'}>Công Việc Hoàn Thành: </li>
-                            <li className={'statistic-item'}>Thời Gian Triển Khai: </li>
+                            <li className={'statistic-item'}> <FaStarOfDavid className={'icon-statistic-item'} /> Tổng Số Công Việc: </li>
+                            <li className={'statistic-item'}><FaStarOfDavid className={'icon-statistic-item'} /> Công Việc Hoàn Thành: </li>
+                            <li className={'statistic-item'}><FaStarOfDavid className={'icon-statistic-item'} /> Thời Gian Triển Khai: </li>
                         </ul>
                         <span className={'description'}>
-                            Các công việc chưa hoàn thành sẽ được duy chuyển vào Lưu Trữ.
+                            Các công việc chưa hoàn thành sẽ được duy chuyển vào <b>Lưu Trữ</b>.
                         </span>
                     </div>
                     <div className={'footer-complete-sprint'}>
                         <button className={'btn-complete'} onClick={handleCompleteSprint}>Hoàn Thành</button>
-                        <button className={'btn-cancel'} onClick={() => setShowCompleteSprint(false)}>hủy</button>
+                        <button className={'btn-cancel'} onClick={() => setShowCompleteSprint(false)}>Hủy</button>
                     </div>
 
                 </div>

@@ -16,6 +16,8 @@ import {useForm, Controller} from "react-hook-form";
 import {listCounties} from "~/asset/data/initDataGlobal";
 import {createStaff, editStaff} from "~/api/Client/Staff/staffAPI";
 import {staffSelector} from "~/redux/selectors/staff/staffSelector";
+import axiosClient from "~/api/axiosClient";
+import {getCookies} from "~/api/Client/Auth";
 
 
 EditStaff.propTypes = {};
@@ -32,8 +34,17 @@ function EditStaff(props) {
 
     let data = useSelector(staffSelector)
     console.log(data);
+    const [uploadAvatarURL, setUploadAvatarURL]=useState({imageUrl:''});
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
+    const [fileUpload, setFileUpload] = useState([
+        {
+            uid: '-1',
+            name: 'Avatar',
+            status: 'done',
+            url: data.avatar_url,
+        }]
+    )
     const [previewTitle, setPreviewTitle] = useState('');
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -48,7 +59,8 @@ function EditStaff(props) {
             ...job_info, ...contact_info, ...rest,
             birthday:dayjs(dayjs(data.birthday ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
             date_of_degree:dayjs(dayjs(data.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
-            date_of_joining:dayjs(dayjs(data.job_info.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD')
+            date_of_joining:dayjs(dayjs(data.job_info.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
+
         }
     });
     console.log( {
@@ -98,23 +110,22 @@ function EditStaff(props) {
                 bank_account_number: data.bank_account_number,
                 bank_name: data.bank_name,
                 emergency_contact: data.emergency_contact,
-                permanent_address: data.permanent_address,
+                permanent_address:`${data.per_address} ${data.per_residence}`,
                 tax_code: data.tax_code,
-                temporary_address: data.temporary_address
+                temporary_address:`${data.tmp_address} ${data.tmp_residence}`
             },
             job_info: {
-                company_id: 1,
+                company_id: 0,
                 date_of_joining:dayjs(data.date_of_joining, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
                 department_id: data.department_id,
-                group_id: data.group_id,
                 job_title: data.job_title
             },
             birthday:dayjs(data.birthday, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             date_of_degree:dayjs(data.date_of_degree, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             education_level:+data.education_level,
-            permanent_address: `${data.per_address} ${data.per_residence}`,
-            temporary_address: `${data.tmp_address} ${data.tmp_residence}`,
-            avatar_url: `https://th.bing.com/th/id/R.8a11509003ea4fc583e224…7ebde5?rik=KSGxl77IPIC1Iw&riu=http%3a%2f%2fupload`,
+          //  permanent_address: `${data.per_address} ${data.per_residence}`,
+           // temporary_address: `${data.tmp_address} ${data.tmp_residence}`,
+            avatar_url: uploadAvatarURL.imageUrl,
         }
         delete updateStaff.tmp_address
         delete updateStaff.per_address
@@ -124,7 +135,6 @@ function EditStaff(props) {
         console.log('Update Staff:', updateStaff)
 
         const respond = await editStaff(updateStaff)
-        console.log(respond)
         if(respond.status===1){
             messageApi.open({
                 type: 'success',
@@ -151,6 +161,34 @@ function EditStaff(props) {
 
 
     }
+    const handleUpload = (options) => {
+        const { onSuccess, onError, file, onProgress } = options;
+        // const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiVm8gVGh1YW4iLCJhdmF0YXJfdXJsIjoiIiwiZGVwYXJ0bWVudF9pZCI6MSwicGVybWlzc2lvbiI6W3sibmFtZSI6IlNwcmludCIsInBlcm1pc3Npb24iOnsic3ByaW50LmNyZWF0ZSI6dHJ1ZSwic3ByaW50LmRlbGV0ZSI6dHJ1ZSwic3ByaW50LnVwZGF0ZSI6dHJ1ZSwic3ByaW50LnZpZXciOnRydWV9fSx7Im5hbWUiOiJUYXNrIiwicGVybWlzc2lvbiI6eyJ0YXNrLmNyZWF0ZSI6dHJ1ZSwidGFzay5kZWxldGUiOnRydWUsInRhc2sudXBkYXRlIjp0cnVlLCJ0YXNrLnZpZXciOnRydWV9fSx7Im5hbWUiOiJTdGFmZiIsInBlcm1pc3Npb24iOnsic3RhZmYuY3JlYXRlIjp0cnVlLCJzdGFmZi5kZWxldGUiOnRydWUsInN0YWZmLnVwZGF0ZSI6dHJ1ZSwic3RhZmYudmlldyI6dHJ1ZX19LHsibmFtZSI6IlByb2plY3QiLCJwZXJtaXNzaW9uIjp7InByb2plY3QuY3JlYXRlIjp0cnVlLCJwcm9qZWN0LmRlbGV0ZSI6dHJ1ZSwicHJvamVjdC51cGRhdGUiOnRydWUsInByb2plY3QudmlldyI6dHJ1ZX19XX0sImV4cCI6MTY4NDI2NTAzOSwiaWF0IjoxNjg0MjM2MjM5fQ.VPzwQy42yHkWoD1y3FPMSXBPSbylpL2BKml9zi_K33XSetwJJOTXsS5g7rtgDByl6K5QJaEsvYK3-WrgbUHL0UCo6uMtbgbwqr70u1B8oN5R8UVATwFqhCjVDlyMLHLT6ozrCyKGX-lqLWmvbbngiVavnYZa2bBSQg_of9c_E69ey17UntyMZ9gXEoaV4KPFZReaJKskMWJPnt1vKlHSAho-OmmglruKR-lhXcpzbJx8iKCj1MNvWvqLYfoXdzsRb3bHuccHP84_baUou-B0P3efGCQajyBilCoInL4LSukl0Hb62jACg769WXekKCXYqmYJi5TN9fL0SCoUgmrjHw'; // Thay thế bằng mã thông báo truy cập hợp lệ của bạn
+        const token = getCookies('vps_token');
+        const formData = new FormData();
+        formData.append('file', file);
+        axiosClient.post('http://127.0.0.1:8080/api/v1/image/upload', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                );
+                onProgress({ percent: percentCompleted });
+            },
+        })
+            .then((response) => {
+                // Xử lý phản hồi từ máy chủ sau khi tải lên thành công
+                onSuccess(response.data);
+                setUploadAvatarURL(response.data.result)
+            })
+            .catch((error) => {
+                // Xử lý lỗi tải lên
+                onError(error);
+            });
+    };
     return (<div className="create-staff-container">
             {contextHolder}
             <HeaderContent title='Thêm Nhân Viên' icon={FaUserPlus}/>
@@ -288,7 +326,6 @@ function EditStaff(props) {
                                     help={errors.phone_number ? 'Vui lòng nhập số điện thoại ' : null}>
                                     <Input
                                         {...field}
-                                        addonBefore={prefixSelector}
                                         style={{
                                             width: '100%',
                                         }}
@@ -338,8 +375,10 @@ function EditStaff(props) {
                                     label="Ảnh Đại Diện">
                                     <Upload
                                         {...field}
-                                        action="/upload.do" listType="picture-card"
+                                        customRequest={handleUpload}
+                                        listType="picture-card"
                                         maxCount={1}
+                                        defaultFileList={fileUpload}
                                         onPreview={handlePreview}
 
                                     >
@@ -479,18 +518,6 @@ function EditStaff(props) {
                                 </Form.Item>
                             )}
                         />
-                        <Controller
-                            control={control}
-                            name="social_network"
-                            render={({field}) => (<Form.Item
-                                    label="Mạng xã hội"
-                                    hasFeedback>
-                                    <AutoComplete {...field} options={websiteOptions} onChange={onWebsiteChange}
-                                                  placeholder="fb,linked,ig,..">
-                                        <Input size="middle" name=''/>
-                                    </AutoComplete>
-                                </Form.Item>)}
-                        />
 
                     </Col>
 
@@ -507,8 +534,8 @@ function EditStaff(props) {
                             render={({field}) => (<Form.Item
                                     label="Chức Vụ"
                                     hasFeedback
-                                    validateStatus={errors.role ? 'error' : 'success'}
-                                    help={errors.role ? 'Vui lòng chọn chức vụ ' : null}>
+                                    validateStatus={errors.role_id ? 'error' : 'success'}
+                                    help={errors.role_id ? 'Vui lòng chọn chức vụ ' : null}>
                                     <Select {...field} placeholder="Chọn chức vụ" size="middle">
                                         <Select.Option value={1}>CEO</Select.Option>
                                         <Select.Option value={2}>CTO</Select.Option>
@@ -561,19 +588,19 @@ function EditStaff(props) {
                                     <Select {...field} options={[{key: '1', value: 1}]}/>
                                 </Form.Item>)}
                         />
-                        <Controller
-                            control={control}
-                            name="group_id"
-                            rules={{required: true}}
-                            render={({field}) => (<Form.Item
+                        {/*<Controller*/}
+                        {/*    control={control}*/}
+                        {/*    name="group_id"*/}
+                        {/*    rules={{required: true}}*/}
+                        {/*    render={({field}) => (<Form.Item*/}
 
-                                    label="Nhóm làm việc"
-                                    hasFeedback
-                                    validateStatus={errors.group_id ? 'error' : 'success'}
-                                    help={errors.group_id ? 'Vui lòng chọn nhóm ' : null}>
-                                    <Select {...field} options={[{key: '1', value: 1}]} size="middle"/>
-                                </Form.Item>)}
-                        />
+                        {/*            label="Nhóm làm việc"*/}
+                        {/*            hasFeedback*/}
+                        {/*            validateStatus={errors.group_id ? 'error' : 'success'}*/}
+                        {/*            help={errors.group_id ? 'Vui lòng chọn nhóm ' : null}>*/}
+                        {/*            <Select {...field} options={[{key: '1', value: 1}]} size="middle"/>*/}
+                        {/*        </Form.Item>)}*/}
+                        {/*/>*/}
 
                     </Col>
                 </Row>
@@ -651,7 +678,6 @@ function EditStaff(props) {
                         <Controller
                             control={control}
                             name="tax_code"
-                            rules={{required: true}}
                             render={({field}) => (<Form.Item
                                     label="Mã số thuế"
                                     hasFeedback
@@ -663,7 +689,6 @@ function EditStaff(props) {
                         <Controller
                             control={control}
                             name="bank_name"
-                            rules={{required: true}}
                             render={({field}) => (<Form.Item
 
                                     label="Ngân hàng"
@@ -701,7 +726,6 @@ function EditStaff(props) {
                         <Controller
                             control={control}
                             name="bank_account_number"
-                            rules={{required: true}}
                             render={({field}) => (<Form.Item
 
                                     label="Số tài khoản"

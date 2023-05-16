@@ -272,15 +272,16 @@ function BacklogPage(props) {
     const [showAddSprint,setShowAddSprint]=useState(false)
     const [listSprints,setListSprints]=useState([])
     const [messageApi, contextHolder] = message.useMessage();
+    const [loadData,setLoadData]=useState(false)
     const dispatch = useDispatch()
     const isReset=useSelector(isResetSprintSelector)
     useEffect(()=>{
         // call API get sprint task lên
         async function fetchData() {
             const project=JSON.parse(localStorage.getItem('project'))
-            let params = {};
-            // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
-            if (search !== '') params = { ...params, search };
+            // let params = {};
+            // // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
+            // if (search !== '') params = { ...params, search };
             const respond = await getProjectById(project.projectId,search);
           console.log('Data respond:', respond)
             if (respond.status === 401) {
@@ -291,6 +292,7 @@ function BacklogPage(props) {
                 });
                 handleSetUnthorization();
                 return false;
+
             } else if (respond.status === 1) {
                 setProject(respond.data, 'reset-page');
                 setListSprints(respond.data.sprints)
@@ -303,7 +305,7 @@ function BacklogPage(props) {
         }
         fetchData();
 
-    },[search,isReset])
+    },[search,isReset,loadData])
     const handleSetUnthorization = () => {
         dispatch(setExpiredToken(true));
         const token = getCookies('vps_token');
@@ -320,7 +322,8 @@ function BacklogPage(props) {
                 content: result.message,
                 duration: 1.3,
             });
-            dispatch(setIsResetSprint(true))
+         //  dispatch(setIsResetSprint(true))
+            setLoadData(!loadData)
         }
         else if(result.status===0) {
             messageApi.open({
@@ -342,7 +345,8 @@ function BacklogPage(props) {
                 content: result.message,
                 duration: 1.3,
             });
-            dispatch(setIsResetSprint(true))
+           // dispatch(setIsResetSprint(true))
+            setLoadData(!loadData)
         } else if (result.status === 0) {
             messageApi.open({
                 type: 'error',
@@ -352,15 +356,17 @@ function BacklogPage(props) {
         }
 
     }
-    const handleDeleteSprint=async (id) => {
-        console.log('Delete sprint:', id)
-        const result = await deleteSprint(id);
+    const handleDeleteSprint=async (item) => {
+        console.log('Delete sprint:', item)
+        const result = await deleteSprint(item.id);
         if (result.status === 1) {
             messageApi.open({
                 type: 'success',
                 content: result.message,
                 duration: 1.3,
             });
+            //dispatch(setIsResetSprint(true))
+            setLoadData(!loadData)
         } else if (result.status === 0) {
             messageApi.open({
                 type: 'error',

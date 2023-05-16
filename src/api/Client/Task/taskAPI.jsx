@@ -67,13 +67,14 @@ export const getTaskById = async (id) => {
 export const createTask = async (body) => {
     const url = 'tasks';
     const response = await axiosClient.post(url, body, configHeadersAuthenticate());
+    console.log(response)
     if(response.status === 1 || response.message ==="Success") {
         return {status:1,message:'Tạo công việc mới thành công'}
     }
     else if (response.status ===0){
         return {status:0,message:'Tạo công việc thất bại'}
     }
-    console.log(response)
+
 
 };
 

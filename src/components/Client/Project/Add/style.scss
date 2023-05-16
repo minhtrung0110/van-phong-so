@@ -51,4 +51,19 @@
     padding: 0 4rem;
   }
 }
+@media (max-width: 768px) {
+  /* Điều chỉnh kiểu dáng cho thiết bị di động ở đây */
+  .container-create-project{
+    padding: 1rem ;
+    margin: calc(var(--pd-content)/2);
+  }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Điều chỉnh kiểu dáng cho máy tính bảng ở đây */
+  .container-create-project{
+    padding: 2rem ;
+    margin:  calc(var(--pd-content));
+  }
+
+}
 

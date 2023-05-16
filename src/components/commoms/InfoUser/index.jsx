@@ -7,7 +7,7 @@ import {Avatar, Button, Divider, Dropdown, Space} from "antd";
 import {FaExpand, FaLock, FaPager, FaSignOutAlt, FaUser} from "react-icons/fa";
 import Menu from "~/components/commoms/Popper/Menu";
 import {config} from "~/config";
-import checkErrorImage from "~/utils/validateImage";
+import checkErrorImage from "~/utils/validation";
 import AvatarCustom from "~/components/commoms/AvatarCustom";
 import './customDropdown.scss'
 import {NavLink} from "react-router-dom";

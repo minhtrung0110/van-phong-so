@@ -93,8 +93,8 @@ export const createStaff = async (body) => {
 
 export const editStaff = async (id, body) => {
     const url = `employees`;
-
     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
+    console.log(response    )
     if(response.status === 1 || response.message ==="Success") {
         return {status:1,message:'Cập nhật nhân viên mới thành công'}
     }

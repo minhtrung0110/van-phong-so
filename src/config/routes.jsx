@@ -7,7 +7,7 @@ const routes = {
     forgotPassword:'/forgot-password',
     setting:"/setting",
     post:'/posts',
-    project:"project/sprint",
+    project:"/project/sprint",
     profile:"/@:nickname",
     meeting:"/meeting",
     staff:"/staff",

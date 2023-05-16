@@ -76,7 +76,7 @@ function EditProject({onBack}) {
     const listStatus=[
         {label:'Hoàn Thành',value:1},
         {label:'Đang Triển Khai',value:0},
-        {label:'Chờ',value:-1},
+        {label:'Dừng',value:-1},
     ]
     return (
         <>

@@ -25,3 +25,13 @@ export  function  checkIsImage(file) {
     };
     reader.readAsArrayBuffer(file);
 };
+export const validateEmail = (email) => {
+    // Biểu thức chính quy để kiểm tra định dạng email
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+};
+export const validateEmailCompany = (email) => {
+    // Biểu thức chính quy để kiểm tra định dạng email
+    const emailRegex = /^[A-Z0-9._%+-]+@nextgen\.vn$/i;
+    return emailRegex.test(email);
+};

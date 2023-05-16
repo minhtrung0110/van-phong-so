@@ -113,7 +113,7 @@ function AllProjectPage(props) {
                 content: result.message,
                 duration: 1.3,
             });
-            await handleLoading('desc', 'edit')
+          //  await handleLoading('desc', 'edit')
         }else {
             messageApi.open({
                 type: 'error',
@@ -134,7 +134,7 @@ function AllProjectPage(props) {
      <>
          {
              isAddProject ?(
-                 <AddProject onBack={handleLoading()} />
+                 <AddProject onBack={handleLoading} />
              ):(
                  isEditProject ? (
                      <EditProject onBack={handleLoading}/>

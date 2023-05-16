@@ -24,6 +24,11 @@ import HeaderContent from "~/components/commoms/HeaderContent";
 import {listCounties} from "~/asset/data/initDataGlobal";
 import {createStaff} from "~/api/Client/Staff/staffAPI";
 import dayjs from "dayjs";
+import {uploadImage} from "~/api/Client/Upload/uploadAPI";
+import axiosClient from "~/api/axiosClient";
+import {getCookies} from "~/api/Client/Auth";
+import {getValue} from "@testing-library/user-event/dist/utils";
+import {validateEmail, validateEmailCompany} from "~/utils/validation";
 
 AddStaff.propTypes = {
 
@@ -39,6 +44,7 @@ function AddStaff(props) {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
+    const [uploadAvatarURL, setUploadAvatarURL]=useState({imageUrl:''});
     const [messageApi, contextHolder] = message.useMessage();
     const dispatch = useDispatch();
 
@@ -82,30 +88,29 @@ function AddStaff(props) {
         setPreviewOpen(true);
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
     };
+    console.log(uploadAvatarURL)
     const onSave = async (data) => {
         const newStaff = {
             ...data,
                 contact_info: {
                 bank_account_number: data.bank_account_number,
-               bank_name: data.bank_name,
+                bank_name: data.bank_name,
                 emergency_contact: data.emergency_contact,
-                permanent_address: data.permanent_address,
+                permanent_address:`${data.per_address} ${data.per_residence}`,
                 tax_code: data.tax_code,
-                temporary_address: data.temporary_address
+                temporary_address:`${data.tmp_address} ${data.tmp_residence}`
             },
             job_info: {
                 company_id: 1,
                 date_of_joining:dayjs(data.date_of_joining, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
                 department_id: data.department_id,
-                group_id: data.group_id,
+               // group_id: data.group_id,
                 job_title: data.job_title
             },
             birthday:dayjs(data.birthday, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             date_of_degree:dayjs(data.date_of_degree, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             education_level:+data.education_level,
-            permanent_address: `${data.per_address} ${data.per_residence}`,
-            temporary_address: `${data.tmp_address} ${data.tmp_residence}`,
-            avatar_url: `https://th.bing.com/th/id/R.8a11509003ea4fc583e224…7ebde5?rik=KSGxl77IPIC1Iw&riu=http%3a%2f%2fupload`,
+            avatar_url: uploadAvatarURL.imageUrl,
         }
         delete newStaff.tmp_address
         delete newStaff.per_address
@@ -142,6 +147,34 @@ function AddStaff(props) {
 
 
     }
+    const handleUpload = (options) => {
+        const { onSuccess, onError, file, onProgress } = options;
+       // const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiVm8gVGh1YW4iLCJhdmF0YXJfdXJsIjoiIiwiZGVwYXJ0bWVudF9pZCI6MSwicGVybWlzc2lvbiI6W3sibmFtZSI6IlNwcmludCIsInBlcm1pc3Npb24iOnsic3ByaW50LmNyZWF0ZSI6dHJ1ZSwic3ByaW50LmRlbGV0ZSI6dHJ1ZSwic3ByaW50LnVwZGF0ZSI6dHJ1ZSwic3ByaW50LnZpZXciOnRydWV9fSx7Im5hbWUiOiJUYXNrIiwicGVybWlzc2lvbiI6eyJ0YXNrLmNyZWF0ZSI6dHJ1ZSwidGFzay5kZWxldGUiOnRydWUsInRhc2sudXBkYXRlIjp0cnVlLCJ0YXNrLnZpZXciOnRydWV9fSx7Im5hbWUiOiJTdGFmZiIsInBlcm1pc3Npb24iOnsic3RhZmYuY3JlYXRlIjp0cnVlLCJzdGFmZi5kZWxldGUiOnRydWUsInN0YWZmLnVwZGF0ZSI6dHJ1ZSwic3RhZmYudmlldyI6dHJ1ZX19LHsibmFtZSI6IlByb2plY3QiLCJwZXJtaXNzaW9uIjp7InByb2plY3QuY3JlYXRlIjp0cnVlLCJwcm9qZWN0LmRlbGV0ZSI6dHJ1ZSwicHJvamVjdC51cGRhdGUiOnRydWUsInByb2plY3QudmlldyI6dHJ1ZX19XX0sImV4cCI6MTY4NDI2NTAzOSwiaWF0IjoxNjg0MjM2MjM5fQ.VPzwQy42yHkWoD1y3FPMSXBPSbylpL2BKml9zi_K33XSetwJJOTXsS5g7rtgDByl6K5QJaEsvYK3-WrgbUHL0UCo6uMtbgbwqr70u1B8oN5R8UVATwFqhCjVDlyMLHLT6ozrCyKGX-lqLWmvbbngiVavnYZa2bBSQg_of9c_E69ey17UntyMZ9gXEoaV4KPFZReaJKskMWJPnt1vKlHSAho-OmmglruKR-lhXcpzbJx8iKCj1MNvWvqLYfoXdzsRb3bHuccHP84_baUou-B0P3efGCQajyBilCoInL4LSukl0Hb62jACg769WXekKCXYqmYJi5TN9fL0SCoUgmrjHw'; // Thay thế bằng mã thông báo truy cập hợp lệ của bạn
+        const token = getCookies('vps_token');
+        const formData = new FormData();
+        formData.append('file', file);
+        axiosClient.post('http://127.0.0.1:8080/api/v1/image/upload', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                );
+                onProgress({ percent: percentCompleted });
+            },
+        })
+            .then((response) => {
+                // Xử lý phản hồi từ máy chủ sau khi tải lên thành công
+                onSuccess(response.data);
+                setUploadAvatarURL(response.data.result)
+            })
+            .catch((error) => {
+                // Xử lý lỗi tải lên
+                onError(error);
+            });
+    };
     return (
         <div className="create-staff-container">
             {contextHolder}
@@ -245,13 +278,19 @@ function AddStaff(props) {
                         <Controller
                             control={control}
                             name='email'
-                            rules={{required: true}}
+                            rules={{
+                                required: 'Vui lòng nhập email',
+                                validate: {
+                                    emailFormat: (value) => validateEmailCompany(value) || 'Email không đúng định dạng',
+                                },
+                            }}
                             render={({field}) => (
                                 <Form.Item
-                                    label="Mail"
+                                    label="Mail công ty"
                                     hasFeedback
                                     validateStatus={errors.email ? 'error' : 'success'}
-                                    help={errors.email ? 'Vui lòng nhập mail ' : null}>
+                                    help={errors.email ? 'Vui lòng nhập mail chính xác ' : null}
+                                >
 
                                     <Input {...field} size="middle"/>
                                 </Form.Item>
@@ -261,7 +300,10 @@ function AddStaff(props) {
                         <Controller
                             control={control}
                             name='personal_email'
-                            rules={{required: true}}
+                            rules={{
+                                required: true,
+                                validate: (value) => validateEmail(value),
+                            }}
                             render={({field}) => (
                                 <Form.Item
                                     label="E-mail cá nhân"
@@ -286,7 +328,6 @@ function AddStaff(props) {
                                     help={errors.phone_number ? 'Vui lòng nhập số điện thoại ' : null}>
                                     <Input
                                         {...field}
-                                        addonBefore={prefixSelector}
                                         style={{
                                             width: '100%',
                                         }}
@@ -341,9 +382,11 @@ function AddStaff(props) {
                                     label="Ảnh Đại Diện">
                                     <Upload
                                         {...field}
-                                        action="/upload.do" listType="picture-card"
+                                        customRequest={handleUpload}
+                                        listType="picture-card"
                                         maxCount={1}
                                         onPreview={handlePreview}
+                                        //onChange={(e)=>handleUPloadImage(e)}
 
                                     >
                                         <div>
@@ -484,7 +527,6 @@ function AddStaff(props) {
                         <Controller
                             control={control}
                             name="date_of_degree"
-                            rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Thời gian tốt nghiệp"
@@ -497,21 +539,6 @@ function AddStaff(props) {
                                 </Form.Item>
                             )}
                         />
-                        <Controller
-                            control={control}
-                            name="social_network"
-                            render={({field}) => (
-                                <Form.Item
-                                    label="Mạng xã hội"
-                                    hasFeedback>
-                                    <AutoComplete {...field} options={websiteOptions} onChange={onWebsiteChange}
-                                                  placeholder="fb,linked,ig,..">
-                                        <Input size="middle" name=''/>
-                                    </AutoComplete>
-                                </Form.Item>
-                            )}
-                        />
-
                     </Col>
 
                 </Row>
@@ -528,8 +555,8 @@ function AddStaff(props) {
                                 <Form.Item
                                     label="Chức Vụ"
                                     hasFeedback
-                                    validateStatus={errors.role ? 'error' : 'success'}
-                                    help={errors.role ? 'Vui lòng chọn chức vụ ' : null}>
+                                    validateStatus={errors.role_id ? 'error' : 'success'}
+                                    help={errors.role_id ? 'Vui lòng chọn chức vụ ' : null}>
                                     <Select {...field} placeholder="Chọn chức vụ" size="middle">
                                         <Select.Option value={1}>CEO</Select.Option>
                                         <Select.Option value={2}>CTO</Select.Option>
@@ -587,23 +614,21 @@ function AddStaff(props) {
                                 </Form.Item>
                             )}
                         />
-                        <Controller
-                            control={control}
-                            name="group_id"
-                            rules={{required: true}}
-                            render={({field}) => (
-                                <Form.Item
+                        {/*<Controller*/}
+                        {/*    control={control}*/}
+                        {/*    name="group_id"*/}
+                        {/*    rules={{required: true}}*/}
+                        {/*    render={({field}) => (*/}
+                        {/*        <Form.Item*/}
 
-                                    label="Nhóm làm việc"
-                                    hasFeedback
-                                    validateStatus={errors.group_id ? 'error' : 'success'}
-                                    help={errors.group_id ? 'Vui lòng chọn nhóm ' : null}>
-                                    <Select {...field} options={[
-                                        {key:'1',value:1}
-                                    ]}size="middle"/>
-                                </Form.Item>
-                            )}
-                        />
+                        {/*            label="Nhóm làm việc"*/}
+                        {/*            hasFeedback*/}
+                        {/*            validateStatus={errors.group_id ? 'error' : 'success'}*/}
+                        {/*            help={errors.group_id ? 'Vui lòng chọn nhóm ' : null}>*/}
+                        {/*            <Input {...field} size="middle"/>*/}
+                        {/*        </Form.Item>*/}
+                        {/*    )}*/}
+                        {/*/>*/}
 
                     </Col>
                 </Row>
@@ -691,7 +716,6 @@ function AddStaff(props) {
                         <Controller
                             control={control}
                             name="tax_code"
-                            rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     label="Mã số thuế"
@@ -705,7 +729,6 @@ function AddStaff(props) {
                         <Controller
                             control={control}
                             name="bank_name"
-                            rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
 
@@ -756,7 +779,6 @@ function AddStaff(props) {
                         <Controller
                             control={control}
                             name="bank_account_number"
-                            rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
 
