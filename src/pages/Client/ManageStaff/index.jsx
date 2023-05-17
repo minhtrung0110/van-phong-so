@@ -13,7 +13,7 @@ import {
 } from "~/redux/selectors/staff/staffSelector";
 import AddStaff from "~/components/Client/Staff/Add";
 import EditStaff from "~/components/Client/Staff/Edit";
-import {setIsAdd} from "~/redux/reducer/staff/staffReducer";
+import {setIsAdd, setIsEdit} from "~/redux/reducer/staff/staffReducer";
 import PaginationUI from "~/components/commoms/Pagination";
 import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
@@ -146,12 +146,11 @@ function ManageStaff(props) {
             deleteCookie('vps_token');
         }
     };
-    const backToStaffList = async (value, action) => {
+    const backToStaffList = async (action) => {
         setLoading(true);
-        if (action === 'edit') {
-        }
+        let sort=(action === 'edit') ? 'updated_at,asc': 'created_at,desc';
         const result = await getListStaffs({
-            sort: value,
+            sort,
         });
         setStaff(result, 'page');
         setLoading(false);

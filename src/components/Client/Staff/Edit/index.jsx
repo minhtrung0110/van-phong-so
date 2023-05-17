@@ -18,6 +18,8 @@ import {createStaff, editStaff} from "~/api/Client/Staff/staffAPI";
 import {staffSelector} from "~/redux/selectors/staff/staffSelector";
 import axiosClient from "~/api/axiosClient";
 import {getCookies} from "~/api/Client/Auth";
+import {isEmpty, split} from "lodash";
+import {validateEmail, validateEmailCompany} from "~/utils/validation";
 
 
 EditStaff.propTypes = {};
@@ -29,12 +31,9 @@ const getBase64 = (file) => new Promise((resolve, reject) => {
 });
 
 function EditStaff(props) {
-
     dayjs.locale('vi'); // thiết lập ngôn ngữ hiển thị là tiếng Việt
-
-    let data = useSelector(staffSelector)
-    console.log(data);
-    const [uploadAvatarURL, setUploadAvatarURL]=useState({imageUrl:''});
+    let staff = useSelector(staffSelector)
+    const [uploadAvatarURL, setUploadAvatarURL] = useState({imageUrl: ''});
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [fileUpload, setFileUpload] = useState([
@@ -42,56 +41,36 @@ function EditStaff(props) {
             uid: '-1',
             name: 'Avatar',
             status: 'done',
-            url: data.avatar_url,
+            url: staff.avatar_url,
         }]
     )
     const [previewTitle, setPreviewTitle] = useState('');
     const [messageApi, contextHolder] = message.useMessage();
-
     const dispatch = useDispatch();
-    // xủ lý data
-    let {job_info, contact_info, role, ...rest} = data
-    const [autoCompleteResult, setAutoCompleteResult] = useState([]);
+    // xủ lý staff
+    let {job_info, contact_info, role, ...rest} = staff
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
     } = useForm({
         defaultValues: {
             ...job_info, ...contact_info, ...rest,
-            birthday:dayjs(dayjs(data.birthday ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
-            date_of_degree:dayjs(dayjs(data.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
-            date_of_joining:dayjs(dayjs(data.job_info.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
+            per_residence:staff.contact_info.permanent_address.substring(staff.contact_info.permanent_address.indexOf(",") + 1).trim(),
+            per_address:staff.contact_info.permanent_address.split(',')[0].trim(),
+            tmp_residence:staff.contact_info.temporary_address.substring(staff.contact_info.temporary_address.indexOf(",") + 1).trim(),
+            tmp_address:staff.contact_info.temporary_address.split(',')[0].trim(),
+            birthday: dayjs(dayjs(staff.birthday).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
+            date_of_degree: dayjs(dayjs(staff.date_of_degree).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
+            date_of_joining: dayjs(dayjs(staff.job_info.date_of_degree).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
 
         }
     });
-    console.log( {
-            ...job_info, ...contact_info, ...rest,
-            birthday:dayjs(dayjs(data.birthday ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
-            date_of_degree:dayjs(dayjs(data.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
-            date_of_joining:dayjs(dayjs(data.job_info.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD')
-    })
-    const onWebsiteChange = (value) => {
-        if (!value) {
-            setAutoCompleteResult([]);
-        } else {
-            setAutoCompleteResult(['.com', '.org', '.net'].map((domain) => `${value}${domain}`));
-        }
-    };
-    const websiteOptions = autoCompleteResult.map((website) => ({
-        label: website, value: website,
-    }));
+    // console.log( {
+    //         ...job_info, ...contact_info, ...rest,
+    //         birthday:dayjs(dayjs(staff.birthday ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
+    //         date_of_degree:dayjs(dayjs(staff.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD'),
+    //         date_of_joining:dayjs(dayjs(staff.job_info.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD')
+    // })
     const residences = provinceVn;
-
-    const prefixSelector = (<Form.Item name="prefix" noStyle>
-            <Select
-                style={{
-                    width: 70,
-                }}
-            >
-                <Select.Option value="86">+86</Select.Option>
-                <Select.Option value="87">+87</Select.Option>
-            </Select>
-        </Form.Item>);
-
     const handleCancel = () => {
         dispatch(setIsEdit(false))
     }
@@ -105,65 +84,67 @@ function EditStaff(props) {
     };
     const onSave = async (data) => {
         const updateStaff = {
-            ...data,
+            id:staff.id,
+            role_id: 1,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            birthday: dayjs(data.birthday, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            date_of_degree: dayjs(data.date_of_degree, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            education_level: +data.education_level,
+            avatar_url: isEmpty(uploadAvatarURL.imageUrl)?fileUpload[0].url:uploadAvatarURL.imageUrl,
+            sex: data.sex,
+            place_of_birth: data.place_of_birth,
+            nationality: data.nationality,
+            id_number: data.id_number,
+            place_of_issue: data.place_of_issue,
+            major: data.major,
+            email: data.email,
+            personal_email: data.personal_email,
+            phone_number: data.phone_number,
+            marital_status: data.marital_status,
+            ethnicity: data.ethnicity,
+            religion: data.religion,
+            education_degree: data.education_degree,
+            graduated_school: data.graduated_school,
             contact_info: {
+                id: staff.contact_info.id,
                 bank_account_number: data.bank_account_number,
                 bank_name: data.bank_name,
                 emergency_contact: data.emergency_contact,
-                permanent_address:`${data.per_address} ${data.per_residence}`,
+                permanent_address:`${data.per_address},${data.per_residence}`,
                 tax_code: data.tax_code,
-                temporary_address:`${data.tmp_address} ${data.tmp_residence}`
+                temporary_address:`${data.tmp_address},${data.tmp_residence}`
             },
             job_info: {
-                company_id: 0,
-                date_of_joining:dayjs(data.date_of_joining, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                id: staff.job_info.id,
+                company_id: 1,
+                date_of_joining: dayjs(data.date_of_joining, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
                 department_id: data.department_id,
                 job_title: data.job_title
             },
-            birthday:dayjs(data.birthday, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            date_of_degree:dayjs(data.date_of_degree, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            education_level:+data.education_level,
-          //  permanent_address: `${data.per_address} ${data.per_residence}`,
-           // temporary_address: `${data.tmp_address} ${data.tmp_residence}`,
-            avatar_url: uploadAvatarURL.imageUrl,
-        }
-        delete updateStaff.tmp_address
-        delete updateStaff.per_address
-        delete updateStaff.tmp_residence
-        delete updateStaff.per_residence
-        delete updateStaff.social_network
-        console.log('Update Staff:', updateStaff)
 
+        }
+        console.log('Update Staff:', updateStaff)
         const respond = await editStaff(updateStaff)
-        if(respond.status===1){
+        if (respond.status === 1) {
             messageApi.open({
                 type: 'success',
                 content: respond.message,
-                duration: 1.3,
+                duration: 1.2,
             });
-            props.backToStaffList([
-                {
-                    key: 'updated_at',
-                    value: 'desc',
-                },
-            ]);
-            setTimeout(() => handleCancel(), 1300)
-        }
-        else {
+            props.backToStaffList('edit');
+           setTimeout(() => handleCancel(), 100)
+        } else {
             messageApi.open({
                 type: 'error',
                 content: respond.message,
-                duration: 1.3,
+                duration: 1.4,
             });
         }
-
         // thành công
-
-
     }
     const handleUpload = (options) => {
-        const { onSuccess, onError, file, onProgress } = options;
-        // const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiVm8gVGh1YW4iLCJhdmF0YXJfdXJsIjoiIiwiZGVwYXJ0bWVudF9pZCI6MSwicGVybWlzc2lvbiI6W3sibmFtZSI6IlNwcmludCIsInBlcm1pc3Npb24iOnsic3ByaW50LmNyZWF0ZSI6dHJ1ZSwic3ByaW50LmRlbGV0ZSI6dHJ1ZSwic3ByaW50LnVwZGF0ZSI6dHJ1ZSwic3ByaW50LnZpZXciOnRydWV9fSx7Im5hbWUiOiJUYXNrIiwicGVybWlzc2lvbiI6eyJ0YXNrLmNyZWF0ZSI6dHJ1ZSwidGFzay5kZWxldGUiOnRydWUsInRhc2sudXBkYXRlIjp0cnVlLCJ0YXNrLnZpZXciOnRydWV9fSx7Im5hbWUiOiJTdGFmZiIsInBlcm1pc3Npb24iOnsic3RhZmYuY3JlYXRlIjp0cnVlLCJzdGFmZi5kZWxldGUiOnRydWUsInN0YWZmLnVwZGF0ZSI6dHJ1ZSwic3RhZmYudmlldyI6dHJ1ZX19LHsibmFtZSI6IlByb2plY3QiLCJwZXJtaXNzaW9uIjp7InByb2plY3QuY3JlYXRlIjp0cnVlLCJwcm9qZWN0LmRlbGV0ZSI6dHJ1ZSwicHJvamVjdC51cGRhdGUiOnRydWUsInByb2plY3QudmlldyI6dHJ1ZX19XX0sImV4cCI6MTY4NDI2NTAzOSwiaWF0IjoxNjg0MjM2MjM5fQ.VPzwQy42yHkWoD1y3FPMSXBPSbylpL2BKml9zi_K33XSetwJJOTXsS5g7rtgDByl6K5QJaEsvYK3-WrgbUHL0UCo6uMtbgbwqr70u1B8oN5R8UVATwFqhCjVDlyMLHLT6ozrCyKGX-lqLWmvbbngiVavnYZa2bBSQg_of9c_E69ey17UntyMZ9gXEoaV4KPFZReaJKskMWJPnt1vKlHSAho-OmmglruKR-lhXcpzbJx8iKCj1MNvWvqLYfoXdzsRb3bHuccHP84_baUou-B0P3efGCQajyBilCoInL4LSukl0Hb62jACg769WXekKCXYqmYJi5TN9fL0SCoUgmrjHw'; // Thay thế bằng mã thông báo truy cập hợp lệ của bạn
+        const {onSuccess, onError, file, onProgress} = options;
         const token = getCookies('vps_token');
         const formData = new FormData();
         formData.append('file', file);
@@ -176,7 +157,7 @@ function EditStaff(props) {
                 const percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
                 );
-                onProgress({ percent: percentCompleted });
+                onProgress({percent: percentCompleted});
             },
         })
             .then((response) => {
@@ -215,13 +196,13 @@ function EditStaff(props) {
                             name="first_name"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Họ"
-                                    hasFeedback
-                                    validateStatus={errors.first_name ? 'error' : 'success'}
-                                    help={errors.first_name ? 'Vui lòng nhập họ' : null}>
+                                label="Họ"
+                                hasFeedback
+                                validateStatus={errors.first_name ? 'error' : 'success'}
+                                help={errors.first_name ? 'Vui lòng nhập họ' : null}>
 
-                                    <Input  {...field} size="middle" className='ant-input-no-radius '/>
-                                </Form.Item>)}
+                                <Input  {...field} size="middle" className='ant-input-no-radius '/>
+                            </Form.Item>)}
                         />
 
                         <Controller
@@ -229,13 +210,13 @@ function EditStaff(props) {
                             name="last_name"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Tên"
-                                    hasFeedback
-                                    validateStatus={errors.last_name ? 'error' : 'success'}
-                                    help={errors.last_name ? 'Vui lòng nhập tên ' : null}>
+                                label="Tên"
+                                hasFeedback
+                                validateStatus={errors.last_name ? 'error' : 'success'}
+                                help={errors.last_name ? 'Vui lòng nhập tên ' : null}>
 
-                                    <Input  {...field} size="middle"/>
-                                </Form.Item>)}
+                                <Input  {...field} size="middle"/>
+                            </Form.Item>)}
                         />
 
                         <Form.Item
@@ -249,13 +230,13 @@ function EditStaff(props) {
                                 name='birthday'
                                 rules={{required: true}}
                                 render={({field}) => (
-                                        <DatePicker
-                                            format="DD/MM/YYYY"
-                                            size="middle" placeholder={'Chọn ngày'}
-                                       //    defaultValue={dayjs(dayjs(data.birthday ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD')}
-                                            {...field}
-                                        />
-                                    )}
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        size="middle" placeholder={'Chọn ngày'}
+                                        //    defaultValue={dayjs(dayjs(data.birthday ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD')}
+                                        {...field}
+                                    />
+                                )}
                             />
                         </Form.Item>
 
@@ -264,54 +245,62 @@ function EditStaff(props) {
                             name='sex'
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Giới tính" name="sex"
-                                    hasFeedback
-                                    validateStatus={errors.sex ? 'error' : 'success'}
-                                    help={errors.sex ? 'Vui lòng chọn giới tính' : null}>
+                                label="Giới tính" name="sex"
+                                hasFeedback
+                                validateStatus={errors.sex ? 'error' : 'success'}
+                                help={errors.sex ? 'Vui lòng chọn giới tính' : null}>
 
-                                    <Radio.Group {...field}>
-                                        <Radio value='male'>Nam</Radio>
-                                        <Radio value='female'>Nữ</Radio>
-                                    </Radio.Group> </Form.Item>)}
+                                <Radio.Group {...field}>
+                                    <Radio value='male'>Nam</Radio>
+                                    <Radio value='female'>Nữ</Radio>
+                                </Radio.Group> </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name='place_of_birth'
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Nơi sinh"
-                                    hasFeedback
-                                    validateStatus={errors.place_of_birth ? 'error' : 'success'}
-                                    help={errors.place_of_birth ? 'Vui lòng nhập nơi sinh ' : null}>
+                                label="Nơi sinh"
+                                hasFeedback
+                                validateStatus={errors.place_of_birth ? 'error' : 'success'}
+                                help={errors.place_of_birth ? 'Vui lòng nhập nơi sinh ' : null}>
 
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name='email'
-                            rules={{required: true}}
+                            rules={{
+                                required: 'Vui lòng nhập email',
+                                validate: {
+                                    emailFormat: (value) => validateEmailCompany(value) || 'Email không đúng định dạng',
+                                },
+                            }}
                             render={({field}) => (<Form.Item
-                                    label="Mail"
-                                    hasFeedback
-                                    validateStatus={errors.email ? 'error' : 'success'}
-                                    help={errors.email ? 'Vui lòng nhập mail ' : null}>
+                                label="Mail"
+                                hasFeedback
+                                validateStatus={errors.email ? 'error' : 'success'}
+                                help={errors.email ? 'Vui lòng nhập mail ' : null}>
 
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
 
                         <Controller
                             control={control}
                             name='personal_email'
-                            rules={{required: true}}
+                            rules={{
+                                required: true,
+                                validate: (value) => validateEmail(value),
+                            }}
                             render={({field}) => (<Form.Item
-                                    label="E-mail cá nhân"
-                                    hasFeedback
-                                    validateStatus={errors.personal_email ? 'error' : 'success'}
-                                    help={errors.personal_email ? 'Vui lòng nhập mail cá nhân ' : null}>
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                label="E-mail cá nhân"
+                                hasFeedback
+                                validateStatus={errors.personal_email ? 'error' : 'success'}
+                                help={errors.personal_email ? 'Vui lòng nhập mail cá nhân ' : null}>
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
 
                         <Controller
@@ -319,41 +308,41 @@ function EditStaff(props) {
                             name='phone_number'
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Số điện thoại"
-                                    hasFeedback
-                                    labelAlign='left'
-                                    validateStatus={errors.phone_number ? 'error' : 'success'}
-                                    help={errors.phone_number ? 'Vui lòng nhập số điện thoại ' : null}>
-                                    <Input
-                                        {...field}
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                        size="middle" name=''
-                                        className='ant-input-no-radius '
-                                    />
-                                </Form.Item>)}
+                                label="Số điện thoại"
+                                hasFeedback
+                                labelAlign='left'
+                                validateStatus={errors.phone_number ? 'error' : 'success'}
+                                help={errors.phone_number ? 'Vui lòng nhập số điện thoại ' : null}>
+                                <Input
+                                    {...field}
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                    size="middle" name=''
+                                    className='ant-input-no-radius '
+                                />
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name="marital_status"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Tình trạng hôn nhân "
-                                    hasFeedback
-                                    validateStatus={errors.marital_status ? 'error' : 'success'}
-                                    help={errors.marital_status ? 'Vui lòng chọn ' : null}>
-                                    <Select {...field}
-                                            options={[{value: 'single', label: 'Độc thân'}, {
-                                                value: 'Married',
-                                                label: 'Đã kết hôn'
-                                            }, {value: 'Divorced', label: 'Đã ly hôn'}, {
-                                                value: 'Widowed',
-                                                label: 'Góa vợ hoặc góa chồng'
-                                            }]}
-                                    />
+                                label="Tình trạng hôn nhân "
+                                hasFeedback
+                                validateStatus={errors.marital_status ? 'error' : 'success'}
+                                help={errors.marital_status ? 'Vui lòng chọn ' : null}>
+                                <Select {...field}
+                                        options={[{value: 'single', label: 'Độc thân'}, {
+                                            value: 'Married',
+                                            label: 'Đã kết hôn'
+                                        }, {value: 'Divorced', label: 'Đã ly hôn'}, {
+                                            value: 'Widowed',
+                                            label: 'Góa vợ hoặc góa chồng'
+                                        }]}
+                                />
 
-                                </Form.Item>)}
+                            </Form.Item>)}
                         />
 
                         <Controller
@@ -361,39 +350,39 @@ function EditStaff(props) {
                             name="ethnicity"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Dân tộc "
-                                    hasFeedback
-                                    validateStatus={errors.ethnicity ? 'error' : 'success'}
-                                    help={errors.ethnicity ? 'Vui lòng điền dân tộc ' : null}>
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                label="Dân tộc "
+                                hasFeedback
+                                validateStatus={errors.ethnicity ? 'error' : 'success'}
+                                help={errors.ethnicity ? 'Vui lòng điền dân tộc ' : null}>
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name="avatar_url"
                             render={({field}) => (<Form.Item
-                                    label="Ảnh Đại Diện">
-                                    <Upload
-                                        {...field}
-                                        customRequest={handleUpload}
-                                        listType="picture-card"
-                                        maxCount={1}
-                                        defaultFileList={fileUpload}
-                                        onPreview={handlePreview}
+                                label="Ảnh Đại Diện">
+                                <Upload
+                                    {...field}
+                                    customRequest={handleUpload}
+                                    listType="picture-card"
+                                    maxCount={1}
+                                    defaultFileList={fileUpload}
+                                    onPreview={handlePreview}
 
-                                    >
-                                        <div>
-                                            <FaPlus/>
-                                            <div
-                                                style={{
-                                                    marginTop: 8,
-                                                }}
-                                            >
-                                                Tải Lên
-                                            </div>
+                                >
+                                    <div>
+                                        <FaPlus/>
+                                        <div
+                                            style={{
+                                                marginTop: 8,
+                                            }}
+                                        >
+                                            Tải Lên
                                         </div>
-                                    </Upload>
-                                </Form.Item>)}
+                                    </div>
+                                </Upload>
+                            </Form.Item>)}
                         />
 
                     </Col>
@@ -404,37 +393,37 @@ function EditStaff(props) {
                             name="nationality"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Quốc tịch"
-                                    hasFeedback
-                                    validateStatus={errors.nationality ? 'error' : 'success'}
-                                    help={errors.nationality ? 'Vui lòng nhập quốc tịch ' : null}>
-                                    <Select {...field}
-                                            options={listCounties}/>
-                                </Form.Item>)}
+                                label="Quốc tịch"
+                                hasFeedback
+                                validateStatus={errors.nationality ? 'error' : 'success'}
+                                help={errors.nationality ? 'Vui lòng nhập quốc tịch ' : null}>
+                                <Select {...field}
+                                        options={listCounties}/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name="religion"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Tôn giáo"
-                                    hasFeedback
-                                    validateStatus={errors.religion ? 'error' : 'success'}
-                                    help={errors.religion ? 'Vui lòng nhập tôn giáo ' : null}>
-                                    <Input {...field}/>
-                                </Form.Item>)}
+                                label="Tôn giáo"
+                                hasFeedback
+                                validateStatus={errors.religion ? 'error' : 'success'}
+                                help={errors.religion ? 'Vui lòng nhập tôn giáo ' : null}>
+                                <Input {...field}/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name="id_number"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Căn cước công dân"
-                                    hasFeedback
-                                    validateStatus={errors.id_number ? 'error' : 'success'}
-                                    help={errors.id_number ? 'Vui lòng nhập căn cước công dân ' : null}>
-                                    <Input {...field}/>
-                                </Form.Item>)}
+                                label="Căn cước công dân"
+                                hasFeedback
+                                validateStatus={errors.id_number ? 'error' : 'success'}
+                                help={errors.id_number ? 'Vui lòng nhập căn cước công dân ' : null}>
+                                <Input {...field}/>
+                            </Form.Item>)}
                         />
 
                         <Controller
@@ -442,24 +431,24 @@ function EditStaff(props) {
                             name="place_of_issue"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Nơi cấp"
-                                    hasFeedback
-                                    validateStatus={errors.place_of_issue ? 'error' : 'success'}
-                                    help={errors.place_of_issue ? 'Vui lòng nhập nơi cấp ' : null}>
-                                    <Input {...field}/>
-                                </Form.Item>)}
+                                label="Nơi cấp"
+                                hasFeedback
+                                validateStatus={errors.place_of_issue ? 'error' : 'success'}
+                                help={errors.place_of_issue ? 'Vui lòng nhập nơi cấp ' : null}>
+                                <Input {...field}/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name="education_level"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Trình độ"
-                                    hasFeedback
-                                    validateStatus={errors.education_level ? 'error' : 'success'}
-                                    help={errors.education_level ? 'Vui lòng điền trình độ ' : null}>
-                                    <Input {...field}/>
-                                </Form.Item>)}
+                                label="Trình độ"
+                                hasFeedback
+                                validateStatus={errors.education_level ? 'error' : 'success'}
+                                help={errors.education_level ? 'Vui lòng điền trình độ ' : null}>
+                                <Input {...field}/>
+                            </Form.Item>)}
                         />
 
                         <Controller
@@ -467,12 +456,12 @@ function EditStaff(props) {
                             name="major"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Chuyên ngành"
-                                    hasFeedback
-                                    validateStatus={errors.major ? 'error' : 'success'}
-                                    help={errors.major ? 'Vui lòng điền chuyên ngành ' : null}>
-                                    <Input {...field}/>
-                                </Form.Item>)}
+                                label="Chuyên ngành"
+                                hasFeedback
+                                validateStatus={errors.major ? 'error' : 'success'}
+                                help={errors.major ? 'Vui lòng điền chuyên ngành ' : null}>
+                                <Input {...field}/>
+                            </Form.Item>)}
                         />
 
                         <Controller
@@ -480,12 +469,12 @@ function EditStaff(props) {
                             name="education_degree"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Bằng cấp "
-                                    hasFeedback
-                                    validateStatus={errors.education_degree ? 'error' : 'success'}
-                                    help={errors.education_degree ? 'Vui lòng điền bằng cấp ' : null}>
-                                    <Input {...field}/>
-                                </Form.Item>)}
+                                label="Bằng cấp "
+                                hasFeedback
+                                validateStatus={errors.education_degree ? 'error' : 'success'}
+                                help={errors.education_degree ? 'Vui lòng điền bằng cấp ' : null}>
+                                <Input {...field}/>
+                            </Form.Item>)}
                         />
 
                         <Controller
@@ -493,12 +482,12 @@ function EditStaff(props) {
                             name="graduated_school"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Tốt nghiệp trường "
-                                    hasFeedback
-                                    validateStatus={errors.graduated_school ? 'error' : 'success'}
-                                    help={errors.graduated_school ? 'Vui lòng điền trường ' : null}>
-                                    <Input {...field}/>
-                                </Form.Item>)}
+                                label="Tốt nghiệp trường "
+                                hasFeedback
+                                validateStatus={errors.graduated_school ? 'error' : 'success'}
+                                help={errors.graduated_school ? 'Vui lòng điền trường ' : null}>
+                                <Input {...field}/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
@@ -513,7 +502,7 @@ function EditStaff(props) {
                                     <DatePicker {...field}
                                                 placeholder="Chọn thời gian"
                                                 format={'DD/MM/YYYY'} picker="month"
-                                             //   defaultValue={dayjs(dayjs(data.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD')}
+                                        //   defaultValue={dayjs(dayjs(data.date_of_degree ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD')}
                                     />
                                 </Form.Item>
                             )}
@@ -532,16 +521,16 @@ function EditStaff(props) {
                             name="role_id"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Chức Vụ"
-                                    hasFeedback
-                                    validateStatus={errors.role_id ? 'error' : 'success'}
-                                    help={errors.role_id ? 'Vui lòng chọn chức vụ ' : null}>
-                                    <Select {...field} placeholder="Chọn chức vụ" size="middle">
-                                        <Select.Option value={1}>CEO</Select.Option>
-                                        <Select.Option value={2}>CTO</Select.Option>
-                                        <Select.Option value={3}>Other</Select.Option>
-                                    </Select>
-                                </Form.Item>)}
+                                label="Chức Vụ"
+                                hasFeedback
+                                validateStatus={errors.role_id ? 'error' : 'success'}
+                                help={errors.role_id ? 'Vui lòng chọn chức vụ ' : null}>
+                                <Select {...field} placeholder="Chọn chức vụ" size="middle">
+                                    <Select.Option value={1}>CEO</Select.Option>
+                                    <Select.Option value={2}>CTO</Select.Option>
+                                    <Select.Option value={3}>Other</Select.Option>
+                                </Select>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
@@ -549,12 +538,12 @@ function EditStaff(props) {
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
 
-                                    label="Tên công việc"
-                                    hasFeedback
-                                    validateStatus={errors.job_title ? 'error' : 'success'}
-                                    help={errors.job_title ? 'Vui lòng chọn công việc ' : null}>
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                label="Tên công việc"
+                                hasFeedback
+                                validateStatus={errors.job_title ? 'error' : 'success'}
+                                help={errors.job_title ? 'Vui lòng chọn công việc ' : null}>
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
@@ -567,7 +556,7 @@ function EditStaff(props) {
                                     validateStatus={errors.date_of_joining ? 'error' : 'success'}
                                     help={errors.date_of_joining ? 'Vui lòng điền ngày vào làm ' : null}>
                                     <DatePicker {...field}
-                                             //   defaultValue={dayjs(dayjs(data.job_info.date_of_joining ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD')}
+                                        //   defaultValue={dayjs(dayjs(data.job_info.date_of_joining ).format('YYYY-MM-DD HH:mm:ss'), 'YYYY-MM-DD')}
                                                 size="middle" format="DD/MM/YYYY"/>
                                 </Form.Item>
                             )}
@@ -581,12 +570,12 @@ function EditStaff(props) {
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
 
-                                    label="Phòng ban"
-                                    hasFeedback
-                                    validateStatus={errors.department_id ? 'error' : 'success'}
-                                    help={errors.department_id ? 'Vui lòng chọn phòng ban ' : null}>
-                                    <Select {...field} options={[{key: '1', value: 1}]}/>
-                                </Form.Item>)}
+                                label="Phòng ban"
+                                hasFeedback
+                                validateStatus={errors.department_id ? 'error' : 'success'}
+                                help={errors.department_id ? 'Vui lòng chọn phòng ban ' : null}>
+                                <Select {...field} options={[{key: '1', value: 1}]}/>
+                            </Form.Item>)}
                         />
                         {/*<Controller*/}
                         {/*    control={control}*/}
@@ -614,25 +603,25 @@ function EditStaff(props) {
                             name="per_residence"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Địa chỉ thường trú"
-                                    hasFeedback
-                                    validateStatus={errors.per_residence ? 'error' : 'success'}
-                                    help={errors.per_residence ? 'Vui lòng điền địa chỉ thừơng trú ' : null}>
-                                    <Cascader options={residences} {...field} size="middle" name=''
-                                              className='ant-input-no-radius '/>
-                                </Form.Item>)}
+                                label="Địa chỉ thường trú"
+                                hasFeedback
+                                validateStatus={errors.per_residence ? 'error' : 'success'}
+                                help={errors.per_residence ? 'Vui lòng điền địa chỉ thừơng trú ' : null}>
+                                <Cascader options={residences} {...field} size="middle" name=''
+                                          className='ant-input-no-radius '/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name="per_address"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Số nhà thường trú"
-                                    hasFeedback
-                                    validateStatus={errors.per_address ? 'error' : 'success'}
-                                    help={errors.per_address ? 'Vui lòng điền số nhà thường trú ' : null}>
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                label="Số nhà thường trú"
+                                hasFeedback
+                                validateStatus={errors.per_address ? 'error' : 'success'}
+                                help={errors.per_address ? 'Vui lòng điền số nhà thường trú ' : null}>
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
 
                         <Controller
@@ -640,13 +629,13 @@ function EditStaff(props) {
                             name="tmp_residence"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Địa chỉ thường trú"
-                                    hasFeedback
-                                    validateStatus={errors.tmp_residence ? 'error' : 'success'}
-                                    help={errors.tmp_residence ? 'Vui lòng điền địa chỉ tạm trú ' : null}>
-                                    <Cascader options={residences} {...field} size="middle" name=''
-                                              className='ant-input-no-radius '/>
-                                </Form.Item>)}
+                                label="Địa chỉ thường trú"
+                                hasFeedback
+                                validateStatus={errors.tmp_residence ? 'error' : 'success'}
+                                help={errors.tmp_residence ? 'Vui lòng điền địa chỉ tạm trú ' : null}>
+                                <Cascader options={residences} {...field} size="middle" name=''
+                                          className='ant-input-no-radius '/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
@@ -654,12 +643,12 @@ function EditStaff(props) {
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
 
-                                    label="Số nhà tạm trú "
-                                    hasFeedback
-                                    validateStatus={errors.tmp_address ? 'error' : 'success'}
-                                    help={errors.tmp_address ? 'Vui lòng điền số nhà tạm trú ' : null}>
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                label="Số nhà tạm trú "
+                                hasFeedback
+                                validateStatus={errors.tmp_address ? 'error' : 'success'}
+                                help={errors.tmp_address ? 'Vui lòng điền số nhà tạm trú ' : null}>
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
                     </Col>
                     <Col className='col-right' xs={{span: 24}} lg={{span: 12}}>
@@ -668,79 +657,79 @@ function EditStaff(props) {
                             name="emergency_contact"
                             rules={{required: true}}
                             render={({field}) => (<Form.Item
-                                    label="Liên hệ khẩn cấp"
-                                    hasFeedback
-                                    validateStatus={errors.emergency_contact ? 'error' : 'success'}
-                                    help={errors.emergency_contact ? 'Vui lòng điền số điện thoại ' : null}>
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                label="Liên hệ khẩn cấp"
+                                hasFeedback
+                                validateStatus={errors.emergency_contact ? 'error' : 'success'}
+                                help={errors.emergency_contact ? 'Vui lòng điền số điện thoại ' : null}>
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name="tax_code"
                             render={({field}) => (<Form.Item
-                                    label="Mã số thuế"
-                                    hasFeedback
-                                    validateStatus={errors.tax_code ? 'error' : 'success'}
-                                    help={errors.tax_code ? 'Vui lòng điền ma số thuế ' : null}>
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                label="Mã số thuế"
+                                hasFeedback
+                                validateStatus={errors.tax_code ? 'error' : 'success'}
+                                help={errors.tax_code ? 'Vui lòng điền ma số thuế ' : null}>
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name="bank_name"
                             render={({field}) => (<Form.Item
 
-                                    label="Ngân hàng"
-                                    hasFeedback
-                                    validateStatus={errors.bank_name ? 'error' : 'success'}
-                                    help={errors.bank_name ? 'Vui lòng chọn ngân hàng ' : null}>
-                                    <Select {...field}
-                                            options={[{
-                                                key: 'VCB', value: 'Ngân hàng TMCP Ngoại Thương Việt Nam'
-                                            }, {key: 'CTG', value: 'Ngân hàng TMCP Công Thương Việt Nam'}, {
-                                                key: 'BIDV', value: 'Ngân hàng TMCP Đầu tư và Phát triển Việt Nam'
-                                            }, {key: 'ACB', value: 'Ngân hàng TMCP Á Châu'}, {
-                                                key: 'MB', value: 'Ngân hàng TMCP Quân Đội'
-                                            }, {key: 'TCB', value: 'Ngân hàng TMCP Kỹ Thương Việt Nam'}, {
-                                                key: 'VPB', value: 'Ngân hàng TMCP Việt Nam Thịnh Vượng'
-                                            }, {
-                                                key: 'Techcombank', value: 'Ngân hàng TMCP Kỹ Thương Việt Nam'
-                                            }, {key: 'SHB', value: 'Ngân hàng TMCP Sài Gòn - Hà Nội'}, {
-                                                key: 'HDBank', value: 'Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh'
-                                            }, {
-                                                key: 'AGRIBANK',
-                                                value: 'Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam'
-                                            }, {
-                                                key: 'Vietcombank', value: 'Ngân hàng TMCP Ngoại Thương Việt Nam'
-                                            }, {key: 'OceanBank', value: 'Ngân hàng TMCP Đại Dương'}, {
-                                                key: 'PVcomBank', value: 'Ngân hàng TMCP Đại Chúng Việt Nam'
-                                            }, {key: 'SCB', value: 'Ngân hàng TMCP Sài Gòn'}, {
-                                                key: 'SeABank', value: 'Ngân hàng TMCP Đông Nam Á'
-                                            }, {key: 'VIB', value: 'Ngân hàng TMCP Quốc tế'}, {
-                                                key: 'VietinBank', value: 'Ngân hàng TMCP Công Thương Việt Nam'
-                                            }]}
-                                            size="middle"/>
-                                </Form.Item>)}
+                                label="Ngân hàng"
+                                hasFeedback
+                                validateStatus={errors.bank_name ? 'error' : 'success'}
+                                help={errors.bank_name ? 'Vui lòng chọn ngân hàng ' : null}>
+                                <Select {...field}
+                                        options={[{
+                                            key: 'VCB', value: 'Ngân hàng TMCP Ngoại Thương Việt Nam'
+                                        }, {key: 'CTG', value: 'Ngân hàng TMCP Công Thương Việt Nam'}, {
+                                            key: 'BIDV', value: 'Ngân hàng TMCP Đầu tư và Phát triển Việt Nam'
+                                        }, {key: 'ACB', value: 'Ngân hàng TMCP Á Châu'}, {
+                                            key: 'MB', value: 'Ngân hàng TMCP Quân Đội'
+                                        }, {key: 'TCB', value: 'Ngân hàng TMCP Kỹ Thương Việt Nam'}, {
+                                            key: 'VPB', value: 'Ngân hàng TMCP Việt Nam Thịnh Vượng'
+                                        }, {
+                                            key: 'Techcombank', value: 'Ngân hàng TMCP Kỹ Thương Việt Nam'
+                                        }, {key: 'SHB', value: 'Ngân hàng TMCP Sài Gòn - Hà Nội'}, {
+                                            key: 'HDBank', value: 'Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh'
+                                        }, {
+                                            key: 'AGRIBANK',
+                                            value: 'Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam'
+                                        }, {
+                                            key: 'Vietcombank', value: 'Ngân hàng TMCP Ngoại Thương Việt Nam'
+                                        }, {key: 'OceanBank', value: 'Ngân hàng TMCP Đại Dương'}, {
+                                            key: 'PVcomBank', value: 'Ngân hàng TMCP Đại Chúng Việt Nam'
+                                        }, {key: 'SCB', value: 'Ngân hàng TMCP Sài Gòn'}, {
+                                            key: 'SeABank', value: 'Ngân hàng TMCP Đông Nam Á'
+                                        }, {key: 'VIB', value: 'Ngân hàng TMCP Quốc tế'}, {
+                                            key: 'VietinBank', value: 'Ngân hàng TMCP Công Thương Việt Nam'
+                                        }]}
+                                        size="middle"/>
+                            </Form.Item>)}
                         />
                         <Controller
                             control={control}
                             name="bank_account_number"
                             render={({field}) => (<Form.Item
 
-                                    label="Số tài khoản"
-                                    hasFeedback
-                                    validateStatus={errors.bank_account_number ? 'error' : 'success'}
-                                    help={errors.bank_account_number ? 'Vui lòng điền số tài khoản ' : null}>
-                                    <Input {...field} size="middle"/>
-                                </Form.Item>)}
+                                label="Số tài khoản"
+                                hasFeedback
+                                validateStatus={errors.bank_account_number ? 'error' : 'success'}
+                                help={errors.bank_account_number ? 'Vui lòng điền số tài khoản ' : null}>
+                                <Input {...field} size="middle"/>
+                            </Form.Item>)}
                         />
                     </Col>
                 </Row>
 
                 <div className="footer-form">
                     <button className='btn-cancel' onClick={handleCancel}>Thoát</button>
-                    <button className={`btn-submit  ${!isDirty ?'disabled':''}`} type='submit'>Cập Nhật</button>
+                    <button className={`btn-submit  ${!isDirty ? 'disabled' : ''}`} type='submit'>Cập Nhật</button>
 
                 </div>
                 {/*--Modal Detail Avatar --*/}

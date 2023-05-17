@@ -15,14 +15,9 @@ export const configHeadersAuthenticate = () => {
 };
 
 export const getListStaffs = async ({ sort,filter, search,keySearch, page } = {}) => {
-    console.log({ sort,filter, search, page })
     const url = 'employees';
     const queryString = [];
-    if (sort && sort.length > 0) {
-        sort.forEach((item) => {
-            queryString.push(`sort[${titleToSlug(item.key)}]=${item.value}`);
-        });
-    }
+    if (sort) {queryString.push(`orderBy=${sort}`)}
     if (search) {
        // queryString.push(`${keySearch}=${search}`);
         queryString.push(search);
@@ -38,8 +33,6 @@ export const getListStaffs = async ({ sort,filter, search,keySearch, page } = {}
             queryString.push(`role_id=${filter.role}`);
         }
     }
-
-
     const final_url = concatQueryString(queryString, url);
     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
     console.log('request URL: ' + final_url);
@@ -91,10 +84,10 @@ export const createStaff = async (body) => {
 
 };
 
-export const editStaff = async (id, body) => {
+export const editStaff = async (body) => {
     const url = `employees`;
     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
-    console.log(response    )
+    console.log('Respond của edit staff:',response)
     if(response.status === 1 || response.message ==="Success") {
         return {status:1,message:'Cập nhật nhân viên mới thành công'}
     }

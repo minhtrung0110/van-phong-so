@@ -30,9 +30,7 @@ import {getCookies} from "~/api/Client/Auth";
 import {getValue} from "@testing-library/user-event/dist/utils";
 import {validateEmail, validateEmailCompany} from "~/utils/validation";
 
-AddStaff.propTypes = {
-
-};
+AddStaff.propTypes = {};
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -40,11 +38,12 @@ const getBase64 = (file) =>
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
     });
+
 function AddStaff(props) {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
-    const [uploadAvatarURL, setUploadAvatarURL]=useState({imageUrl:''});
+    const [uploadAvatarURL, setUploadAvatarURL] = useState({imageUrl: ''});
     const [messageApi, contextHolder] = message.useMessage();
     const dispatch = useDispatch();
 
@@ -92,24 +91,24 @@ function AddStaff(props) {
     const onSave = async (data) => {
         const newStaff = {
             ...data,
-                contact_info: {
+            contact_info: {
                 bank_account_number: data.bank_account_number,
                 bank_name: data.bank_name,
                 emergency_contact: data.emergency_contact,
-                permanent_address:`${data.per_address} ${data.per_residence}`,
+                permanent_address: `${data.per_address},${data.per_residence}`,
                 tax_code: data.tax_code,
-                temporary_address:`${data.tmp_address} ${data.tmp_residence}`
+                temporary_address: `${data.tmp_address},${data.tmp_residence}`
             },
             job_info: {
                 company_id: 1,
-                date_of_joining:dayjs(data.date_of_joining, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                date_of_joining: dayjs(data.date_of_joining, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
                 department_id: data.department_id,
-               // group_id: data.group_id,
+                // group_id: data.group_id,
                 job_title: data.job_title
             },
-            birthday:dayjs(data.birthday, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            date_of_degree:dayjs(data.date_of_degree, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            education_level:+data.education_level,
+            birthday: dayjs(data.birthday, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            date_of_degree: dayjs(data.date_of_degree, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            education_level: +data.education_level,
             avatar_url: uploadAvatarURL.imageUrl,
         }
         delete newStaff.tmp_address
@@ -121,7 +120,7 @@ function AddStaff(props) {
 
         const respond = await createStaff(newStaff)
         console.log(respond)
-        if(respond.status===1){
+        if (respond.status === 1) {
             messageApi.open({
                 type: 'success',
                 content: respond.message,
@@ -133,9 +132,8 @@ function AddStaff(props) {
                     value: 'desc',
                 },
             ]);
-          setTimeout(() => handleCancel(), 1300)
-        }
-        else {
+            setTimeout(() => handleCancel(), 1300)
+        } else {
             messageApi.open({
                 type: 'error',
                 content: respond.message,
@@ -148,8 +146,8 @@ function AddStaff(props) {
 
     }
     const handleUpload = (options) => {
-        const { onSuccess, onError, file, onProgress } = options;
-       // const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiVm8gVGh1YW4iLCJhdmF0YXJfdXJsIjoiIiwiZGVwYXJ0bWVudF9pZCI6MSwicGVybWlzc2lvbiI6W3sibmFtZSI6IlNwcmludCIsInBlcm1pc3Npb24iOnsic3ByaW50LmNyZWF0ZSI6dHJ1ZSwic3ByaW50LmRlbGV0ZSI6dHJ1ZSwic3ByaW50LnVwZGF0ZSI6dHJ1ZSwic3ByaW50LnZpZXciOnRydWV9fSx7Im5hbWUiOiJUYXNrIiwicGVybWlzc2lvbiI6eyJ0YXNrLmNyZWF0ZSI6dHJ1ZSwidGFzay5kZWxldGUiOnRydWUsInRhc2sudXBkYXRlIjp0cnVlLCJ0YXNrLnZpZXciOnRydWV9fSx7Im5hbWUiOiJTdGFmZiIsInBlcm1pc3Npb24iOnsic3RhZmYuY3JlYXRlIjp0cnVlLCJzdGFmZi5kZWxldGUiOnRydWUsInN0YWZmLnVwZGF0ZSI6dHJ1ZSwic3RhZmYudmlldyI6dHJ1ZX19LHsibmFtZSI6IlByb2plY3QiLCJwZXJtaXNzaW9uIjp7InByb2plY3QuY3JlYXRlIjp0cnVlLCJwcm9qZWN0LmRlbGV0ZSI6dHJ1ZSwicHJvamVjdC51cGRhdGUiOnRydWUsInByb2plY3QudmlldyI6dHJ1ZX19XX0sImV4cCI6MTY4NDI2NTAzOSwiaWF0IjoxNjg0MjM2MjM5fQ.VPzwQy42yHkWoD1y3FPMSXBPSbylpL2BKml9zi_K33XSetwJJOTXsS5g7rtgDByl6K5QJaEsvYK3-WrgbUHL0UCo6uMtbgbwqr70u1B8oN5R8UVATwFqhCjVDlyMLHLT6ozrCyKGX-lqLWmvbbngiVavnYZa2bBSQg_of9c_E69ey17UntyMZ9gXEoaV4KPFZReaJKskMWJPnt1vKlHSAho-OmmglruKR-lhXcpzbJx8iKCj1MNvWvqLYfoXdzsRb3bHuccHP84_baUou-B0P3efGCQajyBilCoInL4LSukl0Hb62jACg769WXekKCXYqmYJi5TN9fL0SCoUgmrjHw'; // Thay thế bằng mã thông báo truy cập hợp lệ của bạn
+        const {onSuccess, onError, file, onProgress} = options;
+        // const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiVm8gVGh1YW4iLCJhdmF0YXJfdXJsIjoiIiwiZGVwYXJ0bWVudF9pZCI6MSwicGVybWlzc2lvbiI6W3sibmFtZSI6IlNwcmludCIsInBlcm1pc3Npb24iOnsic3ByaW50LmNyZWF0ZSI6dHJ1ZSwic3ByaW50LmRlbGV0ZSI6dHJ1ZSwic3ByaW50LnVwZGF0ZSI6dHJ1ZSwic3ByaW50LnZpZXciOnRydWV9fSx7Im5hbWUiOiJUYXNrIiwicGVybWlzc2lvbiI6eyJ0YXNrLmNyZWF0ZSI6dHJ1ZSwidGFzay5kZWxldGUiOnRydWUsInRhc2sudXBkYXRlIjp0cnVlLCJ0YXNrLnZpZXciOnRydWV9fSx7Im5hbWUiOiJTdGFmZiIsInBlcm1pc3Npb24iOnsic3RhZmYuY3JlYXRlIjp0cnVlLCJzdGFmZi5kZWxldGUiOnRydWUsInN0YWZmLnVwZGF0ZSI6dHJ1ZSwic3RhZmYudmlldyI6dHJ1ZX19LHsibmFtZSI6IlByb2plY3QiLCJwZXJtaXNzaW9uIjp7InByb2plY3QuY3JlYXRlIjp0cnVlLCJwcm9qZWN0LmRlbGV0ZSI6dHJ1ZSwicHJvamVjdC51cGRhdGUiOnRydWUsInByb2plY3QudmlldyI6dHJ1ZX19XX0sImV4cCI6MTY4NDI2NTAzOSwiaWF0IjoxNjg0MjM2MjM5fQ.VPzwQy42yHkWoD1y3FPMSXBPSbylpL2BKml9zi_K33XSetwJJOTXsS5g7rtgDByl6K5QJaEsvYK3-WrgbUHL0UCo6uMtbgbwqr70u1B8oN5R8UVATwFqhCjVDlyMLHLT6ozrCyKGX-lqLWmvbbngiVavnYZa2bBSQg_of9c_E69ey17UntyMZ9gXEoaV4KPFZReaJKskMWJPnt1vKlHSAho-OmmglruKR-lhXcpzbJx8iKCj1MNvWvqLYfoXdzsRb3bHuccHP84_baUou-B0P3efGCQajyBilCoInL4LSukl0Hb62jACg769WXekKCXYqmYJi5TN9fL0SCoUgmrjHw'; // Thay thế bằng mã thông báo truy cập hợp lệ của bạn
         const token = getCookies('vps_token');
         const formData = new FormData();
         formData.append('file', file);
@@ -162,7 +160,7 @@ function AddStaff(props) {
                 const percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
                 );
-                onProgress({ percent: percentCompleted });
+                onProgress({percent: percentCompleted});
             },
         })
             .then((response) => {
@@ -239,7 +237,7 @@ function AddStaff(props) {
                                     validateStatus={errors.birthday ? 'error' : 'success'}
                                     help={errors.birthday ? 'Vui lòng nhập ngày sinh ' : null}>
 
-                                    <DatePicker {...field}  format="DD/MM/YYYY" size="middle" placeholder={'Chọn ngày'}/>
+                                    <DatePicker {...field} format="DD/MM/YYYY" size="middle" placeholder={'Chọn ngày'}/>
                                 </Form.Item>
                             )}
                         />
@@ -609,8 +607,8 @@ function AddStaff(props) {
                                     validateStatus={errors.department_id ? 'error' : 'success'}
                                     help={errors.department_id ? 'Vui lòng chọn phòng ban ' : null}>
                                     <Select {...field} options={[
-                                        {key:'1',value:1}
-                                    ]} />
+                                        {key: '1', value: 1}
+                                    ]}/>
                                 </Form.Item>
                             )}
                         />
