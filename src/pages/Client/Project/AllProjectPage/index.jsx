@@ -88,7 +88,7 @@ function AllProjectPage(props) {
     };
     const handleLoading = async (value='desc', action) => {
         setLoading(true);
-        const obSort=(action==='add')?`created_at ${value}`:`updated_at ${value}`
+        const obSort=(action==='add')?`created_at`:`updated_at`
         const respond = await getListProjects({
             sort: obSort
         });

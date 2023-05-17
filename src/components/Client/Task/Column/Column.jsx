@@ -5,7 +5,7 @@ import {FaEllipsisH, FaExclamationTriangle, FaPlus, FaTimes} from "react-icons/f
 import {Button, ButtonGroup} from "react-bootstrap";
 import {cloneDeep} from "lodash";
 import {mapOrder} from "~/utils/sorts";
-import {Dropdown, Input, Form, Modal} from "antd";
+import {Dropdown, Input, Form, Modal, message} from "antd";
 import Card from "~/components/Client/Task/Card/TaskItem";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import TextArea from "antd/es/input/TextArea";
@@ -14,23 +14,27 @@ import DetailTask from "~/components/Client/Task/DetailTask";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {useSelector} from "react-redux";
 import { projectSelector} from "~/redux/selectors/project/projectSelector";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {createTask} from "~/api/Client/Task/taskAPI";
 
 
 function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdateTask}) {
     // console.log(column )
     const [showConfirmModal, setShowConfirmModal] = useState(false)
-    const [columnTitle, setColumnTitle] = useState('')
+    const [columnTitle, setColumnTitle] = useState(column.name)
     const [isAddCard, setIsAddCard] = useState(false)
+    const [messageApi, contextHolder] = message.useMessage();
     const [valueNewCard, setValueNewCard] = useState('')
     const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
     const [taskUpdate, setTaskUpdate] = useState({})
     const project=useSelector(projectSelector)
+    const userLogin=useSelector(getUserSelector)
     console.log(project)
     const newCardRef = useRef()
     useEffect(() => {
-        setColumnTitle(column.title)
-    }, [column.title])
-    const cards = column.cards;//mapOrder(column.cards, column.cardOrder, 'id')
+        setColumnTitle(column.name)
+    }, [column.name])
+    const cards = column.tasks;//mapOrder(column.cards, column.cardOrder, 'id')
     const handleRemoveColumn = () => {
             const newColumn = {
                 ...column,
@@ -51,30 +55,50 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
         onUpdateColumn(newColumn)
 
     }
-    const handleAddCard = () => {
+    const handleAddCard = async () => {
         const newCardToAdd = {
-            id: Math.random().toString(36).substr(2, 5),
-            boardId: column.boardId,
-            columnId: column.id,
+            id: Math.floor(Math.random() * (999 - 10 + 1)) + 10,
+            employee_id: userLogin.id,
+            sprint_id: sprint.id,
+            project_id: sprint.project_id,
+            board_column_id: column.id,
+            assignee_employee: null,
+            report_employee: userLogin,
+            // report_employee: null,
             title: valueNewCard,
-            description: '',
-            startTime:'01/10/2022',
-            endTime:'31/12/2022',
-            priority:'none',
-            members:[],
-            todoList:[],
-            fileList:[],
-            comments:[],
+            description: "",
+            priority: 4,
+            subtasks: [],
+            attachments: [],
+            comments: [],
+            estimate_point: 3,
+            status: 1,
+            task_histories: [],
+            sort: 1,
         }
-        let newColumn = cloneDeep(column)
-        newColumn.cards.push(newCardToAdd)
-        newColumn.cardOrder.push(newCardToAdd.id)
-        // truyền lên board Content
-        onUpdateColumn(newColumn)
+        const result = await createTask(newCardToAdd)
+        if (result.status === 1) {
+            let newColumn = cloneDeep(column)
+            newColumn.tasks.push(newCardToAdd)
+            /// newColumn.cardOrder.push(newCardToAdd.id)
+            // truyền lên board Content
+            onUpdateColumn(newColumn)
 
-        // clear up
-        setValueNewCard('')
-        setIsAddCard(false)
+            // clear up
+            setValueNewCard('')
+            setIsAddCard(false)
+            // onCreateTask(newCardToAdd)
+        } else {
+            messageApi.open({
+                type: 'error',
+                message: result.message,
+                duration: 1.3,
+            })
+            setValueNewCard('')
+            setIsAddCard(false)
+
+        }
+
 
     }
     const handleDuplicateTask = (task) =>{
@@ -83,8 +107,8 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
             id: Math.random().toString(36).substr(2, 5),
         }
         let newColumn = cloneDeep(column)
-        newColumn.cards.push(taskDuplicate)
-        newColumn.cardOrder.push(taskDuplicate.id)
+        newColumn.tasks.push(taskDuplicate)
+      //  newColumn.cardOrder.push(taskDuplicate.id)
         // truyền lên board Content
         onUpdateColumn(newColumn)
 
@@ -204,7 +228,7 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
                     dropPlaceholderAnimationDuration={200}
                 >
                     {
-                        !!column.cards && column.cards.map((item, index) => (
+                        !!column.tasks && column.tasks.map((item, index) => (
                             <Draggable key={index}>
                                 <TaskItem task={item} onShowDetail={handleShowDetailTask}/>
                             </Draggable>

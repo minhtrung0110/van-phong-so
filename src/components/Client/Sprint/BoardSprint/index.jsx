@@ -7,20 +7,19 @@ import SprintItemV2 from "~/components/Client/Sprint/test/SprinrItemV2";
 import {conCatArrayInArray, remakeSprintFromSlide} from "~/utils/sorts";
 import {flushSync} from "react-dom";
 import './BoardSprint.scss'
+import NotFoundData from "~/components/commoms/NotFoundData";
 
-BoardSprint.propTypes = {
+BoardSprint.propTypes = {};
 
-};
-
-function BoardSprint({project,columnData,onEdit, onDelete,onCreateTask, onDeleteTask,onUpdateTask}) {
-   // console.log(columnData)
-    const [columns,setColumns] = useState(columnData)
-    const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
-    const [newColTitle,setNewColTitle]=useState('')
-    //  console.log(columns)
-    useEffect(()=>{
+function BoardSprint({project, columnData, onEdit, onDelete, onCreateTask, onDeleteTask, onUpdateTask}) {
+    // console.log(columnData)
+    const [columns, setColumns] = useState(columnData)
+    const [isOpenNewColForm, setIsOpenNewColForm] = useState(false)
+    const [newColTitle, setNewColTitle] = useState('')
+    console.log(columns)
+    useEffect(() => {
         setColumns(columnData)
-    },[columnData])
+    }, [columnData])
 
     // const onSprintDrop=(dropResult)=>{
     //     let newSprints=[...columns]
@@ -37,32 +36,31 @@ function BoardSprint({project,columnData,onEdit, onDelete,onCreateTask, onDelete
     //     // console.log(newBoard)
     // }
     // khi kéo thả project qua lai giua cac cột
-    const onCardDropSprint = (columnId,dropResult) => {
-        console.log( 'Dichuyen',dropResult)
-        console.log('col -id:',columnId)
-        console.log('Columns',columns)
-        if(dropResult.removedIndex !=null || dropResult.addedIndex !=null)
-        {
-            let newColumns=[...columns]
-            let currentColumn=newColumns.find((item=>item.id===columnId)) // là cái sprint chô sẽ duoc chuyển vào
-            const listCardSprint=currentColumn.tasks// conCatArrayInArray(currentColumn.columns);
-           // console.log('ccheccked',listCardSprint)
-            console.log('Đang Tesst: ',currentColumn,newColumns)
-            currentColumn.tasks=applyDragSprint(currentColumn.tasks, dropResult, currentColumn.id);
+    const onCardDropSprint = (columnId, dropResult) => {
+        console.log('Dichuyen', dropResult)
+        console.log('col -id:', columnId)
+        console.log('Columns', columns)
+        if (dropResult.removedIndex != null || dropResult.addedIndex != null) {
+            let newColumns = [...columns]
+            let currentColumn = newColumns.find((item => item.id === columnId)) // là cái sprint chô sẽ duoc chuyển vào
+            const listCardSprint = currentColumn.tasks// conCatArrayInArray(currentColumn.columns);
+            // console.log('ccheccked',listCardSprint)
+            console.log('Đang Tesst: ', currentColumn, newColumns)
+            currentColumn.tasks = applyDragSprint(currentColumn.tasks, dropResult, currentColumn.id);
 
-           // currentColumn.cardOrder=currentColumn.cards.map(i=>i.id)
-          flushSync(()=>setColumns(newColumns))
+            // currentColumn.cardOrder=currentColumn.cards.map(i=>i.id)
+            flushSync(() => setColumns(newColumns))
         }
-       // vấn de: khi kéo thả thì trường column_ID của project bi loi không thay dôi
+        // vấn de: khi kéo thả thì trường column_ID của project bi loi không thay dôi
     }
-    console.log(columns)
+    // console.log(columns)
 
     return (
         <div>
             <Container
                 orientation="vertical"
-                getChildPayload={index =>columns[index]}
-             //   dragHandleSelector=".column-drag-handle"
+                getChildPayload={index => columns[index]}
+                //   dragHandleSelector=".column-drag-handle"
                 dropPlaceholder={{
                     animationDuration: 150,
                     showOnTop: true,
@@ -70,24 +68,27 @@ function BoardSprint({project,columnData,onEdit, onDelete,onCreateTask, onDelete
                 }}
             >
                 {
-                    !!columns && columns.map((sprint,index)=> sprint.status < 2 && (
-                        <Draggable
-                            key={index}>
-                            <SprintItemV2
-                                sprint={sprint}
-                                column={sprint}
-                                onCardDrop={onCardDropSprint}
-                                onEdit={onEdit}
-                                onDelete={onDelete}
-                                listStatus={project.board_columns}
-                                onCreateTask={onCreateTask}
-                                onDeleteTask={onDeleteTask}
-                                onUpdateTask={onUpdateTask}
+                    columns.length > 0 ? (columns.map((sprint, index) => sprint.status < 2 && (
+                            <Draggable
+                                key={index}>
+                                <SprintItemV2
+                                    sprint={sprint}
+                                    column={sprint}
+                                    onCardDrop={onCardDropSprint}
+                                    onEdit={onEdit}
+                                    onDelete={onDelete}
+                                    listStatus={sprint.board_columns}
+                                    onCreateTask={onCreateTask}
+                                    onDeleteTask={onDeleteTask}
+                                    onUpdateTask={onUpdateTask}
 
-                            />
-                        </Draggable>
+                                />
+                            </Draggable>
+                        )
+                    )) : (
+                        <NotFoundData/>
+                    )
 
-                    ))
                 }
             </Container>
         </div>

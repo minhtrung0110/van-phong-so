@@ -7,7 +7,7 @@ const routes = {
     forgotPassword:'/forgot-password',
     setting:"/setting",
     post:'/posts',
-    project:"/project/sprint",
+    project:"/projects/sprint",
     profile:"/@:nickname",
     meeting:"/meeting",
     staff:"/staff",
@@ -18,7 +18,7 @@ const routes = {
     changePassword:"/change-password",
     logout:"/logout",
     config:'/config',
-    backlog:'/project/backlog',
+    backlog:'/projects/backlog',
     allProject:'/projects',
     decentralize:'/decentralize',
 

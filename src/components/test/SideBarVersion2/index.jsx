@@ -2,8 +2,8 @@ import { Menu} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {
     FaCalendar, FaCogs,
-    FaHome, FaLaptop, FaLayerGroup, FaNewspaper,
-    FaPeopleArrows,
+    FaHome, FaLaptop, FaLayerGroup, FaListAlt, FaNewspaper,
+    FaPeopleArrows, FaProjectDiagram, FaRecycle,
     FaTasks, FaUserCog
 } from "react-icons/fa";
 import {useSelector} from "react-redux";
@@ -12,6 +12,8 @@ import './style.scss'
 import Sider from "antd/es/layout/Sider";
 import {NavLink, useLocation,} from "react-router-dom"
 import {config} from "~/config";
+import ImageCustom from "~/components/commoms/Image";
+import imgCompany from "~/asset/images/logonCompany.png"
 
 function getItem(label, key, icon, children) {
     return {
@@ -33,7 +35,13 @@ export const listMenuClientItems = [
             getItem(<NavLink to={config.routes.setting}>Cài Đặt</NavLink>, config.routes.setting, <FaCogs/>),
         ]
     ),
-    getItem(<NavLink to={config.routes.allProject}>Dự Án</NavLink>, config.routes.allProject, <FaTasks/>),
+    getItem('Dự Án', 'project', <FaProjectDiagram/>, [
+        getItem(<NavLink to={config.routes.allProject}>Dự Án</NavLink>, config.routes.allProject, <FaListAlt/>),
+        getItem(<NavLink to={config.routes.backlog}>Chu Kỳ</NavLink>, config.routes.backlog, <FaRecycle/>),
+        getItem(<NavLink to={config.routes.project}>Công Việc</NavLink>, config.routes.project, <FaTasks/>),
+        ]
+    ),
+
     getItem(<NavLink to={config.routes.schedule}>Lịch Biểu</NavLink>, config.routes.schedule, <FaCalendar/>),
 
 
@@ -73,13 +81,10 @@ const SideBarVersion2 = () => {
         <Sider collapsed={collapsed}
                className={`sidebar-version2 ${collapsed ? 'hide' : ''}`}
         >
-            <div
-                style={{
-                    height: 32,
-                    margin: 16,
-                    background: 'rgba(255, 255, 255, 0.2)',
-                }}
-            />
+            <div className={`side-bar-logo ${collapsed?'mini':''}`}                >
+               <ImageCustom className={`img-company ${collapsed?'mini':''}`} src={imgCompany} alt={'Loggo'}/>
+            </div>
+
             <Menu
                 openKeys={openKey}
                 onOpenChange={onOpenChange}

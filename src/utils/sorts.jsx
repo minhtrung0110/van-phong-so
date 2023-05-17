@@ -52,6 +52,7 @@ export const remakeSprintFromSlide = (array,sprint) => {
 
 };
 export const getTitleStatusTask=(id,array) => {
+    console.log('check ngay:',array)
     return array.find((item) =>item.id === id)
 }
 export const statisticsStatusTask=(listStatus,listTasks) => {

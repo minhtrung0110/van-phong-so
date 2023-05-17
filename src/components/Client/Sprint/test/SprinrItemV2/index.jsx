@@ -16,6 +16,7 @@ import './SprintItem.scss'
 import dayjs from "dayjs";
 import {createTask} from "~/api/Client/Task/taskAPI";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import CompleteSprint from "~/components/Client/Sprint/CompleteSprint";
 
 SprintItemV2.propTypes = {};
 // 0: chưa active
@@ -34,6 +35,8 @@ function SprintItemV2({
                           onUpdateTask
                       }) {
     //console.log('check nè', splitArrayByKey(sprint.tasks,'board_column_id'))
+    console.log(sprint)
+    const totalTasks=sprint.hasOwnProperty('tasks')?sprint.tasks.length:0;
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     const [showCompleteSprint, setShowCompleteSprint]=useState()
@@ -84,10 +87,9 @@ function SprintItemV2({
         onEdit(id, data)
         setShowEditSprint(false)
     }
-    console.log(userLogin)
     const handleCreateTask = async () => {
         const newCardToAdd = {
-            // id: Math.random().toString(36).substr(2, 5),
+            id: Math.floor(Math.random() * (999 - 10 + 1)) + 10,
             employee_id:userLogin.id,
             sprint_id: sprint.id,
             project_id: sprint.project_id,
@@ -106,7 +108,6 @@ function SprintItemV2({
             task_histories:[],
             sort:1,
         }
-
         // add new card to Sprint
         const newSprint = {...sprint}
         newSprint.tasks.push(newCardToAdd)
@@ -159,7 +160,7 @@ function SprintItemV2({
                                 className='sprint-time'>{`${dayjs(sprint.start_date).format('DD/MM/YYYY')} - ${dayjs(sprint.end_date).format('DD/MM/YYYY')}`}</div>
                         )
                     }
-                    <div className='total-task'>{`( ${sprint.tasks.length} công việc )`}</div>
+                    <div className='total-task'>{`( ${totalTasks} công việc )`}</div>
 
                 </div>
                 {
@@ -167,7 +168,7 @@ function SprintItemV2({
                         <div className='sprint-action'>
                             <div className='sprint-status'>
                                 {
-                                    splitArrayByKey(sprint.tasks,'board_column_id').map((item, index) => (
+                                 totalTasks>0 &&   splitArrayByKey(sprint.tasks,'board_column_id').map((item, index) => (
                                         <span key={index} className={`status-${item.id}`}>{!!item.cards.length?item.cards.length:0}</span>
 
                                     ))
@@ -193,7 +194,7 @@ function SprintItemV2({
             </div>
             {!!isOpen && (<div className='sprint-content'>
 
-                    <div className={`list-task ${sprint.tasks.length > 0 ? '' : 'dashed'}`}>
+                    <div className={`list-task ${totalTasks > 0 ? '' : 'dashed'}`}>
                         <Container
                             groupName="col"
                             onDrop={dropResult => onCardDrop(column.id, dropResult)}
@@ -208,7 +209,7 @@ function SprintItemV2({
                             dropPlaceholderAnimationDuration={200}
                         >
                             {
-                                sprint.tasks.map((task, index) => (
+                              totalTasks >0 &&  sprint.tasks.map((task, index) => (
                                     <Draggable key={index}>
                                         <TaskItem task={task} columns={listStatus} type={'long'}/>
                                     </Draggable>
@@ -265,7 +266,7 @@ function SprintItemV2({
             </Modal>
             <ConfirmModal open={showConfirmDelete} title='Xác Nhận Xóa'
                           content={<div
-                              dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Phiên <strong>${sprint.name}</strong>  ? `}}/>}
+                              dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Phiên <strong>${sprint.title}</strong>  ? `}}/>}
                           textCancel='Hủy' textOK='Xóa' onCancel={() => setShowConfirmDelete(false)}
                           onOK={handleDelete}/>
             <Modal title="" open={showCompleteSprint}
@@ -276,30 +277,7 @@ function SprintItemV2({
                    width={450}
                    style={{top: 80}}
             >
-                <div className='notify-complete-sprint'>
-                    <div className='header-complete-sprint'>
-                      <div className='info-title'>
-                          <FaTrophy className="icon"/>
-                          <span className={'title'}>Hoàn Thành Chu Kỳ</span>
-                      </div>
-                    </div>
-                    <div className='content-complete-sprint'>
-                        <h4 className={'title'}><FaChartLine className='icon' />Thống Kê</h4>
-                        <ul className={'statistics'}>
-                            <li className={'statistic-item'}> <FaStarOfDavid className={'icon-statistic-item'} /> Tổng Số Công Việc: </li>
-                            <li className={'statistic-item'}><FaStarOfDavid className={'icon-statistic-item'} /> Công Việc Hoàn Thành: </li>
-                            <li className={'statistic-item'}><FaStarOfDavid className={'icon-statistic-item'} /> Thời Gian Triển Khai: </li>
-                        </ul>
-                        <span className={'description'}>
-                            Các công việc chưa hoàn thành sẽ được duy chuyển vào <b>Lưu Trữ</b>.
-                        </span>
-                    </div>
-                    <div className={'footer-complete-sprint'}>
-                        <button className={'btn-complete'} onClick={handleCompleteSprint}>Hoàn Thành</button>
-                        <button className={'btn-cancel'} onClick={() => setShowCompleteSprint(false)}>Hủy</button>
-                    </div>
-
-                </div>
+              <CompleteSprint onComplete={handleCompleteSprint} onCancel={setShowCompleteSprint} />
             </Modal>
         </div>
     );

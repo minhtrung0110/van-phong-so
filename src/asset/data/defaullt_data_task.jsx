@@ -38,7 +38,7 @@ export const listPriority = [
         backgroundColor: 'rgba(233,64,64,.12)'
     },
     {
-        id:2,
+        id:20,
         label: 'Trung Bình',
         value: 'middle',
         color: '#fa8c16',

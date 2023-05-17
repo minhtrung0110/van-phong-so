@@ -19,9 +19,8 @@ import {boardSelector, isResetSprintSelector} from "~/redux/selectors/project/pr
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
-import {getProjectById} from "~/api/Client/Project/projectAPI";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
-import {createSprint, deleteSprint, editSprint} from "~/api/Client/Sprint/sprintAPI";
+import {createSprint, deleteSprint, editSprint, getListSprintByProjectId} from "~/api/Client/Sprint/sprintAPI";
 import {setIsResetSprint} from "~/redux/reducer/project/projectReducer";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 
@@ -282,7 +281,7 @@ function BacklogPage(props) {
             // let params = {};
             // // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
             // if (search !== '') params = { ...params, search };
-            const respond = await getProjectById(project.projectId,search);
+            const respond = await getListSprintByProjectId(project.projectId,search);
           console.log('Data respond:', respond)
             if (respond.status === 401) {
                 messageApi.open({
@@ -295,8 +294,7 @@ function BacklogPage(props) {
 
             } else if (respond.status === 1) {
                 setProject(respond.data, 'reset-page');
-                setListSprints(respond.data.sprints)
-
+                setListSprints(respond.data)
             } else {
                 setProject([])
                 return false;
@@ -397,19 +395,19 @@ function BacklogPage(props) {
                            <div className='breadcrumb'>
                                <Breadcrumb>
                                    <Breadcrumb.Item><NavLink to={config.routes.allProject}>Dự Án</NavLink></Breadcrumb.Item>
-                                   <Breadcrumb.Item><NavLink to={config.routes.backlog}>Danh sách công việc</NavLink></Breadcrumb.Item>
+                                   <Breadcrumb.Item><NavLink to={config.routes.backlog}>Danh sách chu kỳ phát triển </NavLink></Breadcrumb.Item>
 
                                </Breadcrumb>
                            </div>
                            <div className='sprint-backlog-header'>
                                <div className= 'sprint-backlog-title'>
                                    <FaList className={'icon'} />
-                                   Danh sách công việc
+                                   Danh sách chu kỳ phát triển
                                </div>
                                <div className= 'sprint-backlog-actions'>
                                    <SearchHidenButton   width={'15rem'} onSearch={setSearch}/>
                                    <button className='create-sprint' onClick={()=>setShowAddSprint(true)}>
-                                       Tạo mới phiên dự án
+                                       Tạo mới chu kỳ phát triển
                                    </button>
                                </div>
                            </div>

@@ -97,22 +97,28 @@ function ProjectTable({tableHeader, tableBody,onUpdate,onDelete}) {
                                 </button>
                             )
                         }
-                        <button
-                            onClick={
-                          (e) => handleEditProject(item)
-                                }
-                            className=" btn-edit"
-                        >
-                            <FaPen className="icon-edit"/>
-                        </button>
-                        <button
-                            onClick={(e) => {
-                               showConfirmDeleteProject(e, item);
-                            }}
-                            className="btn-delete"
-                        >
-                            <FaTimesCircle className="icon-delete"/>
-                        </button>
+                        {
+                            item.status!==1 && (
+                                <button
+                                    onClick={
+                                        (e) => handleEditProject(item)
+                                    }
+                                    className=" btn-edit"
+                                >
+                                    <FaPen className="icon-edit"/>
+                                </button>
+                            )
+                        }
+                        {item.status===0 && (
+                            <button
+                                onClick={(e) => {
+                                    showConfirmDeleteProject(e, item);
+                                }}
+                                className="btn-delete"
+                            >
+                                <FaTimesCircle className="icon-delete"/>
+                            </button>
+                        )}
 
                     </td>
                 </tr>

@@ -47,7 +47,7 @@ function EditProject({onBack}) {
                 content: result.message,
                 duration: 1.3,
             });
-         //   onBack('desc', 'edit')
+          onBack('desc', 'edit')
             handleCancel()
         }
         else if(result.status===401){

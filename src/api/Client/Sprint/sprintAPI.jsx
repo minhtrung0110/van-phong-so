@@ -15,7 +15,6 @@ export const configHeadersAuthenticate = () => {
 };
 
 export const getListProjects = async ({ sort,filter, search,keySearch, page } = {}) => {
-    console.log({ sort,filter, search, page })
     const url = 'projects';
     const queryString = [];
     if (sort) {
@@ -38,17 +37,28 @@ export const getListProjects = async ({ sort,filter, search,keySearch, page } = 
         return 500;
     }
 };
-
-export const getSprintById = async (id) => {
+export const getListSprintByProjectId = async (id) => {
+    const url = `sprints?project_id=${id}`;
+    const response = await axiosClient.get(url,configHeadersAuthenticate());
+    console.log('response', response)
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,data:response.data.result,message:'Lấy thông tin dự án thành công'}
+    }
+    else if (response.status===401)   return {status:401,message:'Không thể xác thực'}
+    else {
+        return {status:0,data:[],message:'Không thể lấy thông tin dự án.'}
+    }
+};
+export const getSprintById = async (id,{ sort,filter, search,keySearch, page } = {}) => {
     const url = `sprints/${id}`;
     const response = await axiosClient.get(url,configHeadersAuthenticate());
-    //console.log('response', response)
-    if (response.status === 1) {
-        return response.data.result;
-    } else if (response.status === 401) {
-        return 401;
-    } else {
-        return {};
+    console.log('response', response)
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,data:response.data.result,message:'Lấy thông tin chu kỳ thành công'}
+    }
+    else if (response.status===401)   return {status:401,message:'Không thể xác thực'}
+    else {
+        return {status:0,data:[],message:'Không thể lấy thông tin chu kỳ.'}
     }
 };
 export const createSprint = async (body) => {

@@ -38,8 +38,9 @@ function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeL
         newColumns=applyDrag(newColumns,dropResult)
         let newBoard={...board}
         // cập nhật columnnOrder bang các id sau khi keo tha
-        newBoard.columnOrder=newColumns.map(item=>item.id)
-        newBoard.columns=newColumns
+       // newBoard.columnOrder=newColumns.map(item=>item.id)
+        newBoard.board_columns=newColumns
+        console.log('neww_Columns',newColumns)
         setColumns(newColumns)
         onBoard(newBoard)
         // console.log(newColumns)
@@ -55,8 +56,8 @@ function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeL
             let newColumns=[...columns]
             let currentColumn=newColumns.find((item=>item.id===columnId))
             console.log('New column:',newColumns,currentColumn)
-            currentColumn.cards=applyDrag(currentColumn.cards,dropResult,currentColumn.id)
-            currentColumn.cardOrder=currentColumn.cards.map(i=>i.id)
+            currentColumn.tasks=applyDrag(currentColumn.tasks,dropResult,currentColumn.id)
+           // currentColumn.cardOrder=currentColumn.tasks.map(i=>i.id)
 
             setColumns(newColumns)
 
@@ -79,7 +80,7 @@ function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeL
         let newBoard={...board}
         // cập nhật columnnOrder bang các id sau khi keo tha
         newBoard.columnOrder=newColumns.map(item=>item.id)
-        newBoard.columns=newColumns
+        newBoard.board_columns=newColumns
         setColumns(newColumns)
         onBoard(newBoard)
 
@@ -107,7 +108,7 @@ function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeL
         // console.log(columns)
         let newBoard={...board}
         newBoard.columnOrder=newColumns.map(item=>item.id)
-        newBoard.columns=newColumns
+        newBoard.board_columns=newColumns
 
         onBoard(newBoard)
       //  console.log(newColUpdate)

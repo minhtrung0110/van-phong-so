@@ -41,7 +41,7 @@ const listStatus = [
     },
 ]
 function ManageDepartment(props) {
-    const [data, setData] = useState([])
+    const [data, setData] = useState(listDepartments)
     const [page, setPage] = React.useState(1);
     const [totalRecord, setTotalRecord] = React.useState(data.length);
     const [loading, setLoading] = React.useState(false);
@@ -80,29 +80,7 @@ function ManageDepartment(props) {
         const stt={status:value}
         setFilter(prev=>({...prev,...stt}))
     }
-    useEffect(() => {
-        async function fetchData() {
-            //  setLoading(true)
-            console.log('Search:', search, ' - Filter:', filter)
-            let params = {};
-            if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
-            if (search !== '') params = { ...params, filter, search };
-            console.log('Params:', params)
-            const respond = await getListDepartments(params);
-            console.log('Data respond:', respond)
-            if (respond === 401) {
-                handleSetUnthorization();
-                return false;
-            } else if (respond === 500) {
-                setData([])
-                return false;
-            } else {
-                setDepartment(respond, 'reset-page');
-            }
-            setLoading(false);
-        }
-        fetchData();
-    }, [search, filter,isReset]);
+
 
     const handleSetUnthorization = () => {
         dispatch(setExpiredToken(true));
