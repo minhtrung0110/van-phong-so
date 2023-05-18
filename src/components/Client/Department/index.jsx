@@ -24,7 +24,7 @@ function DepartmentTable({tableHeader, tableBody,onDelete}) {
     const dispatch = useDispatch()
     const handleEditDepartment = async (e, item) => {
         e.stopPropagation();
-        const data = await getDepartmentById(item.ID);
+        const data = await getDepartmentById(item.id);
         console.log('Data nhận :', data)
         if (Object.keys(data).length > 0) {
             dispatch(setDepartment(data));
@@ -83,9 +83,9 @@ function DepartmentTable({tableHeader, tableBody,onDelete}) {
                     <td className={'text-status'}>
                         <p
                             className={` ${
-                                item.status === 1 ? 'active' : 'negative '
+                                item.status === true ? 'active' : 'negative '
                             }`}
-                        >                            {item.status === 1 ? 'Đang Hoạt Động' : 'Tạm Dừng'}
+                        >                            {item.status ===true ? 'Đang Hoạt Động' : 'Tạm Dừng'}
                         </p>
                     </td>
                     <td className="col-action">

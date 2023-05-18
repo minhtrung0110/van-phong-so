@@ -12,29 +12,90 @@ import AvatarCustom from "~/components/commoms/AvatarCustom";
 import {useDispatch, useSelector} from "react-redux";
 import {setIsAdd} from "~/redux/reducer/project/projectReducer";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {getListDepartments} from "~/api/Client/Department/departmentAPI";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import {getListStaffsByDepartmentId} from "~/api/Client/Staff/staffAPI";
+import {isEmpty} from "lodash";
+import {createProject} from "~/api/Client/Project/projectAPI";
 
 
 function AddProject({onBack}) {
     const [listStaff, setListStaff] = useState([])
     const [listRoom, setListRoom] = useState([])
+    const [departmentId,setDepartmentId] = useState()
     const [messageApi, contextHolder] = message.useMessage();
     const dispatch =useDispatch()
     const userLogin=useSelector(getUserSelector)
+    console.log(departmentId)
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+    };
+    const    fetchDataDepartment  = async () => {
+        const respond = await getListDepartments();
+        console.log('Data respond:', respond)
+        if (respond === 401) {
+            handleSetUnthorization();
+            return false;
+        } else if (respond === 500) {
+            setListRoom([])
+            return false;
+        } else {
+            setListRoom(mixDataDepartments(respond.results));
+        }
+    }
+    const    fetchDataStaffs = async (id) => {
+        const respond = await getListStaffsByDepartmentId (id);
+        console.log('Data respond:', respond)
+        if (respond === 401) {
+            handleSetUnthorization();
+            return false;
+        } else if (respond === 500) {
+            setListStaff([])
+            return false;
+        } else {
+            setListStaff(respond);
+        }
+    }
     const {
-        control, handleSubmit, formState: {errors, isDirty, dirtyFields},
+        control, handleSubmit,setValue, formState: {errors, isDirty, dirtyFields},
     } = useForm({});
     useEffect(() => {
         // call API get listDepartment
-        setListRoom(mixDataDepartments(listDepartments))
+        fetchDataDepartment()
         // call API get listStaff
-        const data = listStaffs.map((item) => ({value: item.mail, label: `${item.first_name} ${item.last_name}`}))
-        setListStaff(data)
+       // const data = listStaffs.map((item) => ({value: item.mail, label: `${item.first_name} ${item.last_name}`}))
+      //  setListStaff(data)
     }, [])
-    const onSubmit = (data) => {
-        const newProject={...data,created_by:userLogin,}
+    const handleChoseDepartment=(id) => {
+        setValue('department_id',id)
+        fetchDataStaffs(id)
+        console.log(listStaff)
+    }
+    const onSubmit = async (data) => {
+        const newProject = {...data, created_by: userLogin,}
         console.log(newProject)
+        const result = await createProject(newProject)
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
 
-        onBack('desc','add')
+            setTimeout(() => handleCancel(), 1300)
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3,
+            });
+        }
+        onBack('desc', 'add')
     }
     const mixDataDepartments =(data)=>{
         return data.map(item=>({value:item.id, label:item.name}))
@@ -97,6 +158,7 @@ function AddProject({onBack}) {
                                     <Select
                                         options={listRoom}
                                         {...field}  className='input' size="large"
+                                        onChange={(e) =>handleChoseDepartment(e)}
                                         placeholder="Chọn phòng ban ..."/>
                                 </Form.Item>
                             )}
@@ -143,16 +205,16 @@ function AddProject({onBack}) {
                                         filterOption={filterOption}
                                     >
                                         {
-                                            listStaffs.map((item, i) =>(
+                                           !isEmpty(listStaff) && listStaff.map((item, i) =>(
                                                 <Option key={i}
-                                                        value={ item.mail} label={ `${item.first_name} ${item.last_name}`}
+                                                        value={ item.mail} label= {item.full_name}
                                                 >
                                                  <div   style={{
                                                      display:'flex',
                                                      alignItem:'center',
                                                      justifyContent: 'flex-start',
                                                  }}>
-                                                     <AvatarCustom lastName={item.last_name} avatar={item.avatar} size={'small'}/>
+                                                     <AvatarCustom lastName={item.full_name} avatar={item.avatar_url} size={'small'}/>
 
                                                      <span  style={{
                                                          marginLeft:'1rem',
@@ -160,7 +222,7 @@ function AddProject({onBack}) {
                                                          fontStyle:'italic',
                                                          fontWeight:'bold',
                                                      }}
-                                                     >{`${item.first_name} ${item.last_name}`}</span>
+                                                     >{item.full_name}</span>
                                                  </div>
                                                 </Option>
                                             ))

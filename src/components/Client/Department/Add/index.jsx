@@ -28,7 +28,7 @@ function AddDepartment({onCancel, onSave}) {
                 labelAlign={"left"}
                 className='row-frame'>
                 <Controller
-                    name="roomName"
+                    name="name"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
@@ -36,8 +36,8 @@ function AddDepartment({onCancel, onSave}) {
                         <Form.Item
                             label="Tên phòng"
                             hasFeedback
-                            validateStatus={errors.roomName ? 'error' : 'success'}
-                            help={errors.roomName ? 'Vui lòng nhập tên phòng' : null}>
+                            validateStatus={errors.name ? 'error' : 'success'}
+                            help={errors.name ? 'Vui lòng nhập tên phòng' : null}>
 
                             <Input  {...field} size="middle" className='ant-input-no-radius '/>
                         </Form.Item>

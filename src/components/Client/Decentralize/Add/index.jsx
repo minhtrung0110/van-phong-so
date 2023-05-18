@@ -1,12 +1,12 @@
-import React, {useRef, useState} from 'react';
-import PropTypes from 'prop-types';
-import {useForm, Controller} from "react-hook-form";
-import {Checkbox, Col, Form, Input, message, Row, Switch,} from "antd";
+import React, {useState} from 'react';
+import {Controller, useForm} from "react-hook-form";
+import {Col, Form, Input, message, Row,} from "antd";
 import './style.scss'
 import HeaderContent from "~/components/commoms/HeaderContent";
 import GroupPermission from "~/components/Client/Decentralize/GroupPermission";
 import {setIsAdd} from "~/redux/reducer/decentralize/decentralizeReducer";
 import {useDispatch} from "react-redux";
+import {createRole} from "~/api/Client/Role/roleAPI";
 
 AddRole.propTypes = {};
 
@@ -15,59 +15,82 @@ function AddRole({onBack}) {
     const dispatch=useDispatch()
     const [messageApi, contextHolder] = message.useMessage();
     const [project, setProject] = useState({
+        view_project:false,
         add_project: false,
         update_project: false,
         delete_project: false,
     });
     const [sprint, setSprint] = useState({
+        view_srint:false,
         add_sprint: false,
         update_sprint: false,
         delete_sprint: false,
     });
     const [task, setTask] = useState({
+        view_task:false,
         add_task: false,
         update_task: false,
         delete_task: false,
     });
     const [column, setColumn] = useState({
+        view_column:false,
         add_column: false,
         update_column: false,
         delete_column: false,
     });
     const [calendar, setCalendar] = useState({
+        view_calendar:false,
         add_calendar: false,
         update_calendar: false,
         delete_calendar: false,
     });
     const [staff, setStaff] = useState({
+        view_staff:false,
         add_staff: false,
         update_staff: false,
         delete_staff: false,
     });
     const [department, setDepartment] = useState({
+        view_department:false,
         add_department: false,
         update_department: false,
         delete_department: false,
     });
 
 
-    const handleSubmitPermission = () => {
+    const handleSubmitPermission = async (data) => {
         const name = getValues("name");
-        const result = {
-            name,
+        const arrayPermissions = {
             ...staff, ...department,
             ...project, ...sprint, ...task, ...column,
             ...calendar
         }
-        // console.log(result);
-        // thành công
-        console.log('Create new role:', result)
-        messageApi.open({
-            type: 'success',
-            content: 'Thêm thành công',
-            duration: 1.3,
-        });
-        setTimeout(()=> dispatch(setIsAdd(false)),1400)
+        const trueFieldsArray = Object.entries(arrayPermissions)
+            .filter(([key, value]) => value === true)
+            .map(([key]) => key);
+        const newRole = {
+            title: name,
+            status: 1,
+            permissions: trueFieldsArray
+        }
+        const result = await createRole(newRole)
+        if(result.status===1){
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+            //  setTimeout(()=> dispatch(setIsAdd(false)),1400)
+        }
+        else {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3,
+            });
+            //  setTimeout(()=> dispatch(setIsAdd(false)),1400)
+        }
+
 
 
     }

@@ -17,36 +17,43 @@ function EditRole({ onBack}) {
     const [messageApi, contextHolder] = message.useMessage();
     const dispatch=useDispatch()
     const [project,setProject]=useState({
+        view_project:false,
         add_project: false,
         update_project: false,
         delete_project: false,
     });
     const [sprint,setSprint]=useState({
+        view_sprint:false,
         add_sprint: false,
         update_sprint: false,
         delete_sprint: false,
     });
     const [task,setTask]=useState({
+        view_task:false,
         add_task: false,
         update_task: false,
         delete_task: false,
     });
     const [column,setColumn]=useState({
+        view_column:false,
         add_column: false,
         update_column: false,
         delete_column: false,
     });
     const [calendar,setCalendar]=useState({
+        view_calendar:false,
         add_calendar: false,
         update_calendar: false,
         delete_calendar: false,
     });
     const [staff,setStaff]=useState({
+        view_staff:false,
         add_staff: false,
         update_staff: false,
         delete_staff: false,
     });
     const [department,setDepartment]=useState({
+        view_department:false,
         add_department: false,
         update_department: false,
         delete_department: false,

@@ -6,31 +6,35 @@ import {Controller, useForm} from "react-hook-form";
 import {Form, Input, Radio, message} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {departmentSelector} from "~/redux/selectors/department/departmenrSelector";
-import {setIsEdit} from "~/redux/reducer/department/departmentReducer";
+import {setIsEdit, setIsReset} from "~/redux/reducer/department/departmentReducer";
 import {createDepartment, editDepartment} from "~/api/Client/Department/departmentAPI";
 
 EditDepartment.propTypes = {
     onCancel: PropTypes.func.isRequired,
 };
 
-function EditDepartment({onCancel}) {
+function EditDepartment({onCancel,onBack}) {
     const department = useSelector(departmentSelector)
     const dispatch=useDispatch()
     const [messageApi, contextHolder] = message.useMessage();
     const {
         control, handleSubmit, formState: { errors, isDirty, dirtyFields },
     } = useForm({
-        defaultValues: {...department}
+        defaultValues: {...department,status:department.status===true?1:0}
     });
     const handleUpdateDepartment = async (data) => {
-        console.log('Create Department: ', data)
-        const response = await editDepartment(data);
+        const response = await editDepartment({...data,status:data.status===1,id:department.id});
         if (response.status === 1) {
             messageApi.open({
                 type: 'success',
                 content: response.message,
                 duration: 1.35,
             });
+            setTimeout(() => dispatch(setIsEdit(false)), 800)
+            dispatch(setIsReset(true))
+            onBack('edit')
+
+
         } else if (response.status === 0) {
             messageApi.open({
                 type: 'error',
@@ -38,7 +42,7 @@ function EditDepartment({onCancel}) {
                 duration: 1.4,
             });
         }
-        setTimeout(() => dispatch(setIsEdit(false)), 1350)
+
     }
     return (
         <div className="edit-department-container">
@@ -92,7 +96,6 @@ function EditDepartment({onCancel}) {
                        name="status"
                        control={control}
                        rules={{required: true}}
-
                        render={({field}) => (
                            <Form.Item label="Trạng Thái" validateStatus={errors.status ? 'error' : 'success'}
                                       hasFeedback help={errors.status ? 'Vui lòng chọn trạng thái' : null}>

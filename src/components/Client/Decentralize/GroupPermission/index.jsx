@@ -24,6 +24,7 @@ function GroupPermission({switchGroupState,setSwitchGroupSate,title}) {
         setSwitchGroupSate(result)
 
         // set giá trị cho tất cả các switch
+        console.log( Object.values(switchRefs.current))
         Object.values(switchRefs.current).forEach((ref) => {
             ref.checked =!selectAll;
         });
@@ -72,6 +73,15 @@ function GroupPermission({switchGroupState,setSwitchGroupSate,title}) {
 
           />
           <span className={'title'}>Xóa {title}  </span>
+        </span>
+
+                <span className='permission-item'>
+          <Switch
+              checked={switchGroupState[keys[3]]}
+              onChange={(checked) => handleSwitchChange(checked, keys[3])}
+              //  ref={(ref) => (switchRefs.current.delete = ref)}
+          />
+          <span className={'title'}>Xem {title}</span>
         </span>
             </div>
 

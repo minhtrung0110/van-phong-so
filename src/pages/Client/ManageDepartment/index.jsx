@@ -13,7 +13,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {isEditDepartmentSelector, isResetDepartmentSelector} from "~/redux/selectors/department/departmenrSelector";
 import EditDepartment from "~/components/Client/Department/Edit";
 import AddDepartment from "~/components/Client/Department/Add";
-import {setIsAdd, setIsEdit} from "~/redux/reducer/department/departmentReducer";
+import {setIsAdd, setIsEdit, setIsReset} from "~/redux/reducer/department/departmentReducer";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {listDepartments} from "~/asset/data/initDataGlobal";
 import FilterSelect from "~/components/commoms/FilterSelect";
@@ -48,8 +48,8 @@ function ManageDepartment(props) {
     const dispatch = useDispatch()
     const isEdit = useSelector(isEditDepartmentSelector)
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [search,setSearch] = React.useState('')
-    const [filter, setFilter] = React.useState('')
+    const [search, setSearch] = React.useState('')
+    const [filter, setFilter] = React.useState({role:'all',status:'all'})
     const [messageApi, contextHolder] = message.useMessage();
     const isReset=useSelector(isResetDepartmentSelector)
     const handlePageChange = async (page) => {
@@ -99,13 +99,14 @@ function ManageDepartment(props) {
     };
     const handleCreateDepartment = async (data) => {
         console.log('Create Department: ', data)
-        const response = await createDepartment(data);
+        const response = await createDepartment({name:data.name,status:true});
         if(response.status===1){
             messageApi.open({
                 type: 'success',
                 content: response.message,
                 duration: 1.35,
             });
+            dispatch(setIsReset(true))
         }
         else if(response.status===0){
             messageApi.open({
@@ -120,10 +121,40 @@ function ManageDepartment(props) {
     const handleDeleteDepartment = (data)=>{
         console.log('Delete Department: ',data)
     }
-
+    useEffect(() => {
+        async function fetchDataDepartment() {
+            //  setLoading(true)
+            console.log('Search:', search, ' - Filter:', filter)
+            let params = {};
+            if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
+            if (search !== '') params = { ...params, filter, search };
+            const respond = await getListDepartments(params);
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setData([])
+                return false;
+            } else {
+                setDepartment(respond, 'reset-page');
+            }
+            setLoading(false);
+        }
+        fetchDataDepartment();
+    }, [search, filter,isReset]);
+    const backToDepartmentList = async (action) => {
+        setLoading(true);
+        let sort=(action === 'edit') ? 'updated_at': 'created_at,desc';
+        const result = await getListDepartments({
+            sort,
+        });
+        setDepartment(result, 'page');
+        setLoading(false);
+    };
     return (
         <>
-            {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit}    />):(
+            {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit}  onBack={backToDepartmentList}   />):(
                 (
                   !!loading ?(<ListPageSkeleton column={5} lengthItem={5} /> ):
                       (  <div className='container-department'>
@@ -142,12 +173,12 @@ function ManageDepartment(props) {
                                   <div className='search-excel'>
                                       <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
                                           onSearch={setSearch}               backgroundButton='#479f87'/>
-                                      <Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>
-                                          <Button className='btn'><FaFileUpload className='icon'/></Button>
-                                      </Tooltip>
-                                      <Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>
-                                          <Button className='btn'><FaFileDownload className='icon'/></Button>
-                                      </Tooltip>
+                                      {/*<Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>*/}
+                                      {/*    <Button className='btn'><FaFileUpload className='icon'/></Button>*/}
+                                      {/*</Tooltip>*/}
+                                      {/*<Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>*/}
+                                      {/*    <Button className='btn'><FaFileDownload className='icon'/></Button>*/}
+                                      {/*</Tooltip>*/}
                                       <Button className='btn-add'
                                               onClick={handleOpenAddDepartment}>Tạo Mới </Button>
                                   </div>

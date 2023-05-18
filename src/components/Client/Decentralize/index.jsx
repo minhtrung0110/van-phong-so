@@ -30,7 +30,7 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
 
     const showConfirmDeleteDecentralize = (e, item) => {
         e.stopPropagation();
-        setShowPopupDelete({department_id: item.id,name:item.name, show: true});
+        setShowPopupDelete({department_id: item.id,name:item.title, show: true});
     };
     const renderTableBody = () => {
         return tableBody.map((item) => {
@@ -42,15 +42,15 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
                     <td className="col-txt">{item.id}</td>
 
                     <td className="col-txt">
-                        {item.name}
+                        {item.title}
                     </td>
                     <td className={'text-status'}>
                         <p
                             className={` ${
-                                item.status === 1 ? 'active' : 'negative '
+                                item.status === true ? 'active' : 'negative '
                             }`}
                         >
-                            {item.status === 1 ? 'Đang Hoạt Động' : 'Tạm Dừng'}
+                            {item.status === true ? 'Đang Hoạt Động' : 'Tạm Dừng'}
                         </p>
                     </td>
                     <td className="col-action">
@@ -82,9 +82,9 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
             <TableLayout tableHeader={tableHeader} tableBody={renderTableBody()}/>
 
 
-            <ConfirmModal title="Xác Nhận Xóa"
+            <ConfirmModal title="Xác Nhận Vô Hiệu Hóa Quyền"
                           open={showPopupDelete.show}
-                          content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Quyền <strong>${showPopupDelete.name}</strong>  ? `}} />}
+                          content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Vô Hiệu Hóa Quyền <strong>${showPopupDelete.name}</strong>  ? `}} />}
                           textOK="Xóa"
                           textCancel="Hủy"
                           onOK={() => handleConfirmDelete(showPopupDelete.department_id)}

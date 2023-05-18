@@ -59,6 +59,19 @@ export const getStaffById = async (id) => {
         return {};
     }
 };
+export const getListStaffsByDepartmentId = async (id) => {
+    const url = `employees/departments/${id}`;
+    const response = await axiosClient.get(url,configHeadersAuthenticate());
+    console.log(url)
+    //console.log('response', response)
+    if (response.status === 1) {
+        return response.data.result;
+    } else if (response.status === 401) {
+        return 401;
+    } else {
+        return {};
+    }
+};
 export const createStaff = async (body) => {
     const url = 'employees';
     const response = await axiosClient.post(url, body, configHeadersAuthenticate());

@@ -13,35 +13,32 @@ import {decentralize_table_header} from "~/asset/data/decentralize-table-header"
 import {useDispatch, useSelector} from "react-redux";
 import {
     isAddDecentralizeSelector,
-    isEditDecentralizeSelector
+    isEditDecentralizeSelector, isResetDecentralizeSelector
 } from "~/redux/selectors/decentralize/decentralizeSelector";
 import AddRole from "~/components/Client/Decentralize/Add";
-import {setIsAdd, setIsEdit} from "~/redux/reducer/decentralize/decentralizeReducer";
+import {setIsAdd, setIsEdit,setIsReset} from "~/redux/reducer/decentralize/decentralizeReducer";
 import EditRole from "~/components/Client/Decentralize/Edit";
 import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
+import {getListDepartments} from "~/api/Client/Department/departmentAPI";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import {deleteRole, getListRoles} from "~/api/Client/Role/roleAPI";
+import FilterSelect from "~/components/commoms/FilterSelect";
 
 Decentralize.propTypes = {};
-
+const listStatus=[
+    {label: "Tât Cả", value: "all"},
+    {label: "Hoạt Động",value:'active'},
+    {label: "Vô Hiệu", value:'disabled'},
+]
 function Decentralize(props) {
-    const [data, setData] = useState(listDecentralize)
+    const [data, setData] = useState([])
     const [page, setPage] = React.useState(1);
     const [totalRecord, setTotalRecord] = React.useState(data.length);
     const [loading, setLoading] = React.useState(false);
-    const [filter, setFilter] = React.useState()
-    const [search, setSearch] = useState()
+    const [search, setSearch] = React.useState('')
+    const [filter, setFilter] = React.useState({role:'all',status:'all'})
     const [messageApi, contextHolder] = message.useMessage();
-    const error = () => {
-        messageApi.open({
-            type: 'error',
-            content: 'This is an error message',
-        });
-    };
-    const warning = () => {
-        messageApi.open({
-            type: 'warning',
-            content: 'This is a warning message',
-        });
-    };
     const dispatch = useDispatch()
     const handleAddNewRole = () => {
         dispatch(setIsAdd(true))
@@ -68,34 +65,64 @@ function Decentralize(props) {
     };
     const handleRemoveDecentralize = async (id) => {
         console.log('Delete Decentralize: ', id)
-        //e.stopPropagation();
-        // const result = await deleteDecentralize(id);
-        // console.log('result', result);
-        // if (result === 200) {
-        //     SuccessToast('Remove department successfully', 3000);
-        // } else if (result === 404) {
-        //     ErrorToast('Remove departments unsuccessfully', 3000);
-        //     Notiflix.Block.remove('#root');
-        // } else if (result === 401) {
-        //     Notiflix.Block.remove('#root');
-        // } else {
-        //     Notiflix.Block.remove('#root');
-        //     ErrorToast('Something went wrong. Please try again', 3000);
-        // }
-        // dispatch(setIsReset(Math.random()));
-        messageApi.open({
-            type: 'success',
-            content: 'Xóa thành công',
-            duration: 1.5,
-        });
+        const result = await deleteRole(id);
+        if(result.status===1){
+            dispatch(setIsReset(Math.random()));
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.5,
+            });
+        }
+        else {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.5,
+            });
+        }
+
+
     };
     const isAdd = useSelector(isAddDecentralizeSelector)
     const isEdit = useSelector(isEditDecentralizeSelector);
+    const isReset = useSelector(isResetDecentralizeSelector);
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+    };
     useEffect(() => {
-        console.log('Search:', search)
-        console.log('Filter:', filter)
+        async function fetchDataRole() {
+            let params = {};
+            if (filter.status !== 'all') params = { ...params, filter };
+            if (search !== '') params = { ...params, filter, search };
+            const respond = await getListRoles(params);
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setData([])
+                return false;
+            } else {
+                setRole(respond, 'reset-page');
+            }
+            setLoading(false);
+        }
+        fetchDataRole();
 
-    }, [data,filter, search])
+    }, [filter, search,isReset])
+    const setRole = (respond, value) => {
+        setData(respond.results);
+        if (value !== 'page') {
+            setPage(1);
+        }
+        setTotalRecord(respond.pagination.totalRecords);
+        // setTotalPage(result.meta.);
+    };
     return (
         <>
             {contextHolder}
@@ -112,8 +139,8 @@ function Decentralize(props) {
                                         </div>
                                         <div className='filter-decentralize-page'>
                                             <div className='filter-group'>
-                                                <FilterRadiobox width='15.2rem' backGround={'#479f87'}
-                                                                onFilter={setFilter}/>
+                                                <FilterSelect width={'15.2rem'} backGround={'#479f87'}
+                                                                onFilter={setFilter} listOptions={listStatus} title={'Trạng Thái'}/>
                                             </div>
                                             <div className='search-create'>
                                                 <SearchHidenButton height='2.4rem' width='20rem'
