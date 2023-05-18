@@ -17,6 +17,8 @@ import {editSprint, getListSprintByProjectId, getSprintById} from "~/api/Client/
 import {message} from "antd";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import KanbanProject from "~/components/commoms/Skeleton/Kaban/KanbanProject";
+import KanbanProjectSkeleton from "~/components/commoms/Skeleton/Kaban/KanbanProject";
 
 ManageTaskPage.propTypes = {};
 
@@ -130,17 +132,23 @@ function ManageTaskPage(props) {
     }
     return (
 
-        <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
-            {contextHolder}
-            <HeaderTask onCurrentProject={setCurrentProject}/>
-            <BoardBar boardName={'Dự Án'}  onFilter={setFilter}
-                      onCompleteSprint={handleUpdateSprint}
-                      sprint={sprint}
-                      onSearch={setSearch}/>
-            <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}
-                          onUpdateTask={handleUpdateTask}
-                          onDeleteTask={handleDeleteTask} />
-        </div>
+      <>
+          {
+              loading ? (<KanbanProjectSkeleton />):(
+                  <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
+                      {contextHolder}
+                      <HeaderTask onCurrentProject={setCurrentProject}/>
+                      <BoardBar boardName={'Dự Án'}  onFilter={setFilter}
+                                onCompleteSprint={handleUpdateSprint}
+                                sprint={sprint}
+                                onSearch={setSearch}/>
+                      <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}
+                                    onUpdateTask={handleUpdateTask}
+                                    onDeleteTask={handleDeleteTask} />
+                  </div>
+              )
+          }
+      </>
     );
 }
 

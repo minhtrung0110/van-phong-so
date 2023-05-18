@@ -23,6 +23,8 @@ import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSke
 import {createSprint, deleteSprint, editSprint, getListSprintByProjectId} from "~/api/Client/Sprint/sprintAPI";
 import {setIsResetSprint} from "~/redux/reducer/project/projectReducer";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
+import ListSprint from "~/components/commoms/Skeleton/Project/Sprint";
+import ListSprintSkeleton from "~/components/commoms/Skeleton/Project/Sprint";
 
 
 BacklogPage.propTypes = {};
@@ -276,7 +278,7 @@ function BacklogPage(props) {
     const isReset=useSelector(isResetSprintSelector)
     useEffect(()=>{
         // call API get sprint task lên
-        async function fetchData() {
+        async function fetchDataListSprint() {
             const project=JSON.parse(localStorage.getItem('project'))
             // let params = {};
             // // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
@@ -301,7 +303,7 @@ function BacklogPage(props) {
             }
             setLoading(false);
         }
-        fetchData();
+        fetchDataListSprint();
 
     },[search,isReset,loadData])
     const handleSetUnthorization = () => {
@@ -388,7 +390,7 @@ function BacklogPage(props) {
     return (
        <>
            {
-               loading ?(<ListPageSkeleton />):(
+               loading ?(<ListSprintSkeleton/>):(
                    <div className='container-backlog'>
                        {contextHolder}
                        <div className='header-backlog'>

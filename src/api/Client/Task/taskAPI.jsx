@@ -77,7 +77,16 @@ export const createTask = async (body) => {
 
 
 };
-
+export const dragAndDropTask = async (body) => {
+    const url = `tasks`;
+    const response = await axiosClient.put(url, body, configHeadersAuthenticate());
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,message:'Cập nhật công việc thành công'}
+    }
+    else if (response.status ===0){
+        return {status:0,message:'Cập nhật công việc thất bại'}
+    }
+};
 export const editTask = async (id, body) => {
     const url = `tasks`;
 

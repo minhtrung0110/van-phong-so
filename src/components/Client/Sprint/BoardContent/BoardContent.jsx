@@ -10,12 +10,13 @@ import Column from "~/components/Client/Task/Column/Column";
 import {isEmpty} from "lodash";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import TextArea from "antd/es/input/TextArea";
-import {Badge, Calendar, Col, Modal, Row} from "antd";
+import {Badge, Calendar, Col, message, Modal, Row} from "antd";
 import {useSelector} from "react-redux";
 import {deleteTaskSelector, isViewTimelineSelector} from "~/redux/selectors/project/projectSelector";
 import column from "~/components/Client/Task/Column/Column";
 import dayjs from "dayjs";
 import TimeLine from "~/components/Client/Sprint/TimeLine";
+import {dragAndDropTask} from "~/api/Client/Task/taskAPI";
 
 
 function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeLine}) {
@@ -24,6 +25,7 @@ function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeL
     const [columns,setColumns] = useState(columnData)
     const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
     const [newColTitle,setNewColTitle]=useState('')
+    const [messageApi, contextHolder] = message.useMessage();
   //  console.log(columns)
     const newColInputRef=useRef()
         const isViewTimeLine=useSelector(isViewTimelineSelector)
@@ -47,21 +49,37 @@ function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeL
         // console.log(newBoard)
     }
     // khi kéo thả project qua lai giua cac cột
+    const updateStatusTask=async (body) => {
+        const result = await dragAndDropTask(body)
+        return result.status === 1;
+    }
     const onCardDrop = (columnId,dropResult) => {
         console.log( 'Dichuyen',dropResult)
         console.log('col -id:',columnId)
         console.log('Columns',columns)
-        if(dropResult.removedIndex !=null || dropResult.addedIndex !=null)
+        if(dropResult.removedIndex !=null || dropResult.addedIndex !=null) /// Drop lần 2 lần thả vào column
         {
-            let newColumns=[...columns]
-            let currentColumn=newColumns.find((item=>item.id===columnId))
-            console.log('New column:',newColumns,currentColumn)
-            currentColumn.tasks=applyDrag(currentColumn.tasks,dropResult,currentColumn.id)
-           // currentColumn.cardOrder=currentColumn.tasks.map(i=>i.id)
-
-            setColumns(newColumns)
-
-
+            let taskDrop= {
+                task_id: dropResult.payload.id,
+                new_index: dropResult.addedIndex,
+                new_boardcolumn: columnId,
+            }
+            console.log('Object PPut API',taskDrop)
+            // if(updateStatusTask(taskDrop)){
+                let newColumns=[...columns]
+                let currentColumn=newColumns.find((item=>item.id===columnId))
+                console.log('New column:',newColumns,currentColumn)
+                currentColumn.tasks=applyDrag(currentColumn.tasks,dropResult,currentColumn.id)
+                // currentColumn.cardOrder=currentColumn.tasks.map(i=>i.id)
+                setColumns(newColumns)
+            // }else{
+            //     messageApi.open({
+            //         type:'error',
+            //         message:'Phát hiện lỗi',
+            //         duration:1.2
+            //         }
+            //     )
+            // }
         }
         // vấn de: khi kéo thả thì trường column_ID của project bi loi không thay dôi
     }
