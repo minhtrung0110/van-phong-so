@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { getCookies } from '../Auth';
 import axiosClient from '../../axiosClient';
 import {concatQueryString} from "~/utils/concatQueryString";
 import {titleToSlug} from "~/utils/titleToSlug";
+import axiosClientCalendar from "~/api/axiosClientCalendar";
 
 export const configHeadersAuthenticate = () => {
     const token = getCookies('vps_token');
@@ -13,13 +15,13 @@ export const configHeadersAuthenticate = () => {
     };
 };
 
-export const getListDepartments = async ({ sort,filter, search,keySearch, page } = {}) => {
-    console.log({ sort,filter, search, page })
-    const url = 'departments';
+export const getListEvents = async ({ sort,filter, search,keySearch, page } = {}) => {
+    const url = 'events';
     const queryString = [];
     if (sort) {queryString.push(`orderBy=${sort}`)}
     if (search) {
-        queryString.push(`name=${search}`);
+        // queryString.push(`${keySearch}=${search}`);
+        queryString.push(search);
     }
     if (page) {
         queryString.push(`page=${page}`);
@@ -28,10 +30,14 @@ export const getListDepartments = async ({ sort,filter, search,keySearch, page }
         if (filter.status!== 'all') {
             queryString.push(`status=${filter.status}`);
         }
+        if (filter.role!== 'all') {
+            queryString.push(`role_id=${filter.role}`);
+        }
     }
     const final_url = concatQueryString(queryString, url);
-    const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
+    const reponse = await axiosClientCalendar.get(final_url, configHeadersAuthenticate());
     console.log('request URL: ' + final_url);
+
     if (reponse.status === 401) {
         return 401;
     } else if (reponse.status === 1) {
@@ -41,8 +47,8 @@ export const getListDepartments = async ({ sort,filter, search,keySearch, page }
     }
 };
 
-export const getDepartmentById = async (id) => {
-    const url = `departments/${id}`;
+export const getEventById = async (id) => {
+    const url = `events/${id}`;
     const response = await axiosClient.get(url,configHeadersAuthenticate());
     console.log(url)
     //console.log('response', response)
@@ -54,11 +60,24 @@ export const getDepartmentById = async (id) => {
         return {};
     }
 };
-export const createDepartment = async (body) => {
-    const url = 'departments';
+export const getListEventsByDepartmentId = async (id) => {
+    const url = `events/departments/${id}`;
+    const response = await axiosClient.get(url,configHeadersAuthenticate());
+    console.log(url)
+    //console.log('response', response)
+    if (response.status === 1) {
+        return response.data.result;
+    } else if (response.status === 401) {
+        return 401;
+    } else {
+        return {};
+    }
+};
+export const createEvent = async (body) => {
+    const url = 'events';
     const response = await axiosClient.post(url, body, configHeadersAuthenticate());
     if(response.status === 1 || response.message ==="Success") {
-        return {status:1,message:'Tạo phòng ban mới thành công'}
+        return {status:1,message:'Tạo nhân viên mới thành công'}
     }
     else if (response.status ===0){
         switch (response.code) {
@@ -79,11 +98,10 @@ export const createDepartment = async (body) => {
 
 };
 
-export const editDepartment = async (body) => {
-    const url = `departments`;
-
+export const editEvent = async (body) => {
+    const url = `events`;
     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
-    console.log(response)
+    console.log('Respond của edit calendar:',response)
     if(response.status === 1 || response.message ==="Success") {
         return {status:1,message:'Cập nhật nhân viên mới thành công'}
     }
@@ -103,8 +121,8 @@ export const editDepartment = async (body) => {
         }
     }
 };
-export const deleteDepartment = async (id) => {
-    const url = `/departments/${id}`;
+export const deleteEvent = async (id) => {
+    const url = `/events/${id}`;
     const response = await axiosClient.delete(url, configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {
@@ -113,8 +131,8 @@ export const deleteDepartment = async (id) => {
         return {status:0,message:'Cho Thôi Việc Thất Bại'}
     }
 };
-// export const getAllDepartmentsWithEmailAndPhone = async ({ email, phoneNumber } = {}) => {
-//     const url = '/api/admin/staff';
+// export const getAllEventsWithEmailAndPhone = async ({ email, phoneNumber } = {}) => {
+//     const url = '/api/admin/calendar';
 //     const queryString = [];
 //     if (email) {
 //         queryString.push(`email=${email}`);

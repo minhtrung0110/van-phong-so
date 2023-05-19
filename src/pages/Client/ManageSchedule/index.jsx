@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import {Calendar, momentLocalizer, Views} from "react-big-calendar";
@@ -10,6 +10,11 @@ import EditProject from "~/components/Client/Project/EditProject";
 import EventItem from "~/components/Client/Schedule/AddEvent";
 import AddEvent from "~/components/Client/Schedule/AddEvent";
 import EditEvent from "~/components/Client/Schedule/EditEvent";
+import {getListDepartments} from "~/api/Client/Department/departmentAPI";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import {getListEvents} from "~/api/Client/Calendar";
+import {useDispatch} from "react-redux";
 ManageSchedule.propTypes = {
 
 };
@@ -17,7 +22,9 @@ ManageSchedule.propTypes = {
 function ManageSchedule(props) {
     const [myEvents, setEvents] = useState([])
     const [showEvent,setShowEvent] = useState({event:null,show:false})
+    const [loading, setLoading] = React.useState(false);
     const [showAddEvent,setShowAddEvent] = useState({start:null,end:null,show:false})
+    const dispatch=useDispatch()
     const handleCancelShowEvent = ()=>{
         setShowEvent({...showEvent,show: false})
     }
@@ -27,12 +34,12 @@ function ManageSchedule(props) {
     const events = [
         {
             id:'1KL578as',
-            title: 'Chơi Gái',
+            title: 'Họp Khoa Luận Tốt Nghiệp',
             type: 'reminder',
             notification:'1',
             repeat:0,
-            start: new Date(2023, 2, 18, 10, 0),
-            end: new Date(2023, 2, 20, 12, 0),
+            start: new Date(2023, 5, 18, 10, 0),
+            end: new Date(2023, 5, 20, 12, 0),
         },
         {
             title: 'Họp Dự Án ',
@@ -43,8 +50,8 @@ function ManageSchedule(props) {
             members: [],
             notification:'120',
             repeat:1,
-            start: new Date(2023, 2, 21, 10, 0),
-            end: new Date(2023, 2, 28, 12, 0),
+            start: new Date(2023, 5, 21, 10, 0),
+            end: new Date(2023, 5, 28, 12, 0),
         },
         {
             title: 'Đánh Cầu Lông',
@@ -52,18 +59,18 @@ function ManageSchedule(props) {
             type: 'schedule',
             notification:'3',
             repeat:0,
-            start: new Date(2023, 2, 28, 10, 0),
-            end: new Date(2023, 2, 28, 12, 0),
+            start: new Date(2023, 5, 28, 10, 0),
+            end: new Date(2023, 5, 28, 12, 0),
             description: 'Mô tả sự kiện B'
         },
         {
-            title: 'Sự kiện bắn súng',
+            title: 'Triển khai ứng dụng đặt xe',
             id:'1as',
             type: 'reminder',
             notification:'60',
             repeat:1,
-            start: new Date(2023, 2, 1, 10, 0), // Ngày bắt đầu
-            end: new Date(2023, 2, 12, 12, 0), // Ngày kết thúc
+            start: new Date(2023, 4, 26, 10, 0), // Ngày bắt đầu
+            end: new Date(2023, 1, 30, 12, 0), // Ngày kết thúc
             rule: {
                 freq: 'weekly',
                 interval: 1,
@@ -74,7 +81,33 @@ function ManageSchedule(props) {
         },
         // ...
     ];
-
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+    };
+    const setEvent = (respond, value) => {
+        setEvent(respond.results);
+    };
+    useEffect(() => {
+        async function fetchDataEvents() {
+            const respond = await getListEvents();
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setEvent([])
+                return false;
+            } else {
+                setEvent(respond);
+            }
+            setLoading(false);
+        }
+        fetchDataEvents();
+    }, []);
     const localizer = momentLocalizer(moment);
 
     const handleSelectSlot = useCallback(
@@ -97,8 +130,8 @@ function ManageSchedule(props) {
     )
     const { defaultDate, scrollToTime } = useMemo(
         () => ({
-            defaultDate: new Date(2023, 2, 12),
-            scrollToTime: new Date(2023, 1, 1, 6),
+            defaultDate: new Date(2023, 4, 1),
+            scrollToTime: new Date(2023, 5, 30, 6),
         }),
         []
     )

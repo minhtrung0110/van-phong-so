@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import dayjs from 'dayjs';
@@ -20,6 +20,8 @@ import axiosClient from "~/api/axiosClient";
 import {getCookies} from "~/api/Client/Auth";
 import {isEmpty, split} from "lodash";
 import {validateEmail, validateEmailCompany} from "~/utils/validation";
+import {getListDepartments} from "~/api/Client/Department/departmentAPI";
+import {getListRoles} from "~/api/Client/Role/roleAPI";
 
 
 EditStaff.propTypes = {};
@@ -36,6 +38,8 @@ function EditStaff(props) {
     const [uploadAvatarURL, setUploadAvatarURL] = useState({imageUrl: ''});
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
+    const [listDepartment,setListDepartment] =useState([])
+    const [listRole,setListRole] = useState([])
     const [fileUpload, setFileUpload] = useState([
         {
             uid: '-1',
@@ -104,6 +108,7 @@ function EditStaff(props) {
             marital_status: data.marital_status,
             ethnicity: data.ethnicity,
             religion: data.religion,
+            status: data.status,
             education_degree: data.education_degree,
             graduated_school: data.graduated_school,
             contact_info: {
@@ -170,6 +175,34 @@ function EditStaff(props) {
                 onError(error);
             });
     };
+    useEffect(() => {
+        async function fetchDataDepartment() {
+            const filter = {  status:1};
+            const respond = await getListDepartments({filter});
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                return false;
+            } else if (respond === 500) {
+                setListDepartment([])
+                return false;
+            } else {
+                setListDepartment(respond.results.map((item)=>({label:item.name,value:item.id})));
+            }
+        }
+        async function fetchDataRole() {
+            const respond = await getListRoles({filter:'active'});
+            if (respond === 401) {
+                return false;
+            } else if (respond === 500) {
+                setListRole([])
+                return false;
+            } else {
+                setListRole(respond.results.map((item)=>({label:item.title,value:item.id})));
+            }
+        }
+        fetchDataRole();
+        fetchDataDepartment();
+    }, []);
     return (<div className="create-staff-container">
             {contextHolder}
             <HeaderContent title='Thêm Nhân Viên' icon={FaUserPlus}/>
@@ -347,18 +380,6 @@ function EditStaff(props) {
 
                         <Controller
                             control={control}
-                            name="ethnicity"
-                            rules={{required: true}}
-                            render={({field}) => (<Form.Item
-                                label="Dân tộc "
-                                hasFeedback
-                                validateStatus={errors.ethnicity ? 'error' : 'success'}
-                                help={errors.ethnicity ? 'Vui lòng điền dân tộc ' : null}>
-                                <Input {...field} size="middle"/>
-                            </Form.Item>)}
-                        />
-                        <Controller
-                            control={control}
                             name="avatar_url"
                             render={({field}) => (<Form.Item
                                 label="Ảnh Đại Diện">
@@ -411,6 +432,19 @@ function EditStaff(props) {
                                 validateStatus={errors.religion ? 'error' : 'success'}
                                 help={errors.religion ? 'Vui lòng nhập tôn giáo ' : null}>
                                 <Input {...field}/>
+                            </Form.Item>)}
+                        />
+
+                        <Controller
+                            control={control}
+                            name="ethnicity"
+                            rules={{required: true}}
+                            render={({field}) => (<Form.Item
+                                label="Dân tộc "
+                                hasFeedback
+                                validateStatus={errors.ethnicity ? 'error' : 'success'}
+                                help={errors.ethnicity ? 'Vui lòng điền dân tộc ' : null}>
+                                <Input {...field} size="middle"/>
                             </Form.Item>)}
                         />
                         <Controller
@@ -525,11 +559,9 @@ function EditStaff(props) {
                                 hasFeedback
                                 validateStatus={errors.role_id ? 'error' : 'success'}
                                 help={errors.role_id ? 'Vui lòng chọn chức vụ ' : null}>
-                                <Select {...field} placeholder="Chọn chức vụ" size="middle">
-                                    <Select.Option value={1}>CEO</Select.Option>
-                                    <Select.Option value={2}>CTO</Select.Option>
-                                    <Select.Option value={3}>Other</Select.Option>
-                                </Select>
+                                <Select {...field} placeholder="Chọn chức vụ" size="middle"
+                                options={listRole}
+                                />
                             </Form.Item>)}
                         />
                         <Controller
@@ -574,22 +606,23 @@ function EditStaff(props) {
                                 hasFeedback
                                 validateStatus={errors.department_id ? 'error' : 'success'}
                                 help={errors.department_id ? 'Vui lòng chọn phòng ban ' : null}>
-                                <Select {...field} options={[{key: '1', value: 1}]}/>
+                                <Select {...field} options={listDepartment}/>
                             </Form.Item>)}
                         />
-                        {/*<Controller*/}
-                        {/*    control={control}*/}
-                        {/*    name="group_id"*/}
-                        {/*    rules={{required: true}}*/}
-                        {/*    render={({field}) => (<Form.Item*/}
-
-                        {/*            label="Nhóm làm việc"*/}
-                        {/*            hasFeedback*/}
-                        {/*            validateStatus={errors.group_id ? 'error' : 'success'}*/}
-                        {/*            help={errors.group_id ? 'Vui lòng chọn nhóm ' : null}>*/}
-                        {/*            <Select {...field} options={[{key: '1', value: 1}]} size="middle"/>*/}
-                        {/*        </Form.Item>)}*/}
-                        {/*/>*/}
+                        <Controller
+                            name="status"
+                            control={control}
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Form.Item label="Trạng Thái" validateStatus={errors.status ? 'error' : 'success'}
+                                           hasFeedback help={errors.status ? 'Vui lòng chọn trạng thái' : null}>
+                                    <Radio.Group {...field}>
+                                        <Radio value={1}>Hoạt Động</Radio>
+                                        <Radio value={0}>Vô Hiệu</Radio>
+                                    </Radio.Group>
+                                </Form.Item>
+                            )}
+                        />
 
                     </Col>
                 </Row>

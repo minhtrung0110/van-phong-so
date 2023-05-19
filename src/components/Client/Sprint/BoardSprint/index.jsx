@@ -12,7 +12,7 @@ import NotFoundData from "~/components/commoms/NotFoundData";
 BoardSprint.propTypes = {};
 
 function BoardSprint({project, columnData, onEdit, onDelete, onCreateTask, onDeleteTask, onUpdateTask,members}) {
-    // console.log(columnData)
+    console.log('columnData',columnData)
     const [columns, setColumns] = useState(columnData)
     const [isOpenNewColForm, setIsOpenNewColForm] = useState(false)
     const [newColTitle, setNewColTitle] = useState('')

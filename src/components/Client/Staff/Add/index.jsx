@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import {
@@ -29,6 +29,8 @@ import axiosClient from "~/api/axiosClient";
 import {getCookies} from "~/api/Client/Auth";
 import {getValue} from "@testing-library/user-event/dist/utils";
 import {validateEmail, validateEmailCompany} from "~/utils/validation";
+import {getListDepartments} from "~/api/Client/Department/departmentAPI";
+import {getListRoles} from "~/api/Client/Role/roleAPI";
 
 AddStaff.propTypes = {};
 const getBase64 = (file) =>
@@ -45,6 +47,8 @@ function AddStaff(props) {
     const [previewTitle, setPreviewTitle] = useState('');
     const [uploadAvatarURL, setUploadAvatarURL] = useState({imageUrl: ''});
     const [messageApi, contextHolder] = message.useMessage();
+    const [listDepartment,setListDepartment] =useState([])
+    const [listRole,setListRole] = useState([])
     const dispatch = useDispatch();
 
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
@@ -58,24 +62,8 @@ function AddStaff(props) {
             setAutoCompleteResult(['.com', '.org', '.net'].map((domain) => `${value}${domain}`));
         }
     };
-    const websiteOptions = autoCompleteResult.map((website) => ({
-        label: website,
-        value: website,
-    }));
-    const residences = provinceVn;
 
-    const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
-            <Select
-                style={{
-                    width: 70,
-                }}
-            >
-                <Select.Option value="86">+86</Select.Option>
-                <Select.Option value="87">+87</Select.Option>
-            </Select>
-        </Form.Item>
-    );
+    const residences = provinceVn;
     const handleCancel = () => {
         dispatch(setIsAdd(false))
     }
@@ -87,7 +75,34 @@ function AddStaff(props) {
         setPreviewOpen(true);
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
     };
-    console.log(uploadAvatarURL)
+    useEffect(() => {
+        async function fetchDataDepartment() {
+            const filter = {  status:1};
+            const respond = await getListDepartments({filter});
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                return false;
+            } else if (respond === 500) {
+                setListDepartment([])
+                return false;
+            } else {
+                setListDepartment(respond.results.map((item)=>({label:item.name,value:item.id})));
+            }
+        }
+        async function fetchDataRole() {
+            const respond = await getListRoles({filter:'active'});
+            if (respond === 401) {
+                return false;
+            } else if (respond === 500) {
+                setListRole([])
+                return false;
+            } else {
+                setListRole(respond.results.map((item)=>({label:item.title,value:item.id})));
+            }
+        }
+        fetchDataRole();
+        fetchDataDepartment();
+    }, []);
     const onSave = async (data) => {
         const newStaff = {
             ...data,
@@ -555,11 +570,9 @@ function AddStaff(props) {
                                     hasFeedback
                                     validateStatus={errors.role_id ? 'error' : 'success'}
                                     help={errors.role_id ? 'Vui lòng chọn chức vụ ' : null}>
-                                    <Select {...field} placeholder="Chọn chức vụ" size="middle">
-                                        <Select.Option value={1}>CEO</Select.Option>
-                                        <Select.Option value={2}>CTO</Select.Option>
-                                        <Select.Option value={3}>Other</Select.Option>
-                                    </Select>
+                                    <Select {...field} placeholder="Chọn chức vụ" size="middle"
+
+                                    options={listRole}/>
                                 </Form.Item>
                             )}
                         />
@@ -606,9 +619,7 @@ function AddStaff(props) {
                                     hasFeedback
                                     validateStatus={errors.department_id ? 'error' : 'success'}
                                     help={errors.department_id ? 'Vui lòng chọn phòng ban ' : null}>
-                                    <Select {...field} options={[
-                                        {key: '1', value: 1}
-                                    ]}/>
+                                    <Select {...field} options={listDepartment}/>
                                 </Form.Item>
                             )}
                         />

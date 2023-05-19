@@ -27,7 +27,7 @@ function getItem(label, key, icon, children) {
 export const listMenuClientItems = [
     getItem('Tổ Chức', 'group', <FaLayerGroup/>, [
             getItem(<NavLink to={config.routes.home}>Bảng Tin</NavLink>, config.routes.home, <FaHome/>),
-            getItem(<NavLink to={config.routes.post}>Bài Viết</NavLink>, config.routes.post, <FaNewspaper/>),
+         //   getItem(<NavLink to={config.routes.post}>Bài Viết</NavLink>, config.routes.post, <FaNewspaper/>),
             getItem(<NavLink to={config.routes.staff}>Nhân Sự</NavLink>, config.routes.staff, <FaPeopleArrows/>),
             getItem(<NavLink to={config.routes.department}>Phòng Ban</NavLink>, config.routes.department, <FaLaptop/>),
             getItem(<NavLink to={config.routes.decentralize}>Phân Quyền</NavLink>, config.routes.decentralize,

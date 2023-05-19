@@ -63,7 +63,7 @@ function ManageTaskPage(props) {
             // let params = {};
             // // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
             // if (search !== '') params = { ...params, search };
-            const respond = await getSprintById(1);
+            const respond = await getSprintById(2);
             console.log('Data respond:', respond)
             if (respond.status === 401) {
                 messageApi.open({
@@ -96,16 +96,16 @@ function ManageTaskPage(props) {
         //     setColumns(mapOrder([...currentSprint.columns], currentSprint.columnOrder, 'id'))
         //     console.log('SprintActive: ',currentSprint)
 
-            // const data=   boardFromDB.columns.map((column) =>{
-            //   return  column.cards.map((card)=>({id:card.id,title:card.title,endTime:card.endTime}))
-            //
-            //  //   setTimeLine(prev=>[...prev,...data])
-            //   //  console.log(timeLine)
-            // })
-            // const flattenedArr = data.reduce((acc, val) => Array.isArray(val) ? acc.concat(flatten(val)) : acc.concat(val), []);
-            // console.log(flattenedArr )
+        // const data=   boardFromDB.columns.map((column) =>{
+        //   return  column.cards.map((card)=>({id:card.id,title:card.title,endTime:card.endTime}))
+        //
+        //  //   setTimeLine(prev=>[...prev,...data])
+        //   //  console.log(timeLine)
+        // })
+        // const flattenedArr = data.reduce((acc, val) => Array.isArray(val) ? acc.concat(flatten(val)) : acc.concat(val), []);
+        // console.log(flattenedArr )
 
-            // sort Column
+        // sort Column
         //
         //
         //
@@ -154,24 +154,24 @@ function ManageTaskPage(props) {
     }
     return (
 
-      <>
-          {
-              loading ? (<KanbanProjectSkeleton />):(
-                  <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
-                      {contextHolder}
-                      <HeaderTask onCurrentProject={setCurrentProject}/>
-                      <BoardBar boardName={'Dự Án'}  onFilter={setFilter}
-                                onCompleteSprint={handleUpdateSprint}
-                                members={listMembers}
-                                sprint={sprint}
-                                onSearch={setSearch}/>
-                      <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}
-                                    onUpdateTask={handleUpdateTask}
-                                    onDeleteTask={handleDeleteTask} />
-                  </div>
-              )
-          }
-      </>
+        <>
+            {
+                loading ? (<KanbanProjectSkeleton />):(
+                    <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
+                        {contextHolder}
+                        <HeaderTask onCurrentProject={setCurrentProject}/>
+                        <BoardBar boardName={'Dự Án'}  onFilter={setFilter}
+                                  onCompleteSprint={handleUpdateSprint}
+                                  members={listMembers}
+                                  sprint={sprint}
+                                  onSearch={setSearch}/>
+                        <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}
+                                      onUpdateTask={handleUpdateTask}
+                                      onDeleteTask={handleDeleteTask} />
+                    </div>
+                )
+            }
+        </>
     );
 }
 

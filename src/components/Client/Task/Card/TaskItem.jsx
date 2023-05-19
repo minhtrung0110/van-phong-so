@@ -30,8 +30,8 @@ function TaskItem({task,type,columns, onShowDetail}) {
                                   ))
                               }
                             <span className='status'>{
-                                getTitleStatusTask(task.board_column_id,columns).name
-
+                             getTitleStatusTask(task.board_column_id,columns).name
+//'Todo'
                             }</span>
 
                           </>

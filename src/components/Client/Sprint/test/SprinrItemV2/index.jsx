@@ -35,8 +35,9 @@ function SprintItemV2({
                           onUpdateTask
                       }) {
     //console.log('check nè', splitArrayByKey(sprint.tasks,'board_column_id'))
-    console.log(sprint)
+
     const totalTasks=sprint.hasOwnProperty('tasks')?sprint.tasks.length:0;
+    console.log(totalTasks)
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     const [showCompleteSprint, setShowCompleteSprint]=useState()

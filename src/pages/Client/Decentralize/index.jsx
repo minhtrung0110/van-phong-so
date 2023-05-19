@@ -35,7 +35,7 @@ function Decentralize(props) {
     const [data, setData] = useState([])
     const [page, setPage] = React.useState(1);
     const [totalRecord, setTotalRecord] = React.useState(data.length);
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const [search, setSearch] = React.useState('')
     const [filter, setFilter] = React.useState({role:'all',status:'all'})
     const [messageApi, contextHolder] = message.useMessage();

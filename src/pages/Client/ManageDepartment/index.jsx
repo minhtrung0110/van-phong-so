@@ -126,7 +126,7 @@ function ManageDepartment(props) {
             //  setLoading(true)
             console.log('Search:', search, ' - Filter:', filter)
             let params = {};
-            if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
+            if (filter.status !== 'all') params = { ...params, filter };
             if (search !== '') params = { ...params, filter, search };
             const respond = await getListDepartments(params);
             console.log('Data respond:', respond)

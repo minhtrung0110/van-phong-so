@@ -296,7 +296,7 @@ function BacklogPage(props) {
 
             } else if (respond.status === 1) {
                 setProject(respond.data, 'reset-page');
-                setListSprints(respond.data)
+                setListSprints(respond.data);
             } else {
                 setProject([])
                 return false;

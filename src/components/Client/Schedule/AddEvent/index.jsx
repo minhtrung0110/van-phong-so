@@ -167,46 +167,46 @@ function AddEvent({start,end,onSave,onCancel}) {
                         </Form.Item>
                     )}
                 />
-                <div className='config'>
-                    <div className='repeat'>
-                        <FaRecycle className='icon'/>
-                        <Controller
-                            name="repeat"
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => (
-                                <Select
-                                    {...field}
-                                    defaultValue="Không lặp lại"
-                                    style={{
-                                        width: 190,
-                                    }}
-                                    options={optionsLoopDuration}
-                                />
-                            )}
-                        />
+                {/*<div className='config'>*/}
+                {/*    <div className='repeat'>*/}
+                {/*        <FaRecycle className='icon'/>*/}
+                {/*        <Controller*/}
+                {/*            name="repeat"*/}
+                {/*            control={control}*/}
+                {/*            defaultValue=""*/}
+                {/*            render={({field}) => (*/}
+                {/*                <Select*/}
+                {/*                    {...field}*/}
+                {/*                    defaultValue="Không lặp lại"*/}
+                {/*                    style={{*/}
+                {/*                        width: 190,*/}
+                {/*                    }}*/}
+                {/*                    options={optionsLoopDuration}*/}
+                {/*                />*/}
+                {/*            )}*/}
+                {/*        />*/}
 
-                    </div>
-                    <div className='notification'>
-                        <FaBell className='icon'/>
-                        <Controller
-                            name="notification"
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => (
-                                <Select
-                                    {...field}
-                                    defaultValue="Không nhắc"
-                                    style={{
-                                        width: 190,
-                                    }}
-                                    options={optionsNotifyDuration}
-                                />
-                            )}
-                        />
+                {/*    </div>*/}
+                {/*    <div className='notification'>*/}
+                {/*        <FaBell className='icon'/>*/}
+                {/*        <Controller*/}
+                {/*            name="notification"*/}
+                {/*            control={control}*/}
+                {/*            defaultValue=""*/}
+                {/*            render={({field}) => (*/}
+                {/*                <Select*/}
+                {/*                    {...field}*/}
+                {/*                    defaultValue="Không nhắc"*/}
+                {/*                    style={{*/}
+                {/*                        width: 190,*/}
+                {/*                    }}*/}
+                {/*                    options={optionsNotifyDuration}*/}
+                {/*                />*/}
+                {/*            )}*/}
+                {/*        />*/}
 
-                    </div>
-                </div>
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
             {
                 typeEvent==='event'  && (
