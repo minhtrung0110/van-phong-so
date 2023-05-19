@@ -13,7 +13,7 @@ import FilterProject from "~/components/commoms/FilterProject";
 import {listMembersForTask} from "~/asset/data/initalDataTask";
 import CompleteSprint from "~/components/Client/Sprint/CompleteSprint";
 
-function BoardBar({boardName, sprint, onFilter,onCompleteSprint}) {
+function BoardBar({boardName,members, sprint, onFilter,onCompleteSprint}) {
     const [showConfirmDelete, setIsShowConfirmDelete] = useState(false)
     const [showCompleteSprint, setShowCompleteSprint]=useState()
     const listActionProjects = [
@@ -46,12 +46,12 @@ function BoardBar({boardName, sprint, onFilter,onCompleteSprint}) {
     return (
         <div className="navbar-board">
             <div className="board-view">
-                <h4 className='board-name'><FaClipboardList className='icon'/> {boardName}</h4>
+                <h4 className='board-name'><FaClipboardList className='icon'/> {members.name}</h4>
             </div>
             <div className="board-filter">
                 <div className="sprint-name">{sprint.title}</div>
                 <FilterProject onFilter={onFilter} listmember={listMembersForTask} className={'filter-btn'}/>
-                <GroupMember />
+                <GroupMember defaultMembers={members.members} sizeAvatar={'small'} />
                 <div>
                     <Dropdown
                         menu={{

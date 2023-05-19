@@ -41,7 +41,7 @@ function ProjectTable({tableHeader, tableBody,onUpdate,onDelete}) {
     const handleEditProject=  async (item) => {
         const result = await getProjectById(item.id)
         if (result.status===1){
-            dispatch(setProject(item))
+            dispatch(setProject(result.data))
             dispatch(setIsEditProject(true))
         }
         else if(result.status===401){
@@ -87,7 +87,7 @@ function ProjectTable({tableHeader, tableBody,onUpdate,onDelete}) {
                     <td className="col-txt">{`${item.created_by.first_name} ${item.created_by.last_name}`}</td>
                     <td className="col-action">
                         {
-                            item.status!==-1 && (
+                            item.status!==2 && (
                                 <button
                                     id="show-user"
                                     onClick={() => handleChosenProject(item)}

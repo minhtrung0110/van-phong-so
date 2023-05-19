@@ -52,15 +52,18 @@ function Decentralize(props) {
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
-        // const result = await getAllStaffs({
-        //     page,
-        // });
-        // if (result === 401) {
-        // } else if (result === 500) {
-        //     return false;
-        // } else {
-        //     setStaff(result, 'page');
-        // }
+        const result = await getListRoles({
+            page,
+        });
+        if (result === 401) {
+            handleSetUnthorization();
+            return false;
+        } else if (result === 500) {
+            setData([])
+            return false;
+        } else {
+            setRole(result, 'page');
+        }
         setLoading(false);
     };
     const handleRemoveDecentralize = async (id) => {
@@ -165,7 +168,7 @@ function Decentralize(props) {
                                         {totalRecord >= 5 && (
                                             <PaginationUI
                                                 handlePageChange={handlePageChange}
-                                                perPage={5}
+                                                perPage={10}
                                                 totalRecord={totalRecord}
                                                 currentPage={page}
                                             />

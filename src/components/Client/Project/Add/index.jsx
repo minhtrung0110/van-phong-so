@@ -65,19 +65,19 @@ function AddProject({onBack}) {
         control, handleSubmit,setValue, formState: {errors, isDirty, dirtyFields},
     } = useForm({});
     useEffect(() => {
-        // call API get listDepartment
+        setValue('member_ids',[])
         fetchDataDepartment()
-        // call API get listStaff
-       // const data = listStaffs.map((item) => ({value: item.mail, label: `${item.first_name} ${item.last_name}`}))
-      //  setListStaff(data)
     }, [])
     const handleChoseDepartment=(id) => {
         setValue('department_id',id)
         fetchDataStaffs(id)
-        console.log(listStaff)
+
     }
     const onSubmit = async (data) => {
-        const newProject = {...data, created_by: userLogin,}
+        const member_ids=data.member_ids.map((member) =>{
+            return listStaff.find(item => item.email===member).ID
+        })
+        const newProject = {...data,member_ids,status:0, created_by: userLogin,}
         console.log(newProject)
         const result = await createProject(newProject)
         if (result.status === 1) {
@@ -86,8 +86,8 @@ function AddProject({onBack}) {
                 content: result.message,
                 duration: 1.3,
             });
-
             setTimeout(() => handleCancel(), 1300)
+            onBack('desc', 'add')
         } else {
             messageApi.open({
                 type: 'error',
@@ -95,10 +95,10 @@ function AddProject({onBack}) {
                 duration: 1.3,
             });
         }
-        onBack('desc', 'add')
+
     }
     const mixDataDepartments =(data)=>{
-        return data.map(item=>({value:item.id, label:item.name}))
+        return data.map(item=>({value:item.id, label:item.name,status:1}))
     }
     const filterOption = (input, option) => {
         //validate nó ẽ kiễm tra xem khớp với value hoăc label koo
@@ -168,15 +168,15 @@ function AddProject({onBack}) {
                     <div className='members'>
                         <h4 className='lable'>Thêm Thành Viên: </h4>
                         <Controller
-                            name="listMembers"
+                            name="member_ids"
                             control={control}
                             defaultValue=""
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     hasFeedback
-                                    validateStatus={errors.listMembers ? 'error' : 'success'}
-                                    help={errors.listMembers ? 'Vui lòng chọn thành viên' : null}>
+                                    validateStatus={errors.member_ids ? 'error' : 'success'}
+                                    help={errors.member_ids ? 'Vui lòng chọn thành viên' : null}>
                                     {/*<Select*/}
                                     {/*    {...field}*/}
                                     {/*    showSearch*/}
@@ -207,7 +207,7 @@ function AddProject({onBack}) {
                                         {
                                            !isEmpty(listStaff) && listStaff.map((item, i) =>(
                                                 <Option key={i}
-                                                        value={ item.mail} label= {item.full_name}
+                                                        value={item.email} label= {item.full_name}
                                                 >
                                                  <div   style={{
                                                      display:'flex',

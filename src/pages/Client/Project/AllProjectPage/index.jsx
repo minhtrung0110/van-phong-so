@@ -72,9 +72,10 @@ function AllProjectPage(props) {
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
-        const respond= await getListProjects({
+        const respond = await getListProjects({
             page,
         });
+        console.log('Data respond:', respond)
         if (respond === 401) {
             handleSetUnthorization();
             return false;
@@ -82,7 +83,7 @@ function AllProjectPage(props) {
             setListProject([])
             return false;
         } else {
-            setProject(respond, 'reset-page');
+            setProject(respond, 'page');
             setLoading(false);
         }
     };
@@ -164,10 +165,10 @@ function AllProjectPage(props) {
                                      )
 
                                  }
-                                 {totalRecord >= 1 && (
+                                 {totalRecord >= 6 && (
                                      <PaginationUI
                                          handlePageChange={handlePageChange}
-                                         perPage={8}
+                                         perPage={10}
                                          totalRecord={totalRecord}
                                          currentPage={page}
                                      />

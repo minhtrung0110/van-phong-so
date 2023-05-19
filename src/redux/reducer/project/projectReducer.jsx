@@ -16,6 +16,7 @@ export const projectReducer = createSlice({
         isReset:'reset-page',
         isResetSprint:false,
         isResetTask:false,
+        members:[],
         task: {},
     },
     reducers: {
@@ -27,6 +28,9 @@ export const projectReducer = createSlice({
         },
         setSprint: (state, action) => {
             state.sprint = action.payload;
+        },
+        setMembers: (state, action) => {
+            state.members = action.payload;
         },
         setDetailTask: (state, action) => {
             state.detailTask = action.payload;
@@ -61,6 +65,8 @@ export const projectReducer = createSlice({
     },
 });
 
-export const { setKeyProject,setIsAdd,setIsEditProject, setTask,setSprint,setIsReset,setIsResetSprint,setIsResetTask,setProject,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = projectReducer.actions;
+export const { setKeyProject,setIsAdd,setIsEditProject, setTask,setSprint,setIsReset,setIsResetSprint,setIsResetTask,
+    setMembers,
+    setProject,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = projectReducer.actions;
 
 export default projectReducer.reducer;

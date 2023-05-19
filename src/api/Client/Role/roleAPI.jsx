@@ -43,15 +43,13 @@ export const getListRoles = async ({sort, filter, search, keySearch, page} = {})
 
 export const getRoleById = async (id) => {
     const url = `roles/${id}`;
-    const response = await axiosClient.get(url, configHeadersAuthenticate());
-    console.log(url)
-    //console.log('response', response)
-    if (response.status === 1) {
-        return response.data.result;
-    } else if (response.status === 0) {
-        return 401;
-    } else {
-        return {};
+    const response = await axiosClient.get(url,configHeadersAuthenticate());
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,data:response.data.result,message:'Lấy thông tin quyền thành công'}
+    }
+    else if (response.status===401)   return {status:401,message:'Không thể xác thực'}
+    else {
+        return {status:0,data:[],message:'Không thể lấy thông tin quyền.'}
     }
 };
 export const createRole = async (body) => {
@@ -66,10 +64,10 @@ export const createRole = async (body) => {
 
 };
 
-export const editRole = async (id, body) => {
+export const editRole = async (body) => {
     const url = `roles`;
-
     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
+    console.log(response)
     if (response.status === 1 || response.message === "Success") {
         return {status: 1, message: 'Cập nhật quyền mới thành công'}
     } else if (response.status === 401) return {status: 401, message: 'Không thể xác thuc'}

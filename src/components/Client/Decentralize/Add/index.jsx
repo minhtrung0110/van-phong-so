@@ -70,17 +70,17 @@ function AddRole({onBack}) {
             .map(([key]) => key);
         const newRole = {
             title: name,
-            status: 1,
-            permissions: trueFieldsArray
+            status: true,
+            permissions_title: trueFieldsArray
         }
+        console.log(newRole);
         const result = await createRole(newRole)
         if(result.status===1){
             messageApi.open({
                 type: 'success',
                 content: result.message,
                 duration: 1.3,
-            });
-            //  setTimeout(()=> dispatch(setIsAdd(false)),1400)
+            });setTimeout(()=> dispatch(setIsAdd(false)),1200)
         }
         else {
             messageApi.open({

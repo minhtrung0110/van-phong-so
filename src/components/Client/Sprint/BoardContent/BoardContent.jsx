@@ -19,7 +19,7 @@ import TimeLine from "~/components/Client/Sprint/TimeLine";
 import {dragAndDropTask} from "~/api/Client/Task/taskAPI";
 
 
-function BoardContent({board,onBoard,columnData, onDeleteTask,onUpdateTask,timeLine}) {
+function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,timeLine}) {
    // console.log({board,onBoard,columnData})
    // console.log('rendering')
     const [columns,setColumns] = useState(columnData)

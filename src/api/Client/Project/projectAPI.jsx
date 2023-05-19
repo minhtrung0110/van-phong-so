@@ -58,7 +58,22 @@ export const getProjectById = async (id,search) => {
     }
     const final_url = concatQueryString(queryString, url);
     const response = await axiosClient.get(final_url,configHeadersAuthenticate());
-    console.log(response)
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,data:response.data.result,message:'Lấy thông tin dự án thành công'}
+    }
+    else if (response.status===401)   return {status:401,message:'Không thể xác thực'}
+    else {
+        return {status:0,data:[],message:'Không thể lấy thông tin dự án.'}
+    }
+};
+export const getStaffsProjectById = async (id,search) => {
+    const url = `projects/${id}/employees`;
+    const queryString = [];
+    if (search) {
+        queryString.push(`search=${search}`);
+    }
+    const final_url = concatQueryString(queryString, url);
+    const response = await axiosClient.get(final_url,configHeadersAuthenticate());
     if(response.status === 1 || response.message ==="Success") {
         return {status:1,data:response.data.result,message:'Lấy thông tin dự án thành công'}
     }

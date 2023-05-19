@@ -19,6 +19,7 @@ import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import KanbanProject from "~/components/commoms/Skeleton/Kaban/KanbanProject";
 import KanbanProjectSkeleton from "~/components/commoms/Skeleton/Kaban/KanbanProject";
+import {getStaffsProjectById} from "~/api/Client/Project/projectAPI";
 
 ManageTaskPage.propTypes = {};
 
@@ -26,6 +27,7 @@ function ManageTaskPage(props) {
     const [board, setBoard] = useState({})
     const [columns, setColumns] = useState([])
     const [loading, setLoading] = React.useState(true);
+    const [listMembers, setListMembers] = useState([])
     const [currentProject, setCurrentProject] = useState('')
     const [filter, setFilter] = useState()
     const [messageApi, contextHolder] = message.useMessage();
@@ -36,9 +38,28 @@ function ManageTaskPage(props) {
     const dispatch=useDispatch()
     const idProject=useSelector(keyProjectSelector)
     const location=useLocation()
+    const fetchDataMembers=async (id) => {
+        const respond = await getStaffsProjectById(id)
+        if (respond.status === 401) {
+            messageApi.open({
+                type: 'error',
+                content: respond.message,
+                duration: 1.3,
+            });
+            handleSetUnthorization();
+            return false;
+
+        } else if (respond.status === 1) {
+            setListMembers(respond.data);
+        } else {
+            setListMembers([])
+            return false;
+        }
+        setLoading(false);
+    }
     useEffect(() => {
+        const project=JSON.parse(localStorage.getItem('project'))
         async function fetchDataSprint() {
-            const project=JSON.parse(localStorage.getItem('project'))
             // let params = {};
             // // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
             // if (search !== '') params = { ...params, search };
@@ -63,6 +84,7 @@ function ManageTaskPage(props) {
             setLoading(false);
         }
         fetchDataSprint();
+        fetchDataMembers(1)
 
         // const boardFromDB = initialData.boards.find(board => board.id === project.projectId)
         // if (!isEmpty(boardFromDB)) {
@@ -140,6 +162,7 @@ function ManageTaskPage(props) {
                       <HeaderTask onCurrentProject={setCurrentProject}/>
                       <BoardBar boardName={'Dự Án'}  onFilter={setFilter}
                                 onCompleteSprint={handleUpdateSprint}
+                                members={listMembers}
                                 sprint={sprint}
                                 onSearch={setSearch}/>
                       <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}

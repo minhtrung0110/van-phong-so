@@ -21,7 +21,7 @@ import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {createSprint, deleteSprint, editSprint, getListSprintByProjectId} from "~/api/Client/Sprint/sprintAPI";
-import {setIsResetSprint} from "~/redux/reducer/project/projectReducer";
+import {setIsResetSprint, setMembers} from "~/redux/reducer/project/projectReducer";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import ListSprint from "~/components/commoms/Skeleton/Project/Sprint";
 import ListSprintSkeleton from "~/components/commoms/Skeleton/Project/Sprint";

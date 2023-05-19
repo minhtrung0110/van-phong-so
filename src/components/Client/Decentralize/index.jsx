@@ -6,6 +6,10 @@ import {FaPen,FaTimesCircle} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {setDecentralize,setIsEdit} from "~/redux/reducer/decentralize/decentralizeReducer";
+import {getDepartmentById} from "~/api/Client/Department/departmentAPI";
+import {setDepartment} from "~/redux/reducer/department/departmentReducer";
+import {message} from "antd";
+import {getRoleById} from "~/api/Client/Role/roleAPI";
 
 
 DecentralizeTable.propTypes = {};
@@ -16,11 +20,25 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
         name:'',
         show: false,
     });
+    const [messageApi, contextHolder] = message.useMessage();
     const dispatch = useDispatch()
-    const handleEditDecentralize = (e,item) => {
-        e.stopPropagation();
-        dispatch(setIsEdit(true));
-        dispatch(setDecentralize(item));
+    const handleEditDecentralize = async (item) => {
+        const data = await getRoleById(item.id);
+        console.log('Data nhận :', data)
+        if (Object.keys(data).length > 0) {
+            dispatch(setIsEdit(true));
+            dispatch(setDecentralize({...data.data,id: item.id}));
+        } else if (data === 401) {
+            //   //  Notiflix.Block.remove('#root');
+        } else {
+            //    // Notiflix.Block.remove('#root');
+            messageApi.open({
+                type: 'error',
+                content: 'Cập nhật thất bại',
+                duration: 1.3,
+            });
+        }
+
     };
     const handleConfirmDelete=(id)=>{
         setShowPopupDelete({...showPopupDelete, show: false});
@@ -38,6 +56,7 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
                 <tr key={item.id} className="row-data c-pointer row-item"
 
                 >
+                    {contextHolder}
 
                     <td className="col-txt">{item.id}</td>
 
@@ -56,7 +75,7 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
                     <td className="col-action">
                         <button
                             id="edit-department"
-                            onClick={(e) => handleEditDecentralize(e,item)}
+                            onClick={() => handleEditDecentralize(item)}
                             className=" btn-edit"
                         >
                             <FaPen className="icon-edit"/>

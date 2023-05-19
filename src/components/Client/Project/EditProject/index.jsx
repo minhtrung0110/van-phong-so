@@ -13,45 +13,91 @@ import HeaderContent from "~/components/commoms/HeaderContent";
 import {FaFolderPlus} from "react-icons/fa";
 import {setIsAdd, setIsEditProject} from "~/redux/reducer/project/projectReducer";
 import {editProject} from "~/api/Client/Project/projectAPI";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import {getListDepartments} from "~/api/Client/Department/departmentAPI";
+import {getListStaffsByDepartmentId} from "~/api/Client/Staff/staffAPI";
+import {isEmpty} from "lodash";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 
 
 function EditProject({onBack}) {
     const  project=useSelector(projectSelector)
-    console.log(project)
+    const [listStaff, setListStaff] = useState([])
     const [listRoom, setListRoom] = useState([])
-    const [listStaff, setListStaff] = useState()
     const [messageApi, contextHolder] = message.useMessage();
-    const defaultMembers= !!project.members && project.members.map(item=>({value: item.mail, label:  `${item.first_name} ${item.last_name}`}))
+    const defaultMembers= !!project.members && project.members.map(item=>({value: item.email, label:  `${item.first_name} ${item.last_name}`}))
     const {
-        control, handleSubmit, formState: {errors, isDirty, dirtyFields},
+        control, handleSubmit,setValue, formState: {errors, isDirty, dirtyFields},
     } = useForm({
-        defaultValues:{...project,members:[defaultMembers]}
+        defaultValues:{...project,member_ids:defaultMembers}
     });
+    console.log({...project,member_ids:defaultMembers})
     const dispatch=useDispatch()
-
+    const userLogin=useSelector(getUserSelector)
     const handleCancel=()=>{
         dispatch(setIsEditProject(false))
     }
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+    };
+    const    fetchDataDepartment  = async () => {
+        const respond = await getListDepartments();
+        console.log('Data respond:', respond)
+        if (respond === 401) {
+            handleSetUnthorization();
+            return false;
+        } else if (respond === 500) {
+            setListRoom([])
+            return false;
+        } else {
+            setListRoom(mixDataDepartments(respond.results));
+        }
+    }
+    const    fetchDataStaffs = async (id) => {
+        const respond = await getListStaffsByDepartmentId (id);
+        console.log('Data respond:', respond)
+        if (respond === 401) {
+            handleSetUnthorization();
+            return false;
+        } else if (respond === 500) {
+            setListStaff([])
+            return false;
+        } else {
+            setListStaff(respond);
+        }
+    }
+    const handleChoseDepartment=(id) => {
+        setValue('department_id',id)
+        fetchDataStaffs(id)
+    }
     useEffect(() => {
-        // call API get listDepartment
-        setListRoom(mixDataDepartments(listDepartments))
-        // call API get listStaff
-        const data = listStaffs.map((item) => ({value: item.mail, label: `${item.first_name} ${item.last_name}`}))
-        setListStaff(data)
+
+        fetchDataDepartment()
+        fetchDataStaffs(project.department_id)
     }, [])
     const onSubmit = async (data) => {
-        const result = await editProject({...data,members:[]});
+        const member_ids=data.member_ids.map((member) =>{
+            return listStaff.find(item => item.email===member).ID
+        })
+        const updateProject = {...data,member_ids,status:0, created_by: userLogin,}
+        const result = await editProject(updateProject);
         if(result.status===1){
             messageApi.open({
                 type: 'success',
                 content: result.message,
                 duration: 1.3,
             });
+            setTimeout(() => handleCancel(), 1300)
           onBack('desc', 'edit')
             handleCancel()
         }
         else if(result.status===401){
-
+                handleSetUnthorization()
         }
         else {
             messageApi.open({
@@ -76,7 +122,7 @@ function EditProject({onBack}) {
     const listStatus=[
         {label:'Hoàn Thành',value:1},
         {label:'Đang Triển Khai',value:0},
-        {label:'Dừng',value:-1},
+        {label:'Dừng',value:2},
     ]
     return (
         <>
@@ -126,6 +172,7 @@ function EditProject({onBack}) {
                                     <Select
                                         options={listRoom}
                                         {...field}  className='input' size="large"
+                                        onChange={(e) =>handleChoseDepartment(e)}
                                         placeholder="Chọn phòng ban ..."/>
                                 </Form.Item>
                             )}
@@ -135,30 +182,15 @@ function EditProject({onBack}) {
                     <div className='members'>
                         <h4 className='lable'>Thêm Thành Viên: </h4>
                         <Controller
-                            name="members"
+                            name="member_ids"
                             control={control}
                             defaultValue=""
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     hasFeedback
-                                    validateStatus={errors.members ? 'error' : 'success'}
-                                    help={errors.members ? 'Vui lòng chọn thành viên' : null}>
-                                    {/*<Select*/}
-                                    {/*    {...field}*/}
-                                    {/*    showSearch*/}
-                                    {/*    mode="multiple"*/}
-                                    {/*    size={'large'}*/}
-                                    {/*    placeholder="Email, tên đăng nhập ..."*/}
-                                    {/*    filterOption={filterOption}*/}
-                                    {/*    filterSort={(optionA, optionB) =>*/}
-                                    {/*        (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())*/}
-                                    {/*    }*/}
-                                    {/*    style={{*/}
-                                    {/*        width: '100%',*/}
-                                    {/*    }}*/}
-                                    {/*    options={listStaff}*/}
-                                    {/*/>*/}
+                                    validateStatus={errors.member_ids ? 'error' : 'success'}
+                                    help={errors.member_ids ? 'Vui lòng chọn thành viên' : null}>
                                     <Select
                                         {...field}
                                         showSearch
@@ -172,16 +204,16 @@ function EditProject({onBack}) {
                                         filterOption={filterOption}
                                     >
                                         {
-                                            listStaffs.map((item, i) =>(
+                                            !isEmpty(listStaff) && listStaff.map((item, i) =>(
                                                 <Option key={i}
-                                                        value={ item.mail} label={ `${item.first_name} ${item.last_name}`}
+                                                        value={item.email} label= {item.full_name}
                                                 >
                                                     <div   style={{
                                                         display:'flex',
                                                         alignItem:'center',
                                                         justifyContent: 'flex-start',
                                                     }}>
-                                                        <AvatarCustom lastName={item.last_name} avatar={item.avatar} size={'small'}/>
+                                                        <AvatarCustom lastName={item.full_name} avatar={item.avatar_url} size={'small'}/>
 
                                                         <span  style={{
                                                             marginLeft:'1rem',
@@ -189,7 +221,7 @@ function EditProject({onBack}) {
                                                             fontStyle:'italic',
                                                             fontWeight:'bold',
                                                         }}
-                                                        >{`${item.first_name} ${item.last_name}`}</span>
+                                                        >{item.full_name}</span>
                                                     </div>
                                                 </Option>
                                             ))
