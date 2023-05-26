@@ -30,7 +30,7 @@ export const listMenuClientItems = [
          //   getItem(<NavLink to={config.routes.post}>Bài Viết</NavLink>, config.routes.post, <FaNewspaper/>),
             getItem(<NavLink to={config.routes.staff}>Nhân Sự</NavLink>, config.routes.staff, <FaPeopleArrows/>),
             getItem(<NavLink to={config.routes.department}>Phòng Ban</NavLink>, config.routes.department, <FaLaptop/>),
-            getItem(<NavLink to={config.routes.decentralize}>Phân Quyền</NavLink>, config.routes.decentralize,
+            getItem(<NavLink to={config.routes.decentralize}>Chức Danh</NavLink>, config.routes.decentralize,
                 <FaUserCog/>),
             getItem(<NavLink to={config.routes.setting}>Cài Đặt</NavLink>, config.routes.setting, <FaCogs/>),
         ]

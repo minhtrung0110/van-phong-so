@@ -338,22 +338,22 @@ function BacklogPage(props) {
     }
     const handleUpdateSprint=async (id,data) => {
         console.log('Update Sprint: ',id, data)
-        const result = await editSprint(id,data);
-        if (result.status === 1) {
-            messageApi.open({
-                type: 'success',
-                content: result.message,
-                duration: 1.3,
-            });
-           // dispatch(setIsResetSprint(true))
-            setLoadData(!loadData)
-        } else if (result.status === 0) {
-            messageApi.open({
-                type: 'error',
-                content: result.message,
-                duration: 1.4,
-            });
-        }
+        // const result = await editSprint(id,data);
+        // if (result.status === 1) {
+        //     messageApi.open({
+        //         type: 'success',
+        //         content: result.message,
+        //         duration: 1.3,
+        //     });
+        //    // dispatch(setIsResetSprint(true))
+        //     setLoadData(!loadData)
+        // } else if (result.status === 0) {
+        //     messageApi.open({
+        //         type: 'error',
+        //         content: result.message,
+        //         duration: 1.4,
+        //     });
+        // }
 
     }
     const handleDeleteSprint=async (item) => {
