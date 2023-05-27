@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './style.scss'
 import {Calendar, momentLocalizer, Views} from "react-big-calendar";
 import moment from "moment";
-import 'moment/locale/vi';
+
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import {Modal} from "antd";
 import EditProject from "~/components/Client/Project/EditProject";
@@ -15,6 +15,7 @@ import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {getListEvents} from "~/api/Client/Calendar";
 import {useDispatch} from "react-redux";
+import dayjs from "dayjs";
 ManageSchedule.propTypes = {
 
 };
@@ -88,9 +89,6 @@ function ManageSchedule(props) {
             deleteCookie('vps_token');
         }
     };
-    const setEvent = (respond, value) => {
-        setEvent(respond.results);
-    };
     useEffect(() => {
         async function fetchDataEvents() {
             const respond = await getListEvents();
@@ -99,17 +97,20 @@ function ManageSchedule(props) {
                 handleSetUnthorization();
                 return false;
             } else if (respond === 500) {
-                setEvent([])
+                setEvents([])
                 return false;
             } else {
-                setEvent(respond);
+                setData(respond.results);
             }
             setLoading(false);
         }
         fetchDataEvents();
     }, []);
     const localizer = momentLocalizer(moment);
-
+    const setData=(array)=>{
+      const events=  array.map((event)=>({id: event.id,start:new Date(event.start_time),end:new Date(event.end_time),title:event.title,...event}))
+        setEvents(events)
+    }
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
             setShowAddEvent({start,end,show: true})
@@ -130,7 +131,7 @@ function ManageSchedule(props) {
     )
     const { defaultDate, scrollToTime } = useMemo(
         () => ({
-            defaultDate: new Date(2023, 4, 1),
+            defaultDate: new Date(2023, 5, 1),
             scrollToTime: new Date(2023, 5, 30, 6),
         }),
         []
@@ -169,13 +170,14 @@ function ManageSchedule(props) {
             repeat:event.repeat,
         };
     };
+    console.log(myEvents)
     return (
         <div  className='container-schedule'>
             <Calendar
                 className='calendar'
                 defaultDate={defaultDate}
                 defaultView={Views.MONTH}
-                events={events}
+                events={myEvents}
                 localizer={localizer}
                 onSelectEvent={handleSelectEvent}
                 onSelectSlot={handleSelectSlot}
