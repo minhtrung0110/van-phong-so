@@ -16,7 +16,6 @@ InfoUser.propTypes = {
 };
 
 const cx = classNames.bind(styles);
-
 function InfoUser({user,onLogout}) {
     const [showImage, setShowImage] = useState(false);
     const checkImageUrl = (url) => {
@@ -51,7 +50,7 @@ function InfoUser({user,onLogout}) {
                           <AvatarCustom avatar={user.avatar_url} lastName={user.name} size={'default'}/>
                           <div className={cx('gr')}>
                               <span  className={cx('name')}>{`${user.name}`}</span>
-                              <span className={cx('role')} >{`${user.username} `}</span>
+                              <span className={cx('role')} >{`${user.role_title} `}</span>
                           </div>
                       </div>
 
@@ -86,15 +85,8 @@ function InfoUser({user,onLogout}) {
     };
     const menuStyle = {
         boxShadow: 'none',
-    };
-    //console.log('check Image',checkErrorImage(avatar))
+    }
     return (
-        // <Menu   items={ userMenu} hideOnClick={false}>
-        // <div className={cx('box-user')}>
-        //    <AvatarCustom avatar={avatar} lastName={lastName} />
-        //
-        // </div>
-        // </Menu>
         <Dropdown
             menu={{
                 items,
@@ -112,5 +104,3 @@ function InfoUser({user,onLogout}) {
 }
 
 export default InfoUser;
-
-//className={cx('')}

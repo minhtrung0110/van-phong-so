@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {FaAngleDown, FaBars, FaFlipboard, FaPager, FaSignOutAlt, FaUser,} from "react-icons/fa";
+import { FaBars,} from "react-icons/fa";
 import classNames from "classnames/bind";
 import InfoUser from "~/components/commoms/InfoUser";
 
@@ -10,11 +10,7 @@ import {isCollapseSideBar} from "~/redux/selectors/dashboard/dashboardSelector";
 import {setCollapseSideBar} from "~/redux/reducer/dashboard/dashboardReducer";
 import {useLocation, useNavigate} from "react-router-dom";
 import {dataConvertBreadcrumbLanguage} from "~/asset/data/data-convert-breadcrumb-language";
-import SearchCustom from "~/components/commoms/Search";
-import DropdownNotify from "~/components/commoms/DropdownNotify";
 import styles from './Header.module.scss'
-import {Dropdown} from "antd";
-import SelectHeaderProject from "~/components/commoms/SelectHeaderProject";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {setUser, setExpiredToken, setIsLogin} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies, handleGetUserInformation} from "~/api/Client/Auth";

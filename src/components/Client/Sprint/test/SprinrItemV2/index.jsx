@@ -171,7 +171,6 @@ function SprintItemV2({
                                 {
                                  totalTasks>0 &&   splitArrayByKey(sprint.tasks,'board_column_id').map((item, index) => (
                                         <span key={index} className={`status-${item.id}`}>{!!item.cards.length?item.cards.length:0}</span>
-
                                     ))
                                 }
                             </div>
@@ -278,7 +277,7 @@ function SprintItemV2({
                    width={450}
                    style={{top: 80}}
             >
-              <CompleteSprint onComplete={handleCompleteSprint} onCancel={setShowCompleteSprint} />
+              <CompleteSprint sprint={sprint} onComplete={handleCompleteSprint} onCancel={setShowCompleteSprint} />
             </Modal>
         </div>
     );

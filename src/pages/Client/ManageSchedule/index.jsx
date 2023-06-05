@@ -5,7 +5,7 @@ import {Calendar, momentLocalizer, Views} from "react-big-calendar";
 import moment from "moment";
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import {Modal} from "antd";
+import {message, Modal} from "antd";
 import EditProject from "~/components/Client/Project/EditProject";
 import EventItem from "~/components/Client/Schedule/AddEvent";
 import AddEvent from "~/components/Client/Schedule/AddEvent";
@@ -13,9 +13,12 @@ import EditEvent from "~/components/Client/Schedule/EditEvent";
 import {getListDepartments} from "~/api/Client/Department/departmentAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
-import {getListEvents} from "~/api/Client/Calendar";
+import {createEvent, getListEvents} from "~/api/Client/Calendar";
 import {useDispatch} from "react-redux";
 import dayjs from "dayjs";
+import {useNavigate} from "react-router-dom";
+import {config} from "~/config";
+import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 ManageSchedule.propTypes = {
 
 };
@@ -25,7 +28,10 @@ function ManageSchedule(props) {
     const [showEvent,setShowEvent] = useState({event:null,show:false})
     const [loading, setLoading] = React.useState(false);
     const [showAddEvent,setShowAddEvent] = useState({start:null,end:null,show:false})
+    const [listStaff,setListStaff] = useState([])
+    const [messageApi, contextHolder] = message.useMessage();
     const dispatch=useDispatch()
+    const navigate=useNavigate()
     const handleCancelShowEvent = ()=>{
         setShowEvent({...showEvent,show: false})
     }
@@ -88,6 +94,7 @@ function ManageSchedule(props) {
         if (token) {
             deleteCookie('vps_token');
         }
+        navigate(config.routes.login)
     };
     useEffect(() => {
         async function fetchDataEvents() {
@@ -105,6 +112,21 @@ function ManageSchedule(props) {
             setLoading(false);
         }
         fetchDataEvents();
+        async function fetchDataStaff() {
+            const respond = await getListStaffs();
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setListStaff([])
+                return false;
+            } else {
+                setListStaff(respond.results);
+            }
+            setLoading(false);
+        }
+        fetchDataStaff();
     }, []);
     const localizer = momentLocalizer(moment);
     const setData=(array)=>{
@@ -136,8 +158,27 @@ function ManageSchedule(props) {
         }),
         []
     )
-    const handleCreateEvent=(data) => {
+    const handleCreateEvent=async (data) => {
         console.log('Create event: ', data)
+        const result = await createEvent(data)
+        if (result.status===1) {
+            messageApi.open({
+                type:'success',
+                message:result.message,
+                duration:1.3
+            })
+        }
+        else if(result.status===401){
+            handleSetUnthorization();
+        }
+        else {
+            messageApi.open({
+                type:'error',
+                message:result.message,
+                duration:1.3
+            })
+        }
+
     }
     const handleUpdateEvent=(data) => {
         console.log('Update event: ', data)
@@ -199,7 +240,9 @@ function ManageSchedule(props) {
                 destroyOnClose={true}
                 open={showAddEvent.show}
             >
-                <AddEvent start={showAddEvent.start} end={showAddEvent.end} onCancel={handleCancelShowAddEvent} onSave={handleCreateEvent} />
+                <AddEvent start={showAddEvent.start} end={showAddEvent.end}
+                          listStaff={listStaff}
+                          onCancel={handleCancelShowAddEvent} onSave={handleCreateEvent} />
             </Modal>
             <Modal
                 title="Cập Nhật Sư Kiện"

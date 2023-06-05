@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getCookies } from '../Auth';
+import {getCookies} from '../Auth';
 import axiosClient from '../../axiosClient';
 import {concatQueryString} from "~/utils/concatQueryString";
 import {titleToSlug} from "~/utils/titleToSlug";
@@ -15,10 +15,12 @@ export const configHeadersAuthenticate = () => {
     };
 };
 
-export const getListEvents = async ({ sort,filter, search,keySearch, page } = {}) => {
+export const getListEvents = async ({sort, filter, search, keySearch, page} = {}) => {
     const url = 'events';
     const queryString = [];
-    if (sort) {queryString.push(`orderBy=${sort}`)}
+    if (sort) {
+        queryString.push(`orderBy=${sort}`)
+    }
     if (search) {
         // queryString.push(`${keySearch}=${search}`);
         queryString.push(search);
@@ -26,11 +28,11 @@ export const getListEvents = async ({ sort,filter, search,keySearch, page } = {}
     if (page) {
         queryString.push(`page=${page}`);
     }
-    if(!!filter){
-        if (filter.status!== 'all') {
+    if (!!filter) {
+        if (filter.status !== 'all') {
             queryString.push(`status=${filter.status}`);
         }
-        if (filter.role!== 'all') {
+        if (filter.role !== 'all') {
             queryString.push(`role_id=${filter.role}`);
         }
     }
@@ -49,7 +51,7 @@ export const getListEvents = async ({ sort,filter, search,keySearch, page } = {}
 
 export const getEventById = async (id) => {
     const url = `events/${id}`;
-    const response = await axiosClient.get(url,configHeadersAuthenticate());
+    const response = await axiosClient.get(url, configHeadersAuthenticate());
     console.log(url)
     //console.log('response', response)
     if (response.status === 1) {
@@ -62,7 +64,7 @@ export const getEventById = async (id) => {
 };
 export const getListEventsByDepartmentId = async (id) => {
     const url = `events/departments/${id}`;
-    const response = await axiosClient.get(url,configHeadersAuthenticate());
+    const response = await axiosClient.get(url, configHeadersAuthenticate());
     console.log(url)
     //console.log('response', response)
     if (response.status === 1) {
@@ -75,46 +77,31 @@ export const getListEventsByDepartmentId = async (id) => {
 };
 export const createEvent = async (body) => {
     const url = 'events';
-    const response = await axiosClient.post(url, body, configHeadersAuthenticate());
-    if(response.status === 1 || response.message ==="Success") {
-        return {status:1,message:'Tạo nhân viên mới thành công'}
-    }
-    else if (response.status ===0){
-        switch (response.code) {
-            case -1009:
-                return {status:0,message:'Thông tin không chính xác'}
-                break
-            case -1010:
-                return {status:0,message:'Email đã tồn tại ! Vui lòng chọn email khác'}
-                break
-            case -1011:
-                return {status:0,message:'Tài khoản đã bị vo hiệu hóa'}
-                break
-            default:
-                break
-        }
-    }
-    console.log(response)
-
-};
-
+    const response = await axiosClientCalendar.post(url, body, configHeadersAuthenticate());
+    if (response.status === 1) {
+        return {status: 1, message: 'Tạo sự kiện mới thành công'}
+    } else if (response.status === 401) return {status: 401, message: 'Không thể xác thuc'}
+    else
+        return {
+            status: 0, message: 'Tạo sự kiện mới thất bại'
+        };
+}
 export const editEvent = async (body) => {
     const url = `events`;
     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
-    console.log('Respond của edit calendar:',response)
-    if(response.status === 1 || response.message ==="Success") {
-        return {status:1,message:'Cập nhật nhân viên mới thành công'}
-    }
-    else if (response.status ===0){
+    console.log('Respond của edit calendar:', response)
+    if (response.status === 1 || response.message === "Success") {
+        return {status: 1, message: 'Cập nhật nhân viên mới thành công'}
+    } else if (response.status === 0) {
         switch (response.code) {
             case -1009:
-                return {status:0,message:'Thông tin không chính xác'}
+                return {status: 0, message: 'Thông tin không chính xác'}
                 break
             case -1010:
-                return {status:0,message:'Email đã tồn tại ! Vui lòng chọn email khác'}
+                return {status: 0, message: 'Email đã tồn tại ! Vui lòng chọn email khác'}
                 break
             case -1011:
-                return {status:0,message:'Tài khoản đã bị vo hiệu hóa'}
+                return {status: 0, message: 'Tài khoản đã bị vo hiệu hóa'}
                 break
             default:
                 break
@@ -126,9 +113,9 @@ export const deleteEvent = async (id) => {
     const response = await axiosClient.delete(url, configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {
-        return {status:1,message:'Cho Thôi Việc Thành Công'}
+        return {status: 1, message: 'Cho Thôi Việc Thành Công'}
     } else if (response.status === 0) {
-        return {status:0,message:'Cho Thôi Việc Thất Bại'}
+        return {status: 0, message: 'Cho Thôi Việc Thất Bại'}
     }
 };
 // export const getAllEventsWithEmailAndPhone = async ({ email, phoneNumber } = {}) => {

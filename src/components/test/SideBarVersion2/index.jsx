@@ -14,6 +14,9 @@ import {NavLink, useLocation,} from "react-router-dom"
 import {config} from "~/config";
 import ImageCustom from "~/components/commoms/Image";
 import imgCompany from "~/asset/images/logonCompany.png"
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {isEmpty} from "lodash";
+import SidebarSkeleton from "~/components/commoms/Skeleton/Sidebar/SidebarSkeleton";
 
 function getItem(label, key, icon, children) {
     return {
@@ -23,6 +26,18 @@ function getItem(label, key, icon, children) {
         label,
     };
 }
+const arrayMenuItems=[
+    {id:1,key:'Staff',keyMenu:config.routes.staff,name:'Nhân Sự',link:config.routes.staff,icon:<FaPeopleArrows/>,group:1},
+    {id:2,key:'Department',keyMenu:config.routes.department,name:'Phòng Ban',link:config.routes.department,icon:<FaLaptop/>,group:1},
+    {id:3,key:'Role',keyMenu:config.routes.decentralize,name:'Chức Danh',link:config.routes.decentralize,icon:<FaUserCog/>,group:1},
+    {id:4,key:'Post',keyMenu:config.routes.home,name:'Bài Viết',link:config.routes.home,icon:<FaHome/>,group:1},
+    {id:5,key:'Setting',keyMenu:config.routes.setting,name:'Cài Đặt',link:config.routes.setting,icon:<FaCogs/>,group:1},
+    {id:6,key:'Project',keyMenu:config.routes.allProject,name:'Dự Án',link:config.routes.allProject,icon:<FaListAlt/>,group:2},
+    {id:7,key:'Sprint',keyMenu:config.routes.backlog,name:'Chu Kỳ',link:config.routes.backlog,icon:<FaRecycle/>,group:2},
+    {id:8,key:'Task',keyMenu:config.routes.project,name:'Công Việc',link:config.routes.project,icon:<FaTasks/>,group:2},
+    {id:9,key:'Calendar',keyMenu:config.routes.schedule,name:'Lịch Biểu',link:config.routes.schedule,icon:<FaCalendar/>,group:0},
+]
+
 
 export const listMenuClientItems = [
     getItem('Tổ Chức', 'group', <FaLayerGroup/>, [
@@ -50,6 +65,30 @@ const SideBarVersion2 = () => {
     const location = useLocation();
     const collapsed = useSelector(isCollapseSideBar)
     const [openKey, setOpenKey] = useState(['group']);
+    const userLogin=useSelector(getUserSelector)
+    const viewPermissions = !isEmpty(userLogin) && userLogin.permission
+        .filter(item => Object.keys(item.permission).some(key => key.includes('view') && item.permission[key] === true))
+        .map(item => item.name);
+    //console.log('Test permissions: ',viewPermissions)
+
+    const listMenuItems = !isEmpty(userLogin) ?arrayMenuItems.reduce((acc, item, currentIndex) => {
+        if (viewPermissions.includes(item.key)) {
+            return acc.concat(item);
+        }
+        return acc;
+    }, []):[]
+    const  groupCompany=  getItem('Tổ Chức', 'group', <FaLayerGroup/>,listMenuItems.map(item => item.group===1 && (
+            getItem(<NavLink to={item.link}>{item.name}</NavLink>, item.keyMenu, item.icon)
+        ))
+    )
+    const groupProject= getItem('Dự Án', 'project', <FaProjectDiagram/>, listMenuItems.map(item => item.group===2 && (
+            getItem(<NavLink to={item.link}>{item.name}</NavLink>, item.keyMenu, item.icon)
+        ))
+    )
+    const groupCalendar=listMenuItems.map(item => item.group===0 && (
+        getItem(<NavLink to={item.link}>{item.name}</NavLink>, item.keyMenu, item.icon)
+    ))
+    const listMenuDemos = [groupCompany,groupProject,...groupCalendar]
     const handleOnClick = (item) => {
         console.log(item)
         if (item.keyPath.length >= 2) {
@@ -85,14 +124,18 @@ const SideBarVersion2 = () => {
                <ImageCustom className={`img-company ${collapsed?'mini':''}`} src={imgCompany} alt={'Loggo'}/>
             </div>
 
-            <Menu
-                openKeys={openKey}
-                onOpenChange={onOpenChange}
-                selectedKeys={location.pathname}
-                mode="inline"
-                theme="light"
-                items={listMenuClientItems}
-            />
+            {
+                isEmpty(userLogin) ?(<SidebarSkeleton collapsed={collapsed}/>):(
+                    <Menu
+                        openKeys={openKey}
+                        onOpenChange={onOpenChange}
+                        selectedKeys={location.pathname}
+                        mode="inline"
+                        theme="light"
+                        items={listMenuDemos}
+                    />
+                )
+            }
 
         </Sider>
     );

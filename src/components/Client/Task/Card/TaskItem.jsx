@@ -1,6 +1,6 @@
 import React from 'react';
 import "./TaskItem.scss";
-import {FaPen} from "react-icons/fa";
+import {FaPen, FaUser} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import {setDetailTask} from "~/redux/reducer/project/projectReducer";
 import {findStyleForStatusTask, getTitleStatusTask} from "~/utils/sorts";
@@ -9,7 +9,7 @@ import AvatarCustom from "~/components/commoms/AvatarCustom";
 import {Tooltip} from "antd";
 
 function TaskItem({task,type,columns, onShowDetail}) {
-   // console.log(project)
+   console.log( 'Test Lỗi:', getTitleStatusTask(task.board_column_id,columns))
     const dispatch = useDispatch()
     const handleShowDetail = () => {
         dispatch(setDetailTask(task))
@@ -25,9 +25,11 @@ function TaskItem({task,type,columns, onShowDetail}) {
                         type==='long' && (
                           <>
                               {
-                                  !!task.members &&  task.members.map((item)=> (
-                                      <AvatarCustom avatar={item.avatar} size={'small'} lastName={item.last_name} />
-                                  ))
+                                  task.assignee_employee.id===0 ?(
+                                        <Tooltip  ><span className={'unsigned'}> <FaUser className={'icon'} /></span></Tooltip>
+                                  ):(
+                                      <AvatarCustom avatar={task.assignee_employee.avatar_url} size={'small'} lastName={task.assignee_employee.last_name} />
+                                  )
                               }
                             <span className='status'>{
                              getTitleStatusTask(task.board_column_id,columns).name

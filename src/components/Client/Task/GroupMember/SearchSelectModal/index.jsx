@@ -12,10 +12,9 @@ const cx = classNames.bind(styles)
 
 function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], placeholder, top = '10rem'}) {
     const [value, setValue] = useState([]);
-    console.log(listOptions)
     const options = listOptions.map((d) => ({
-        value: d.id,
-        label: `${d.first_name} ${d.last_name}`,
+        value: d.email,
+        label: `${d.full_name}`,
     }))
     // calll API get Staff List
 
@@ -40,9 +39,11 @@ function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], pl
     };
     const handleOnClose = () => {
         const listMemberChosen = value.map((id) => {
-            const item = listOptions.find((member) => id === member.id)
+            console.log('id', id)
+            const item = listOptions.find((member) => id === member.email);
             if (!isEmpty(item)) return item;
         })
+        console.log('member dc cchon',listMemberChosen)
         onSubmit(listMemberChosen);
         onClose(false)
     }

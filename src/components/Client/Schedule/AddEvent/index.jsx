@@ -17,6 +17,10 @@ import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
 import {isEmpty} from "lodash";
 import moment from "moment";
+import {useSelector} from "react-redux";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import GroupMember from "~/components/Client/Task/GroupMember";
+import {setMembers} from "~/redux/reducer/project/projectReducer";
 
 AddEvent.propTypes = {};
 const optionsLoopDuration = [
@@ -83,14 +87,26 @@ const rangePresets = [
         value: [dayjs().add(-90, 'd'), dayjs()],
     },
 ];
-function AddEvent({start,end,onSave,onCancel}) {
+function AddEvent({start,end,listStaff,onSave,onCancel}) {
     const [typeEvent, setTypeEvent] = useState('event')
     const [errorDescription, setErrorDescription] = useState('');
+    const [members, setMembers] =useState([])
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
-    } = useForm({});
+    } = useForm({ defaultValues:{
+            duration:[dayjs(start),dayjs(end)]
+        }});
+    const userLogin=useSelector(getUserSelector)
     const onSubmit = (data) => {
-        console.log('Submit: ',data)
+        const {duration,...rest}=data
+        const newEvent={
+            event_type:typeEvent==='event'?1:2,
+            start_time:dayjs(duration[0],"DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end_time:dayjs(duration[1],"DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            created_by_id:userLogin.id,
+            ...rest
+        }
+        onSave(newEvent)
     }
     console.log(errors)
     const {RangePicker} = DatePicker;
@@ -105,7 +121,7 @@ function AddEvent({start,end,onSave,onCancel}) {
 
             layout="horizontal"
             style={{}}
-            onFinish={handleSubmit(onSave)}
+            onFinish={handleSubmit(onSubmit)}
             labelAlign={"left"}
             className='event-item'
         >
@@ -151,7 +167,6 @@ function AddEvent({start,end,onSave,onCancel}) {
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item
-
                             hasFeedback
                             validateStatus={errors.duration ? 'error' : 'success'}
                             help={errors.duration ? 'Vui lòng chon thời gian' : null}>
@@ -162,7 +177,7 @@ function AddEvent({start,end,onSave,onCancel}) {
                                 style={{ width: 585 }}
                                 format="DD/MM/YYYY HH:mm:ss"
                                 className="range-date"
-                                defaultValue={[dayjs(start),dayjs(end)]}
+                              //  defaultValue={[dayjs(start),dayjs(end)]}
                             />
                         </Form.Item>
                     )}
@@ -212,6 +227,9 @@ function AddEvent({start,end,onSave,onCancel}) {
                 typeEvent==='event'  && (
                     <div className='members'>
                         <p>Người tham gia:</p>
+                        <GroupMember
+                            onMembers={setMembers} defaultMembers={members} addMember={true}
+                            listMembersForTask={listStaff}/>
                     </div>
                 )
             }
@@ -221,15 +239,15 @@ function AddEvent({start,end,onSave,onCancel}) {
                     <div className='description'>
                         <p>Nội Dung Công Việc:</p>
                         <Controller
-                            name="description"
+                            name="content"
                             control={control}
                             defaultValue=""
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     hasFeedback
-                                    validateStatus={errors.description ? 'error' : 'success'}
-                                    help={errors.description ? 'Vui lòng điền mô tả cho sự kiện' : null}>
+                                    validateStatus={errors.content ? 'error' : 'success'}
+                                    help={errors.content ? 'Vui lòng điền mô tả cho sự kiện' : null}>
                                 <CustomEditor
                                     {...field}
                                     id="description" editorDescription={editorDescription}

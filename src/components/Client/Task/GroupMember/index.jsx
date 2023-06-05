@@ -35,8 +35,8 @@ function GroupMember({onMembers,defaultMembers=[],listMembersForTask,addMember=f
 
                 {
                   !!defaultMembers &&  defaultMembers.map((item)=> (
-                        <Tooltip title={`${item.first_name} ${item.last_name}`} placement="top" key={item.id}>
-                            <AvatarCustom avatar={item.avatar_url} lastName={item.last_name} size={sizeAvatar} />
+                        <Tooltip title={item.full_name} placement="top" key={item.id}>
+                            <AvatarCustom avatar={item.avatar_url} lastName={item.full_name} size={sizeAvatar} />
                             {/*<Avatar src={item.avatar}*/}
                             {/*    style={{*/}
                             {/*        backgroundColor: '#87d068',*/}

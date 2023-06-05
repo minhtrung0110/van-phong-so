@@ -2,12 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {FaChartLine, FaStarOfDavid, FaTrophy} from "react-icons/fa";
 import './style.scss'
+import dayjs from "dayjs";
 CompleteSprint.propTypes = {
     onCancel: PropTypes.func.isRequired,
     onComplete: PropTypes.func.isRequired,
 };
 
-function CompleteSprint({onCancel,onComplete}) {
+function CompleteSprint({sprint,onCancel,onComplete}) {
+    const total = sprint.tasks.length;
+    const tasksDone = sprint.tasks.reduce((acc, task) => {
+        if (task.board_column_id === 9) {
+            return acc + 1;
+        } else {
+            return acc;
+        }
+    }, 0);
+    const currentDate = dayjs();
+    const duration = currentDate.diff(sprint.start_date, 'hour');
+    const numberOfDays=Math.floor(duration/24)
+    const numberOfHours =duration%24
     return (
         <div className='notify-complete-sprint'>
             <div className='header-complete-sprint'>
@@ -19,9 +32,17 @@ function CompleteSprint({onCancel,onComplete}) {
             <div className='content-complete-sprint'>
                 <h4 className={'title'}><FaChartLine className='icon' />Thống Kê</h4>
                 <ul className={'statistics'}>
-                    <li className={'statistic-item'}> <FaStarOfDavid className={'icon-statistic-item'} /> Tổng Số Công Việc: </li>
-                    <li className={'statistic-item'}><FaStarOfDavid className={'icon-statistic-item'} /> Công Việc Hoàn Thành: </li>
-                    <li className={'statistic-item'}><FaStarOfDavid className={'icon-statistic-item'} /> Thời Gian Triển Khai: </li>
+                    <li className={'statistic-item'}> <FaStarOfDavid className={'icon-statistic-item'} />
+                     Tổng Số Công Việc:   <span className={'result-statistic-item'}>{total}</span>
+                    </li>
+                    <li className={'statistic-item'}><FaStarOfDavid className={'icon-statistic-item'} />
+                        Công Việc Hoàn Thành:  <span className={'result-statistic-item'}>{tasksDone}</span>
+                    </li>
+                    <li className={'statistic-item'}><FaStarOfDavid className={'icon-statistic-item'} />
+                        Thời Gian Triển Khai:  <span className={'result-statistic-item'}>
+                            {numberOfDays>0?`${numberOfDays} ngày ${numberOfHours} giờ`:`${numberOfHours} giờ`}
+                    </span>
+                    </li>
                 </ul>
                 <span className={'description'}>
                             Các công việc chưa hoàn thành sẽ được duy chuyển vào <b>Lưu Trữ</b>.
