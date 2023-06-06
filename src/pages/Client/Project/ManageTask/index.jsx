@@ -114,6 +114,7 @@ function ManageTaskPage(props) {
         //     dispatch(setIsViewTimeline(true))
         // }
         // else  dispatch(setIsViewTimeline(false))
+        console.log('Filter: ',filter   )
 
     }, [currentProject, filter, search])
     const handleSetUnthorization = () => {

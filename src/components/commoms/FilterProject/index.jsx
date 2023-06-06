@@ -9,16 +9,15 @@ import {config} from "~/config";
 import Menu from "~/components/commoms/Popper/Menu";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 
-FilterProject.propTypes = {
-
-};
+FilterProject.propTypes = {};
 const cx = classNames.bind(styles)
 
-function FilterProject({listmember = [], onFilter,className}) {
+function FilterProject({listmember = [], onFilter, className}) {
     const [checkedListMember, setCheckedListMember] = useState([]);
     const [checkedListDuration, setCheckedListDuration] = useState([]);
     const [checkedListPriority, setCheckedListPriority] = useState([]);
     const [listMemberMore, setListMemberMore] = useState([]);
+    const [amountFilter, setAmountFilter] = useState(0);
     const [searchValue, setSearchValue] = useState('')
     const optionsSelectMember = listmember.map((d) => ({
         value: d.id,
@@ -60,21 +59,28 @@ function FilterProject({listmember = [], onFilter,className}) {
             width: '100%',
         },
         listmember,
-        options:optionsSelectMember,
+        options: optionsSelectMember,
         onChange: (newValue) => {
             setListMemberMore(newValue);
         },
         placeholder: 'Chọn thành viên...',
         maxTagCount: 'responsive',
     };
-
+    const handleClearFilter=()=>{
+        if(searchValue!=='' || checkedListPriority.length>0 || checkedListMember.length>0 || checkedListDuration.length>0){
+            setSearchValue('')
+            setCheckedListDuration([])
+            setCheckedListMember([])
+            setCheckedListPriority([])
+        }
+    }
     const itemsFilter = [
         {
             id: '1',
             label: 'Tìm kiếm',
             content: (
                 <div className={cx('list-sub-item-search')}>
-                    <SearchHidenButton className='search'  width='20rem' height='2rem'  searchButtonText={<FaSearch/>}
+                    <SearchHidenButton className='search' width='20rem' height='2rem' searchButtonText={<FaSearch/>}
                                        onSearch={onSearch}
                     />
                 </div>
@@ -117,25 +123,37 @@ function FilterProject({listmember = [], onFilter,className}) {
                                 value={checkedListPriority}
                                 onChange={onChangePriority}/>
             )
+        },
+        {
+            id: '5',
+            label: null,
+            content: (
+              <button className={cx('btn-clear-filter')} onClick={handleClearFilter}>Dọn dẹp bộ lọc</button>
+            )
         }
     ]
     useEffect(() => {
-        onFilter({
-            search:searchValue,
+        const filter = {
+            search: searchValue,
             member: checkedListMember.concat(listMemberMore),
             duration: checkedListDuration,
             priority: checkedListPriority
-        })
-    }, [searchValue,checkedListMember,listMemberMore, checkedListDuration, checkedListPriority])
+        }
+        setAmountFilter(Object.values(filter).reduce((acc, item) => {
+            if (item.length > 0) return acc + 1
+            else return acc
+        }, 0))
+        onFilter(filter)
+
+    }, [searchValue, checkedListMember, listMemberMore, checkedListDuration, checkedListPriority])
     return (
-        <div>
+        <div className={cx('filter-btn')}>
             <Menu items={itemsFilter} hideOnClick={false} delay={400}>
-                <a onClick={(e) => e.preventDefault()} className={className}>
-                    <div className={cx('filter-project')}>
-                        <FaFilter className={cx('icon')}/>
-                        Bộ lọc
-                    </div>
-                </a>
+                <div className={cx('filter-project')}>
+                    <FaFilter className={cx('icon')}/>
+                    <span className={cx('title')}>  Bộ lọc</span>
+                    <span className={cx('amount')}>{amountFilter}</span>
+                </div>
             </Menu>
         </div>
     );
