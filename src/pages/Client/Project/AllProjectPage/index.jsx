@@ -24,6 +24,9 @@ import {
 import EditProject from "~/components/Client/Project/EditProject";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 import {disableProject} from "~/api/Client/Project/projectAPI";
+import {navigate} from "react-big-calendar/lib/utils/constants";
+import {useNavigate} from "react-router-dom";
+import {config} from "~/config";
 AllProjectPage.propTypes = {
 
 };
@@ -39,7 +42,7 @@ function AllProjectPage(props) {
     const isReset=useSelector(isResetProjectSelector)
     const isAddProject=useSelector(isAddProjectSelector)
     const isEditProject=useSelector(isEditProjectSelector)
-
+    const navigation=useNavigate()
     const setProject = (respond, value) => {
         setListProject(respond.results);
         if (value !== 'page') {
@@ -130,6 +133,7 @@ function AllProjectPage(props) {
         if (token) {
             deleteCookie('vps_token');
         }
+        navigation(config.routes.login)
     };
     return (
      <>

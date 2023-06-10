@@ -13,7 +13,8 @@ import FilterProject from "~/components/commoms/FilterProject";
 import {listMembersForTask} from "~/asset/data/initalDataTask";
 import CompleteSprint from "~/components/Client/Sprint/CompleteSprint";
 
-function BoardBar({boardName,members, sprint, onFilter,onCompleteSprint}) {
+function BoardBar({boardName,members, sprint, onFilter,onCompleteSprint,onDeleteSprint}) {
+    console.log('Testing: ',members)
     const [showConfirmDelete, setIsShowConfirmDelete] = useState(false)
     const [showCompleteSprint, setShowCompleteSprint]=useState()
     const listActionProjects = [
@@ -37,8 +38,9 @@ function BoardBar({boardName,members, sprint, onFilter,onCompleteSprint}) {
             setShowCompleteSprint(true)
         }
     };
-    const handleRemoveProject = () => {
+    const handleRemoveSprint = () => {
         setIsShowConfirmDelete(false)
+        onDeleteSprint(sprint)
     }
     const handleCompleteSprint=()=>{
         onCompleteSprint(sprint.id, {...sprint, status:2})
@@ -50,7 +52,7 @@ function BoardBar({boardName,members, sprint, onFilter,onCompleteSprint}) {
             </div>
             <div className="board-filter">
                 <div className="sprint-name">{sprint.title}</div>
-                <FilterProject onFilter={onFilter} listmember={listMembersForTask} />
+                <FilterProject onFilter={onFilter} listmember={members.members} />
                 <GroupMember defaultMembers={members.members} sizeAvatar={'small'} />
                 <div>
                     <Dropdown
@@ -74,12 +76,12 @@ function BoardBar({boardName,members, sprint, onFilter,onCompleteSprint}) {
                    width={450}
                    style={{top: 80}}
             >
-                <CompleteSprint onComplete={handleCompleteSprint} onCancel={setShowCompleteSprint} />
+                <CompleteSprint sprint={sprint} onComplete={handleCompleteSprint} onCancel={setShowCompleteSprint} />
             </Modal>
             <ConfirmModal open={showConfirmDelete} title='Xác Nhận Xóa'
-                          content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Thực Sự Muốn Xóa Dự Án <strong>${boardName}</strong> Này ? `}} />}
+                          content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Thực Sự Muốn Xóa Chu Kỳ <strong>${sprint.title}</strong> Này ? `}} />}
                           textCancel='Hủy' textOK='Xóa' onCancel={() => setIsShowConfirmDelete(false)}
-                          onOK={handleRemoveProject}/>
+                          onOK={handleRemoveSprint}/>
         </div>
     );
 }

@@ -92,6 +92,15 @@ export const logout = async () => {
             return 500;
     }
 };
+export const changePassword = async (body) => {
+    const response = await axiosClient.post('api/admin/forgot-password', body);
+    // thông báo mật khẩu hiện tại ko đúng
+    if (response.status === 1 || response.message === "Success") {
+        return {status: 1, message: 'Đổi mật khẩu thành công'}
+    } else if (response.status === 401) return {status: 401, message: 'Không thể xác thực'}
+    else
+        return {status: 0, message: 'Đổi mật khẩu thất bại'}
+};
 
 export const senMailOTP = async (body) => {
     const response = await axiosClient.post('api/admin/otp-sendmail', body);

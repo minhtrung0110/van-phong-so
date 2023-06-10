@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import  './style.scss'
-import {Form, Input} from "antd";
+import {Form, Input, message} from "antd";
 import {FaLock} from "react-icons/fa";
 import {Controller, useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {config} from "~/config";
+import {changePassword, deleteCookie, getCookies} from "~/api/Client/Auth";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 ManageMyAccount.propTypes = {
 
 };
@@ -14,13 +18,51 @@ function ManageMyAccount(props) {
     const {
         control, handleSubmit, formState: { errors, isDirty, dirtyFields },
     } = useForm(   )
-    const onSubmit = (data) => console.log({ data,errors, isDirty, dirtyFields });
+    const [messageApi, contextHolder] = message.useMessage();
+    const userLogin=useSelector(getUserSelector)
     const navigation=useNavigate()
+    const dispatch=useDispatch()
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+        navigation(config.routes.login)
+    };
+    const onSubmit = async (data) => {
+        console.log({data, errors, isDirty, dirtyFields})
+        const response = await changePassword({data,user_id:userLogin.id})
+        if(response.status===1){
+            messageApi.open({
+                type: 'success',
+                message: response.message,
+                duration:1.3
+            })
+            navigation(config.routes.home)
+        }
+        else if(response.status===401){
+            messageApi.open({
+                type: 'success',
+                message: 'Không thể xác thực',
+                duration:1
+            })
+            handleSetUnthorization()
+        }else {
+            messageApi.open({
+                type: 'error',
+                message: response.message,
+                duration:1.3
+            })
+        }
+
+    };
     const handleCancel = () => {
         navigation(config.routes.home)
     }
     return (
         <div className='my-account-page'>
+            {contextHolder}
             <div className='header-changed-password'>
                 <FaLock className='icon' />
                 <span className='title'> Đổi Mật Khẩu</span>

@@ -8,6 +8,9 @@ import GroupMember from "~/components/Client/Task/GroupMember";
 import {config} from "~/config";
 import Menu from "~/components/commoms/Popper/Menu";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
+import {useSelector} from "react-redux";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {isEmpty} from "lodash";
 
 FilterProject.propTypes = {};
 const cx = classNames.bind(styles)
@@ -19,13 +22,14 @@ function FilterProject({listmember = [], onFilter, className}) {
     const [listMemberMore, setListMemberMore] = useState([]);
     const [amountFilter, setAmountFilter] = useState(0);
     const [searchValue, setSearchValue] = useState('')
+    const userLogin=useSelector(getUserSelector)
     const optionsSelectMember = listmember.map((d) => ({
         value: d.id,
         label: `${d.first_name} ${d.last_name}`,
     }))
     const optionsMember = [
         {value: 'none-member', label: 'Không được giao'},
-        {value: 'myself', label: 'Giao cho tôi'},
+        {value: !isEmpty(userLogin)?userLogin.id:'myself', label: 'Giao cho tôi'},
 
     ];
     const optionsDueDay = [

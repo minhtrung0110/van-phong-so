@@ -3,20 +3,21 @@ import PropTypes from 'prop-types';
 import {FaChartLine, FaStarOfDavid, FaTrophy} from "react-icons/fa";
 import './style.scss'
 import dayjs from "dayjs";
+import {isEmpty} from "lodash";
 CompleteSprint.propTypes = {
     onCancel: PropTypes.func.isRequired,
     onComplete: PropTypes.func.isRequired,
 };
 
 function CompleteSprint({sprint,onCancel,onComplete}) {
-    const total = sprint.tasks.length;
-    const tasksDone = sprint.tasks.reduce((acc, task) => {
+    const total =!isEmpty(sprint.tasks) ?sprint.tasks.length:0
+    const tasksDone =!isEmpty(sprint.tasks) ? sprint.tasks.reduce((acc, task) => {
         if (task.board_column_id === 9) {
             return acc + 1;
         } else {
             return acc;
         }
-    }, 0);
+    }, 0):0;
     const currentDate = dayjs();
     const duration = currentDate.diff(sprint.start_date, 'hour');
     const numberOfDays=Math.floor(duration/24)

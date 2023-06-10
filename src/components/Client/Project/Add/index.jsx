@@ -70,7 +70,9 @@ function AddProject({onBack}) {
     }, [])
     const handleChoseDepartment=(id) => {
         setValue('department_id',id)
+        setValue('member_ids',[])
         fetchDataStaffs(id)
+
 
     }
     const onSubmit = async (data) => {

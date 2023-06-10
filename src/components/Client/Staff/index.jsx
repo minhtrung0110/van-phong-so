@@ -13,7 +13,7 @@ import {deleteStaff, getStaffById} from "~/api/Client/Staff/staffAPI";
 
 StaffTable.propTypes = {};
 
-function StaffTable({tableHeader, tableBody}) {
+function StaffTable({itemDelete=true,itemEdit=true,tableHeader, tableBody}) {
     console.log(tableBody)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [detailStaff, setDetailStaff] = useState({});
@@ -111,22 +111,30 @@ function StaffTable({tableHeader, tableBody}) {
                         >
                             <FaEye className="icon-show"/>
                         </button>
-                        <button
-                            id="edit-staff"
-                            onClick={(e) => handleEditStaff(e, item.ID)}
-                            className=" btn-edit"
-                        >
-                            <FaPen className="icon-edit"/>
-                        </button>
-                        <button
-                            id="disabled-user"
-                            onClick={(e) => {
-                                showConfirmDeleteStaff(e, item.ID);
-                            }}
-                            className="btn-delete"
-                        >
-                            <FaTimesCircle className="icon-delete"/>
-                        </button>
+                        {
+                            itemEdit && (
+                                <button
+                                    id="edit-staff"
+                                    onClick={(e) => handleEditStaff(e, item.ID)}
+                                    className=" btn-edit"
+                                >
+                                    <FaPen className="icon-edit"/>
+                                </button>
+                            )
+                        }
+                        {
+                            itemDelete && (
+                                <button
+                                    id="disabled-user"
+                                    onClick={(e) => {
+                                        showConfirmDeleteStaff(e, item.ID);
+                                    }}
+                                    className="btn-delete"
+                                >
+                                    <FaTimesCircle className="icon-delete"/>
+                                </button>
+                            )
+                        }
 
                     </td>
                 </tr>

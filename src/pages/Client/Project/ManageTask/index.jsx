@@ -13,7 +13,7 @@ import backgroundImage from "~/asset/images/backgroundTask01.jpg"
 import {setIsViewTimeline} from "~/redux/reducer/project/projectReducer";
 import {flatten, isEmpty} from "lodash";
 import {useLocation} from "react-router-dom";
-import {editSprint, getListSprintByProjectId, getSprintById} from "~/api/Client/Sprint/sprintAPI";
+import {deleteSprint, editSprint, getListSprintByProjectId, getSprintById} from "~/api/Client/Sprint/sprintAPI";
 import {message} from "antd";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
@@ -135,6 +135,23 @@ function ManageTaskPage(props) {
     const handleUpdateTask=(value)=>{
         console.log('Update Task: ', value)
     }
+    const handleDeleteSprint=async (item) => {
+        console.log('Delete sprint:', item)
+        const result = await deleteSprint(item.id);
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+        } else if (result.status === 0) {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.4,
+            });
+        }
+    }
     const handleUpdateSprint=async (id,data) => {
         console.log('Update Sprint: ', id, data)
         const result = await editSprint(id, data);
@@ -164,6 +181,7 @@ function ManageTaskPage(props) {
                         <BoardBar boardName={'Dự Án'}  onFilter={setFilter}
                                   onCompleteSprint={handleUpdateSprint}
                                   members={listMembers}
+                                  onDeleteSprint={handleDeleteSprint}
                                   sprint={sprint}
                                   onSearch={setSearch}/>
                         <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}

@@ -12,13 +12,15 @@ import AvatarCustom from "~/components/commoms/AvatarCustom";
 import HeaderContent from "~/components/commoms/HeaderContent";
 import {FaFolderPlus} from "react-icons/fa";
 import {setIsAdd, setIsEditProject} from "~/redux/reducer/project/projectReducer";
-import {editProject} from "~/api/Client/Project/projectAPI";
+import {addStaffInProject, deleteStaffInProject, editProject} from "~/api/Client/Project/projectAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {getListDepartments} from "~/api/Client/Department/departmentAPI";
 import {getListStaffsByDepartmentId} from "~/api/Client/Staff/staffAPI";
 import {isEmpty} from "lodash";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {useNavigate} from "react-router-dom";
+import {config} from "~/config";
 
 
 function EditProject({onBack}) {
@@ -26,14 +28,18 @@ function EditProject({onBack}) {
     const [listStaff, setListStaff] = useState([])
     const [listRoom, setListRoom] = useState([])
     const [messageApi, contextHolder] = message.useMessage();
+
     const defaultMembers= !!project.members && project.members.map(item=>({value: item.email, label:  `${item.first_name} ${item.last_name}`}))
     const {
-        control, handleSubmit,setValue, formState: {errors, isDirty, dirtyFields},
+        control, handleSubmit,setValue,watch, formState: {errors, isDirty, dirtyFields},
     } = useForm({
         defaultValues:{...project,member_ids:defaultMembers}
     });
+    const selectedItems = watch('member_ids', defaultMembers);
+    const [member_ids,setMember_Ids]=useState(defaultMembers)
     console.log({...project,member_ids:defaultMembers})
     const dispatch=useDispatch()
+    const navigation = useNavigate()
     const userLogin=useSelector(getUserSelector)
     const handleCancel=()=>{
         dispatch(setIsEditProject(false))
@@ -44,6 +50,7 @@ function EditProject({onBack}) {
         if (token) {
             deleteCookie('vps_token');
         }
+        navigation(config.routes.login)
     };
     const    fetchDataDepartment  = async () => {
         const respond = await getListDepartments();
@@ -74,6 +81,7 @@ function EditProject({onBack}) {
     const handleChoseDepartment=(id) => {
         setValue('department_id',id)
         fetchDataStaffs(id)
+        setMember_Ids([])
     }
     useEffect(() => {
 
@@ -81,10 +89,8 @@ function EditProject({onBack}) {
         fetchDataStaffs(project.department_id)
     }, [])
     const onSubmit = async (data) => {
-        const member_ids=data.member_ids.map((member) =>{
-            return listStaff.find(item => item.email===member).ID
-        })
-        const updateProject = {...data,member_ids,status:0, created_by: userLogin,}
+        const updateProject = {id:project.id,name:data.name,department_id:data.department_id,status:data.status,created_by: userLogin,}
+        console.log('UPdates project:',updateProject)
         const result = await editProject(updateProject);
         if(result.status===1){
             messageApi.open({
@@ -111,7 +117,47 @@ function EditProject({onBack}) {
     const mixDataDepartments =(data)=>{
         return data.map(item=>({value:item.id, label:item.name}))
     }
+    const handleDeselect = async (deselectedValue) => {
+       const idStaff=listStaff.find(item => item.email===deselectedValue).ID
+        console.log('Sau delete members:',member_ids.filter(item => item.value!==deselectedValue),'idStaff:',idStaff,deselectedValue)
+       const result = await deleteStaffInProject(project.id, idStaff)
+        console.log(result)
+        if (result.status===1){
+                setMember_Ids(member_ids.filter(item => item.value!==deselectedValue))
+        }else if (result===401){
+            handleSetUnthorization()
+        }else {
+            messageApi.open({
+                type: 'error',
+                content: 'Sự cố! Vui lòng tải lại trang và xem lại kết nối',
+                duration: 1.3,
+            });
+        }
 
+    };
+    const handleSelectChange = async (selectedValues) => {
+      console.log(selectedValues)
+        // tìm email mới dc thêm vào
+        const arrayOldEmails=member_ids.map(member =>member.value)
+        const newItemEmail = selectedValues.find((item) => !arrayOldEmails.includes(item));
+
+        console.log('liststaff:',listStaff)
+        const newMember = listStaff.find(item => item.email === newItemEmail)
+        const result = await addStaffInProject(project.id, newMember.ID)
+        console.log(result)
+        console.log('Thêm member to Project:',{value:newMember.email,lable:newMember.full_name})
+        if (result.status === 1) {
+            setMember_Ids(prev=>[...prev,{value:newMember.email,lable:newMember.full_name}])
+        } else if (result === 401) {
+            handleSetUnthorization()
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: 'Sự cố! Vui lòng tải lại trang và xem lại kết nối',
+                duration: 1.3,
+            });
+        }
+    };
     const filterOption = (input, option) => {
         //validate
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -181,21 +227,23 @@ function EditProject({onBack}) {
                     </div>
                     <div className='members'>
                         <h4 className='lable'>Thêm Thành Viên: </h4>
-                        <Controller
-                            name="member_ids"
-                            control={control}
-                            defaultValue=""
-                            rules={{required: true}}
-                            render={({field}) => (
-                                <Form.Item
-                                    hasFeedback
-                                    validateStatus={errors.member_ids ? 'error' : 'success'}
-                                    help={errors.member_ids ? 'Vui lòng chọn thành viên' : null}>
+                        {/*<Controller*/}
+                        {/*    name="member_ids"*/}
+                        {/*    control={control}*/}
+                        {/*    defaultValue=""*/}
+                        {/*    rules={{required: true}}*/}
+                        {/*    render={({field}) => (*/}
+                                <Form.Item>
+                                    {/*//hasFeedback*/}
+                                    {/*// validateStatus={errors.member_ids ? 'error' : 'success'}*/}
+                                    {/*// help={errors.member_ids ? 'Vui lòng chọn thành viên' : null}>*/}
                                     <Select
-                                        {...field}
+                                        value={member_ids}
                                         showSearch
                                         mode="multiple"
+                                        onChange={handleSelectChange}
                                         size={'large'}
+                                        onDeselect={handleDeselect}
                                         placeholder="Email hoặc tên ..."
                                         style={{
                                             width: '100%',
@@ -229,8 +277,8 @@ function EditProject({onBack}) {
                                     </Select>
                                 </Form.Item>
 
-                            )}
-                        />
+                        {/*    )}*/}
+                        {/*/>*/}
 
                     </div>
                     <div className='status'>
@@ -262,7 +310,7 @@ function EditProject({onBack}) {
                     </div>
                     <div className="box-footer">
                         <button key="2" className='btn-cancel' onClick={handleCancel}>Hủy</button>
-                        <button key="3" className={`btn-confirm  ${!isDirty ? 'disabled' : ''}`} type='submit'>Lưu</button>
+                        <button key="3" className={`btn-confirm  `} type='submit'>Lưu</button>
                     </div>
 
                 </Form>
@@ -270,5 +318,6 @@ function EditProject({onBack}) {
         </>
     );
 }
+//${!isDirty ? 'disabled' : ''}
 
 export default EditProject;

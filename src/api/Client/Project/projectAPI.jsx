@@ -115,14 +115,26 @@ export const disableProject = async (body) => {
         return {status:0,message:'Cho Dự Án Dừng Thất Bại'}
     }
 };
-export const deleteStaff = async (id) => {
-    const url = `/employees/${id}`;
+export const addStaffInProject = async (id,idStaff) => {
+    const url = `/projects/${id}/employees/${idStaff}`;
+    const response = await axiosClient.post(url,{}, configHeadersAuthenticate());
+    console.log(response)
+    if (response.status === 1) {
+        return {status:1,message:'Thêm nhân viên thành công'}
+    } else if (response.status === 401) {return 401}
+    else
+        return {status:0,message:'Thêm nhân viên Thất Bại'}
+
+};
+export const deleteStaffInProject = async (id,idStaff) => {
+    const url = `/projects/${id}/employees/${idStaff}`;
     const response = await axiosClient.delete(url, configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {
-        return {status:1,message:'Cho Thôi Việc Thành Công'}
-    } else if (response.status === 0) {
-        return {status:0,message:'Cho Thôi Việc Thất Bại'}
-    }
+        return {status:1,message:'Xóa nhân viên thành công'}
+    } else if (response.status === 401) {return 401}
+    else
+        return {status:0,message:'Xóa nhân viên Thất Bại'}
+
 };
 

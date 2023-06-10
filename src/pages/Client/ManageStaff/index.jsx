@@ -21,6 +21,10 @@ import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import FilterSelect from "~/components/commoms/FilterSelect";
 import SearchSelectKey from "~/components/commoms/SearchSelectKey";
+import {getListRoles} from "~/api/Client/Role/roleAPI";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {authorizationFeature} from "~/utils/authorizationUtils";
+import {isEmpty} from "lodash";
 
 ManageStaff.propTypes = {};
 const listStatus = [
@@ -82,6 +86,7 @@ function ManageStaff(props) {
     const data_staff_table_header = [...staff_table_header];
     const [loading, setLoading] = React.useState(true);
     const [data, setData] = React.useState([]);
+    const [listRoles,setListRoles] = React.useState([])
     const [search, setSearch] = React.useState('')
     const [filter, setFilter] = React.useState({role:'all',status:'all'})
     const isAddStaff = useSelector(isAddStaffSelector);
@@ -91,6 +96,11 @@ function ManageStaff(props) {
     const [totalRecord, setTotalRecord] = React.useState(data.length);
     const [page, setPage] = React.useState(1);
     const isReset = useSelector(isResetStaffSelector);
+    const userLogin=useSelector(getUserSelector)
+    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Staff','create')
+    const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Staff','update')
+    const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Staff','delete')
+    console.log('Check quyền tạo user:',createPermission)
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
@@ -137,6 +147,26 @@ function ManageStaff(props) {
             setLoading(false);
         }
         fetchData();
+        async function fetchDataRole() {
+
+            const respond = await getListRoles();
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setData([])
+                return false;
+            } else {
+                setListRoles(respond.results.map((item)=>( {
+                    id: item.id,
+                    label: item.title,
+                    value: item.id,
+                })));
+            }
+            setLoading(false);
+        }
+        fetchDataRole();
     }, [search, filter,isReset]);
 
     const handleSetUnthorization = () => {
@@ -195,7 +225,7 @@ function ManageStaff(props) {
                                                                                   title={'Trạng thái'}
                                                                                   background={'#de935e'}
                                                                                   onFilter={handleFilterStatus}/>
-                                                                    <FilterSelect listOptions={listRole} width='15rem'
+                                                                    <FilterSelect listOptions={listRoles} width='15rem'
                                                                                   title={'Chức vụ'}  background={'#5fc5b2'}
                                                                                    onFilter={handleFilterRole} />
 
@@ -218,8 +248,12 @@ function ManageStaff(props) {
                                                                     {/*<Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>*/}
                                                                     {/*    <Button className='btn'><FaFileDownload className='icon'/></Button>*/}
                                                                     {/*</Tooltip>*/}
-                                                                    <button className='btn-add'
-                                                                            onClick={goToPageAddStaff}>Tạo Mới</button>
+                                                                    {
+                                                                        createPermission && (
+                                                                            <button className='btn-add'
+                                                                                    onClick={goToPageAddStaff}>Tạo Mới</button>
+                                                                        )
+                                                                    }
 
 
                                                                 </div>
@@ -230,7 +264,9 @@ function ManageStaff(props) {
                                                 <div className='content-staff-page'>
                                                     {
                                                         data.length > 0 ? (
-                                                            <StaffTable tableHeader={data_staff_table_header} tableBody={data}/>
+                                                            <StaffTable itemEdit={editPermission}
+                                                                        itemDelete={deletePermission}
+                                                                        tableHeader={data_staff_table_header} tableBody={data}/>
                                                         ) : (
                                                             <NotFoundData/>
                                                         )
