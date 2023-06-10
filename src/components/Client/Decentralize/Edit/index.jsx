@@ -14,7 +14,7 @@ EditRole.propTypes = {};
 
 function EditRole({ onBack}) {
     const data=useSelector(decentralizeSelector)
-    console.log(data)
+    //console.log(data)
     const {control, handleSubmit, setValue, register,getValues, formState: {errors}} = useForm({
         defaultValues: {...data,status:data.status===true?1:0}}
     );
@@ -27,19 +27,18 @@ function EditRole({ onBack}) {
     const [project,setProject]=useState(getCheckedRule('project').permission);
     const [sprint,setSprint]=useState(getCheckedRule('sprint').permission);
     const [task,setTask]=useState(getCheckedRule('task').permission);
-    const [column,setColumn]=useState(getCheckedRule('project').permission);
-    const [calendar,setCalendar]=useState(getCheckedRule('project').permission);
+ //   const [column,setColumn]=useState(getCheckedRule('column').permission);
+ //   const [calendar,setCalendar]=useState(getCheckedRule('calendar').permission);
     const [staff,setStaff]=useState(getCheckedRule('staff').permission);
     const [department,setDepartment]=useState(getCheckedRule('department').permission);
 
 
     const handleSubmitPermission = async (body) => {
-
         const name = getValues("role_title");
         const arrayPermissions = {
             ...staff, ...department,
-            ...project, ...sprint, ...task, ...column,
-            ...calendar
+            ...project, ...sprint, ...task,
+          //  ...calendar,...column,
         }
         const trueFieldsArray = Object.entries(arrayPermissions)
             .filter(([key, value]) => value === true)
@@ -120,13 +119,13 @@ function EditRole({ onBack}) {
                     <GroupPermission setSwitchGroupSate={setProject} switchGroupState={project} title={'dự án'} />
                     <GroupPermission setSwitchGroupSate={setSprint} switchGroupState={sprint} title={'sprint'} />
                     <GroupPermission setSwitchGroupSate={setTask} switchGroupState={task} title={'công việc'} />
-                    <GroupPermission setSwitchGroupSate={setColumn} switchGroupState={column} title={'trạng thái công việc'} />
+                    {/*<GroupPermission setSwitchGroupSate={setColumn} switchGroupState={column} title={'trạng thái công việc'} />*/}
 
                 </Col>
                 <Col className='col-title' xs={{span: 24}} lg={{span: 10}}>
                     <GroupPermission setSwitchGroupSate={setStaff} switchGroupState={staff} title={'nhân viên'} />
                     <GroupPermission setSwitchGroupSate={setDepartment} switchGroupState={department} title={'phòng ban'} />
-                    <GroupPermission setSwitchGroupSate={setCalendar} switchGroupState={calendar} title={'lịch biểu'} />
+                    {/*<GroupPermission setSwitchGroupSate={setCalendar} switchGroupState={calendar} title={'lịch biểu'} />*/}
                 </Col>
             </Row>
 

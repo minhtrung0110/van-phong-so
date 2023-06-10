@@ -60,16 +60,16 @@ function GroupPermission({switchGroupState,setSwitchGroupSate,title}) {
         </span>
                 <span className='permission-item'>
           <Switch
-              checked={switchGroupState[keys[1]]}
-              onChange={(checked) => handleSwitchChange(checked, keys[1])}
+              checked={switchGroupState[keys[2]]}
+              onChange={(checked) => handleSwitchChange(checked, keys[2])}
 
           />
           <span className={'title'}>Cập nhật {title}  </span>
         </span>
                 <span className='permission-item'>
           <Switch
-              checked={switchGroupState[keys[2]]}
-              onChange={(checked) => handleSwitchChange(checked, keys[2])}
+              checked={switchGroupState[keys[1]]}
+              onChange={(checked) => handleSwitchChange(checked, keys[1])}
 
           />
           <span className={'title'}>Xóa {title}  </span>
