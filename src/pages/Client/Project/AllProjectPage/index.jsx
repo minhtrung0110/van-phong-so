@@ -22,11 +22,11 @@ import {
     isResetProjectSelector
 } from "~/redux/selectors/project/projectSelector";
 import EditProject from "~/components/Client/Project/EditProject";
-import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 import {disableProject} from "~/api/Client/Project/projectAPI";
-import {navigate} from "react-big-calendar/lib/utils/constants";
 import {useNavigate} from "react-router-dom";
 import {config} from "~/config";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {authorizationFeature} from "~/utils/authorizationUtils";
 AllProjectPage.propTypes = {
 
 };
@@ -43,6 +43,10 @@ function AllProjectPage(props) {
     const isAddProject=useSelector(isAddProjectSelector)
     const isEditProject=useSelector(isEditProjectSelector)
     const navigation=useNavigate()
+    const userLogin=useSelector(getUserSelector)
+    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Project','create')
+    const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Project','update')
+    const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Project','delete')
     const setProject = (respond, value) => {
         setListProject(respond.results);
         if (value !== 'page') {
@@ -153,16 +157,23 @@ function AllProjectPage(props) {
                                  </div>
                                  <div className={'filter-list-project'}>
                                      <SearchHidenButton width='20rem' onSearch={setSearch} />
-                                     <div className={'create-project '} onClick={()=>dispatch(setIsAdd(true))}>
-                                         <FaPlus className='icon' />
-                                         <span className='text' >Tạo Dự Án</span>
-                                     </div>
+                                     {
+                                         createPermission && (
+                                             <div className={'create-project '} onClick={()=>dispatch(setIsAdd(true))}>
+                                                 <FaPlus className='icon' />
+                                                 <span className='text' >Tạo Dự Án</span>
+                                             </div>
+                                         )
+                                     }
                                  </div>
                              </div>
                              <div className={'content-list-project'}>
                                  {
                                      !isEmpty(listProject) ? (
-                                         <ProjectTable tableHeader={project_table_header} tableBody={listProject}
+                                         <ProjectTable
+                                             editItem={editPermission}
+                                             deleteItem={deletePermission}
+                                             tableHeader={project_table_header} tableBody={listProject}
                                                        onDelete={handleDeleteProject}/>
                                      ) : (
                                          <NotFoundData/>

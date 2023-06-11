@@ -11,7 +11,7 @@ import NotFoundData from "~/components/commoms/NotFoundData";
 
 BoardSprint.propTypes = {};
 
-function BoardSprint({project, columnData, onEdit, onDelete, onCreateTask, onDeleteTask, onUpdateTask,members}) {
+function BoardSprint({project,permission, columnData, onEdit, onDelete, onCreateTask, onDeleteTask, onUpdateTask,members}) {
     console.log('columnData',columnData)
     const [columns, setColumns] = useState(columnData)
     const [isOpenNewColForm, setIsOpenNewColForm] = useState(false)
@@ -73,6 +73,7 @@ function BoardSprint({project, columnData, onEdit, onDelete, onCreateTask, onDel
                                 key={index}>
                                 <SprintItemV2
                                     sprint={sprint}
+                                    permission={permission}
                                     column={sprint}
                                     onCardDrop={onCardDropSprint}
                                     onEdit={onEdit}

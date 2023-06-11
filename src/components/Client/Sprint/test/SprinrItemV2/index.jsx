@@ -30,6 +30,7 @@ function SprintItemV2({
                           onDelete,
                           column,
                           onCardDrop,
+    permission,
                           onCreateTask,
                           onDeleteTask,
                           onUpdateTask
@@ -46,7 +47,8 @@ function SprintItemV2({
     const [messageApi, contextHolder] = message.useMessage();
     const [valueNewTask, setValueNewTask] = useState()
     const userLogin=useSelector(getUserSelector)
-    const listOptions = [
+    const showSetting=(permission.edit  || permission.delete)
+    const listOptions =(permission.edit  && permission.delete)? [
         {
             key: 'edit',
             label: 'Cập nhật phiên làm việc',
@@ -55,7 +57,15 @@ function SprintItemV2({
             key: 'remove',
             label: 'Xóa phiên làm việc',
         },
-    ]
+    ]:(permission.edit===true) ?[
+        {
+            key: 'edit',
+            label: 'Cập nhật phiên làm việc',
+        }]:[
+        {
+            key: 'remove',
+            label: 'Xóa phiên làm việc',
+        }]
     const handleOnClick = ({key}) => {
         if (key === 'edit') {
             setShowEditSprint(true)
@@ -178,15 +188,19 @@ function SprintItemV2({
                                     onClick={handleRunSprint}>
                                 {sprint.status === 0 ? 'Bắt Đầu' : 'Hoàn Thành'}
                             </button>
-                            <Dropdown
-                                menu={{
-                                    items: listOptions,
-                                    onClick: handleOnClick,
-                                }}
-                                trigger={['click']}
-                            >
-                                <button className='btn-action'><FaEllipsisH className='dot'/></button>
-                            </Dropdown>
+                            {
+                                showSetting && (
+                                    <Dropdown
+                                        menu={{
+                                            items: listOptions,
+                                            onClick: handleOnClick,
+                                        }}
+                                        trigger={['click']}
+                                    >
+                                        <button className='btn-action'><FaEllipsisH className='dot'/></button>
+                                    </Dropdown>
+                                )
+                            }
 
                         </div>
                     )
@@ -246,7 +260,7 @@ function SprintItemV2({
                         )
                     }
                     {
-                        !isCreateTask &&
+                        (permission.createTask && !isCreateTask )  &&
                         <button className='add-task' onClick={() => setIsCreateTask(true)}>
                             <FaPlus className={'icon-add'}/>
                             Thêm Công Việc

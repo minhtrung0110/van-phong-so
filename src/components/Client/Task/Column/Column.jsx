@@ -18,7 +18,7 @@ import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 import {createTask} from "~/api/Client/Task/taskAPI";
 
 
-function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdateTask}) {
+function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdateTask,permission}) {
     // console.log(column )
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [columnTitle, setColumnTitle] = useState(column.name)
@@ -230,7 +230,7 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
                     {
                         !!column.tasks && column.tasks.map((item, index) => (
                             <Draggable key={index}>
-                                <TaskItem task={item} onShowDetail={handleShowDetailTask}/>
+                                <TaskItem task={item} onShowDetail={handleShowDetailTask} permission={permission} />
                             </Draggable>
 
                         ))
@@ -261,15 +261,15 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
                     </div>
                 )
             }
-            {
-                !isAddCard && (
+
                     <footer className='footer-column'>
+                        {
+                        (permission.createTask && !isAddCard) && (
                       <div className='add-card-task'  onClick={() => setIsAddCard(true)}>
                           <FaPlus className='footer-icon'/> Thêm Công Việc
-                      </div>
+                      </div>)}
                     </footer>
-                )
-            }
+
 
             {/*<ConfirmModal*/}
             {/*    show={showConfirmModal}*/}

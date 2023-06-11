@@ -25,6 +25,9 @@ import {setIsResetSprint, setMembers} from "~/redux/reducer/project/projectReduc
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import ListSprint from "~/components/commoms/Skeleton/Project/Sprint";
 import ListSprintSkeleton from "~/components/commoms/Skeleton/Project/Sprint";
+import {isEmpty} from "lodash";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {authorizationFeature} from "~/utils/authorizationUtils";
 
 
 BacklogPage.propTypes = {};
@@ -35,16 +38,16 @@ const data = [
         description: 'Sprint to display',
         startTime: '18/03/2023 00:10:00',
         endTime: '18/04/2023 23:10:00',
-        listTasks: [   {
-            id:'project-1',
-            boardId  :'kltn-01',
+        listTasks: [{
+            id: 'project-1',
+            boardId: 'kltn-01',
             columnId: 'column-3',
-            title:'UI Login',
+            title: 'UI Login',
             description: '',
-            startTime:'01/01/2023 00:10:00',
-            endTime:'11/03/2023 21:00:00',
-            priority:'highly',
-            members:[  {
+            startTime: '01/01/2023 00:10:00',
+            endTime: '11/03/2023 21:00:00',
+            priority: 'highly',
+            members: [{
                 id: 1,
                 first_name: 'Nguyễn Đức Minh',
                 last_name: 'Trung',
@@ -57,20 +60,20 @@ const data = [
                 address: 'Tan Quy Tây, Bình Chanh,HCM',
                 status: 1,
             }],
-            todoList:[],
-            fileList:[],
-            comments:[],
+            todoList: [],
+            fileList: [],
+            comments: [],
         },
             {
-                id:'project-2',
-                boardId:'kltn-01',
+                id: 'project-2',
+                boardId: 'kltn-01',
                 columnId: 'column-3',
-                title:'UIBase DashBoard',
+                title: 'UIBase DashBoard',
                 description: '',
-                startTime:'01/01/2023 00:10:00',
-                endTime:'20/03/2023 21:00:00',
-                priority:'highly',
-                members:[
+                startTime: '01/01/2023 00:10:00',
+                endTime: '20/03/2023 21:00:00',
+                priority: 'highly',
+                members: [
                     {
                         id: 2,
                         first_name: 'Dương Đình Khả',
@@ -84,37 +87,37 @@ const data = [
                         address: 'HCM',
                         status: 1,
                     }],
-                todoList:[],
-                fileList:[],
-                comments:[],
+                todoList: [],
+                fileList: [],
+                comments: [],
             }
-            ,  {
-                id:'project-3',
-                boardId:'kltn-01',
+            , {
+                id: 'project-3',
+                boardId: 'kltn-01',
                 columnId: 'column-3',
-                title:'Đề Cương Khóa Luận',
+                title: 'Đề Cương Khóa Luận',
                 description: 'Chú Ý xác định đúng đối tượng và tập trung vào quy trình doanh nghiệp',
-                startTime:'01/02/2023 00:10:00 ',
-                endTime:'20/04/2023 20:00:00 ',
-                priority:'highly',
-                members:[],
-                todoList:[
-                    {id:1,name:'Lập Kịch Bản',status:false,isNew:false},
-                    {id:2,name:'Viết Mục Tiêu',status:false,isNew:false}
+                startTime: '01/02/2023 00:10:00 ',
+                endTime: '20/04/2023 20:00:00 ',
+                priority: 'highly',
+                members: [],
+                todoList: [
+                    {id: 1, name: 'Lập Kịch Bản', status: false, isNew: false},
+                    {id: 2, name: 'Viết Mục Tiêu', status: false, isNew: false}
                 ],
-                fileList:[],
-                comments:[],
+                fileList: [],
+                comments: [],
             },
             {
-                id:'project-3',
-                boardId:'kltn-01',
+                id: 'project-3',
+                boardId: 'kltn-01',
                 columnId: 'column-3',
-                title:'Tham Khảo UI',
+                title: 'Tham Khảo UI',
                 description: '',
-                startTime:'01/1/2023 00:10:00',
-                endTime:'01/03/2023 21:00:00',
-                priority:'middle',
-                members:[  {
+                startTime: '01/1/2023 00:10:00',
+                endTime: '01/03/2023 21:00:00',
+                priority: 'middle',
+                members: [{
                     id: 1,
                     first_name: 'Nguyễn Đức Minh',
                     last_name: 'Trung',
@@ -140,9 +143,9 @@ const data = [
                         address: 'HCM',
                         status: 1,
                     }],
-                todoList:[],
-                fileList:[],
-                comments:[],
+                todoList: [],
+                fileList: [],
+                comments: [],
             }
         ],
         status: 1,
@@ -153,16 +156,16 @@ const data = [
         description: 'Sprint to implement',
         startTime: '18/04/2023 00:10:00',
         endTime: '18/05/2023 23:10:00',
-        listTasks: [   {
-            id:'project-1',
-            boardId  :'kltn-01',
+        listTasks: [{
+            id: 'project-1',
+            boardId: 'kltn-01',
             columnId: 'column-3',
-            title:'UI Login',
+            title: 'UI Login',
             description: '',
-            startTime:'01/01/2023 00:10:00',
-            endTime:'11/03/2023 21:00:00',
-            priority:'highly',
-            members:[  {
+            startTime: '01/01/2023 00:10:00',
+            endTime: '11/03/2023 21:00:00',
+            priority: 'highly',
+            members: [{
                 id: 1,
                 first_name: 'Nguyễn Đức Minh',
                 last_name: 'Trung',
@@ -175,20 +178,20 @@ const data = [
                 address: 'Tan Quy Tây, Bình Chanh,HCM',
                 status: 1,
             }],
-            todoList:[],
-            fileList:[],
-            comments:[],
+            todoList: [],
+            fileList: [],
+            comments: [],
         },
             {
-                id:'project-2',
-                boardId:'kltn-01',
+                id: 'project-2',
+                boardId: 'kltn-01',
                 columnId: 'column-3',
-                title:'UIBase DashBoard',
+                title: 'UIBase DashBoard',
                 description: '',
-                startTime:'01/01/2023 00:10:00',
-                endTime:'20/03/2023 21:00:00',
-                priority:'highly',
-                members:[
+                startTime: '01/01/2023 00:10:00',
+                endTime: '20/03/2023 21:00:00',
+                priority: 'highly',
+                members: [
                     {
                         id: 2,
                         first_name: 'Dương Đình Khả',
@@ -202,37 +205,37 @@ const data = [
                         address: 'HCM',
                         status: 1,
                     }],
-                todoList:[],
-                fileList:[],
-                comments:[],
+                todoList: [],
+                fileList: [],
+                comments: [],
             }
-            ,  {
-                id:'project-3',
-                boardId:'kltn-01',
+            , {
+                id: 'project-3',
+                boardId: 'kltn-01',
                 columnId: 'column-3',
-                title:'Đề Cương Khóa Luận',
+                title: 'Đề Cương Khóa Luận',
                 description: 'Chú Ý xác định đúng đối tượng và tập trung vào quy trình doanh nghiệp',
-                startTime:'01/02/2023 00:10:00 ',
-                endTime:'20/04/2023 20:00:00 ',
-                priority:'highly',
-                members:[],
-                todoList:[
-                    {id:1,name:'Lập Kịch Bản',status:false,isNew:false},
-                    {id:2,name:'Viết Mục Tiêu',status:false,isNew:false}
+                startTime: '01/02/2023 00:10:00 ',
+                endTime: '20/04/2023 20:00:00 ',
+                priority: 'highly',
+                members: [],
+                todoList: [
+                    {id: 1, name: 'Lập Kịch Bản', status: false, isNew: false},
+                    {id: 2, name: 'Viết Mục Tiêu', status: false, isNew: false}
                 ],
-                fileList:[],
-                comments:[],
+                fileList: [],
+                comments: [],
             },
             {
-                id:'project-3',
-                boardId:'kltn-01',
+                id: 'project-3',
+                boardId: 'kltn-01',
                 columnId: 'column-3',
-                title:'Tham Khảo UI',
+                title: 'Tham Khảo UI',
                 description: '',
-                startTime:'01/1/2023 00:10:00',
-                endTime:'01/03/2023 21:00:00',
-                priority:'middle',
-                members:[  {
+                startTime: '01/1/2023 00:10:00',
+                endTime: '01/03/2023 21:00:00',
+                priority: 'middle',
+                members: [{
                     id: 1,
                     first_name: 'Nguyễn Đức Minh',
                     last_name: 'Trung',
@@ -258,33 +261,39 @@ const data = [
                         address: 'HCM',
                         status: 1,
                     }],
-                todoList:[],
-                fileList:[],
-                comments:[],
+                todoList: [],
+                fileList: [],
+                comments: [],
             }
         ],
         status: 0,
     }
 ]
+
 function BacklogPage(props) {
-    const [project,setProject]=useState({})
+    const [project, setProject] = useState({})
     const [loading, setLoading] = React.useState(true);
-    const [search,setSearch]=useState([])
-    const [showAddSprint,setShowAddSprint]=useState(false)
-    const [listSprints,setListSprints]=useState([])
+    const [search, setSearch] = useState([])
+    const [showAddSprint, setShowAddSprint] = useState(false)
+    const [listSprints, setListSprints] = useState([])
     const [messageApi, contextHolder] = message.useMessage();
-    const [loadData,setLoadData]=useState(false)
+    const [loadData, setLoadData] = useState(false)
     const dispatch = useDispatch()
-    const isReset=useSelector(isResetSprintSelector)
-    useEffect(()=>{
+    const isReset = useSelector(isResetSprintSelector)
+    const userLogin = useSelector(getUserSelector)
+    const createPermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Sprint', 'create')
+    const editPermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Sprint', 'update')
+    const deletePermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Sprint', 'delete')
+    const createTaskPermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Task', 'create')
+    useEffect(() => {
         // call API get sprint task lên
         async function fetchDataListSprint() {
-            const project=JSON.parse(localStorage.getItem('project'))
+            const project = JSON.parse(localStorage.getItem('project'))
             // let params = {};
             // // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
             // if (search !== '') params = { ...params, search };
-            const respond = await getListSprintByProjectId(project.projectId,search);
-          console.log('Data respond:', respond)
+            const respond = await getListSprintByProjectId(project.projectId, search);
+            console.log('Data respond:', respond)
             if (respond.status === 401) {
                 messageApi.open({
                     type: 'error',
@@ -303,9 +312,10 @@ function BacklogPage(props) {
             }
             setLoading(false);
         }
+
         fetchDataListSprint();
 
-    },[search,isReset,loadData])
+    }, [search, isReset, loadData])
     const handleSetUnthorization = () => {
         dispatch(setExpiredToken(true));
         const token = getCookies('vps_token');
@@ -313,19 +323,18 @@ function BacklogPage(props) {
             deleteCookie('vps_token');
         }
     };
-    const handleCreateSprint=async (data) => {
-       // console.log('Create Sprint: ', data)
+    const handleCreateSprint = async (data) => {
+        // console.log('Create Sprint: ', data)
         const result = await createSprint(data);
-        if(result.status===1){
+        if (result.status === 1) {
             messageApi.open({
                 type: 'success',
                 content: result.message,
                 duration: 1.3,
             });
-         //  dispatch(setIsResetSprint(true))
+            //  dispatch(setIsResetSprint(true))
             setLoadData(!loadData)
-        }
-        else if(result.status===0) {
+        } else if (result.status === 0) {
             messageApi.open({
                 type: 'error',
                 content: result.message,
@@ -336,8 +345,8 @@ function BacklogPage(props) {
             setShowAddSprint(false)
         }, 200)
     }
-    const handleUpdateSprint=async (id,data) => {
-        console.log('Update Sprint: ',id, data)
+    const handleUpdateSprint = async (id, data) => {
+        console.log('Update Sprint: ', id, data)
         // const result = await editSprint(id,data);
         // if (result.status === 1) {
         //     messageApi.open({
@@ -356,7 +365,7 @@ function BacklogPage(props) {
         // }
 
     }
-    const handleDeleteSprint=async (item) => {
+    const handleDeleteSprint = async (item) => {
         console.log('Delete sprint:', item)
         const result = await deleteSprint(item.id);
         if (result.status === 1) {
@@ -375,78 +384,88 @@ function BacklogPage(props) {
             });
         }
     }
-    const handleRunSprint=(data)=>{
+    const handleRunSprint = (data) => {
         handleDeleteSprint(data)
     }
-    const handleDeleteTask=(value)=>{
+    const handleDeleteTask = (value) => {
         console.log('Delete Task: ', value)
     }
-    const handleCreateTask=(value)=>{
+    const handleCreateTask = (value) => {
         console.log('Create Task: ', value)
     }
-    const handleUpdateTask=(value)=>{
+    const handleUpdateTask = (value) => {
         console.log('Update Task: ', value)
     }
     return (
-       <>
-           {
-               loading ?(<ListSprintSkeleton/>):(
-                   <div className='container-backlog'>
-                       {contextHolder}
-                       <div className='header-backlog'>
-                           <div className='breadcrumb'>
-                               <Breadcrumb>
-                                   <Breadcrumb.Item><NavLink to={config.routes.allProject}>Dự Án</NavLink></Breadcrumb.Item>
-                                   <Breadcrumb.Item><NavLink to={config.routes.backlog}>Danh sách chu kỳ phát triển </NavLink></Breadcrumb.Item>
+        <>
+            {
+                loading ? (<ListSprintSkeleton/>) : (
+                    <div className='container-backlog'>
+                        {contextHolder}
+                        <div className='header-backlog'>
+                            <div className='breadcrumb'>
+                                <Breadcrumb>
+                                    <Breadcrumb.Item><NavLink to={config.routes.allProject}>Dự
+                                        Án</NavLink></Breadcrumb.Item>
+                                    <Breadcrumb.Item><NavLink to={config.routes.backlog}>Danh sách chu kỳ phát
+                                        triển </NavLink></Breadcrumb.Item>
 
-                               </Breadcrumb>
-                           </div>
-                           <div className='sprint-backlog-header'>
-                               <div className= 'sprint-backlog-title'>
-                                   <FaList className={'icon'} />
-                                   Danh sách chu kỳ phát triển
-                               </div>
-                               <div className= 'sprint-backlog-actions'>
-                                   <SearchHidenButton   width={'15rem'} onSearch={setSearch}/>
-                                   <button className='create-sprint' onClick={()=>setShowAddSprint(true)}>
-                                       Tạo mới chu kỳ phát triển
-                                   </button>
-                               </div>
-                           </div>
-                       </div>
-                       <div className='content-backlog'>
-                           <BoardSprint
-                               project={project} onBoard={handleUpdateSprint} columnData={listSprints}
-                               onEdit={handleUpdateSprint}
-                               onDelete={handleDeleteSprint}
-                               onDeleteTask={handleDeleteTask}
-                               onCreateTask={handleCreateTask}
-                               onUpdateTask={handleUpdateTask}
-                           />
-                           {/*{*/}
-                           {/*    !!listSprints && listSprints.map((item) =>(*/}
-                           {/*        <SprintItem key={item.id} sprint={item} onEdit={handleUpdateSprint} onDelete={handleDeleteSprint} />*/}
-                           {/*    ))*/}
-                           {/*}*/}
-                           {/*<Backlog />*/}
+                                </Breadcrumb>
+                            </div>
+                            <div className='sprint-backlog-header'>
+                                <div className='sprint-backlog-title'>
+                                    <FaList className={'icon'}/>
+                                    Danh sách chu kỳ phát triển
+                                </div>
+                                <div className='sprint-backlog-actions'>
+                                    <SearchHidenButton width={'15rem'} onSearch={setSearch}/>
+                                    {
+                                        createPermission && (
+                                            <button className='create-sprint' onClick={() => setShowAddSprint(true)}>
+                                                Tạo mới chu kỳ phát triển
+                                            </button>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div className='content-backlog'>
+                            <BoardSprint
+                                permission={{
+                                    edit: editPermission, delete: deletePermission,
+                                    createTask:createTaskPermission
+                                }}
+                                project={project} onBoard={handleUpdateSprint} columnData={listSprints}
+                                onEdit={handleUpdateSprint}
+                                onDelete={handleDeleteSprint}
+                                onDeleteTask={handleDeleteTask}
+                                onCreateTask={handleCreateTask}
+                                onUpdateTask={handleUpdateTask}
+                            />
+                            {/*{*/}
+                            {/*    !!listSprints && listSprints.map((item) =>(*/}
+                            {/*        <SprintItem key={item.id} sprint={item} onEdit={handleUpdateSprint} onDelete={handleDeleteSprint} />*/}
+                            {/*    ))*/}
+                            {/*}*/}
+                            {/*<Backlog />*/}
 
-                       </div>
-                       <Modal title="Tạo Mới " open={showAddSprint}
-                              destroyOnClose
-                              maskClosable={true}
-                              onCancel={()=>setShowAddSprint(false)}
-                              footer={null}
-                              width={700}
-                              style={{top: 150}}
-                       >
-                           <AddSprint onClose={()=>setShowAddSprint(false)} onSave={handleCreateSprint} />
-                       </Modal>
+                        </div>
+                        <Modal title="Tạo Mới " open={showAddSprint}
+                               destroyOnClose
+                               maskClosable={true}
+                               onCancel={() => setShowAddSprint(false)}
+                               footer={null}
+                               width={700}
+                               style={{top: 150}}
+                        >
+                            <AddSprint onClose={() => setShowAddSprint(false)} onSave={handleCreateSprint}/>
+                        </Modal>
 
 
-                   </div>
-               )
-           }
-       </>
+                    </div>
+                )
+            }
+        </>
     );
 }
 

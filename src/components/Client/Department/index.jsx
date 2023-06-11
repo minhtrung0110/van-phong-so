@@ -15,7 +15,7 @@ import {deleteStaff} from "~/api/Client/Staff/staffAPI";
 
 DepartmentTable.propTypes = {};
 
-function DepartmentTable({tableHeader, tableBody,onDelete}) {
+function DepartmentTable({editItem,deleteItem,tableHeader, tableBody,onDelete}) {
     const [messageApi, contextHolder] = message.useMessage();
     const [showPopupDelete, setShowPopupDelete] = useState({
         department_id: null,
@@ -96,22 +96,30 @@ function DepartmentTable({tableHeader, tableBody,onDelete}) {
                         >
                             <FaEye className="icon-show"/>
                         </button>
-                        <button
-                            id="edit-department"
-                            onClick={(e) => handleEditDepartment(e,item)}
-                            className=" btn-edit"
-                        >
-                            <FaPen className="icon-edit"/>
-                        </button>
-                        <button
-                            id="disabled-user"
-                            onClick={(e) => {
-                                showConfirmDeleteDepartment(e, item);
-                            }}
-                            className="btn-delete"
-                        >
-                            <FaTimesCircle className="icon-delete"/>
-                        </button>
+                        {
+                            editItem && (
+                                <button
+                                    id="edit-department"
+                                    onClick={(e) => handleEditDepartment(e,item)}
+                                    className=" btn-edit"
+                                >
+                                    <FaPen className="icon-edit"/>
+                                </button>
+                            )
+                        }
+                        {
+                            deleteItem && (
+                                <button
+                                    id="disabled-user"
+                                    onClick={(e) => {
+                                        showConfirmDeleteDepartment(e, item);
+                                    }}
+                                    className="btn-delete"
+                                >
+                                    <FaTimesCircle className="icon-delete"/>
+                                </button>
+                            )
+                        }
 
                     </td>
                     {contextHolder}

@@ -130,7 +130,6 @@ function AddStaff(props) {
         delete newStaff.per_address
         delete newStaff.tmp_residence
         delete newStaff.per_residence
-        delete newStaff.social_network
         console.log('Create Staff:', newStaff)
 
         const respond = await createStaff(newStaff)

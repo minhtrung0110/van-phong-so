@@ -19,7 +19,7 @@ ProjectTable.propTypes = {
 
 };
 
-function ProjectTable({tableHeader, tableBody,onUpdate,onDelete}) {
+function ProjectTable({editItem,deleteItem,tableHeader, tableBody,onUpdate,onDelete}) {
     const [showPopupDelete, setShowPopupDelete] = useState({
         project: null,
         show: false,
@@ -98,7 +98,7 @@ function ProjectTable({tableHeader, tableBody,onUpdate,onDelete}) {
                             )
                         }
                         {
-                            item.status!==1 && (
+                            item.status!==1 && editItem &&  (
                                 <button
                                     onClick={
                                         (e) => handleEditProject(item)
@@ -109,7 +109,7 @@ function ProjectTable({tableHeader, tableBody,onUpdate,onDelete}) {
                                 </button>
                             )
                         }
-                        {item.status===0 && (
+                        {item.status===0 && deleteItem && (
                             <button
                                 onClick={(e) => {
                                     showConfirmDeleteProject(e, item);

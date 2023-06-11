@@ -12,17 +12,24 @@ import Comment from "~/components/commoms/Comment";
 import Gallery from "react-photo-gallery";
 import {Dropdown} from "antd";
 import {value} from "lodash/seq";
+import {getListCommentsPost, likePost} from "~/api/Client/Post/postAPI";
+import {useSelector} from "react-redux";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 PostItem.propTypes = {
 
 };
 const cx=classNames.bind(styles);
 function PostItem({post,onUpdate,onDelete}) {
     const [showComment,setShowComment]=useState(false)
-    const date=dayjs(post.date,'YYYY-MM-DD').locale('vi').format('HH:mm, DD [tháng] M, YYYY');
+    const [listComments,setListComments]=useState([])
+    const [liked,setLiked]=useState(false)
+    const date=dayjs(post.updated_at,'YYYY-MM-DDTHH:mm:ss.SSSSZ').locale('vi').format('HH:mm, DD [tháng] M, YYYY');
     const listActions=[
         {label: 'Cập nhật bài viết',key:'edit',icon:<FaPenAlt/>},
         {label: 'Xóa bài viết',key:'delete',icon:<FaTrashAlt/>}
     ]
+    const userLogin=useSelector(getUserSelector)
+    const arrayImages=post.posts_images.map((item)=>({src:item.image_url, width: 3, height: 2}))
     const handleOnClickAction=(value)=>{
             if(value.key==='edit'){
                 onUpdate(post)
@@ -31,50 +38,77 @@ function PostItem({post,onUpdate,onDelete}) {
                 onDelete(post.id)
             }
     }
+    const handleLiked=async (id) => {
+        const result = await likePost(id, userLogin.id)
+        if(result.status===1){
+        setLiked(true)
+        }else {
+            setLiked(false)
+        }
+    }
+    const handleGetListComments=async () => {
+        if(showComment){
+            setShowComment(false)
+        }
+        else {
+            const result = await getListCommentsPost(post.id)
+            if(result.status===1){
+                setListComments(result.data)
+                setShowComment(true)
+            }
+            else {
+
+            }
+        }
+    }
     return (
         <div className={cx('post-item')}>
             <div className={cx('post-head')}>
                 <div className={cx('post-user')}>
-                    <AvatarCustom lastName={post.author.last_name} avatar={post.author.avatar} className={cx('post-avatar')} />
+                    <AvatarCustom lastName={post.created_by.last_name} avatar={post.created_by.avatar_url} className={cx('post-avatar')} />
                     <div className={cx('post-author')}>
                         <span className={cx('post-name-author')}>
-                            {`${post.author.first_name} ${post.author.last_name}`}
+                            {`${post.created_by.first_name} ${post.created_by.last_name}`}
                         </span>
                         <span className={cx('post-date')}>
                             {date}
                         </span>
                     </div>
-
                 </div>
-                <Dropdown
-                    menu={{
-                        items:listActions,
-                        onClick: handleOnClickAction
-                    }}
-                    trigger={['click']}
-                >
-                    <div className={cx('post-more')}>
-                        <FaEllipsisH className={cx('icon')} />
-                    </div>
-                </Dropdown>
+                {
+                    post.created_by.id === userLogin.id &&(
+                        <Dropdown
+                            menu={{
+                                items:listActions,
+                                onClick: handleOnClickAction
+                            }}
+                            trigger={['click']}
+                        >
+                            <div className={cx('post-more')}>
+                                <FaEllipsisH className={cx('icon')} />
+                            </div>
+                        </Dropdown>
+                    )
+                }
 
             </div>
             <div className={cx('post-content')}>
-                <div className={cx('description')}>{post.description}</div>
+                <div className={cx('description')} dangerouslySetInnerHTML={{ __html: post.content }}></div>
                 {
-                    <Gallery photos={post.files} limitNodeSearch={4} />
+                    <Gallery photos={arrayImages} limitNodeSearch={4} />
                 }
             </div>
             <div className={cx('post-stats')}>
-                <div className={cx('cmt')}>{post.comments.length} bình luận</div>
+                <div className={cx('cmt')}>{post.hasOwnProperty('comments')?post.comments.length:0} bình luận</div>
+                <div className={cx('like')}>{post.hasOwnProperty('total_likes')?post.total_likes:0} thích</div>
             </div>
             <div className={cx('post-actions')}>
 
-                <div className={cx('action-item','like-btn')}>
+                <div className={cx('action-item',`${liked?'active-like':'like-btn'}`)} onClick={()=>handleLiked(post.id)}>
                     <FaRegThumbsUp className={cx('icon')} />
                     <span className={cx('title')}>Thích</span>
                 </div>
-                <div className={cx('action-item')} onClick={()=>setShowComment(!showComment)}>
+                <div className={cx('action-item')} onClick={handleGetListComments}>
                     <FaRegCommentAlt className={cx('icon')} />
                     <span className={cx('title')}>Bình luận</span>
                 </div>
@@ -88,7 +122,7 @@ function PostItem({post,onUpdate,onDelete}) {
                 {
                     !!showComment && (
                         <div className={cx('media')}>
-                            <Comment user={post.author} listComment={post.comments} />
+                            <Comment user={post.created_by} listComment={post.comments} />
                         </div>
                     )
                 }

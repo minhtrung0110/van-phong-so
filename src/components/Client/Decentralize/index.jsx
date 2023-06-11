@@ -14,7 +14,7 @@ import {getRoleById} from "~/api/Client/Role/roleAPI";
 
 DecentralizeTable.propTypes = {};
 
-function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
+function DecentralizeTable({deleteItem,editItem,tableHeader, tableBody,onDelete,onUpdate}) {
     const [showPopupDelete, setShowPopupDelete] = useState({
         department_id: null,
         name:'',
@@ -73,22 +73,30 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
                         </p>
                     </td>
                     <td className="col-action">
-                        <button
-                            id="edit-department"
-                            onClick={() => handleEditDecentralize(item)}
-                            className=" btn-edit"
-                        >
-                            <FaPen className="icon-edit"/>
-                        </button>
-                        <button
-                            id="disabled-user"
-                            onClick={(e) => {
-                                showConfirmDeleteDecentralize(e, item);
-                            }}
-                            className="btn-delete"
-                        >
-                            <FaTimesCircle className="icon-delete"/>
-                        </button>
+                        {
+                            editItem && (
+                                <button
+                                    id="edit-department"
+                                    onClick={() => handleEditDecentralize(item)}
+                                    className=" btn-edit"
+                                >
+                                    <FaPen className="icon-edit"/>
+                                </button>
+                            )
+                        }
+                        {
+                            deleteItem && (
+                                <button
+                                    id="disabled-user"
+                                    onClick={(e) => {
+                                        showConfirmDeleteDecentralize(e, item);
+                                    }}
+                                    className="btn-delete"
+                                >
+                                    <FaTimesCircle className="icon-delete"/>
+                                </button>
+                            )
+                        }
 
                     </td>
                 </tr>

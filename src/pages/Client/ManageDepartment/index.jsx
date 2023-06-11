@@ -5,22 +5,23 @@ import NotFoundData from "~/components/commoms/NotFoundData";
 import DepartmentTable from "~/components/Client/Department";
 import {department_table_header} from "~/asset/data/department-table-header";
 import PaginationUI from "~/components/commoms/Pagination";
-import {FaFileDownload, FaFileUpload, FaRegBuilding, FaSearch} from "react-icons/fa";
-import FilterRadiobox from "~/components/commoms/FilterSelect";
+import { FaRegBuilding, FaSearch} from "react-icons/fa";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import {Button, Modal, Tooltip,message} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {isEditDepartmentSelector, isResetDepartmentSelector} from "~/redux/selectors/department/departmenrSelector";
 import EditDepartment from "~/components/Client/Department/Edit";
 import AddDepartment from "~/components/Client/Department/Add";
-import {setIsAdd, setIsEdit, setIsReset} from "~/redux/reducer/department/departmentReducer";
+import {setIsEdit, setIsReset} from "~/redux/reducer/department/departmentReducer";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {listDepartments} from "~/asset/data/initDataGlobal";
 import FilterSelect from "~/components/commoms/FilterSelect";
 import {createDepartment, getListDepartments} from "~/api/Client/Department/departmentAPI";
-import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {isEmpty} from "lodash";
+import {authorizationFeature} from "~/utils/authorizationUtils";
 
 ManageDepartment.propTypes = {};
 const listStatus = [
@@ -52,6 +53,10 @@ function ManageDepartment(props) {
     const [filter, setFilter] = React.useState({role:'all',status:'all'})
     const [messageApi, contextHolder] = message.useMessage();
     const isReset=useSelector(isResetDepartmentSelector)
+    const userLogin=useSelector(getUserSelector)
+    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Department','create')
+    const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Department','update')
+    const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Department','delete')
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
@@ -179,8 +184,12 @@ function ManageDepartment(props) {
                                       {/*<Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>*/}
                                       {/*    <Button className='btn'><FaFileDownload className='icon'/></Button>*/}
                                       {/*</Tooltip>*/}
-                                      <Button className='btn-add'
-                                              onClick={handleOpenAddDepartment}>Tạo Mới </Button>
+                                      {
+                                          createPermission && (
+                                              <Button className='btn-add'
+                                                      onClick={handleOpenAddDepartment}>Tạo Mới </Button>
+                                          )
+                                      }
                                   </div>
                               </div>
 
@@ -188,7 +197,10 @@ function ManageDepartment(props) {
                           <div className='content-department-page'>
                               {
                                   data.length > 0 ? (
-                                      <DepartmentTable tableHeader={department_table_header} tableBody={data} onDelete={handleDeleteDepartment} />
+                                      <DepartmentTable
+                                          editItem={editPermission}
+                                          deleteItem={deletePermission}
+                                          tableHeader={department_table_header} tableBody={data} onDelete={handleDeleteDepartment} />
                                   ) : (
                                       <NotFoundData/>
                                   )

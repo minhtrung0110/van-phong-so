@@ -8,7 +8,6 @@ import { message } from 'antd';
 import NotFoundData from "~/components/commoms/NotFoundData";
 import PaginationUI from "~/components/commoms/Pagination";
 import DecentralizeTable from "~/components/Client/Decentralize";
-import {listDecentralize} from "~/asset/data/initDataGlobal";
 import {decentralize_table_header} from "~/asset/data/decentralize-table-header";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -19,11 +18,13 @@ import AddRole from "~/components/Client/Decentralize/Add";
 import {setIsAdd, setIsEdit,setIsReset} from "~/redux/reducer/decentralize/decentralizeReducer";
 import EditRole from "~/components/Client/Decentralize/Edit";
 import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
-import {getListDepartments} from "~/api/Client/Department/departmentAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {deleteRole, getListRoles} from "~/api/Client/Role/roleAPI";
 import FilterSelect from "~/components/commoms/FilterSelect";
+import {isEmpty} from "lodash";
+import {authorizationFeature} from "~/utils/authorizationUtils";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 
 Decentralize.propTypes = {};
 const listStatus=[
@@ -39,6 +40,10 @@ function Decentralize(props) {
     const [search, setSearch] = React.useState('')
     const [filter, setFilter] = React.useState({role:'all',status:'all'})
     const [messageApi, contextHolder] = message.useMessage();
+    const userLogin=useSelector(getUserSelector)
+    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Staff','create')
+    const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Staff','update')
+    const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Staff','delete')
     const dispatch = useDispatch()
     const handleAddNewRole = () => {
         dispatch(setIsAdd(true))
@@ -149,7 +154,11 @@ function Decentralize(props) {
                                                 <SearchHidenButton height='2.4rem' width='20rem'
                                                                    searchButtonText={<FaSearch/>}
                                                                    backgroundButton='#479f87' onSearch={setSearch}/>
-                                                <button className='btn-add' onClick={handleAddNewRole}>Tạo Mới</button>
+                                                {
+                                                    createPermission && (
+                                                        <button className='btn-add' onClick={handleAddNewRole}>Tạo Mới</button>
+                                                    )
+                                                }
 
                                             </div>
                                         </div>
@@ -157,7 +166,10 @@ function Decentralize(props) {
                                     <div className='content-decentralize'>
                                         {
                                             data.length > 0 ? (
-                                                <DecentralizeTable tableHeader={decentralize_table_header} tableBody={data}
+                                                <DecentralizeTable
+                                                    editItem={editPermission}
+                                                    deleteItem={deletePermission}
+                                                    tableHeader={decentralize_table_header} tableBody={data}
                                                                    onDelete={handleRemoveDecentralize}
                                                 />
                                             ) : (

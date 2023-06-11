@@ -20,6 +20,8 @@ import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import KanbanProject from "~/components/commoms/Skeleton/Kaban/KanbanProject";
 import KanbanProjectSkeleton from "~/components/commoms/Skeleton/Kaban/KanbanProject";
 import {getStaffsProjectById} from "~/api/Client/Project/projectAPI";
+import {authorizationFeature} from "~/utils/authorizationUtils";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 
 ManageTaskPage.propTypes = {};
 
@@ -33,8 +35,10 @@ function ManageTaskPage(props) {
     const [messageApi, contextHolder] = message.useMessage();
     const [search, setSearch] = useState()
     const [sprint,setSprint] = useState({})
-    const isCreateProject = useSelector(isCreateProjectSelector)
-
+    const userLogin=useSelector(getUserSelector)
+    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Task','create')
+    const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Task','update')
+    const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Task','delete')
     const dispatch=useDispatch()
     const idProject=useSelector(keyProjectSelector)
     const location=useLocation()
@@ -185,7 +189,7 @@ function ManageTaskPage(props) {
                                   sprint={sprint}
                                   onSearch={setSearch}/>
                         <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}
-                                      onUpdateTask={handleUpdateTask}
+                                      onUpdateTask={handleUpdateTask} permission={{create:createPermission,edit:editPermission,delete:deletePermission}}
                                       onDeleteTask={handleDeleteTask} />
                     </div>
                 )

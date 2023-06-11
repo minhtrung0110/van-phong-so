@@ -63,7 +63,8 @@ $breakpoints: (
   .post-content{
     padding:1rem  2rem;
     .description{
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: var(--14px);
     }
 
   }
@@ -78,8 +79,14 @@ $breakpoints: (
     }
 
   .cmt{
-
+    margin-right: 0.3rem;
+    font-size: var(--12px);
+    font-style: italic;
   }
+    .like{
+      font-style: italic;
+      font-size: var(--12px);
+    }
   }
   .post-actions{
     display: flex;
@@ -121,6 +128,18 @@ $breakpoints: (
           color: var(--blue);
           font-weight: 700;
         }
+      }
+    }
+    .active-like{
+      .icon{
+        transform: scale(1.75);
+        color: var(--blue);
+
+        animation: like 0.5s ease-in-out;
+      }
+      .title{
+        color: var(--blue);
+        font-weight: 700;
       }
     }
 
