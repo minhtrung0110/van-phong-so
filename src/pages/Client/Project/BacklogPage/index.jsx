@@ -20,7 +20,13 @@ import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import ListPageSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
-import {createSprint, deleteSprint, editSprint, getListSprintByProjectId} from "~/api/Client/Sprint/sprintAPI";
+import {
+    completeSprint,
+    createSprint,
+    deleteSprint,
+    editSprint,
+    getListSprintByProjectId
+} from "~/api/Client/Sprint/sprintAPI";
 import {setIsResetSprint, setMembers} from "~/redux/reducer/project/projectReducer";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import ListSprint from "~/components/commoms/Skeleton/Project/Sprint";
@@ -347,22 +353,48 @@ function BacklogPage(props) {
     }
     const handleUpdateSprint = async (id, data) => {
         console.log('Update Sprint: ', id, data)
-        // const result = await editSprint(id,data);
-        // if (result.status === 1) {
-        //     messageApi.open({
-        //         type: 'success',
-        //         content: result.message,
-        //         duration: 1.3,
-        //     });
-        //    // dispatch(setIsResetSprint(true))
-        //     setLoadData(!loadData)
-        // } else if (result.status === 0) {
-        //     messageApi.open({
-        //         type: 'error',
-        //         content: result.message,
-        //         duration: 1.4,
-        //     });
-        // }
+        const result = await editSprint(id,data);
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+           // dispatch(setIsResetSprint(true))
+            setLoadData(!loadData)
+        } else if (result.status === 0) {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.4,
+            });
+        }
+
+    }
+    const handleCompleteSprint = async (id,idDone) => {
+        console.log('Complete Sprint: ', id)
+        const backlog=listSprints.find(sprint => sprint.title==="BackLog")
+        const complete = {
+            sprint_id: id,
+            to_sprint:backlog.id,
+            id_done:idDone
+        }
+        const result = await completeSprint(id,complete);
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+            // dispatch(setIsResetSprint(true))
+            setLoadData(!loadData)
+        } else if (result.status === 0) {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.4,
+            });
+        }
 
     }
     const handleDeleteSprint = async (item) => {
@@ -438,6 +470,7 @@ function BacklogPage(props) {
                                 project={project} onBoard={handleUpdateSprint} columnData={listSprints}
                                 onEdit={handleUpdateSprint}
                                 onDelete={handleDeleteSprint}
+                                onComplete={handleCompleteSprint}
                                 onDeleteTask={handleDeleteTask}
                                 onCreateTask={handleCreateTask}
                                 onUpdateTask={handleUpdateTask}

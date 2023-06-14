@@ -9,10 +9,10 @@ AvatarCustom.propTypes = {
     lastName: PropTypes.string.isRequired,
 };
 const cx=classNames.bind(styles)
-function AvatarCustom({avatar,lastName,size='large'}) {
+function AvatarCustom({avatar="http://",lastName="A",size='large'}) {
     const [show, setShow] = useState(false);
     const array = !isEmpty(lastName) ?lastName.split(" "):[];
-    const name = array[array.length - 1];
+    const name = lastName.charAt(0);
     const checkImageUrl = (url) => {
         // /\.(jpeg|jpg|png|gif)\b/i.test(url);
         let img = document.createElement('img');

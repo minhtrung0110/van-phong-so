@@ -19,10 +19,10 @@ export const listColorStateDefaults =[
         color: '#760ae7',
         backgroundColor:'rgba(115,59,238,0.12)'},
     {id:7,
-        color: '#43f5f5',
+        color: '#25bcde',
         backgroundColor:'rgba(54,245,229,0.12)'},
     {id:8,
-        color: '#f326d0',
+        color: '#f326ab',
         backgroundColor:'rgba(219,37,239,0.12)'},
     {id:9,
         color: '#4ce861',
@@ -33,28 +33,28 @@ export const listPriority = [
     {
         id:1,
         label: 'Cao',
-        value: 'highly',
+        value: 1,
         color: '#e94040',
         backgroundColor: 'rgba(233,64,64,.12)'
     },
     {
         id:2,
         label: 'Trung Bình',
-        value: 'middle',
+        value: 2,
         color: '#fa8c16',
         backgroundColor: 'rgba(250,140,22,.12)'
     },
     {
         id:3,
         label: 'Thấp',
-        value: 'low',
+        value: 3,
         color: '#18baff',
         backgroundColor: 'rgba(24,186,255,.12)'
     },
     {
         id:4,
         label: 'Không ưu tiên',
-        value: 'none',
+        value: 4,
         color: '#a9a8a8',
         backgroundColor: '#f5f7f9'
     },

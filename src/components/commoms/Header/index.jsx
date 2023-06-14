@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FaBars,} from "react-icons/fa";
 import classNames from "classnames/bind";
 import InfoUser from "~/components/commoms/InfoUser";
-
+import {Skeleton} from "antd";
 import './Header.module.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {isCollapseSideBar} from "~/redux/selectors/dashboard/dashboardSelector";
@@ -26,6 +26,7 @@ function HeaderBar({onCollapse}) {
     const dispatch = useDispatch();
     const location = useLocation();
     const navigate=useNavigate()
+    const [loading,setLoading]=useState(false)
     const [showConfirmLogout,setShowConfirmLogout] =useState(false)
     const handleSwitchMode = (e) => {
         if (e.target.checked) {
@@ -55,6 +56,7 @@ function HeaderBar({onCollapse}) {
     };
     useEffect(()=>{
         async function fetchData(){
+            setLoading(true)
             const result=await handleGetUserInformation()
             if (result===401) {
                 handleSetUnthorization();
@@ -63,6 +65,7 @@ function HeaderBar({onCollapse}) {
             else {
                 setUserLogin(result);
                 dispatch(setUser(result));
+                setLoading(false);
             }
         }
         fetchData()
@@ -86,9 +89,15 @@ function HeaderBar({onCollapse}) {
                     <label htmlFor="switch-mode" className={cx("switch-mode")}></label>
                     {/*<DropdownNotify/>*/}
 
-                    <InfoUser user={userLogin}
-                              onLogout={setShowConfirmLogout}
-                             />
+                    {
+                        loading ? (
+                            <Skeleton.Avatar active={true} size={'large'}  />
+                        ):(
+                            <InfoUser user={userLogin}
+                                      onLogout={setShowConfirmLogout}
+                            />
+                        )
+                    }
                 </div>
 
 

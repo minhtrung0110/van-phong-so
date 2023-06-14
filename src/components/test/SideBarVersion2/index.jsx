@@ -27,10 +27,10 @@ function getItem(label, key, icon, children) {
     };
 }
 const arrayMenuItems=[
-    {id:1,key:'Staff',keyMenu:config.routes.staff,name:'Nhân Sự',link:config.routes.staff,icon:<FaPeopleArrows/>,group:1},
+    {id:1,key:'Post',keyMenu:config.routes.home,name:'Bài Viết',link:config.routes.home,icon:<FaHome/>,group:1},
     {id:2,key:'Department',keyMenu:config.routes.department,name:'Phòng Ban',link:config.routes.department,icon:<FaLaptop/>,group:1},
-    {id:3,key:'Role',keyMenu:config.routes.decentralize,name:'Chức Danh',link:config.routes.decentralize,icon:<FaUserCog/>,group:1},
-    {id:4,key:'Post',keyMenu:config.routes.home,name:'Bài Viết',link:config.routes.home,icon:<FaHome/>,group:1},
+       {id:3,key:'Staff',keyMenu:config.routes.staff,name:'Nhân Sự',link:config.routes.staff,icon:<FaPeopleArrows/>,group:1},
+    {id:4,key:'Role',keyMenu:config.routes.decentralize,name:'Chức Danh',link:config.routes.decentralize,icon:<FaUserCog/>,group:1},
     {id:5,key:'Setting',keyMenu:config.routes.setting,name:'Cài Đặt',link:config.routes.setting,icon:<FaCogs/>,group:1},
     {id:6,key:'Project',keyMenu:config.routes.allProject,name:'Dự Án',link:config.routes.allProject,icon:<FaListAlt/>,group:2},
     {id:7,key:'Sprint',keyMenu:config.routes.backlog,name:'Chu Kỳ',link:config.routes.backlog,icon:<FaRecycle/>,group:2},
@@ -66,11 +66,12 @@ const SideBarVersion2 = () => {
     const collapsed = useSelector(isCollapseSideBar)
     const [openKey, setOpenKey] = useState(['group']);
     const userLogin=useSelector(getUserSelector)
-    const viewPermissions = !isEmpty(userLogin) && userLogin.permission
+    const arrayPermissions = !isEmpty(userLogin) && userLogin.permission
         .filter(item => Object.keys(item.permission).some(key => key.includes('view') && item.permission[key] === true))
         .map(item => item.name);
-    //console.log('Test permissions: ',viewPermissions)
 
+    const viewPermissions=Array.isArray(arrayPermissions) ?arrayPermissions.concat('Post','Calendar'):[]
+    console.log('Test permissions: ',viewPermissions)
     const listMenuItems = !isEmpty(userLogin) ?arrayMenuItems.reduce((acc, item, currentIndex) => {
         if (viewPermissions.includes(item.key)) {
             return acc.concat(item);

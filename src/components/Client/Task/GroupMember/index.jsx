@@ -12,7 +12,7 @@ GroupMember.propTypes = {
 };
 
 function GroupMember({onMembers,defaultMembers=[],listMembersForTask,addMember=false,maxCount=4,sizeAvatar='default'}) {
-    console.log(defaultMembers)
+   /// console.log('Testing:',listMembersForTask)
     const [openSelectMember, setOpenSelectMember] = useState(false)
     const listDefaultColors=['#721e1e',
         '#da7e14',
@@ -35,8 +35,8 @@ function GroupMember({onMembers,defaultMembers=[],listMembersForTask,addMember=f
 
                 {
                   !!defaultMembers &&  defaultMembers.map((item)=> (
-                        <Tooltip title={item.full_name} placement="top" key={item.id}>
-                            <AvatarCustom avatar={item.avatar_url} lastName={item.full_name} size={sizeAvatar} />
+                        <Tooltip title={`${item.first_name} ${item.last_name}`} placement="top" key={item.id}>
+                            <AvatarCustom avatar={item.avatar_url} lastName={item.last_name} size={sizeAvatar} />
                             {/*<Avatar src={item.avatar}*/}
                             {/*    style={{*/}
                             {/*        backgroundColor: '#87d068',*/}

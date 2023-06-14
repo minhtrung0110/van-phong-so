@@ -5,58 +5,36 @@ import styles from './CommentForm.module.scss'
 import {useForm} from 'react-hook-form'
 import classNames from "classnames/bind";
 import {Input, Modal, Upload} from "antd";
-import {FaCaretDown, FaEye, FaPaperclip, FaRegSmile, FaTrash} from "react-icons/fa";
+import {FaCaretDown, FaEye, FaPaperclip, FaPaperPlane, FaRegSmile, FaTrash} from "react-icons/fa";
 import {isEmpty} from "lodash";
 import comment from "~/components/commoms/Comment";
 
 CommentForm.propTypes = {};
 const cx = classNames.bind(styles)
-const getBase64 = (file) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-});
-
-function CommentForm({user=null, onSubmit, initialText = "",fileAttached=null,className}) {
+function CommentForm({user, onSubmit, initialText = "",id,onUpdate, className}) {
     const [value, setValue] = useState()
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
-    const [listFile, setListFile] = useState()
-    console.log(value)
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
     } = useForm({});
     useEffect(() => {
         setValue(initialText);
-        setListFile(fileAttached)
-    }, [initialText,fileAttached]);
+    }, [initialText]);
     const onSave = () => {
         // validate Value
-        onSubmit({comment: value, file: listFile})
+        if(onUpdate)
+            onSubmit({id:id,comment: value})
+        else
+        onSubmit({comment: value})
         setValue('')
-        setListFile([])
     }
 
 
-    const handleChangeUpload = (info) => {
-        setListFile(info.fileList)
-    }
-    const handlePreview = async (file) => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
-        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-    };
 
     return (
-        <form className={cx(`component-editor`,className)} onSubmit={handleSubmit(onSave)} >
+        <form className={cx(`component-editor`, className)} onSubmit={handleSubmit(onSave)}>
             <div className={cx('comment-input')}>
-                {!!user &&  <AvatarCustom lastName={user.last_name} avatar={user.avatar} className={cx('post-avatar')}
-                              size={'small'}/> }
+                {!!user && <AvatarCustom lastName={user.last_name} avatar={user.avatar_url} className={cx('post-avatar')}
+                                         size={'small'}/>}
                 <div className={cx('editor')}>
                     <input className={cx('input-comment')}
                            value={value}
@@ -66,28 +44,11 @@ function CommentForm({user=null, onSubmit, initialText = "",fileAttached=null,cl
                     />
                 </div>
             </div>
-            <Upload
-                action="http://localhost:3000/"
-                listType="picture"
-                onPreview={handlePreview}
-                maxCount={1}
-                fileList={listFile}
-                onChange={handleChangeUpload}
-            >
-                 <span className={cx('files')}>
-                <FaPaperclip className={cx('icon')}/>
-                 </span>
 
-            </Upload>
-            <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={() => setPreviewOpen(false)}>
-                <img
-                    alt="example"
-                    style={{
-                        width: '100%',
-                    }}
-                    src={previewImage}
-                />
-            </Modal>
+            <button type={'submit'} className={cx('files')}>
+                <FaPaperPlane className={cx('icon')}/>
+            </button>
+
         </form>
 
     );

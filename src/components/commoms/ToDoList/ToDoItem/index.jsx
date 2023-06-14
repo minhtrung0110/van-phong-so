@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {memo, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Checkbox, Input} from "antd";
 import styles from './ToDoItem.module.scss'
@@ -9,7 +9,8 @@ ToDoItem.propTypes = {
 
 };
 const cx=classNames.bind(styles)
-function ToDoItem({data,onUpdate,onDelete}) {
+function ToDoItem({data,onCreate,onUpdate,onDelete}) {
+    //console.log('ToDoItem:',data)
     const inputRef=useRef();
     const [isChecked,setIsChecked]=useState(data.status)
     const [valueInput,setValueInput]=useState(data.name)
@@ -33,7 +34,7 @@ function ToDoItem({data,onUpdate,onDelete}) {
     }, [inputRef]);// chờ đợi khi nào input dc render mới chạy callback
     const handleCancelAddItem=()=>{
         if(isAdd){
-            onDelete({...data})
+           // onDelete({...data})
             setIsAdd(false)
         }
         else if(isUpdate){
@@ -42,7 +43,7 @@ function ToDoItem({data,onUpdate,onDelete}) {
     }
     const handleSaveItem=()=>{
         if(isAdd){
-            onUpdate({...data,name:valueInput,status:isChecked,isNew:false})
+            onCreate({...data,name:valueInput,status:isChecked,isNew:false})
             setIsAdd(false)
         }
         else if(isUpdate){
@@ -92,4 +93,4 @@ function ToDoItem({data,onUpdate,onDelete}) {
     );
 }
 
-export default ToDoItem;
+export default memo(ToDoItem);

@@ -12,7 +12,7 @@ import {getSprintActive, mapOrder} from "~/utils/sorts";
 import backgroundImage from "~/asset/images/backgroundTask01.jpg"
 import {setIsViewTimeline} from "~/redux/reducer/project/projectReducer";
 import {flatten, isEmpty} from "lodash";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {deleteSprint, editSprint, getListSprintByProjectId, getSprintById} from "~/api/Client/Sprint/sprintAPI";
 import {message} from "antd";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
@@ -22,6 +22,8 @@ import KanbanProjectSkeleton from "~/components/commoms/Skeleton/Kaban/KanbanPro
 import {getStaffsProjectById} from "~/api/Client/Project/projectAPI";
 import {authorizationFeature} from "~/utils/authorizationUtils";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {editTask} from "~/api/Client/Task/taskAPI";
+import {config} from "~/config";
 
 ManageTaskPage.propTypes = {};
 
@@ -40,8 +42,8 @@ function ManageTaskPage(props) {
     const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Task','update')
     const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Task','delete')
     const dispatch=useDispatch()
-    const idProject=useSelector(keyProjectSelector)
-    const location=useLocation()
+    //const idProject=useSelector(keyProjectSelector)
+    const navigation=useNavigate()
     const fetchDataMembers=async (id) => {
         const respond = await getStaffsProjectById(id)
         if (respond.status === 401) {
@@ -67,7 +69,7 @@ function ManageTaskPage(props) {
             // let params = {};
             // // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
             // if (search !== '') params = { ...params, search };
-            const respond = await getSprintById(2);
+            const respond = await getSprintById(project.currentSprint);
             console.log('Data respond:', respond)
             if (respond.status === 401) {
                 messageApi.open({
@@ -89,6 +91,7 @@ function ManageTaskPage(props) {
         }
         fetchDataSprint();
         fetchDataMembers(1)
+      //  console.log('Test co duye mang ko:',columns)
 
         // const boardFromDB = initialData.boards.find(board => board.id === project.projectId)
         // if (!isEmpty(boardFromDB)) {
@@ -127,6 +130,7 @@ function ManageTaskPage(props) {
         if (token) {
             deleteCookie('vps_token');
         }
+        navigation(config.routes.login)
     };
     const handleUpdateColumn = (value)=>{
         // Create and Update:  API post Sprint to server
@@ -136,8 +140,27 @@ function ManageTaskPage(props) {
     const handleDeleteTask=(value)=>{
         console.log('Delete Task: ', value)
     }
-    const handleUpdateTask=(value)=>{
+    const handleUpdateTask=async (value) => {
         console.log('Update Task: ', value)
+        const response = await editTask(value)
+        if(response.status ===1){
+            messageApi.open({
+                type:'success',
+                message:response.message,
+                duration:1.3
+            })
+            setFilter({})
+        }else if (response===401){
+            handleSetUnthorization()
+        }else {
+            messageApi.open({
+                type:'error',
+                message:response.message,
+                duration:1.3
+            })
+        }
+
+
     }
     const handleDeleteSprint=async (item) => {
         console.log('Delete sprint:', item)
@@ -189,6 +212,7 @@ function ManageTaskPage(props) {
                                   sprint={sprint}
                                   onSearch={setSearch}/>
                         <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}
+                                      members={listMembers.members}
                                       onUpdateTask={handleUpdateTask} permission={{create:createPermission,edit:editPermission,delete:deletePermission}}
                                       onDeleteTask={handleDeleteTask} />
                     </div>

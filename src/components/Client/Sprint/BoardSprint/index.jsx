@@ -8,15 +8,16 @@ import {conCatArrayInArray, remakeSprintFromSlide} from "~/utils/sorts";
 import {flushSync} from "react-dom";
 import './BoardSprint.scss'
 import NotFoundData from "~/components/commoms/NotFoundData";
+import {dragAndDropTask} from "~/api/Client/Task/taskAPI";
 
 BoardSprint.propTypes = {};
 
-function BoardSprint({project,permission, columnData, onEdit, onDelete, onCreateTask, onDeleteTask, onUpdateTask,members}) {
-    console.log('columnData',columnData)
+function BoardSprint({project,permission, columnData, onEdit, onDelete,onComplete, onCreateTask, onDeleteTask, onUpdateTask,members}) {
+    //console.log('columnData',columnData)
     const [columns, setColumns] = useState(columnData)
     const [isOpenNewColForm, setIsOpenNewColForm] = useState(false)
     const [newColTitle, setNewColTitle] = useState('')
-    console.log(columns)
+    //console.log(columns)
     useEffect(() => {
         setColumns(columnData)
     }, [columnData])
@@ -36,6 +37,19 @@ function BoardSprint({project,permission, columnData, onEdit, onDelete, onCreate
     //     // console.log(newBoard)
     // }
     // khi kéo thả project qua lai giua cac cột
+    const handleSwitchTask=async (sort,id,sprintID) => {
+        const result = await dragAndDropTask({
+            sort: sort+1,
+            sprint_id: sprintID,
+            task_id: id
+        })
+        console.log('Ket qua keo tha:',result  )
+        // console.log('Keo Tha:',{
+        //     sort: dropResult.addedIndex,
+        //     sprint_id: dropResult.payload.sprint_id,
+        //     task_id: dropResult.payload.id,
+        // })
+    }
     const onCardDropSprint = (columnId, dropResult) => {
         console.log('Dichuyen', dropResult)
         console.log('col -id:', columnId)
@@ -45,7 +59,18 @@ function BoardSprint({project,permission, columnData, onEdit, onDelete, onCreate
             let currentColumn = newColumns.find((item => item.id === columnId)) // là cái sprint chô sẽ duoc chuyển vào
             const listCardSprint = currentColumn.tasks// conCatArrayInArray(currentColumn.columns);
             // console.log('ccheccked',listCardSprint)
-            console.log('Đang Tesst: ', currentColumn, newColumns)
+            if(dropResult.addedIndex!==null && dropResult.removedIndex!==null){
+                    handleSwitchTask(dropResult.addedIndex,dropResult.payload.id,dropResult.payload.sprint_id)
+                console.log('Di chuyen trong Sprint add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
+            }
+            else {
+                if(dropResult.addedIndex!==null){
+                    handleSwitchTask(dropResult.addedIndex,dropResult.payload.id,columnId)
+                    console.log('Keo tha sang Sprint mới add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
+                }
+
+            }
+           // console.log('Đang Tesst: ', currentColumn, newColumns)
             currentColumn.tasks = applyDragSprint(currentColumn.tasks, dropResult, currentColumn.id);
 
             // currentColumn.cardOrder=currentColumn.cards.map(i=>i.id)
@@ -78,6 +103,7 @@ function BoardSprint({project,permission, columnData, onEdit, onDelete, onCreate
                                     onCardDrop={onCardDropSprint}
                                     onEdit={onEdit}
                                     onDelete={onDelete}
+                                    onComplete={onComplete}
                                     listStatus={sprint.board_columns}
                                     onCreateTask={onCreateTask}
                                     onDeleteTask={onDeleteTask}

@@ -65,12 +65,24 @@ export const createPost = async (body) => {
         return {status:0,message:'Thêm bài viết thất bại'}
 
 };
+export const createComment = async (id,body) => {
+    const url =`posts/${id}/comments`;
+    const response = await axiosClient.post(url, body, configHeadersAuthenticate());
+    console.log(response)
+    if (response.status === 1) {
+        return {status:1,message:'Thêm bình luận thành công'}
+    } else if (response.status === 401) {return 401}
+    else
+        return {status:0,message:'Thêm bình luận thất bại'}
+
+};
+
 export const getListCommentsPost = async (id) => {
     const url = `posts/${id}/comments`;
     const response = await axiosClient.get(url,  configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {
-        return {status:1,data:response.results,message:''}
+        return {status:1,data:response.data.results,message:''}
     } else if (response.status === 401) {return 401}
     else
         return {status:0,data:[],message:''}
@@ -101,26 +113,24 @@ export const unLikePost = async (id,idStaff) => {
 
 export const editPost = async (body) => {
     const url = `posts`;
-
     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
     console.log(response)
-    if(response.status === 1 || response.message ==="Success") {
-        return {status:1,message:'Cập nhật bài viết mới thành công'}
+    if (response.status === 1) {
+        return {status: 1, message: 'Cập Nhật Bài Viết Thành Công'}
+    } else if (response.status === 401) return 401
+    else{
+        return {status: 0, message: 'Cập Nhật Bài Viết Thất Bại'}
     }
-    else if (response.status ===0){
-        switch (response.code) {
-            case -1009:
-                return {status:0,message:'Thông tin không chính xác'}
-                break
-            case -1010:
-                return {status:0,message:'Email đã tồn tại ! Vui lòng chọn email khác'}
-                break
-            case -1011:
-                return {status:0,message:'Tài khoản đã bị vo hiệu hóa'}
-                break
-            default:
-                break
-        }
+};
+export const editComment = async (id,body) => {
+    const url = `posts/${id}/comments`;
+    const response = await axiosClient.put(url, body, configHeadersAuthenticate());
+    console.log(response)
+    if (response.status === 1) {
+        return {status: 1, message: 'Cập Nhật Bình Luận Thành Công'}
+    } else if (response.status === 401) return 401
+    else{
+        return {status: 0, message: 'Cập Nhật Bình Luận Thất Bại'}
     }
 };
 export const deletePost = async (id) => {
@@ -128,8 +138,20 @@ export const deletePost = async (id) => {
     const response = await axiosClient.delete(url, configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {
-        return {status: 1, message: 'Cho Thôi Việc Thành Công'}
-    } else if (response.status === 0) {
-        return {status: 0, message: 'Cho Thôi Việc Thất Bại'}
+        return {status: 1, message: 'Xóa Bài Viết Thành Công'}
+    } else if (response.status === 401) return 401
+    else{
+        return {status: 0, message: 'Xóa Bài Viết Thất Bại'}
+    }
+}
+export const deleteComment = async (id) => {
+    const url = `/comments/${id}`;
+    const response = await axiosClient.delete(url, configHeadersAuthenticate());
+    console.log(response)
+    if (response.status === 1) {
+        return {status: 1, message: 'Xóa bình luận thành công'}
+    } else if (response.status === 401) return 401
+    else {
+        return {status: 0, message: 'CXóa bình luậ thất bại'}
     }
 }

@@ -34,21 +34,19 @@ import {setDeleteTask} from "~/redux/reducer/project/projectReducer";
 
 DetailTask.propTypes = {};
 
-function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
-
+function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTask, onDuplicate}) {
     const data = useSelector(detailTaskSelector)
-    console.log(data);
+   /// console.log('Priority',data.priority);
     const [errorDescription, setErrorDescription] = useState('');
     const [description,setDescription]=useState(data.description);
-    const [todoList,setTodoList] = useState(data.todoList)
+    const [todoList,setTodoList] = useState(isEmpty(data.todoList)?[]:data.todoList);
     const [priority, setPriority] = useState(data.priority);
-    const [status, setStatus] = useState(getStatusTaskProject(sprint, data.columnId))
+    const [status, setStatus] = useState(getStatusTaskProject(sprint, data.board_column_id))
     const [listFile, setListFile] = useState(data.fileList)
-    const [point, setPoint] = useState(data.point)
+    const [point, setPoint] = useState(data.estimate_point)
     const [taskTitle, setTaskTitle] = useState(data.title)
-
     const [rangeValueTime, setRangeValueTime] = useState(
-        [dayjs(data.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(data.endTime, "DD/MM/YYYY HH:mm:ss")]);
+        [dayjs("2023-05-16T17:32:53.527736Z", "DD/MM/YYYY HH:mm:ss"), dayjs("2023-05-16T17:32:53.527736Z", "DD/MM/YYYY HH:mm:ss")]);
     const [members, setMembers] = useState(data.members)
     const dispatch = useDispatch()
     const {RangePicker} = DatePicker;
@@ -99,13 +97,14 @@ function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onD
     };
 
     const listState = getListStatusTaskProject(sprint)
+
     const listStateRender = listState.map((item, index) => ({
         label: item.label,
         value: item.id,
-        color: listColorStateDefaults[index].color,
-        backgroundColor: listColorStateDefaults[index].backgroundColor
+        color: listColorStateDefaults[item.id-1].color,
+        backgroundColor: listColorStateDefaults[item.id-1].backgroundColor
     }))
-    // console.log(listStateRender)
+   // console.log(listColorStateDefaults[9].color)
     // console.log('Status: ',status)
     const fileList = [
         {
@@ -194,19 +193,38 @@ function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onD
     useEffect(() => {
         // post API Update Task
         // console.log('Open: ',isOpen)
-        onUpdateTask({
-            ...data,
-            title: taskTitle,
-            columnId: status.value,
-            priority:priority,
-            description,
-            todoList,
-            fileList:todoList,
-            members,
-            point,
-            startTime: dayjs(rangeValueTime[0], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
-            , endTime: dayjs(rangeValueTime[1], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
-        })
+        const updateTask=isEmpty(members)?{
+            id:data.id,
+            board_column_id: + status.value,
+            description: description,
+            estimate_point: point,
+            priority: priority,
+            sprint_id: sprint.id,
+            title: taskTitle
+        }: {
+            id:data.id,
+            assignee_employee_id:members[0].id,
+            board_column_id: + status.value,
+            description: description,
+            estimate_point: point,
+            priority: priority,
+            sprint_id: sprint.id,
+            title: taskTitle
+        }
+            onUpdateTask(updateTask)
+        // onUpdateTask({
+        //     ...data,
+        //     title: taskTitle,
+        //     columnId: status.value,
+        //     priority:priority,
+        //     description,
+        //     todoList,
+        //     fileList:todoList,
+        //     members,
+        //     point,
+        //     startTime: dayjs(rangeValueTime[0], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
+        //     , endTime: dayjs(rangeValueTime[1], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
+        // })
 
     }, [taskTitle,status,priority,rangeValueTime,point,description,listFile,todoList,members])
     // DEBUG HERE
@@ -299,7 +317,8 @@ function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onD
                             onChange={(e) => setPriority(e)}
                         >
                             {listPriority.map((item) => (
-                                <Select.Option key={item.value}
+                                <Select.Option key={item.id}
+                                               value={item.value}
                                                style={{
                                                    marginTop: '0.2rem',
                                                    backgroundColor: item.backgroundColor,
@@ -333,7 +352,7 @@ function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onD
                 </div>
                 <div className='todo-list'>
 
-                    <ToDoList list={todoList} onUpdate={setTodoList}/>
+                    <ToDoList list={todoList} taskId={data.id} onUpdate={setTodoList}/>
                 </div>
                 <div className='attach-file'>
                     <Upload

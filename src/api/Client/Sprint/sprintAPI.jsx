@@ -86,6 +86,17 @@ export const editSprint = async (id, body) => {
                       return {status:0,message:'Cập nhật chu kỳ phát triển thất bại'}
     }
 };
+export const completeSprint = async (id, body) => {
+    const url = `sprints/${id}`;
+    const response = await axiosClient.put(url, body, configHeadersAuthenticate());
+    console.log(response)
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,message:'Cập nhật chu kỳ phát triển thành công'}
+    }
+    else if (response.status ===0){
+        return {status:0,message:'Cập nhật chu kỳ phát triển thất bại'}
+    }
+};
 export const deleteSprint= async (id) => {
     const url = `/sprints/${id}`;
     const response = await axiosClient.delete(url, configHeadersAuthenticate());

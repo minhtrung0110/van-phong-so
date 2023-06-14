@@ -94,10 +94,10 @@ function AddPost({author,onSave}) {
            <div className='post-item-create'>
                <div className='post-head'>
                    <div className='post-user'>
-                       <AvatarCustom lastName={author.last_name} avatar={author.avatar} className={'post-avatar'} />
+                       <AvatarCustom lastName={author.name} avatar={author.avatar_url} className={'post-avatar'} />
                    </div>
                    <div className={'post-input'} onClick={()=>setShowAdd(true)}>
-                       {author.last_name} ơi ! Bạn đang nghĩ gì thế ?
+                       {author.name} ơi ! Bạn đang nghĩ gì thế ?
                    </div>
 
                </div>

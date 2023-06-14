@@ -30,25 +30,27 @@ function SprintItemV2({
                           onDelete,
                           column,
                           onCardDrop,
-    permission,
+                          onComplete,
+                          permission,
                           onCreateTask,
                           onDeleteTask,
                           onUpdateTask
                       }) {
-    //console.log('check nè', splitArrayByKey(sprint.tasks,'board_column_id'))
-
-    const totalTasks=sprint.hasOwnProperty('tasks')?sprint.tasks.length:0;
+    const end_date = new Date(sprint.end_date);
+    const current_date = new Date();
+    const overPast = end_date < current_date
+    const totalTasks = sprint.hasOwnProperty('tasks') ? sprint.tasks.length : 0;
     console.log(totalTasks)
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-    const [showCompleteSprint, setShowCompleteSprint]=useState()
+    const [showCompleteSprint, setShowCompleteSprint] = useState()
     const [showEditSprint, setShowEditSprint] = useState(false)
     const [isCreateTask, setIsCreateTask] = useState(false)
     const [messageApi, contextHolder] = message.useMessage();
     const [valueNewTask, setValueNewTask] = useState()
-    const userLogin=useSelector(getUserSelector)
-    const showSetting=(permission.edit  || permission.delete)
-    const listOptions =(permission.edit  && permission.delete)? [
+    const userLogin = useSelector(getUserSelector)
+    const showSetting = (permission.edit || permission.delete)
+    const listOptions = (permission.edit && permission.delete) ? [
         {
             key: 'edit',
             label: 'Cập nhật phiên làm việc',
@@ -57,11 +59,11 @@ function SprintItemV2({
             key: 'remove',
             label: 'Xóa phiên làm việc',
         },
-    ]:(permission.edit===true) ?[
+    ] : (permission.edit === true) ? [
         {
             key: 'edit',
             label: 'Cập nhật phiên làm việc',
-        }]:[
+        }] : [
         {
             key: 'remove',
             label: 'Xóa phiên làm việc',
@@ -79,10 +81,9 @@ function SprintItemV2({
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleRunSprint = () => {
-        if (sprint.status===1){
+        if (sprint.status === 1) {
             setShowCompleteSprint(true)
-        }
-        else {
+        } else {
             if (sprint.status === 0) {
                 onEdit(sprint.id, {...sprint, status: 1})
                 navigate(config.routes.project)
@@ -101,13 +102,13 @@ function SprintItemV2({
     const handleCreateTask = async () => {
         const newCardToAdd = {
             id: Math.floor(Math.random() * (999 - 10 + 1)) + 10,
-            employee_id:userLogin.id,
+            employee_id: userLogin.id,
             sprint_id: sprint.id,
             project_id: sprint.project_id,
             board_column_id: 1,
             assignee_employee: null,
             report_employee: userLogin,
-           // report_employee: null,
+            // report_employee: null,
             title: valueNewTask,
             description: "",
             priority: 1,
@@ -116,8 +117,8 @@ function SprintItemV2({
             comments: [],
             estimate_point: 3,
             status: 1,
-            task_histories:[],
-            sort:1,
+            task_histories: [],
+            sort: 1,
         }
         // add new card to Sprint
         const newSprint = {...sprint}
@@ -135,16 +136,15 @@ function SprintItemV2({
 
         // call  API tạo task
         const result = await createTask(newCardToAdd)
-        if(result.status===1){
+        if (result.status === 1) {
             setValueNewTask('')
             setIsCreateTask(false)
-           // onCreateTask(newCardToAdd)
-        }
-        else {
+            // onCreateTask(newCardToAdd)
+        } else {
             messageApi.open({
-                type:'error',
-                message:result.message,
-                duration:1.3,
+                type: 'error',
+                message: result.message,
+                duration: 1.3,
             })
             setIsCreateTask(false)
             setValueNewTask('')
@@ -155,8 +155,10 @@ function SprintItemV2({
     }
 
     const cards = sprint.tasks//conCatArrayInArray(sprint.columns);
-    const handleCompleteSprint=()=>{
-        onEdit(sprint.id, {...sprint, status:2})
+    const handleCompleteSprint = () => {
+        const done=sprint.board_columns.find(item=>item.name==='Done')
+
+        onComplete(sprint.id,done.id)
     }
     return (
         <div className={`sprint-item ${sprint.status === -1 ? 'backlog' : ''}`}>
@@ -168,7 +170,7 @@ function SprintItemV2({
                     {
                         sprint.status !== -1 && (
                             <div
-                                className='sprint-time'>{`${dayjs(sprint.start_date).format('DD/MM/YYYY')} - ${dayjs(sprint.end_date).format('DD/MM/YYYY')}`}</div>
+                                className={`sprint-time ${overPast ? 'over' : ''} `}>{`${dayjs(sprint.start_date).format('DD/MM/YYYY')} - ${dayjs(sprint.end_date).format('DD/MM/YYYY')}`}</div>
                         )
                     }
                     <div className='total-task'>{`( ${totalTasks} công việc )`}</div>
@@ -179,8 +181,9 @@ function SprintItemV2({
                         <div className='sprint-action'>
                             <div className='sprint-status'>
                                 {
-                                 totalTasks>0 &&   splitArrayByKey(sprint.tasks,'board_column_id').map((item, index) => (
-                                        <span key={index} className={`status-${item.id}`}>{!!item.cards.length?item.cards.length:0}</span>
+                                    totalTasks > 0 && splitArrayByKey(sprint.tasks, 'board_column_id').map((item, index) => (
+                                        <span key={index}
+                                              className={`status-${item.id}`}>{!!item.cards.length ? item.cards.length : 0}</span>
                                     ))
                                 }
                             </div>
@@ -223,7 +226,7 @@ function SprintItemV2({
                             dropPlaceholderAnimationDuration={200}
                         >
                             {
-                              totalTasks >0 &&  sprint.tasks.map((task, index) => (
+                                totalTasks > 0 && sprint.tasks.map((task, index) => (
                                     <Draggable key={index}>
                                         <TaskItem task={task} columns={listStatus} type={'long'}/>
                                     </Draggable>
@@ -260,7 +263,7 @@ function SprintItemV2({
                         )
                     }
                     {
-                        (permission.createTask && !isCreateTask )  &&
+                        (permission.createTask && !isCreateTask) &&
                         <button className='add-task' onClick={() => setIsCreateTask(true)}>
                             <FaPlus className={'icon-add'}/>
                             Thêm Công Việc
@@ -291,7 +294,7 @@ function SprintItemV2({
                    width={450}
                    style={{top: 80}}
             >
-              <CompleteSprint sprint={sprint} onComplete={handleCompleteSprint} onCancel={setShowCompleteSprint} />
+                <CompleteSprint sprint={sprint} onComplete={handleCompleteSprint} onCancel={setShowCompleteSprint}/>
             </Modal>
         </div>
     );

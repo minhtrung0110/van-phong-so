@@ -18,7 +18,7 @@ import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 import {createTask} from "~/api/Client/Task/taskAPI";
 
 
-function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdateTask,permission}) {
+function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,onUpdateTask,permission}) {
     // console.log(column )
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [columnTitle, setColumnTitle] = useState(column.name)
@@ -286,7 +286,8 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
                 destroyOnClose={true}
                // afterClose={()=>handleUpdateTask}
             >
-              <DetailTask isOpen={isOpenDetailTask} listMembers={project.listMembers} sprint={sprint} onDeleteTask={onDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
+              <DetailTask isOpen={isOpenDetailTask} column={column}  listMembers={members} sprint={sprint}
+                          onDeleteTask={onDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
             </Modal>
             <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html:`Bạn Có Thực Sự Muốn Xóa Cột <strong>${columnTitle}</strong> Này ? `}} />}

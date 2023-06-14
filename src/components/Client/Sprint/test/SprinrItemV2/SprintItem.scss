@@ -83,6 +83,12 @@ $spacing: 0.5rem;
 
       .sprint-time {
         margin-left: $spacing;
+        &.over{
+          background-color: var(--negativeSecondary);
+          color: var(--red);
+          padding: 0.2rem 0.3rem;
+          border-radius: 0.2rem;
+        }
       }
       .total-task{
         font-size: var(--14px);

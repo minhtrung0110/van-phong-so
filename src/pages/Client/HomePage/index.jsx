@@ -19,7 +19,7 @@ import {isEmpty} from "lodash";
 import EditPost from "~/components/Client/Post/Edit";
 import {useDispatch, useSelector} from "react-redux";
 import {setPost} from "~/redux/reducer/post/postReducer";
-import {createPost, getListPosts, likePost} from "~/api/Client/Post/postAPI";
+import {createPost, deletePost, getListPosts, likePost} from "~/api/Client/Post/postAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
@@ -31,14 +31,33 @@ HomePage.propTypes = {
 function HomePage({slot}) {
     const [data,setData] =useState([])
     const [loading, setLoading] = React.useState(true);
+    const [loadMore, setLoadMore] = useState(true);
     const [showConfirm,setShowConfirm]=useState({id:null,show:false})
     const [postEdit,setPostEdit]=useState(false)
+    const [totalRecord, setTotalRecord] = React.useState(data.length);
+    const [page, setPage] = React.useState(1);
     const [messageApi, contextHolder] = message.useMessage();
     const dispatch=useDispatch()
     const navigate=useNavigate()
     const userLogin=useSelector(getUserSelector)
-    const handleDeletePost=(id)=>{
-        console.log('Delete post ',showConfirm.id)
+    const handleDeletePost=async (id) => {
+        console.log('Delete post ', showConfirm.id)
+        const response = await deletePost(showConfirm.id)
+        if (response.status === 1) {
+            messageApi.open({
+                type:'success',
+                message:response.message,
+                duration:1.3
+            })
+        } else if (response === 401) {
+            handleSetUnthorization()
+        } else {
+            messageApi.open({
+                type:'error',
+                message:response.message,
+                duration:1.3
+            })
+        }
     }
     const handleOpenConfirm=(id)=>{
         setShowConfirm({id:id,show:true})
@@ -79,12 +98,18 @@ function HomePage({slot}) {
     const handleUpdatePost=(post)=>{
         console.log('Update post ',post)
     }
-    useEffect(() => {
-        async function fetchData() {
-            //  setLoading(true)
-            let params = {};
-            //console.log('Params:', params)
-            const respond = await getListPosts();
+
+    // console.log()
+    // useEffect(() => {
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, [page]);
+    const fetchData=async (load) =>{
+            setLoading(true)
+            let params = {page};
+            const respond = await getListPosts(params);
             console.log('Data respond:', respond)
             if (respond === 401) {
                 handleSetUnthorization();
@@ -96,10 +121,49 @@ function HomePage({slot}) {
                 setPosts(respond, 'reset-page');
             }
             setLoading(false);
-        }
 
-        fetchData();
+
+    }
+
+    useEffect(()=>{
+       if(page===1) fetchData()
     },[])
+    useEffect(() => {
+        const handleScroll = () => {
+
+            if (
+                document.documentElement.scrollHeight - window.innerHeight <=
+                document.documentElement.scrollTop + 100 &&
+                !loading
+            ) {
+
+                const nextPage = page + 1;
+                setPage(nextPage);
+                console.log('Tăng page +1',page)
+                if(page!==1) fetchData();
+            }
+        };
+        const element = document.getElementById('list-posts');
+        window.addEventListener('scroll', handleScroll);
+        // Bắt sự kiện scroll của phần tử cụ thể
+
+
+        // Hủy bỏ sự kiện khi component bị hủy
+        return () => {
+            element.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+
+    // useEffect(() => {
+    //     const list = document.getElementById('list-posts');
+    //
+    //     if(list.clientHeight <= window.innerHeight && list.clientHeight) {
+    //         setLoadMore(true);
+    //         setPage(prev=>prev+1)
+    //     }
+    // }, [props.state]);
+
     const setPosts = (respond, value) => {
         setData(respond.results);
         // if (value !== 'page') {
@@ -115,7 +179,7 @@ function HomePage({slot}) {
             }
             <div className='gr-left'>
 
-                <div className='list-posts'>
+                <div className='list-posts' id={'list-posts'}>
                     <div className='create-post'>
                         <AddPost  author={userLogin} onSave={handleCreatePost} />
                     </div>

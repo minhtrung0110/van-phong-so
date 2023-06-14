@@ -19,7 +19,7 @@ import TimeLine from "~/components/Client/Sprint/TimeLine";
 import {dragAndDropTask} from "~/api/Client/Task/taskAPI";
 
 
-function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,timeLine,permission}) {
+function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,members,timeLine,permission}) {
    // console.log({board,onBoard,columnData})
    // console.log('rendering')
     const [columns,setColumns] = useState(columnData)
@@ -53,6 +53,19 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,timeLi
         const result = await dragAndDropTask(body)
         return result.status === 1;
     }
+    const handleSwitchTaskColumn=async (sort,id,columnID) => {
+        const result = await dragAndDropTask({
+            sort: sort+1,
+            board_column_id: columnID,
+            task_id: id
+        })
+        console.log('Ket qua keo tha:',result  )
+        // console.log('Keo Tha:',{
+        //     sort: dropResult.addedIndex,
+        //     sprint_id: dropResult.payload.sprint_id,
+        //     task_id: dropResult.payload.id,
+        // })
+    }
     const onCardDrop = (columnId,dropResult) => {
         console.log( 'Dichuyen',dropResult)
         console.log('col -id:',columnId)
@@ -69,6 +82,17 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,timeLi
                 let newColumns=[...columns]
                 let currentColumn=newColumns.find((item=>item.id===columnId))
                 console.log('New column:',newColumns,currentColumn)
+            if(dropResult.addedIndex!==null && dropResult.removedIndex!==null){
+                handleSwitchTaskColumn(dropResult.addedIndex,dropResult.payload.id,dropResult.payload.sprint_id)
+                console.log('Di chuyen trong Sprint add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
+            }
+            else {
+                if(dropResult.addedIndex!==null){
+                    handleSwitchTaskColumn(dropResult.addedIndex,dropResult.payload.id,columnId)
+                    console.log('Keo tha sang Sprint mới add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
+                }
+
+            }
                 currentColumn.tasks=applyDrag(currentColumn.tasks,dropResult,currentColumn.id)
                 // currentColumn.cardOrder=currentColumn.tasks.map(i=>i.id)
                 setColumns(newColumns)
@@ -166,6 +190,7 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,timeLi
                                             onDeleteTask={onDeleteTask}
                                             onUpdateTask={onUpdateTask}
                                             permission={permission}
+                                            members={members}
 
                                         />
                                     </Draggable>

@@ -9,7 +9,7 @@ import AvatarCustom from "~/components/commoms/AvatarCustom";
 import {Tooltip} from "antd";
 
 function TaskItem({task,type,columns, onShowDetail}) {
-   console.log( 'Test Lỗi:', getTitleStatusTask(task.board_column_id,columns))
+  // console.log( 'Test Lỗi:', getTitleStatusTask(task.board_column_id,columns))
     const dispatch = useDispatch()
     const handleShowDetail = () => {
         dispatch(setDetailTask(task))

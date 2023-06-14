@@ -21,7 +21,7 @@ PostItem.propTypes = {
 const cx=classNames.bind(styles);
 function PostItem({post,onUpdate,onDelete}) {
     const [showComment,setShowComment]=useState(false)
-    const [listComments,setListComments]=useState([])
+
     const [liked,setLiked]=useState(false)
     const date=dayjs(post.updated_at,'YYYY-MM-DDTHH:mm:ss.SSSSZ').locale('vi').format('HH:mm, DD [tháng] M, YYYY');
     const listActions=[
@@ -47,19 +47,20 @@ function PostItem({post,onUpdate,onDelete}) {
         }
     }
     const handleGetListComments=async () => {
-        if(showComment){
-            setShowComment(false)
-        }
-        else {
-            const result = await getListCommentsPost(post.id)
-            if(result.status===1){
-                setListComments(result.data)
-                setShowComment(true)
-            }
-            else {
-
-            }
-        }
+        setShowComment(!showComment)
+        // if(showComment){
+        //     setShowComment(false)
+        // }
+        // else {
+        //     const result = await getListCommentsPost(post.id)
+        //     if(result.status===1){
+        //         setListComments(result.data)
+        //         setShowComment(true)
+        //     }
+        //     else {
+        //
+        //     }
+        // }
     }
     return (
         <div className={cx('post-item')}>
@@ -122,7 +123,7 @@ function PostItem({post,onUpdate,onDelete}) {
                 {
                     !!showComment && (
                         <div className={cx('media')}>
-                            <Comment user={post.created_by} listComment={post.comments} />
+                            <Comment user={userLogin} postId={post.id}  />
                         </div>
                     )
                 }
