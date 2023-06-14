@@ -35,7 +35,6 @@ function TaskItem({task,type,columns, onShowDetail}) {
                              getTitleStatusTask(task.board_column_id,columns).name
 //'Todo'
                             }</span>
-
                           </>
                         )
                     }
@@ -45,7 +44,7 @@ function TaskItem({task,type,columns, onShowDetail}) {
                               color: stylePriority.color
                           }}
                     >{stylePriority.label}</span>
-                    <span className='id'>{`id: ${task.id}`}</span>
+                    <span className='id'>{`id: ${task.id} sort: ${task.sort}`}</span>
                 </div>
                 {/*<FaPen className='btn-edit-project'/>*/}
             </div>

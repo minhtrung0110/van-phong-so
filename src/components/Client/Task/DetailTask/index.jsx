@@ -39,7 +39,7 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
    /// console.log('Priority',data.priority);
     const [errorDescription, setErrorDescription] = useState('');
     const [description,setDescription]=useState(data.description);
-    const [todoList,setTodoList] = useState(isEmpty(data.todoList)?[]:data.todoList);
+    const [todoList,setTodoList] = useState(data.hasOwnProperty('subtasks')?data.subtasks:[]);
     const [priority, setPriority] = useState(data.priority);
     const [status, setStatus] = useState(getStatusTaskProject(sprint, data.board_column_id))
     const [listFile, setListFile] = useState(data.fileList)
@@ -200,7 +200,8 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
             estimate_point: point,
             priority: priority,
             sprint_id: sprint.id,
-            title: taskTitle
+            title: taskTitle,
+           // sort:1,
         }: {
             id:data.id,
             assignee_employee_id:members[0].id,
@@ -209,7 +210,8 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
             estimate_point: point,
             priority: priority,
             sprint_id: sprint.id,
-            title: taskTitle
+            title: taskTitle,
+          //  sort:1,
         }
             onUpdateTask(updateTask)
         // onUpdateTask({

@@ -83,7 +83,6 @@ function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,
             /// newColumn.cardOrder.push(newCardToAdd.id)
             // truyền lên board Content
             onUpdateColumn(newColumn)
-
             // clear up
             setValueNewCard('')
             setIsAddCard(false)

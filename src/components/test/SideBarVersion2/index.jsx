@@ -71,7 +71,7 @@ const SideBarVersion2 = () => {
         .map(item => item.name);
 
     const viewPermissions=Array.isArray(arrayPermissions) ?arrayPermissions.concat('Post','Calendar'):[]
-    console.log('Test permissions: ',viewPermissions)
+   // console.log('Test permissions: ',viewPermissions)
     const listMenuItems = !isEmpty(userLogin) ?arrayMenuItems.reduce((acc, item, currentIndex) => {
         if (viewPermissions.includes(item.key)) {
             return acc.concat(item);

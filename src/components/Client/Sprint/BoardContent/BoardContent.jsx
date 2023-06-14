@@ -19,7 +19,7 @@ import TimeLine from "~/components/Client/Sprint/TimeLine";
 import {dragAndDropTask} from "~/api/Client/Task/taskAPI";
 
 
-function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,members,timeLine,permission}) {
+function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,members,onReset,timeLine,permission}) {
    // console.log({board,onBoard,columnData})
    // console.log('rendering')
     const [columns,setColumns] = useState(columnData)
@@ -54,12 +54,19 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
         return result.status === 1;
     }
     const handleSwitchTaskColumn=async (sort,id,columnID) => {
+        const columnBoundTask=columns.find(c => c.id === columnID)
+        console.log('Column chua task xu ly',columnBoundTask)
+        const newSortValue=isEmpty(columnBoundTask.tasks)?1:columnBoundTask.tasks[sort].sort
+      //  console.log('Sort thay tế',newSortValue)
         const result = await dragAndDropTask({
-            sort: sort+1,
+            sort: newSortValue,
             board_column_id: columnID,
             task_id: id
         })
-        console.log('Ket qua keo tha:',result  )
+        if(result.status ===1){
+            onReset(Math.random())
+        }
+       console.log('Ket qua keo tha:',result  )
         // console.log('Keo Tha:',{
         //     sort: dropResult.addedIndex,
         //     sprint_id: dropResult.payload.sprint_id,
@@ -83,13 +90,13 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
                 let currentColumn=newColumns.find((item=>item.id===columnId))
                 console.log('New column:',newColumns,currentColumn)
             if(dropResult.addedIndex!==null && dropResult.removedIndex!==null){
-                handleSwitchTaskColumn(dropResult.addedIndex,dropResult.payload.id,dropResult.payload.sprint_id)
-                console.log('Di chuyen trong Sprint add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
+                handleSwitchTaskColumn(dropResult.addedIndex,dropResult.payload.id,dropResult.payload.board_column_id)
+                console.log('Di chuyen trong Column :',dropResult.addedIndex,dropResult.payload.id,dropResult.payload.board_column_id)
             }
             else {
                 if(dropResult.addedIndex!==null){
                     handleSwitchTaskColumn(dropResult.addedIndex,dropResult.payload.id,columnId)
-                    console.log('Keo tha sang Sprint mới add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
+                    console.log('Keo tha sang Column mới add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
                 }
 
             }

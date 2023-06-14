@@ -213,6 +213,7 @@ function ManageTaskPage(props) {
                                   onSearch={setSearch}/>
                         <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}
                                       members={listMembers.members}
+                                      onReset={setFilter}
                                       onUpdateTask={handleUpdateTask} permission={{create:createPermission,edit:editPermission,delete:deletePermission}}
                                       onDeleteTask={handleDeleteTask} />
                     </div>
