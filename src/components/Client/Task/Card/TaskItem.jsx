@@ -13,7 +13,7 @@ function TaskItem({task,type,columns, onShowDetail}) {
     const dispatch = useDispatch()
     const handleShowDetail = () => {
         dispatch(setDetailTask(task))
-        onShowDetail(true)
+        onShowDetail({id:task.id,show:true})
     }
     const stylePriority=findStyleForStatusTask(task.priority,listPriority)
     return (

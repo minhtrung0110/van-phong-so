@@ -31,6 +31,8 @@ import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelect
 import GroupMember from "~/components/Client/Task/GroupMember";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {setDeleteTask} from "~/redux/reducer/project/projectReducer";
+import {getSubTask} from "~/api/Client/Task/taskAPI";
+import ToDoListSkeleton from "~/components/commoms/Skeleton/ToDoList/ToDoListSkeleton";
 
 DetailTask.propTypes = {};
 
@@ -39,16 +41,17 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
    /// console.log('Priority',data.priority);
     const [errorDescription, setErrorDescription] = useState('');
     const [description,setDescription]=useState(data.description);
-    const [todoList,setTodoList] = useState(data.hasOwnProperty('subtasks')?data.subtasks:[]);
+    const [todoList,setTodoList] = useState([]);
     const [priority, setPriority] = useState(data.priority);
     const [status, setStatus] = useState(getStatusTaskProject(sprint, data.board_column_id))
     const [listFile, setListFile] = useState(data.fileList)
     const [point, setPoint] = useState(data.estimate_point)
     const [taskTitle, setTaskTitle] = useState(data.title)
     const [rangeValueTime, setRangeValueTime] = useState(
-        [dayjs("2023-05-16T17:32:53.527736Z", "DD/MM/YYYY HH:mm:ss"), dayjs("2023-05-16T17:32:53.527736Z", "DD/MM/YYYY HH:mm:ss")]);
-    const [members, setMembers] = useState(data.members)
+        [dayjs(data.start_time), dayjs(data.start_time)]);
+    const [members, setMembers] = useState([data.assignee_employee])
     const dispatch = useDispatch()
+    const [loadingSubTask,setLoadingSubTask] = useState(true)
     const {RangePicker} = DatePicker;
     // console.log(priority)
     //  useEffect(()=>{
@@ -170,18 +173,26 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
         if (e.key === 'remove-task') {
             // xóa project
             setShowConfirmModal(true);
-
-
         } else if (e.key === 'duplicate') {
             // hiện tai dang duplicate dựa trên task chưa onChange
-            onDuplicate(data)
-        } else {
-
+            const newCardToAdd = {
+                sprint_id: sprint.id,
+                project_id: sprint.project_id,
+                board_column_id: status.value,
+                assignee_employee_id: data.assignee_employee_id,
+                title: taskTitle,
+                start_time: rangeValueTime[0],
+                end_time: rangeValueTime[1],
+                description:description,
+                priority: priority,
+                comments: [],
+                estimate_point:point,
+            }
+            onDuplicate(newCardToAdd)
         }
     };
     const handleRemoveTask = () => {
-
-        dispatch(setDeleteTask({id: data.id, sprintId: sprint.id, columnId: data.columnId, boardId: data.boardId}))
+        onDeleteTask(data.id)
         setShowConfirmModal(false)
     }
     const handleChangeStatus = (value) => {
@@ -231,6 +242,21 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
     }, [taskTitle,status,priority,rangeValueTime,point,description,listFile,todoList,members])
     // DEBUG HERE
     // console.log(status)
+    // CallAPI
+    useEffect(()=>{
+            const fetchDataSubTask=async (id) => {
+                setLoadingSubTask(true)
+                const response = await getSubTask(id)
+             //   console.log(response)
+                if (response.status ===1){
+                    setTodoList(response.data)
+                }else {
+
+                }
+                setLoadingSubTask(false)
+            }
+            fetchDataSubTask(data.id)
+    },[])
     return (
         <div className='detail-task'>
             <div className='header'>
@@ -343,7 +369,7 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
                     </div>
                     <div className='notification'>
                         <p>Điểm :</p>
-                        <InputNumber min={1} max={20} defaultValue={3} value={point} onChange={e=>setPoint(e.target.value)}/>
+                        <InputNumber min={1} max={20} defaultValue={point} onChange={setPoint}  />
                     </div>
 
                 </div>
@@ -353,8 +379,12 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
                                   defaultValues={data.description}/>
                 </div>
                 <div className='todo-list'>
+                    {
+                        loadingSubTask?(<ToDoListSkeleton/>):(
+                            <ToDoList list={todoList} taskId={data.id} onUpdate={setTodoList}/>
+                        )
+                    }
 
-                    <ToDoList list={todoList} taskId={data.id} onUpdate={setTodoList}/>
                 </div>
                 <div className='attach-file'>
                     <Upload

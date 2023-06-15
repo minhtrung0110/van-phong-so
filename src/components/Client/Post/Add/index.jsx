@@ -15,6 +15,7 @@ AddPost.propTypes = {
 };
 
 function AddPost({author,onSave}) {
+    console.log(author)
     const [showAdd,setShowAdd]=useState(false)
     const [errorDescription, setErrorDescription] = useState('');
     const [description,setDescription] = useState('')
@@ -113,10 +114,10 @@ function AddPost({author,onSave}) {
                 <div className={'form-create-post'}>
                     <div className='post-head'>
                         <div className='post-user'>
-                            <AvatarCustom lastName={author.last_name} avatar={author.avatar} className={'post-avatar'} />
+                            <AvatarCustom lastName={author.last_name} avatar={author.avatar_url} className={'post-avatar'} />
                         </div>
                         <span className={'post-name-author'}>
-                            {`${author.first_name} ${author.last_name}`}
+                            {`${author.name}`}
                         </span>
 
                     </div>

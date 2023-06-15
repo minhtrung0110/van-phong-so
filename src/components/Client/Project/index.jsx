@@ -85,6 +85,7 @@ function ProjectTable({editItem,deleteItem,tableHeader, tableBody,onUpdate,onDel
                     </td>
                     <td className="col-txt">{item.id}</td>
                     <td className="col-txt">{`${item.created_by.first_name} ${item.created_by.last_name}`}</td>
+                    <td className="col-txt">{`${item.status===0?'Đang Triển Khai':item.status===1?'Hoàn Thành':'Dừng'}`}</td>
                     <td className="col-action">
                         {
                             item.status!==2 && (

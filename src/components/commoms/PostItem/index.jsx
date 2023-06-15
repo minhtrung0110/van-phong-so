@@ -22,7 +22,7 @@ const cx=classNames.bind(styles);
 function PostItem({post,onUpdate,onDelete}) {
     const [showComment,setShowComment]=useState(false)
 
-    const [liked,setLiked]=useState(false)
+    const [liked,setLiked]=useState(post.is_liked)
     const date=dayjs(post.updated_at,'YYYY-MM-DDTHH:mm:ss.SSSSZ').locale('vi').format('HH:mm, DD [tháng] M, YYYY');
     const listActions=[
         {label: 'Cập nhật bài viết',key:'edit',icon:<FaPenAlt/>},
@@ -100,7 +100,7 @@ function PostItem({post,onUpdate,onDelete}) {
                 }
             </div>
             <div className={cx('post-stats')}>
-                <div className={cx('cmt')}>{post.hasOwnProperty('comments')?post.comments.length:0} bình luận</div>
+                <div className={cx('cmt')}>{post.hasOwnProperty('total_comments')?post.total_comments:0} bình luận</div>
                 <div className={cx('like')}>{post.hasOwnProperty('total_likes')?post.total_likes:0} thích</div>
             </div>
             <div className={cx('post-actions')}>

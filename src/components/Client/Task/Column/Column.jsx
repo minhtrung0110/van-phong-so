@@ -18,8 +18,8 @@ import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 import {createTask} from "~/api/Client/Task/taskAPI";
 
 
-function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,onUpdateTask,permission}) {
-    // console.log(column )
+function Column({sprint,column,onResetData, onCardDrop,members, onUpdateColumn,onDeleteTask,onUpdateTask,permission}) {
+   // console.log('Permission Column:',permission)
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [columnTitle, setColumnTitle] = useState(column.name)
     const [isAddCard, setIsAddCard] = useState(false)
@@ -29,7 +29,7 @@ function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,
     const [taskUpdate, setTaskUpdate] = useState({})
     const project=useSelector(projectSelector)
     const userLogin=useSelector(getUserSelector)
-    console.log(project)
+  //  console.log(project)
     const newCardRef = useRef()
     useEffect(() => {
         setColumnTitle(column.name)
@@ -56,16 +56,17 @@ function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,
 
     }
     const handleAddCard = async () => {
+        const length=column.tasks.length;
+        const newValueSortTask=column.tasks[length-1].sort
         const newCardToAdd = {
-            id: Math.floor(Math.random() * (999 - 10 + 1)) + 10,
-            employee_id: userLogin.id,
             sprint_id: sprint.id,
             project_id: sprint.project_id,
             board_column_id: column.id,
-            assignee_employee: null,
-            report_employee: userLogin,
-            // report_employee: null,
+            assignee_employee_id: null,
+            report_employee_id: userLogin.id,
             title: valueNewCard,
+            start_time: new Date(),
+            end_time:   new Date(),
             description: "",
             priority: 4,
             subtasks: [],
@@ -73,9 +74,9 @@ function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,
             comments: [],
             estimate_point: 3,
             status: 1,
-            task_histories: [],
-            sort: 1,
+            sort: newValueSortTask+1,
         }
+        console.log(newCardToAdd)
         const result = await createTask(newCardToAdd)
         if (result.status === 1) {
             let newColumn = cloneDeep(column)
@@ -86,6 +87,7 @@ function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,
             // clear up
             setValueNewCard('')
             setIsAddCard(false)
+           // onResetData(Math.random() )
             // onCreateTask(newCardToAdd)
         } else {
             messageApi.open({
@@ -97,21 +99,33 @@ function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,
             setIsAddCard(false)
 
         }
-
-
     }
-    const handleDuplicateTask = (task) =>{
-        const taskDuplicate = {
-          ...task,
-            id: Math.random().toString(36).substr(2, 5),
+    const handleDuplicateTask = async (task) => {
+        const length = column.tasks.length;
+        const newValueSortTask = column.tasks[length - 1].sort
+        //console.log('Sao chep card:',length,column.tasks,{...task,sort: newValueSortTask+1,report_employee_id: userLogin.id,})
+        const newCardToAdd={...task,sort: newValueSortTask+1,report_employee_id: userLogin.id,}
+        const result = await createTask(newCardToAdd)
+        if (result.status === 1) {
+            let newColumn = cloneDeep(column)
+            newColumn.tasks.push(newCardToAdd)
+            /// newColumn.cardOrder.push(newCardToAdd.id)
+            // truyền lên board Content
+            onUpdateColumn(newColumn)
+            // clear up
+            setValueNewCard('')
+            setIsAddCard(false)
+            // onResetData(Math.random() )
+            // onCreateTask(newCardToAdd)
+        } else {
+            messageApi.open({
+                type: 'error',
+                message: result.message,
+                duration: 1.3,
+            })
+            setValueNewCard('')
+            setIsAddCard(false)
         }
-        let newColumn = cloneDeep(column)
-        newColumn.tasks.push(taskDuplicate)
-      //  newColumn.cardOrder.push(taskDuplicate.id)
-        // truyền lên board Content
-        onUpdateColumn(newColumn)
-
-
     }
     const items = [
         {
@@ -165,6 +179,10 @@ function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,
     const handleCloseDetailTask=() => {
         setIsOpenDetailTask(false)
         onUpdateTask(taskUpdate)
+    }
+    const handleDeleteTask=(id) => {
+        setIsOpenDetailTask(false)
+        onDeleteTask(id)
     }
     return (
         <div className="column">
@@ -285,8 +303,8 @@ function Column({sprint,column, onCardDrop,members, onUpdateColumn,onDeleteTask,
                 destroyOnClose={true}
                // afterClose={()=>handleUpdateTask}
             >
-              <DetailTask isOpen={isOpenDetailTask} column={column}  listMembers={members} sprint={sprint}
-                          onDeleteTask={onDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
+              <DetailTask isOpen={isOpenDetailTask} column={column}   listMembers={members} sprint={sprint}
+                          onDeleteTask={handleDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
             </Modal>
             <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html:`Bạn Có Thực Sự Muốn Xóa Cột <strong>${columnTitle}</strong> Này ? `}} />}

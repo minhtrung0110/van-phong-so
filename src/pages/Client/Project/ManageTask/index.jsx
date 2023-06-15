@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import AppBar from "~/components/Client/Sprint/HeaderTask/HeaderTask";
 import BoardBar from "~/components/Client/Sprint/BoardBar/BoardBar";
@@ -22,7 +22,7 @@ import KanbanProjectSkeleton from "~/components/commoms/Skeleton/Kaban/KanbanPro
 import {getStaffsProjectById} from "~/api/Client/Project/projectAPI";
 import {authorizationFeature} from "~/utils/authorizationUtils";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
-import {editTask} from "~/api/Client/Task/taskAPI";
+import {deleteTask, editTask, getListTasksFilter} from "~/api/Client/Task/taskAPI";
 import {config} from "~/config";
 
 ManageTaskPage.propTypes = {};
@@ -34,17 +34,18 @@ function ManageTaskPage(props) {
     const [listMembers, setListMembers] = useState([])
     const [currentProject, setCurrentProject] = useState('')
     const [filter, setFilter] = useState()
+    const [isReset,setIsReset] = useState(false)
     const [messageApi, contextHolder] = message.useMessage();
     const [search, setSearch] = useState()
-    const [sprint,setSprint] = useState({})
-    const userLogin=useSelector(getUserSelector)
-    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Task','create')
-    const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Task','update')
-    const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Task','delete')
-    const dispatch=useDispatch()
+    const [sprint, setSprint] = useState({})
+    const userLogin = useSelector(getUserSelector)
+    const createPermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Task', 'create')
+    const editPermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Task', 'update')
+    const deletePermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Task', 'delete')
+    const dispatch = useDispatch()
     //const idProject=useSelector(keyProjectSelector)
-    const navigation=useNavigate()
-    const fetchDataMembers=async (id) => {
+    const navigation = useNavigate()
+    const fetchDataMembers = async (id) => {
         const respond = await getStaffsProjectById(id)
         if (respond.status === 401) {
             messageApi.open({
@@ -63,8 +64,10 @@ function ManageTaskPage(props) {
         }
         setLoading(false);
     }
+    const isMountedRef = useRef(false);
     useEffect(() => {
-        const project=JSON.parse(localStorage.getItem('project'))
+        const project = JSON.parse(localStorage.getItem('project'))
+        isMountedRef.current = true;
         async function fetchDataSprint() {
             // let params = {};
             // // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
@@ -89,41 +92,43 @@ function ManageTaskPage(props) {
             }
             setLoading(false);
         }
+
         fetchDataSprint();
         fetchDataMembers(1)
-      //  console.log('Test co duye mang ko:',columns)
+        return () => {
+            isMountedRef.current = false;
+        };
 
-        // const boardFromDB = initialData.boards.find(board => board.id === project.projectId)
-        // if (!isEmpty(boardFromDB)) {
-        //     let currentSprint= boardFromDB.sprints.find(item=>item.id===project.currentSprint)//getSprintActive(boardFromDB.sprints);
-        //
-        //     setBoard(boardFromDB)
-        //     setSprint(currentSprint)
-        //     console.log('SprintActive: ',currentSprint)
-        //     setColumns(mapOrder([...currentSprint.columns], currentSprint.columnOrder, 'id'))
-        //     console.log('SprintActive: ',currentSprint)
+    }, [])
+    useEffect(()=>{
+        async function fetchListTaskFilter() {
+            const project = JSON.parse(localStorage.getItem('project'))
+            const params = {assignee_employee_id:filter.member,
 
-        // const data=   boardFromDB.columns.map((column) =>{
-        //   return  column.cards.map((card)=>({id:card.id,title:card.title,endTime:card.endTime}))
-        //
-        //  //   setTimeLine(prev=>[...prev,...data])
-        //   //  console.log(timeLine)
-        // })
-        // const flattenedArr = data.reduce((acc, val) => Array.isArray(val) ? acc.concat(flatten(val)) : acc.concat(val), []);
-        // console.log(flattenedArr )
+                project_id:project.projectId,
+                sprint_id:project.currentSprint,};
+            const respond = await getListTasksFilter(params);
+            console.log('Data respond:', respond)
+            if (respond.status === 401) {
+                messageApi.open({
+                    type: 'error',
+                    content: respond.message,
+                    duration: 1.3,
+                });
+                handleSetUnthorization();
+                return false;
 
-        // sort Column
-        //
-        //
-        //
-        // }
-        // if(filter==='3'){
-        //     dispatch(setIsViewTimeline(true))
-        // }
-        // else  dispatch(setIsViewTimeline(false))
-        console.log('Filter: ',filter   )
-
-    }, [currentProject, filter, search])
+            } else if (respond.status === 1) {
+                setColumns(respond)
+            } else {
+                setColumns([])
+                return false;
+            }
+            setLoading(false);
+        }
+        fetchListTaskFilter()
+        console.log('Filter: ', filter)
+    },[ filter, search])
     const handleSetUnthorization = () => {
         dispatch(setExpiredToken(true));
         const token = getCookies('vps_token');
@@ -132,37 +137,53 @@ function ManageTaskPage(props) {
         }
         navigation(config.routes.login)
     };
-    const handleUpdateColumn = (value)=>{
+    const handleUpdateColumn = (value) => {
         // Create and Update:  API post Sprint to server
         console.log(value)
         // Delete Column : FE return a new Sprint, which  was deleted 1 column Status.
     }
-    const handleDeleteTask=(value)=>{
-        console.log('Delete Task: ', value)
+
+    const handleDeleteTask = async (id) => {
+        const response = await deleteTask(id);
+        if (response.status === 1) {
+            messageApi.open({
+                type: 'success',
+                message: response.message,
+                duration: 1.3
+            })
+            setFilter(Math.random())
+        } else {
+            messageApi.open({
+                type: 'error',
+                message: response.message,
+                duration: 1.3
+            })
+        }
     }
-    const handleUpdateTask=async (value) => {
+
+    const handleUpdateTask = async (value) => {
         console.log('Update Task: ', value)
         const response = await editTask(value)
-        if(response.status ===1){
+        if (response.status === 1) {
             messageApi.open({
-                type:'success',
-                message:response.message,
-                duration:1.3
+                type: 'success',
+                message: response.message,
+                duration: 1.3
             })
             setFilter({})
-        }else if (response===401){
+        } else if (response === 401) {
             handleSetUnthorization()
-        }else {
+        } else {
             messageApi.open({
-                type:'error',
-                message:response.message,
-                duration:1.3
+                type: 'error',
+                message: response.message,
+                duration: 1.3
             })
         }
 
 
     }
-    const handleDeleteSprint=async (item) => {
+    const handleDeleteSprint = async (item) => {
         console.log('Delete sprint:', item)
         const result = await deleteSprint(item.id);
         if (result.status === 1) {
@@ -179,7 +200,7 @@ function ManageTaskPage(props) {
             });
         }
     }
-    const handleUpdateSprint=async (id,data) => {
+    const handleUpdateSprint = async (id, data) => {
         console.log('Update Sprint: ', id, data)
         const result = await editSprint(id, data);
         if (result.status === 1) {
@@ -201,11 +222,11 @@ function ManageTaskPage(props) {
 
         <>
             {
-                loading ? (<KanbanProjectSkeleton />):(
-                    <div className='trello-minhtrung-master' style={{ backgroundImage:`url(${backgroundImage})`}}>
+                loading ? (<KanbanProjectSkeleton/>) : (
+                    <div className='trello-minhtrung-master' style={{backgroundImage: `url(${backgroundImage})`}}>
                         {contextHolder}
                         <HeaderTask onCurrentProject={setCurrentProject}/>
-                        <BoardBar boardName={'Dự Án'}  onFilter={setFilter}
+                        <BoardBar boardName={'Dự Án'} onFilter={setFilter}
                                   onCompleteSprint={handleUpdateSprint}
                                   members={listMembers}
                                   onDeleteSprint={handleDeleteSprint}
@@ -214,8 +235,12 @@ function ManageTaskPage(props) {
                         <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}
                                       members={listMembers.members}
                                       onReset={setFilter}
-                                      onUpdateTask={handleUpdateTask} permission={{create:createPermission,edit:editPermission,delete:deletePermission}}
-                                      onDeleteTask={handleDeleteTask} />
+                                      onUpdateTask={handleUpdateTask} permission={{
+                            createTask: createPermission,
+                            editTask: editPermission,
+                            deleteTask: deletePermission
+                        }}
+                                      onDeleteTask={handleDeleteTask}/>
                     </div>
                 )
             }

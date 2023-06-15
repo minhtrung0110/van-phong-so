@@ -114,7 +114,7 @@ function Comment({user,postId}) {
             setLoading(true)
             let params = {};
             //console.log('Params:', params)
-            const respond = await getListCommentsPost();
+            const respond = await getListCommentsPost(postId);
             console.log('Data respond:', respond)
             if (respond === 401) {
                 handleSetUnthorization();

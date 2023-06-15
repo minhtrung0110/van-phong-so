@@ -73,6 +73,7 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
         //     task_id: dropResult.payload.id,
         // })
     }
+
     const onCardDrop = (columnId,dropResult) => {
         console.log( 'Dichuyen',dropResult)
         console.log('col -id:',columnId)
@@ -192,6 +193,7 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
                                         <Column
                                             sprint={board}
                                             column={col}
+                                            onResetData={onReset}
                                             onCardDrop={onCardDrop}
                                             onUpdateColumn={handleUpdateColumn}
                                             onDeleteTask={onDeleteTask}

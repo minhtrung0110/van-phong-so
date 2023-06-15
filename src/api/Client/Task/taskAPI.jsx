@@ -14,10 +14,15 @@ export const configHeadersAuthenticate = () => {
     };
 };
 
-export const getListTasks = async ({sort, filter, search, keySearch, page} = {}) => {
-    console.log({sort, filter, search, page})
-    const url = 'projects';
+export const getListTasksFilter = async ({sort, filter, search, assignee_employee_ids,sprint_id,project_id,is_assignee} = {}) => {
+    console.log({sort, filter, search, assignee_employee_ids,sprint_id,project_id,is_assignee})
+    const url = 'boardColumns';
     const queryString = [];
+    if(project_id) queryString.push(`project_id=${project_id}`);
+    if(sprint_id) queryString.push(`sprint_id=${sprint_id}`);
+    if (assignee_employee_ids) {
+        queryString.push(`assignee_employee_ids=${assignee_employee_ids.join(',')}`);
+    }
     if (sort && sort.length > 0) {
         sort.forEach((item) => {
             queryString.push(`sort[${titleToSlug(item.key)}]=${item.value}`);
@@ -27,18 +32,6 @@ export const getListTasks = async ({sort, filter, search, keySearch, page} = {})
         // queryString.push(`${keySearch}=${search}`);
         queryString.push(search);
     }
-    if (page) {
-        queryString.push(`page=${page}`);
-    }
-    if (!!filter) {
-        if (filter.status !== 'all') {
-            queryString.push(`status=${filter.status}`);
-        }
-        if (filter.role !== 'all') {
-            queryString.push(`role_id=${filter.role}`);
-        }
-    }
-
 
     const final_url = concatQueryString(queryString, url);
     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
@@ -46,7 +39,7 @@ export const getListTasks = async ({sort, filter, search, keySearch, page} = {})
     if (reponse.status === 401) {
         return 401;
     } else if (reponse.status === 1) {
-        return reponse.data;
+        return reponse.data.result;
     } else {
         return 500;
     }
@@ -65,6 +58,19 @@ export const getTaskById = async (id) => {
             return {status: 0, message: 'Lấy thông tin chi tiết công việc thất bại'}
     }
 }
+export const getSubTask = async (idTask) => {
+    const url = `subtasks/${idTask}`;
+    const response = await axiosClient.get(url, configHeadersAuthenticate());
+    console.log(response)
+    if (response.status === 1 || response.message === "Success") {
+        return {status: 1,data:response.data.result, message: 'Lấy thông tin công việc cần làm thành công'}
+    } else if (response.status === 401) return 401
+    else {
+        return {status: 0, message: 'Lấy thông tin công việc cần làm thất bại'}
+    }
+
+
+};
 
 export const createTask = async (body) => {
     const url = 'tasks';
@@ -107,7 +113,7 @@ export const editTask = async (body) => {
     if (response.status === 1) {
         return {status: 1, message: 'Cập nhật công việc thành công'}
     } else if (response.status === 401) return 401
-    else{
+    else {
         return {status: 0, message: 'Cập nhật công việc thất bại'}
     }
 };
@@ -128,9 +134,10 @@ export const deleteTask = async (id) => {
     const response = await axiosClient.delete(url, configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {
-        return {status: 1, message: 'Xóa Chu Kỳ Phát Triển Thành Công'}
-    } else if (response.status === 0) {
-        return {status: 0, message: 'Xóa Chu Kỳ Phát Triển Thất Bại'}
+        return {status: 1, message: 'Xóa Công Việc Thành Công'}
+    } else if (response.status === 401) return 401
+    else {
+        return {status: 0, message: 'Xóa Công Việc Thất Bại'}
     }
 };
 export const deleteSubTask = async (id) => {

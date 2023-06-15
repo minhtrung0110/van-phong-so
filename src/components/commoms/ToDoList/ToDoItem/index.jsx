@@ -10,7 +10,7 @@ ToDoItem.propTypes = {
 };
 const cx=classNames.bind(styles)
 function ToDoItem({data,onCreate,onUpdate,onDelete}) {
-    //console.log('ToDoItem:',data)
+    console.log('ToDoItem:',data)
     const inputRef=useRef();
     const [isChecked,setIsChecked]=useState(data.status)
     const [valueInput,setValueInput]=useState(data.name)

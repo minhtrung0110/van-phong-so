@@ -13,6 +13,7 @@ function TodoList({list,taskId,onUpdate,onCreate}) {
     //     {id:1,name:'Lập Kịch Bản',status:false,isNew:false},
     //     {id:2,name:'Mua Đao Cu',status:false,isNew:false}
     // ]
+
     const [listToDo,setListToDo] = useState(list)
     const [messageApi, contextHolder] = message.useMessage();
     const [listToDoDone,setListToDoDone] = useState([])
@@ -110,7 +111,7 @@ function TodoList({list,taskId,onUpdate,onCreate}) {
         <div className={cx('todo-list')}>
             {contextHolder}
             {
-               !isEmpty(listToDo) && (
+               !isEmpty(list) && (
                     <div className={cx('todo-container')}>
                         <p>Danh Sách Công Việc Cần Làm ({`${listToDo.reduce((acc, item)=>(item.status===true)?acc+1:acc,0)}/${listToDo.length}`})</p>
                         <List
