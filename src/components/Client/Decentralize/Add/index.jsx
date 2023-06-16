@@ -16,38 +16,38 @@ function AddRole({onBack}) {
     const [messageApi, contextHolder] = message.useMessage();
     const [project, setProject] = useState({
         project_view:false,
-        project_add: false,
+        project_create: false,
         project_update: false,
         project_delete: false,
     });
     const [sprint, setSprint] = useState({
         srint_view:false,
-        sprint_add: false,
+        sprint_create: false,
         sprint_update: false,
         sprint_delete: false,
     });
     const [task, setTask] = useState({
         task_view:false,
-        task_add: false,
+        task_create: false,
         task_update: false,
         task_delete: false,
     });
     const [role, setRole] = useState({
         role_view:false,
-        role_add: false,
+        role_create: false,
         role_update: false,
         role_delete: false,
     });
 
     const [staff, setStaff] = useState({
         staff_view:false,
-        staff_add: false,
+        staff_create: false,
         staff_update: false,
         staff_delete: false,
     });
     const [department, setDepartment] = useState({
         department_view:false,
-        department_add: false,
+        department_create: false,
         department_update: false,
         department_delete: false,
     });

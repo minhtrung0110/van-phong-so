@@ -84,6 +84,9 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
     });
     const onSubmit = (data) => {
         console.log('Submit: ',data)
+        setShowConfirm(false)
+        onSave(data)
+
     }
     console.log(event)
     const {RangePicker} = DatePicker;
@@ -129,7 +132,7 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
         <Form
             layout="horizontal"
             style={{}}
-            onFinish={handleSubmit(onSave)}
+            onFinish={handleSubmit(onSubmit)}
             labelAlign={"left"}
             className='edit-event-item'
         >

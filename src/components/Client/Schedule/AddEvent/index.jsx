@@ -87,25 +87,42 @@ const rangePresets = [
         value: [dayjs().add(-90, 'd'), dayjs()],
     },
 ];
-function AddEvent({start,end,listStaff,onSave,onCancel}) {
+
+function AddEvent({start, end, listStaff, onSave, onCancel}) {
     const [typeEvent, setTypeEvent] = useState('event')
     const [errorDescription, setErrorDescription] = useState('');
-    const [members, setMembers] =useState([])
+    const [members, setMembers] = useState([])
     const {
         control, handleSubmit, formState: {errors, isDirty, dirtyFields},
-    } = useForm({ defaultValues:{
-            duration:[dayjs(start),dayjs(end)]
-        }});
-    const userLogin=useSelector(getUserSelector)
+    } = useForm({
+        defaultValues: {
+            duration: [dayjs(start), dayjs(end)]
+        }
+    });
+    const userLogin = useSelector(getUserSelector)
     const onSubmit = (data) => {
-        const {duration,...rest}=data
-        const newEvent={
-            event_type:typeEvent==='event'?1:2,
-            start_time:dayjs(duration[0],"DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end_time:dayjs(duration[1],"DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            created_by_id:userLogin.id,
+        const {duration, ...rest} = data
+        const newEvent = (typeEvent === 'event') ? {
+            event_type: 1,
+            start_time: dayjs(duration[0], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end_time: dayjs(duration[1], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            created_by_id: userLogin.id,
+            event_employee: members.map((member,index) =>( {
+                employee_email: member.email,
+                employee_id:member.id,
+                event_id: 18,
+                id: index,
+            })),
+            ...rest
+        } : {
+            event_type: 2,
+            start_time: dayjs(duration[0], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end_time: dayjs(duration[1], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            created_by_id: userLogin.id,
             ...rest
         }
+
+
         onSave(newEvent)
     }
     console.log(errors)
@@ -174,10 +191,10 @@ function AddEvent({start,end,listStaff,onSave,onCancel}) {
                                 {...field}
                                 presets={rangePresets}
                                 showTime
-                                style={{ width: 585 }}
+                                style={{width: 585}}
                                 format="DD/MM/YYYY HH:mm:ss"
                                 className="range-date"
-                              //  defaultValue={[dayjs(start),dayjs(end)]}
+                                //  defaultValue={[dayjs(start),dayjs(end)]}
                             />
                         </Form.Item>
                     )}
@@ -224,18 +241,18 @@ function AddEvent({start,end,listStaff,onSave,onCancel}) {
                 {/*</div>*/}
             </div>
             {
-                typeEvent==='event'  && (
+                typeEvent === 'event' && (
                     <div className='members'>
                         <p>Người tham gia:</p>
                         <GroupMember
-                            onMembers={setMembers} defaultMembers={members} addMember={true}
+                            onMembers={setMembers} defaultMembers={members} addMember={true} selectLimit={100}
                             listMembersForTask={listStaff}/>
                     </div>
                 )
             }
 
             {
-                (typeEvent==='event' || typeEvent==='schedule') && (
+                (typeEvent === 'event' || typeEvent === 'schedule') && (
                     <div className='description'>
                         <p>Nội Dung Công Việc:</p>
                         <Controller
@@ -248,10 +265,10 @@ function AddEvent({start,end,listStaff,onSave,onCancel}) {
                                     hasFeedback
                                     validateStatus={errors.content ? 'error' : 'success'}
                                     help={errors.content ? 'Vui lòng điền mô tả cho sự kiện' : null}>
-                                <CustomEditor
-                                    {...field}
-                                    id="description" editorDescription={editorDescription}
-                                              />
+                                    <CustomEditor
+                                        {...field}
+                                        id="description" editorDescription={editorDescription}
+                                    />
                                 </Form.Item>
                             )}
                         />
@@ -260,26 +277,26 @@ function AddEvent({start,end,listStaff,onSave,onCancel}) {
                 )
             }
             {
-                typeEvent==='event'  && (
+                typeEvent === 'event' && (
                     <div className='attach'>
                         <Controller
                             name="file"
                             control={control}
                             defaultValue=""
                             render={({field}) => (
-                                    <Upload
-                                        {...field}
-                                        action="http://localhost:3000/"
-                                        listType="picture"
-                                        // defaultFileList={listFile}
-                                        multiple
-                                        // onChange={handleChangeUpload}
-                                    >
-                                        <button className='btn-upload'>
-                                            <FaPaperclip className='icon'/>
-                                            <span className='title'>Tải lên tệp đính kèm</span>
-                                        </button>
-                                    </Upload>
+                                <Upload
+                                    {...field}
+                                    action="http://localhost:3000/"
+                                    listType="picture"
+                                    // defaultFileList={listFile}
+                                    multiple
+                                    // onChange={handleChangeUpload}
+                                >
+                                    <button className='btn-upload'>
+                                        <FaPaperclip className='icon'/>
+                                        <span className='title'>Tải lên tệp đính kèm</span>
+                                    </button>
+                                </Upload>
                             )}
                         />
 
@@ -289,8 +306,8 @@ function AddEvent({start,end,listStaff,onSave,onCancel}) {
             }
 
             <div className='footer'>
-                        <button className='btn-cancel' onClick={onCancel}>Hủy</button>
-                <button className={`btn-save ${!isDirty ?'disabled':''}`} type='submit'>Lưu</button>
+                <button className='btn-cancel' onClick={onCancel}>Hủy</button>
+                <button className={`btn-save ${!isDirty ? 'disabled' : ''}`} type='submit'>Lưu</button>
             </div>
 
         </Form>

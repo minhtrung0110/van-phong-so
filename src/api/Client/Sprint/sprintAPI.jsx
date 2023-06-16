@@ -49,16 +49,46 @@ export const getListSprintByProjectId = async (id) => {
         return {status:0,data:[],message:'Không thể lấy thông tin dự án.'}
     }
 };
-export const getSprintById = async (id,{ sort,filter, search,keySearch, page } = {}) => {
-    const url = `sprints/${id}`;
-    const response = await axiosClient.get(url,configHeadersAuthenticate());
+export const getSprintById = async ({ sprint_id, assignee_employee_ids,duration_complete,priorities,
+    board_column_id,task_title,is_assignee,is_priority,is_duration_complete} = {}) => {
+    const url = `sprints/getOne`;
+    const queryString = [];
+    if (sprint_id) {
+        queryString.push(`sprint_id=${sprint_id}`);
+    }
+    if (assignee_employee_ids ) {
+        if(Array.isArray(assignee_employee_ids)) {
+            queryString.push(`assignee_employee_ids=${assignee_employee_ids.join(',')}`);
+        }else   queryString.push(`assignee_employee_ids=${assignee_employee_ids}`);
+
+    }
+    if (duration_complete ) {
+        queryString.push(`duration_complete=${duration_complete}`);
+    }
+    if (priorities && priorities.length>0) {
+        queryString.push(`priorities=${priorities.join(',')}`);
+    }
+    if (task_title) {
+        queryString.push(`task_title=${task_title}`);
+    }
+    if (is_assignee) {// ko giao cho ai
+        queryString.push(`is_assignee=${true}`);
+    }
+    if (!!is_duration_complete) {// quá hạn và phải truyền board_column_id
+        queryString.push(`is_duration_complete=${is_duration_complete}`);
+    }
+    if (board_column_id) { // truyền board_column_id của Colum Done
+        queryString.push(`board_column_id=${board_column_id}`);
+    }
+    const final_url = concatQueryString(queryString, url);
+    const response = await axiosClient.get(final_url,configHeadersAuthenticate());
     console.log('response', response)
     if(response.status === 1 || response.message ==="Success") {
-        return {status:1,data:response.data.result,message:'Lấy thông tin chu kỳ thành công'}
+        return {status:1,data:response.data.result,message:'Lấy thông tin danh sách công việc thành công'}
     }
     else if (response.status===401)   return {status:401,message:'Không thể xác thực'}
     else {
-        return {status:0,data:[],message:'Không thể lấy thông tin chu kỳ.'}
+        return {status:0,data:[],message:'Không thể lấy thông tin danh sách công việc.'}
     }
 };
 export const createSprint = async (body) => {

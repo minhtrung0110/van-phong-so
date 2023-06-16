@@ -13,7 +13,7 @@ import EditEvent from "~/components/Client/Schedule/EditEvent";
 import {getListDepartments} from "~/api/Client/Department/departmentAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
-import {createEvent, getListEvents} from "~/api/Client/Calendar";
+import {createEvent, deleteEvent, getListEvents} from "~/api/Client/Calendar";
 import {useDispatch} from "react-redux";
 import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
@@ -30,6 +30,7 @@ function ManageSchedule(props) {
     const [showAddEvent,setShowAddEvent] = useState({start:null,end:null,show:false})
     const [listStaff,setListStaff] = useState([])
     const [messageApi, contextHolder] = message.useMessage();
+    const [reset,setReset] = useState(false)
     const dispatch=useDispatch()
     const navigate=useNavigate()
     const handleCancelShowEvent = ()=>{
@@ -127,7 +128,7 @@ function ManageSchedule(props) {
             setLoading(false);
         }
         fetchDataStaff();
-    }, []);
+    }, [reset]);
     const localizer = momentLocalizer(moment);
     const setData=(array)=>{
       const events=  array.map((event)=>({id: event.id,start:new Date(event.start_time),end:new Date(event.end_time),title:event.title,...event}))
@@ -158,6 +159,7 @@ function ManageSchedule(props) {
         }),
         []
     )
+
     const handleCreateEvent=async (data) => {
         console.log('Create event: ', data)
         const result = await createEvent(data)
@@ -167,6 +169,8 @@ function ManageSchedule(props) {
                 message:result.message,
                 duration:1.3
             })
+            setShowAddEvent(true)
+            setReset(!reset)
         }
         else if(result.status===401){
             handleSetUnthorization();
@@ -183,8 +187,27 @@ function ManageSchedule(props) {
     const handleUpdateEvent=(data) => {
         console.log('Update event: ', data)
     }
-    const handleDeleteEvent=(data) => {
-        console.log('Delete event: ', data)
+    const handleDeleteEvent=async (id) => {
+        console.log('Delete event: ', id)
+        const response = await deleteEvent(id)
+        if (response.status===1) {
+            messageApi.open({
+                type:'success',
+                message:response.message,
+                duration:1.3
+            })
+            setReset(!reset)
+        }
+        else if(response.status===401){
+            handleSetUnthorization();
+        }
+        else {
+            messageApi.open({
+                type:'error',
+                message:response.message,
+                duration:1.3
+            })
+        }
     }
     const eventStyleGetter = (event, start, end, isSelected) => {
         const style = {

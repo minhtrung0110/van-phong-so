@@ -10,11 +10,11 @@ import {isEmpty} from "lodash";
 SearchSelectModal.propTypes = {};
 const cx = classNames.bind(styles)
 
-function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], placeholder, top = '10rem'}) {
+function SearchSelectModal({open, onClose, onSubmit,selectLimit=10, title, listOptions = [],type, placeholder, top = '10rem'}) {
     const [value, setValue] = useState([]);
     const options = listOptions.map((d) => ({
         value: d.email,
-        label: `${d.first_name} ${d.last_name}`,
+        label: type!=='event'?`${d.first_name} ${d.last_name}`:d.full_name,
     }))
     // calll API get Staff List
 
@@ -28,7 +28,7 @@ function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], pl
         options,
         defaultActiveFirstOption:true,
         onChange: (newValue) => {
-            if (newValue?.length > 1) {
+            if (newValue?.length > selectLimit) {
                 // if you want only one element :).
                 newValue.pop();
             }

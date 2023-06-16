@@ -145,8 +145,8 @@ export const deletePost = async (id) => {
         return {status: 0, message: 'Xóa Bài Viết Thất Bại'}
     }
 }
-export const deleteComment = async (id) => {
-    const url = `/comments/${id}`;
+export const deleteComment = async (id,idComment) => {
+    const url = `posts/${id}/comments/${idComment}`;
     const response = await axiosClient.delete(url, configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {

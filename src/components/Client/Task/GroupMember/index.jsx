@@ -11,7 +11,7 @@ GroupMember.propTypes = {
 
 };
 
-function GroupMember({onMembers,defaultMembers=[],listMembersForTask,addMember=false,maxCount=4,sizeAvatar='default'}) {
+function GroupMember({onMembers,defaultMembers=[],selectLimit,listMembersForTask,addMember=false,maxCount=4,sizeAvatar='default'}) {
    /// console.log('Testing:',listMembersForTask)
     const [openSelectMember, setOpenSelectMember] = useState(false)
     const listDefaultColors=['#721e1e',
@@ -53,7 +53,7 @@ function GroupMember({onMembers,defaultMembers=[],listMembersForTask,addMember=f
                     <button className='add-member' onClick={()=>setOpenSelectMember(true)}><FaPlus/></button>
                 )
             }
-            <SearchSelectModal title='Chọn Thành Viên'  listOptions={listMembersForTask}
+            <SearchSelectModal title='Chọn Thành Viên'  listOptions={listMembersForTask} type='event' selectLimit={selectLimit}
                                onSubmit={onMembers}            open={openSelectMember} onClose={setOpenSelectMember}/>
         </div>
     );

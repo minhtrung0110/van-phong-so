@@ -364,7 +364,7 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
                 <div className='gr-02'>
                     <div className='members'>
                         <p>Thực Hiện :</p>
-                        <GroupMember onMembers={setMembers} defaultMembers={members} addMember={true} listMembersForTask={listMembers}/>
+                        <GroupMember onMembers={setMembers} selectLimit={1} defaultMembers={members} addMember={true} listMembersForTask={listMembers}/>
 
                     </div>
                     <div className='notification'>

@@ -91,7 +91,7 @@ function Comment({user,postId,onUpdateAmountComment}) {
     }
     const handleDeleteComment = async (id) => {
         console.log('Comment Delete: ', id)
-        const response = await deleteComment(id)
+        const response = await deleteComment(postId,id)
         if (response.status === 1) {
             setReset(!reset)
             onUpdateAmountComment(prev=>prev-1)

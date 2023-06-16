@@ -110,12 +110,13 @@ export const editEvent = async (body) => {
 };
 export const deleteEvent = async (id) => {
     const url = `/events/${id}`;
-    const response = await axiosClient.delete(url, configHeadersAuthenticate());
+    const response = await axiosClientCalendar.delete(url, configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {
-        return {status: 1, message: 'Cho Thôi Việc Thành Công'}
-    } else if (response.status === 0) {
-        return {status: 0, message: 'Cho Thôi Việc Thất Bại'}
+        return {status: 1, message: 'Xóa Sự Kiện Thành Công'}
+    } else if (response.status === 401) return 401
+    else{
+        return {status: 0, message: 'Xóa Sự Kiện Thất Bại'}
     }
 };
 // export const getAllEventsWithEmailAndPhone = async ({ email, phoneNumber } = {}) => {

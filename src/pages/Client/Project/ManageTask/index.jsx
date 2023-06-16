@@ -33,8 +33,12 @@ function ManageTaskPage(props) {
     const [loading, setLoading] = React.useState(true);
     const [listMembers, setListMembers] = useState([])
     const [currentProject, setCurrentProject] = useState('')
-    const [filter, setFilter] = useState()
-    const [isReset,setIsReset] = useState(false)
+    const [filter, setFilter] = useState({
+        member:[],
+        duration:[],
+        priority:[],
+    })
+    const [isReset, setIsReset] = useState(false)
     const [messageApi, contextHolder] = message.useMessage();
     const [search, setSearch] = useState()
     const [sprint, setSprint] = useState({})
@@ -64,15 +68,24 @@ function ManageTaskPage(props) {
         }
         setLoading(false);
     }
-    const isMountedRef = useRef(false);
     useEffect(() => {
         const project = JSON.parse(localStorage.getItem('project'))
-        isMountedRef.current = true;
+
         async function fetchDataSprint() {
-            // let params = {};
-            // // if (filter.status !== 'all' || filter.role!=='all') params = { ...params, filter };
-            // if (search !== '') params = { ...params, search };
-            const respond = await getSprintById(project.currentSprint);
+            const params = {
+                sprint_id: project.currentSprint,
+                assignee_employee_ids: filter.member,
+                duration_complete: filter.duration==='is_duration_complete'?[]:filter.duration,
+                board_column_id:9,
+                priorities: filter.priority,
+                task_title: filter.search,
+                is_assignee: filter.member==='no_assign',
+                is_duration_complete: filter.duration==='is_duration_complete'
+            }
+            if(filter.duration==='none_duration_complete') params.duration_complete=false
+            if(filter.member==='no_assign') params.assignee_employee_ids=false
+            console.log('Params',params)
+            const respond = await getSprintById(params);
             console.log('Data respond:', respond)
             if (respond.status === 401) {
                 messageApi.open({
@@ -99,7 +112,8 @@ function ManageTaskPage(props) {
         //     isMountedRef.current = false;
         // };
 
-    }, [])
+    }, [filter])
+    console.log('Filter:', filter)
     // useEffect(()=>{
     //     async function fetchListTaskFilter() {
     //         const project = JSON.parse(localStorage.getItem('project'))
@@ -227,7 +241,7 @@ function ManageTaskPage(props) {
                         {contextHolder}
                         <HeaderTask onCurrentProject={setCurrentProject}/>
                         <BoardBar boardName={'Dự Án'} onFilter={setFilter}
-                                  //onCompleteSprint={handleUpdateSprint}
+                            //onCompleteSprint={handleUpdateSprint}
                                   members={listMembers}
                                   onDeleteSprint={handleDeleteSprint}
                                   sprint={sprint}
