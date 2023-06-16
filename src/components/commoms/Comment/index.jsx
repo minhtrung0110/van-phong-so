@@ -19,7 +19,7 @@ Comment.propTypes = {
 const cx=classNames.bind(styles)
 
 
-function Comment({user,postId}) {
+function Comment({user,postId,onUpdateAmountComment}) {
     const [loading,setLoading]=useState(false)
     const [listComments,setListComments]=useState([])
     const [activeComment, setActiveComment] = useState({});
@@ -42,6 +42,7 @@ function Comment({user,postId}) {
             })
             if (response.status === 1) {
                     setReset(!reset)
+
             } else if (response === 401) {
 
             } else {
@@ -60,6 +61,7 @@ function Comment({user,postId}) {
             })
             if (response.status === 1) {
                 setReset(!reset)
+                onUpdateAmountComment(pre=>pre+1)
             } else if (response === 401) {
 
             } else {
@@ -92,6 +94,8 @@ function Comment({user,postId}) {
         const response = await deleteComment(id)
         if (response.status === 1) {
             setReset(!reset)
+            onUpdateAmountComment(prev=>prev-1)
+            setShowConfirm(false)
         } else if (response === 401) {
 
         } else {

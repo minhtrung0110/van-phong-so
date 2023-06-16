@@ -20,7 +20,15 @@ function EditPost({author,onSave}) {
     const [errorDescription, setErrorDescription] = useState('');
     const [description,setDescription] = useState(post.description)
     const [uploadAvatarURL, setUploadAvatarURL] = useState([]);
-    const [listFile, setListFile] = useState(post.files)
+    const listImages=post.posts_images.map(item=>({
+        uid: item.id,
+        name: `Ảnh-Bài-Viết-${item.post_id}-Mã-${item.id}`,
+        status: 'done',
+        url: item.image_url,
+        thumbUrl: item.image_url,
+    }))
+    console.log('Danh sách hình ảnh:',listImages)
+    const [listFile, setListFile] = useState(listImages)
     const editorDescription = (value) => {
         setDescription(value);
         setErrorDescription('');
@@ -42,8 +50,14 @@ function EditPost({author,onSave}) {
     }
     const handleSubmit=() => {
         const result={
-            description,
-            listFile
+            id:post.id,
+            company_id: 1,
+            content: description,
+            posts_images: uploadAvatarURL.map((item,index)=>( {
+                id: index+1,
+                image_url: item.imageUrl,
+                sort: index+1
+            }))
         }
         onSave(result)
         setDescription('')

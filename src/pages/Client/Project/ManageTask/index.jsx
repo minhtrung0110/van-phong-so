@@ -95,40 +95,40 @@ function ManageTaskPage(props) {
 
         fetchDataSprint();
         fetchDataMembers(1)
-        return () => {
-            isMountedRef.current = false;
-        };
+        // return () => {
+        //     isMountedRef.current = false;
+        // };
 
     }, [])
-    useEffect(()=>{
-        async function fetchListTaskFilter() {
-            const project = JSON.parse(localStorage.getItem('project'))
-            const params = {assignee_employee_id:filter.member,
-
-                project_id:project.projectId,
-                sprint_id:project.currentSprint,};
-            const respond = await getListTasksFilter(params);
-            console.log('Data respond:', respond)
-            if (respond.status === 401) {
-                messageApi.open({
-                    type: 'error',
-                    content: respond.message,
-                    duration: 1.3,
-                });
-                handleSetUnthorization();
-                return false;
-
-            } else if (respond.status === 1) {
-                setColumns(respond)
-            } else {
-                setColumns([])
-                return false;
-            }
-            setLoading(false);
-        }
-        fetchListTaskFilter()
-        console.log('Filter: ', filter)
-    },[ filter, search])
+    // useEffect(()=>{
+    //     async function fetchListTaskFilter() {
+    //         const project = JSON.parse(localStorage.getItem('project'))
+    //         const params = {assignee_employee_id:filter.member,
+    //
+    //             project_id:project.projectId,
+    //             sprint_id:project.currentSprint,};
+    //         const respond = await getListTasksFilter(params);
+    //         console.log('Data respond:', respond)
+    //         if (respond.status === 401) {
+    //             messageApi.open({
+    //                 type: 'error',
+    //                 content: respond.message,
+    //                 duration: 1.3,
+    //             });
+    //             handleSetUnthorization();
+    //             return false;
+    //
+    //         } else if (respond.status === 1) {
+    //             setColumns(respond)
+    //         } else {
+    //             setColumns([])
+    //             return false;
+    //         }
+    //         setLoading(false);
+    //     }
+    //     fetchListTaskFilter()
+    //     console.log('Filter: ', filter)
+    // },[ filter, search])
     const handleSetUnthorization = () => {
         dispatch(setExpiredToken(true));
         const token = getCookies('vps_token');
@@ -227,7 +227,7 @@ function ManageTaskPage(props) {
                         {contextHolder}
                         <HeaderTask onCurrentProject={setCurrentProject}/>
                         <BoardBar boardName={'Dự Án'} onFilter={setFilter}
-                                  onCompleteSprint={handleUpdateSprint}
+                                  //onCompleteSprint={handleUpdateSprint}
                                   members={listMembers}
                                   onDeleteSprint={handleDeleteSprint}
                                   sprint={sprint}

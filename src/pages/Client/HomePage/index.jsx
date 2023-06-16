@@ -19,11 +19,12 @@ import {isEmpty} from "lodash";
 import EditPost from "~/components/Client/Post/Edit";
 import {useDispatch, useSelector} from "react-redux";
 import {setPost} from "~/redux/reducer/post/postReducer";
-import {createPost, deletePost, getListPosts, likePost} from "~/api/Client/Post/postAPI";
+import {createPost, deletePost, editPost, getListPosts, likePost} from "~/api/Client/Post/postAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import ListSprintSkeleton from "~/components/commoms/Skeleton/Project/Sprint";
 HomePage.propTypes = {
 
 };
@@ -32,6 +33,7 @@ function HomePage({slot}) {
     const [data,setData] =useState([])
     const [loading, setLoading] = React.useState(true);
     const [loadMore, setLoadMore] = useState(true);
+    const [isReset,setIsReset] = useState(false);
     const [showConfirm,setShowConfirm]=useState({id:null,show:false})
     const [postEdit,setPostEdit]=useState(false)
     const [totalRecord, setTotalRecord] = React.useState(data.length);
@@ -95,8 +97,27 @@ function HomePage({slot}) {
         }
     }
 
-    const handleUpdatePost=(post)=>{
-        console.log('Update post ',post)
+    const handleUpdatePost=async (post) => {
+        console.log('Update post ', post)
+        const result = await editPost(post)
+        if(result.status===1){
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+            setPostEdit(false)
+            setIsReset(Math.random())
+
+        }else if(result===401){
+            handleSetUnthorization()
+        }else {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3,
+            });
+        }
     }
 
     // console.log()
@@ -108,7 +129,7 @@ function HomePage({slot}) {
     // }, [page]);
     const fetchData=async (load) =>{
             setLoading(true)
-            let params = {page};
+            let params = {user_id:userLogin.id};
             const respond = await getListPosts(params);
             console.log('Data respond:', respond)
             if (respond === 401) {
@@ -126,33 +147,33 @@ function HomePage({slot}) {
     }
 
     useEffect(()=>{
-       if(page===1) fetchData()
-    },[])
-    useEffect(() => {
-        const handleScroll = () => {
-
-            if (
-                document.documentElement.scrollHeight - window.innerHeight <=
-                document.documentElement.scrollTop + 100 &&
-                !loading
-            ) {
-
-                const nextPage = page + 1;
-                setPage(nextPage);
-                console.log('Tăng page +1',page)
-                if(page!==1) fetchData();
-            }
-        };
-        const element = document.getElementById('list-posts');
-        window.addEventListener('scroll', handleScroll);
-        // Bắt sự kiện scroll của phần tử cụ thể
-
-
-        // Hủy bỏ sự kiện khi component bị hủy
-        return () => {
-            element.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
+           fetchData()
+    },[isReset])
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //
+    //         if (
+    //             document.documentElement.scrollHeight - window.innerHeight <=
+    //             document.documentElement.scrollTop + 100 &&
+    //             !loading
+    //         ) {
+    //
+    //             const nextPage = page + 1;
+    //             setPage(nextPage);
+    //             console.log('Tăng page +1',page)
+    //             if(page!==1) fetchData();
+    //         }
+    //     };
+    //     const element = document.getElementById('list-posts');
+    //     window.addEventListener('scroll', handleScroll);
+    //     // Bắt sự kiện scroll của phần tử cụ thể
+    //
+    //
+    //     // Hủy bỏ sự kiện khi component bị hủy
+    //     return () => {
+    //         element.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, []);
 
 
     // useEffect(() => {
@@ -177,21 +198,26 @@ function HomePage({slot}) {
             {
                 contextHolder
             }
-            <div className='gr-left'>
+            {
+                loading?(<ListSprintSkeleton />):(
+                    <div className='gr-left'>
 
-                <div className='list-posts' id={'list-posts'}>
-                    <div className='create-post'>
-                        <AddPost  author={userLogin} onSave={handleCreatePost} />
+                        <div className='list-posts' id={'list-posts'}>
+                            <div className='create-post'>
+                                <AddPost  author={userLogin} onSave={handleCreatePost} />
+                            </div>
+                            {!!data && data.map(item => (
+                                <PostItem post={item}
+                                          onReset={setIsReset}
+                                          onUpdate={handleOpenUpdatePost}
+                                          onDelete={handleOpenConfirm}
+                                />
+                            ))}
+
+                        </div>
                     </div>
-                    {!!data && data.map(item => (
-                        <PostItem post={item}
-                                  onUpdate={handleOpenUpdatePost}
-                                  onDelete={handleOpenConfirm}
-                        />
-                    ))}
-
-                </div>
-            </div>
+                )
+            }
             <div className='gr-right'>
                 <div className='filter-posts'>
                     <SearchHidenButton width={'15rem'}/>

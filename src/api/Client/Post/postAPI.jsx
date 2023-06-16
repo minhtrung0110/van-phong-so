@@ -13,11 +13,12 @@ export const configHeadersAuthenticate = () => {
     };
 };
 
-export const getListPosts = async ({ sort,filter, search,keySearch, page } = {}) => {
+export const getListPosts = async ({ sort,filter, search,keySearch, page,user_id } = {}) => {
     console.log({ sort,filter, search, page })
-    const url = 'posts';
+    const url = `posts`;
     const queryString = [];
     if (sort) {queryString.push(`orderBy=${sort}`)}
+    if(user_id) queryString.push(`user_id=${user_id}`)
     if (search) {
         queryString.push(`name=${search}`);
     }
@@ -101,7 +102,7 @@ export const likePost = async (id,idStaff) => {
 };
 export const unLikePost = async (id,idStaff) => {
     const url = `posts/${id}/employees/${idStaff}`;
-    const response = await axiosClient.delete(url, {}, configHeadersAuthenticate());
+    const response = await axiosClient.delete(url, configHeadersAuthenticate());
     console.log(response)
     if (response.status === 1) {
         return {status:1,message:'Bỏ thích bài viết thành công'}

@@ -18,14 +18,14 @@ function BoardBar({boardName,members, sprint, onFilter,onCompleteSprint,onDelete
     const [showConfirmDelete, setIsShowConfirmDelete] = useState(false)
     const [showCompleteSprint, setShowCompleteSprint]=useState()
     const listActionProjects = [
-        {
-            label: 'Hoàn Thành Chu Kỳ Phát Triển',
-            key: '1',
-            icon: <FaTrophy />,
-        },
+        // {
+        //     label: 'Hoàn Thành Chu Kỳ Phát Triển',
+        //     key: '1',
+        //     icon: <FaTrophy />,
+        // },
         {
             label: 'Xóa Chu Kỳ Phát Triển',
-            key: '2',
+            key: '1',
             icon: <FaTrash/>,
         },
 
@@ -54,30 +54,30 @@ function BoardBar({boardName,members, sprint, onFilter,onCompleteSprint,onDelete
                 <div className="sprint-name">{sprint.title}</div>
                 <FilterProject onFilter={onFilter} listmember={members.members} />
                 <GroupMember defaultMembers={members.members} sizeAvatar={'small'} />
-                <div>
-                    <Dropdown
-                        menu={{
-                            items: listActionProjects,
-                            onClick: handleChooseActionProject,
-                        }}
-                        className='action-project'
-                        overlayClassName='overlay-dropdown-action-project'
-                    >
-                        <button className='btn-more'><FaEllipsisH className='dot'/></button>
-                    </Dropdown>
-                </div>
+                {/*<div>*/}
+                {/*    <Dropdown*/}
+                {/*        menu={{*/}
+                {/*            items: listActionProjects,*/}
+                {/*            onClick: handleChooseActionProject,*/}
+                {/*        }}*/}
+                {/*        className='action-project'*/}
+                {/*        overlayClassName='overlay-dropdown-action-project'*/}
+                {/*    >*/}
+                {/*        <button className='btn-more'><FaEllipsisH className='dot'/></button>*/}
+                {/*    </Dropdown>*/}
+                {/*</div>*/}
 
             </div>
-            <Modal title="" open={showCompleteSprint}
-                   destroyOnClose
-                   maskClosable={true}
-                   onCancel={() => setShowCompleteSprint(false)}
-                   footer={null}
-                   width={450}
-                   style={{top: 80}}
-            >
-                <CompleteSprint sprint={sprint} onComplete={handleCompleteSprint} onCancel={setShowCompleteSprint} />
-            </Modal>
+            {/*<Modal title="" open={showCompleteSprint}*/}
+            {/*       destroyOnClose*/}
+            {/*       maskClosable={true}*/}
+            {/*       onCancel={() => setShowCompleteSprint(false)}*/}
+            {/*       footer={null}*/}
+            {/*       width={450}*/}
+            {/*       style={{top: 80}}*/}
+            {/*>*/}
+            {/*    <CompleteSprint sprint={sprint} onComplete={handleCompleteSprint} onCancel={setShowCompleteSprint} />*/}
+            {/*</Modal>*/}
             <ConfirmModal open={showConfirmDelete} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Thực Sự Muốn Xóa Chu Kỳ <strong>${sprint.title}</strong> Này ? `}} />}
                           textCancel='Hủy' textOK='Xóa' onCancel={() => setIsShowConfirmDelete(false)}

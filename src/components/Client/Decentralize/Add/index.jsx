@@ -15,55 +15,48 @@ function AddRole({onBack}) {
     const dispatch=useDispatch()
     const [messageApi, contextHolder] = message.useMessage();
     const [project, setProject] = useState({
-        view_project:false,
-        add_project: false,
-        update_project: false,
-        delete_project: false,
+        project_view:false,
+        project_add: false,
+        project_update: false,
+        project_delete: false,
     });
     const [sprint, setSprint] = useState({
-        view_srint:false,
-        add_sprint: false,
-        update_sprint: false,
-        delete_sprint: false,
+        srint_view:false,
+        sprint_add: false,
+        sprint_update: false,
+        sprint_delete: false,
     });
     const [task, setTask] = useState({
-        view_task:false,
-        add_task: false,
-        update_task: false,
-        delete_task: false,
+        task_view:false,
+        task_add: false,
+        task_update: false,
+        task_delete: false,
     });
-    const [column, setColumn] = useState({
-        view_column:false,
-        add_column: false,
-        update_column: false,
-        delete_column: false,
+    const [role, setRole] = useState({
+        role_view:false,
+        role_add: false,
+        role_update: false,
+        role_delete: false,
     });
-    const [calendar, setCalendar] = useState({
-        view_calendar:false,
-        add_calendar: false,
-        update_calendar: false,
-        delete_calendar: false,
-    });
+
     const [staff, setStaff] = useState({
-        view_staff:false,
-        add_staff: false,
-        update_staff: false,
-        delete_staff: false,
+        staff_view:false,
+        staff_add: false,
+        staff_update: false,
+        staff_delete: false,
     });
     const [department, setDepartment] = useState({
-        view_department:false,
-        add_department: false,
-        update_department: false,
-        delete_department: false,
+        department_view:false,
+        department_add: false,
+        department_update: false,
+        department_delete: false,
     });
 
 
     const handleSubmitPermission = async (data) => {
         const name = getValues("name");
         const arrayPermissions = {
-            ...staff, ...department,
-            ...project, ...sprint, ...task, ...column,
-            ...calendar
+            ...staff, ...department, ...project, ...sprint, ...task, ...role,
         }
         const trueFieldsArray = Object.entries(arrayPermissions)
             .filter(([key, value]) => value === true)
@@ -71,7 +64,7 @@ function AddRole({onBack}) {
         const newRole = {
             title: name,
             status: true,
-            permissions_title: trueFieldsArray
+            permissions_title: trueFieldsArray.map(item => item.replace(/_/g, '.'))
         }
         console.log(newRole);
         const result = await createRole(newRole)
@@ -131,15 +124,14 @@ function AddRole({onBack}) {
                     <GroupPermission setSwitchGroupSate={setProject} switchGroupState={project} title={'dự án'}/>
                     <GroupPermission setSwitchGroupSate={setSprint} switchGroupState={sprint} title={'sprint'}/>
                     <GroupPermission setSwitchGroupSate={setTask} switchGroupState={task} title={'công việc'}/>
-                    <GroupPermission setSwitchGroupSate={setColumn} switchGroupState={column}
-                                     title={'trạng thái công việc'}/>
 
                 </Col>
                 <Col className='col-title' xs={{span: 24}} lg={{span: 10}}>
                     <GroupPermission setSwitchGroupSate={setStaff} switchGroupState={staff} title={'nhân viên'}/>
                     <GroupPermission setSwitchGroupSate={setDepartment} switchGroupState={department}
                                      title={'phòng ban'}/>
-                    <GroupPermission setSwitchGroupSate={setCalendar} switchGroupState={calendar} title={'lịch biểu'}/>
+                    <GroupPermission setSwitchGroupSate={setRole} switchGroupState={role}
+                                     title={'chức danh'}/>
                 </Col>
             </Row>
 

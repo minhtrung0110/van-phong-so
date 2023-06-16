@@ -25,10 +25,14 @@ function TaskItem({task,type,columns, onShowDetail}) {
                         type==='long' && (
                           <>
                               {
-                                  task.assignee_employee.id===0 ?(
-                                        <Tooltip  ><span className={'unsigned'}> <FaUser className={'icon'} /></span></Tooltip>
-                                  ):(
+                                  // task.assignee_employee.id===0 ?(
+                                  //       <Tooltip  ><span className={'unsigned'}> <FaUser className={'icon'} /></span></Tooltip>
+                                  // ):
+                                  task.hasOwnProperty('assignee_employee')?
+                                  (
                                       <AvatarCustom avatar={task.assignee_employee.avatar_url} size={'small'} lastName={task.assignee_employee.last_name} />
+                                  ):(
+                                  <Tooltip  ><span className={'unsigned'}> <FaUser className={'icon'} /></span></Tooltip>
                                   )
                               }
                             <span className='status'>{

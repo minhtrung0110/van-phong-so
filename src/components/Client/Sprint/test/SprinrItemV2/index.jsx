@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import {createTask} from "~/api/Client/Task/taskAPI";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 import CompleteSprint from "~/components/Client/Sprint/CompleteSprint";
+import {isEmpty} from "lodash";
 
 SprintItemV2.propTypes = {};
 // 0: chưa active
@@ -40,7 +41,6 @@ function SprintItemV2({
     const current_date = new Date();
     const overPast = end_date < current_date
     const totalTasks = sprint.hasOwnProperty('tasks') ? sprint.tasks.length : 0;
-    console.log(totalTasks)
     const [isOpen, setIsOpen] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
     const [showCompleteSprint, setShowCompleteSprint] = useState()
@@ -100,29 +100,30 @@ function SprintItemV2({
         setShowEditSprint(false)
     }
     const handleCreateTask = async () => {
+        const length=sprint.tasks.length
+        const newValueSortTask=!isEmpty(sprint.tasks)?sprint.tasks[length-1].sort:1
         const newCardToAdd = {
-            id: Math.floor(Math.random() * (999 - 10 + 1)) + 10,
-            employee_id: userLogin.id,
+            id:Math.floor(Math.random() * 100) + 1,
             sprint_id: sprint.id,
             project_id: sprint.project_id,
-            board_column_id: 1,
-            assignee_employee: null,
-            report_employee: userLogin,
-            // report_employee: null,
+            board_column_id: sprint.board_columns.find(board => board.name==='ToDo').id,
+           // assignee_employee_id: null,
+            report_employee_id: userLogin.id,
             title: valueNewTask,
+            start_time: new Date(),
+            end_time:   new Date(),
             description: "",
-            priority: 1,
+            priority: 4,
             subtasks: [],
             attachments: [],
             comments: [],
             estimate_point: 3,
             status: 1,
-            task_histories: [],
-            sort: 1,
+            sort: newValueSortTask+1,
         }
         // add new card to Sprint
         const newSprint = {...sprint}
-        newSprint.tasks.push(newCardToAdd)
+
         // const currentColumn = newSprint.columns.map((col) => {
         //     if(col.id === newCardToAdd.columnId ){
         //         const newCards = col.cards.push(newCardToAdd);
@@ -139,7 +140,7 @@ function SprintItemV2({
         if (result.status === 1) {
             setValueNewTask('')
             setIsCreateTask(false)
-            // onCreateTask(newCardToAdd)
+            newSprint.tasks.push(newCardToAdd)
         } else {
             messageApi.open({
                 type: 'error',

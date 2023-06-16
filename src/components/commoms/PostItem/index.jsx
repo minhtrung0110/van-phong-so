@@ -12,16 +12,18 @@ import Comment from "~/components/commoms/Comment";
 import Gallery from "react-photo-gallery";
 import {Dropdown} from "antd";
 import {value} from "lodash/seq";
-import {getListCommentsPost, likePost} from "~/api/Client/Post/postAPI";
+import {getListCommentsPost, likePost, unLikePost} from "~/api/Client/Post/postAPI";
 import {useSelector} from "react-redux";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 PostItem.propTypes = {
 
 };
 const cx=classNames.bind(styles);
-function PostItem({post,onUpdate,onDelete}) {
+function PostItem({post,onUpdate,onDelete,onReset}) {
+    console.log('Post Item:',post)
     const [showComment,setShowComment]=useState(false)
-
+    const [totalComments,setTotalComments]=useState(post.total_comments)
+    const [totalLike,setTotalLike]=useState(post.total_likes)
     const [liked,setLiked]=useState(post.is_liked)
     const date=dayjs(post.updated_at,'YYYY-MM-DDTHH:mm:ss.SSSSZ').locale('vi').format('HH:mm, DD [tháng] M, YYYY');
     const listActions=[
@@ -39,12 +41,24 @@ function PostItem({post,onUpdate,onDelete}) {
             }
     }
     const handleLiked=async (id) => {
-        const result = await likePost(id, userLogin.id)
-        if(result.status===1){
-        setLiked(true)
+        if(post.is_liked){
+            const result = await unLikePost(id, userLogin.id)
+            if(result.status===1){
+                setLiked(false)
+                setTotalLike(prev=>prev-1)
+            }else {
+                setLiked(true)
+            }
         }else {
-            setLiked(false)
+            const result = await likePost(id, userLogin.id)
+            if(result.status===1){
+                setLiked(true)
+                setTotalLike(prev=>prev+1)
+            }else {
+                setLiked(false)
+            }
         }
+
     }
     const handleGetListComments=async () => {
         setShowComment(!showComment)
@@ -62,6 +76,7 @@ function PostItem({post,onUpdate,onDelete}) {
         //     }
         // }
     }
+
     return (
         <div className={cx('post-item')}>
             <div className={cx('post-head')}>
@@ -100,8 +115,8 @@ function PostItem({post,onUpdate,onDelete}) {
                 }
             </div>
             <div className={cx('post-stats')}>
-                <div className={cx('cmt')}>{post.hasOwnProperty('total_comments')?post.total_comments:0} bình luận</div>
-                <div className={cx('like')}>{post.hasOwnProperty('total_likes')?post.total_likes:0} thích</div>
+                <div className={cx('cmt')}>{totalComments} bình luận</div>
+                <div className={cx('like')}>{totalLike} thích</div>
             </div>
             <div className={cx('post-actions')}>
 
@@ -123,7 +138,7 @@ function PostItem({post,onUpdate,onDelete}) {
                 {
                     !!showComment && (
                         <div className={cx('media')}>
-                            <Comment user={userLogin} postId={post.id}  />
+                            <Comment user={userLogin} postId={post.id} onUpdateAmountComment={setTotalComments} />
                         </div>
                     )
                 }

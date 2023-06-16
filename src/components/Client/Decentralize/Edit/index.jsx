@@ -27,7 +27,7 @@ function EditRole({ onBack}) {
     const [project,setProject]=useState(getCheckedRule('project').permission);
     const [sprint,setSprint]=useState(getCheckedRule('sprint').permission);
     const [task,setTask]=useState(getCheckedRule('task').permission);
- //   const [column,setColumn]=useState(getCheckedRule('column').permission);
+    const [role,setRole]=useState(getCheckedRule('role').permission);
  //   const [calendar,setCalendar]=useState(getCheckedRule('calendar').permission);
     const [staff,setStaff]=useState(getCheckedRule('staff').permission);
     const [department,setDepartment]=useState(getCheckedRule('department').permission);
@@ -37,8 +37,7 @@ function EditRole({ onBack}) {
         const name = getValues("role_title");
         const arrayPermissions = {
             ...staff, ...department,
-            ...project, ...sprint, ...task,
-          //  ...calendar,...column,
+            ...project, ...sprint, ...task,...role,
         }
         const trueFieldsArray = Object.entries(arrayPermissions)
             .filter(([key, value]) => value === true)
@@ -119,13 +118,13 @@ function EditRole({ onBack}) {
                     <GroupPermission setSwitchGroupSate={setProject} switchGroupState={project} title={'dự án'} />
                     <GroupPermission setSwitchGroupSate={setSprint} switchGroupState={sprint} title={'sprint'} />
                     <GroupPermission setSwitchGroupSate={setTask} switchGroupState={task} title={'công việc'} />
-                    {/*<GroupPermission setSwitchGroupSate={setColumn} switchGroupState={column} title={'trạng thái công việc'} />*/}
 
                 </Col>
                 <Col className='col-title' xs={{span: 24}} lg={{span: 10}}>
                     <GroupPermission setSwitchGroupSate={setStaff} switchGroupState={staff} title={'nhân viên'} />
                     <GroupPermission setSwitchGroupSate={setDepartment} switchGroupState={department} title={'phòng ban'} />
-                    {/*<GroupPermission setSwitchGroupSate={setCalendar} switchGroupState={calendar} title={'lịch biểu'} />*/}
+                    <GroupPermission setSwitchGroupSate={setRole} switchGroupState={role}
+                                     title={'chức danh'}/>
                 </Col>
             </Row>
 
