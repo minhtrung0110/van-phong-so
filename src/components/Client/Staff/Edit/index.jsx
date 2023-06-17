@@ -618,7 +618,7 @@ function EditStaff(props) {
                                            hasFeedback help={errors.status ? 'Vui lòng chọn trạng thái' : null}>
                                     <Radio.Group {...field}>
                                         <Radio value={1}>Hoạt Động</Radio>
-                                        <Radio value={0}>Vô Hiệu</Radio>
+                                        <Radio value={0}>Thôi Việc</Radio>
                                     </Radio.Group>
                                 </Form.Item>
                             )}

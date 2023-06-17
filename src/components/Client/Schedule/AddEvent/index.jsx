@@ -99,6 +99,7 @@ function AddEvent({start, end, listStaff, onSave, onCancel}) {
             duration: [dayjs(start), dayjs(end)]
         }
     });
+    console.log('Member:',members)
     const userLogin = useSelector(getUserSelector)
     const onSubmit = (data) => {
         const {duration, ...rest} = data
@@ -109,9 +110,8 @@ function AddEvent({start, end, listStaff, onSave, onCancel}) {
             created_by_id: userLogin.id,
             event_employee: members.map((member,index) =>( {
                 employee_email: member.email,
-                employee_id:member.id,
-                event_id: 18,
-                id: index,
+                employee_id:member.ID,
+                id: index+1,
             })),
             ...rest
         } : {

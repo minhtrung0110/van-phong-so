@@ -53,11 +53,15 @@ function SprintItemV2({
     const listOptions = (permission.edit && permission.delete) ? [
         {
             key: 'edit',
-            label: 'Cập nhật phiên làm việc',
+            label: 'Cập nhật chu kỳ làm việc',
         },
         {
             key: 'remove',
-            label: 'Xóa phiên làm việc',
+            label: 'Xóa chu kỳ làm việc',
+        },
+        {
+            key: 'access',
+            label: 'Truy cập chu kỳ làm việc',
         },
     ] : (permission.edit === true) ? [
         {
@@ -72,7 +76,25 @@ function SprintItemV2({
         if (key === 'edit') {
             setShowEditSprint(true)
             dispatch(setSprint(sprint))
-        } else setShowConfirmDelete(true)
+        } else if(key==='remove')
+        {
+            setShowConfirmDelete(true)
+        }
+        else {
+            if(sprint.status===1){
+                const project = JSON.parse(localStorage.getItem("project"))
+                project.currentSprint = sprint.id
+                localStorage.setItem('project', JSON.stringify(project))
+                navigate(config.routes.project)
+            }else {
+                messageApi.open({
+                    type:'error',
+                    content:'Chỉ những sprint được bắt đầu mới phép truy cập.',
+                    duration:1.3
+                })
+            }
+
+        }
     }
     const handleDelete = () => {
         onDelete(sprint)

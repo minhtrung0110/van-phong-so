@@ -32,13 +32,13 @@ function ManageTaskPage(props) {
     const [columns, setColumns] = useState([])
     const [loading, setLoading] = React.useState(true);
     const [listMembers, setListMembers] = useState([])
-    const [currentProject, setCurrentProject] = useState('')
     const [filter, setFilter] = useState({
         member:[],
         duration:[],
         priority:[],
     })
-    const [isReset, setIsReset] = useState(false)
+
+    const [isReset, setIsReset] = useState(Math.random())
     const [messageApi, contextHolder] = message.useMessage();
     const [search, setSearch] = useState()
     const [sprint, setSprint] = useState({})
@@ -112,7 +112,7 @@ function ManageTaskPage(props) {
         //     isMountedRef.current = false;
         // };
 
-    }, [filter])
+    }, [filter,isReset])
     console.log('Filter:', filter)
     // useEffect(()=>{
     //     async function fetchListTaskFilter() {
@@ -162,14 +162,14 @@ function ManageTaskPage(props) {
         if (response.status === 1) {
             messageApi.open({
                 type: 'success',
-                message: response.message,
+                content: response.message,
                 duration: 1.3
             })
-            setFilter(Math.random())
+            setIsReset(Math.random())
         } else {
             messageApi.open({
                 type: 'error',
-                message: response.message,
+                content: response.message,
                 duration: 1.3
             })
         }
@@ -179,18 +179,13 @@ function ManageTaskPage(props) {
         console.log('Update Task: ', value)
         const response = await editTask(value)
         if (response.status === 1) {
-            messageApi.open({
-                type: 'success',
-                message: response.message,
-                duration: 1.3
-            })
-            setFilter({})
+            setIsReset(Math.random())
         } else if (response === 401) {
             handleSetUnthorization()
         } else {
             messageApi.open({
                 type: 'error',
-                message: response.message,
+                content: response.message,
                 duration: 1.3
             })
         }
@@ -239,7 +234,7 @@ function ManageTaskPage(props) {
                 loading ? (<KanbanProjectSkeleton/>) : (
                     <div className='trello-minhtrung-master' style={{backgroundImage: `url(${backgroundImage})`}}>
                         {contextHolder}
-                        <HeaderTask onCurrentProject={setCurrentProject}/>
+                        <HeaderTask />
                         <BoardBar boardName={'Dự Án'} onFilter={setFilter}
                             //onCompleteSprint={handleUpdateSprint}
                                   members={listMembers}
@@ -248,7 +243,7 @@ function ManageTaskPage(props) {
                                   onSearch={setSearch}/>
                         <BoardContent board={sprint} onBoard={handleUpdateColumn} columnData={columns}
                                       members={listMembers.members}
-                                      onReset={setFilter}
+                                      onReset={setIsReset}
                                       onUpdateTask={handleUpdateTask} permission={{
                             createTask: createPermission,
                             editTask: editPermission,

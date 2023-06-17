@@ -8,12 +8,15 @@ import {listPriority} from "~/asset/data/defaullt_data_task";
 import AvatarCustom from "~/components/commoms/AvatarCustom";
 import {Tooltip} from "antd";
 
-function TaskItem({task,type,columns, onShowDetail}) {
+function TaskItem({task,type,columns, onShowDetail,showDetail=false}) {
   // console.log( 'Test Lỗi:', getTitleStatusTask(task.board_column_id,columns))
     const dispatch = useDispatch()
     const handleShowDetail = () => {
-        dispatch(setDetailTask(task))
-        onShowDetail({id:task.id,show:true})
+        if(showDetail){
+            dispatch(setDetailTask(task))
+            onShowDetail({id:task.id,show:true})
+        }
+
     }
     const stylePriority=findStyleForStatusTask(task.priority,listPriority)
     return (

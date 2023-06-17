@@ -104,13 +104,13 @@ function StaffTable({itemDelete=true,itemEdit=true,tableHeader, tableBody}) {
                         </p>
                     </td>
                     <td className="col-action">
-                        <button
-                            id="show-user"
-                            onClick={() => handleShowDetailStaff(item)}
-                            className="btn-show"
-                        >
-                            <FaEye className="icon-show"/>
-                        </button>
+                        {/*<button*/}
+                        {/*    id="show-user"*/}
+                        {/*    onClick={() => handleShowDetailStaff(item)}*/}
+                        {/*    className="btn-show"*/}
+                        {/*>*/}
+                        {/*    <FaEye className="icon-show"/>*/}
+                        {/*</button>*/}
                         {
                             itemEdit && (
                                 <button

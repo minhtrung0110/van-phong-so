@@ -247,7 +247,7 @@ function Column({sprint,column,onResetData, onCardDrop,members, onUpdateColumn,o
                     {
                         !!column.tasks && column.tasks.map((item, index) => (
                             <Draggable key={index}>
-                                <TaskItem task={item} onShowDetail={handleShowDetailTask} permission={permission} />
+                                <TaskItem task={item} showDetail={true} onShowDetail={handleShowDetailTask} permission={permission} />
                             </Draggable>
 
                         ))

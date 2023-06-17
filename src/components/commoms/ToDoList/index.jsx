@@ -20,7 +20,7 @@ function TodoList({list,taskId,onUpdate,onCreate}) {
     const [isAddItem,setIsAddItem] = useState(false)
     const handleAddToDoItem=()=>{
         setListToDo([...listToDo,{id:listToDo.length+1,name:'',status:false,isNew:true}])
-        setIsAddItem(true)
+       // setIsAddItem(true)
     }
     const handleUpdateToDoItem=async (item) => {
         const newListToDo = listToDo.map((obj) => {
@@ -107,11 +107,12 @@ function TodoList({list,taskId,onUpdate,onCreate}) {
     // useEffect(()=>{
     //
     // },[listToDo])
+    //console.log('List Todo:',listToDo)
     return (
         <div className={cx('todo-list')}>
             {contextHolder}
             {
-               !isEmpty(list) && (
+               !isEmpty(listToDo) && (
                     <div className={cx('todo-container')}>
                         <p>Danh Sách Công Việc Cần Làm ({`${listToDo.reduce((acc, item)=>(item.status===true)?acc+1:acc,0)}/${listToDo.length}`})</p>
                         <List

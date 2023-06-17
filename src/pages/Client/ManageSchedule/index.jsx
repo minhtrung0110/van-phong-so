@@ -13,7 +13,7 @@ import EditEvent from "~/components/Client/Schedule/EditEvent";
 import {getListDepartments} from "~/api/Client/Department/departmentAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
-import {createEvent, deleteEvent, getListEvents} from "~/api/Client/Calendar";
+import {createEvent, deleteEvent, editEvent, getListEvents} from "~/api/Client/Calendar";
 import {useDispatch} from "react-redux";
 import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
@@ -166,7 +166,7 @@ function ManageSchedule(props) {
         if (result.status===1) {
             messageApi.open({
                 type:'success',
-                message:result.message,
+                content:result.message,
                 duration:1.3
             })
             setShowAddEvent(true)
@@ -178,14 +178,32 @@ function ManageSchedule(props) {
         else {
             messageApi.open({
                 type:'error',
-                message:result.message,
+                content:result.message,
                 duration:1.3
             })
         }
 
     }
-    const handleUpdateEvent=(data) => {
+    const handleUpdateEvent=async (data) => {
         console.log('Update event: ', data)
+        const result = await editEvent(data)
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3
+            })
+            setShowAddEvent(true)
+            setReset(!reset)
+        } else if (result.status === 401) {
+            handleSetUnthorization();
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3
+            })
+        }
     }
     const handleDeleteEvent=async (id) => {
         console.log('Delete event: ', id)
@@ -193,7 +211,7 @@ function ManageSchedule(props) {
         if (response.status===1) {
             messageApi.open({
                 type:'success',
-                message:response.message,
+                content:response.message,
                 duration:1.3
             })
             setReset(!reset)
@@ -204,7 +222,7 @@ function ManageSchedule(props) {
         else {
             messageApi.open({
                 type:'error',
-                message:response.message,
+                content:response.message,
                 duration:1.3
             })
         }

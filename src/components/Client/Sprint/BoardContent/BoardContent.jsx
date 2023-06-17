@@ -208,18 +208,18 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
                             }
                         </Container>
                         <div className='trello-minhtrung-container'  >
-                            {!isOpenNewColForm && (
-                                <Row>
-                                    <Col className='add-new-column'
-                                         onClick={()=>{
-                                             setIsOpenNewColForm(true)
+                            {/*{!isOpenNewColForm && (*/}
+                            {/*    <Row>*/}
+                            {/*        <Col className='add-new-column'*/}
+                            {/*             onClick={()=>{*/}
+                            {/*                 setIsOpenNewColForm(true)*/}
 
-                                         }}
-                                    >
-                                        <FaPlus className='icon-add' />   Tạo Mới
-                                    </Col>
-                                </Row>
-                            )}
+                            {/*             }}*/}
+                            {/*        >*/}
+                            {/*            <FaPlus className='icon-add' />   Tạo Mới*/}
+                            {/*        </Col>*/}
+                            {/*    </Row>*/}
+                            {/*)}*/}
                             {
                                 !!isOpenNewColForm  && ( <Row>
                                     <Col className='enter-new-column'>

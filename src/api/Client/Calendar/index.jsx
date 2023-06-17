@@ -89,24 +89,13 @@ export const createEvent = async (body) => {
 export const editEvent = async (body) => {
     const url = `events`;
     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
-    console.log('Respond của edit calendar:', response)
-    if (response.status === 1 || response.message === "Success") {
-        return {status: 1, message: 'Cập nhật nhân viên mới thành công'}
-    } else if (response.status === 0) {
-        switch (response.code) {
-            case -1009:
-                return {status: 0, message: 'Thông tin không chính xác'}
-                break
-            case -1010:
-                return {status: 0, message: 'Email đã tồn tại ! Vui lòng chọn email khác'}
-                break
-            case -1011:
-                return {status: 0, message: 'Tài khoản đã bị vo hiệu hóa'}
-                break
-            default:
-                break
-        }
-    }
+    if (response.status === 1) {
+        return {status: 1, message: 'Cập nhật sự kiện mới thành công'}
+    } else if (response.status === 401) return {status: 401, message: 'Không thể xác thuc'}
+    else
+        return {
+            status: 0, message: 'Cập nhật sự kiện mới thất bại'
+        };
 };
 export const deleteEvent = async (id) => {
     const url = `/events/${id}`;

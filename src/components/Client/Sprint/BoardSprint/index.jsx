@@ -97,6 +97,7 @@ function BoardSprint({project,permission, columnData, onEdit, onDelete,onComplet
                             <Draggable
                                 key={index}>
                                 <SprintItemV2
+                                    backlogId={1}
                                     sprint={sprint}
                                     permission={permission}
                                     column={sprint}

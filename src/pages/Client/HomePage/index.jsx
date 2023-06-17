@@ -48,15 +48,17 @@ function HomePage({slot}) {
         if (response.status === 1) {
             messageApi.open({
                 type:'success',
-                message:response.message,
+                content:response.message,
                 duration:1.3
             })
+            setShowConfirm(false)
+            setIsReset(!isReset)
         } else if (response === 401) {
             handleSetUnthorization()
         } else {
             messageApi.open({
                 type:'error',
-                message:response.message,
+                content:response.message,
                 duration:1.3
             })
         }

@@ -14,7 +14,8 @@ function SearchSelectModal({open, onClose, onSubmit,selectLimit=10, title, listO
     const [value, setValue] = useState([]);
     const options = listOptions.map((d) => ({
         value: d.email,
-        label: type!=='event'?`${d.first_name} ${d.last_name}`:d.full_name,
+      //  label: type!=='event'?`${d.first_name} ${d.last_name}`:d.full_name,
+        label: `${d.first_name} ${d.last_name}`,
     }))
     // calll API get Staff List
 

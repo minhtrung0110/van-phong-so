@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, DatePicker, Dropdown, Input, InputNumber, Select, Tooltip, Upload} from "antd";
+import {DatePicker, Dropdown, Input, InputNumber, Select, Upload} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {detailTaskSelector} from "~/redux/selectors/project/projectSelector";
 import {
     FaCaretDown,
     FaCheckCircle,
     FaDesktop, FaEllipsisH,
-    FaFemale,
-    FaMale,
     FaPaperclip,
-    FaPlus,
     FaRegFlag
 } from "react-icons/fa";
 import './Detail.scss'
@@ -18,19 +15,11 @@ import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
 import ToDoList from "~/components/commoms/ToDoList";
 import {isEmpty} from "lodash";
-import {
-    getListNameColumn,
-    getListStatusProjecTask,
-    getListStatusTaskProject,
-    getNameColumn,
-    getStatusTaskProject
+import {    getListStatusTaskProject,getStatusTaskProject
 } from "~/utils/sorts";
-import {initialData} from "~/asset/data/initalDataTask";
 import {listColorStateDefaults, listPriority} from "~/asset/data/defaullt_data_task";
-import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelectModal";
 import GroupMember from "~/components/Client/Task/GroupMember";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
-import {setDeleteTask} from "~/redux/reducer/project/projectReducer";
 import {getSubTask} from "~/api/Client/Task/taskAPI";
 import ToDoListSkeleton from "~/components/commoms/Skeleton/ToDoList/ToDoListSkeleton";
 
@@ -50,7 +39,7 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
     const [rangeValueTime, setRangeValueTime] = useState(
         [dayjs(data.start_time), dayjs(data.start_time)]);
     const [members, setMembers] = useState([data.assignee_employee])
-    const dispatch = useDispatch()
+
     const [loadingSubTask,setLoadingSubTask] = useState(true)
     const {RangePicker} = DatePicker;
     // console.log(priority)
@@ -197,9 +186,9 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
     }
     const handleChangeStatus = (value) => {
         setStatus({...status, value})
-        // post API Update Task
-        console.log('Post API :', {...data, columnId: value})
-        //onUpdateTask({...data, columnId:value})
+        // // post API Update Task
+        // console.log('Post API :', {...data, columnId: value})
+        // //onUpdateTask({...data, columnId:value})
     }
     useEffect(() => {
         // post API Update Task
@@ -380,7 +369,7 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
                 </div>
                 <div className='todo-list'>
                     {
-                        loadingSubTask?(<ToDoListSkeleton/>):(
+                        !!loadingSubTask?(<ToDoListSkeleton/>):(
                             <ToDoList list={todoList} taskId={data.id} onUpdate={setTodoList}/>
                         )
                     }
