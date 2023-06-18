@@ -35,7 +35,7 @@ export const applyDragSprint = (arr, dragResult,newSprintID) => {
     console.log('card bi di chuyen :',itemToAdd)
 
     if (addedIndex !== null) {
-        itemToAdd.sprintID=newSprintID;
+        itemToAdd.sprint_id=newSprintID;
         result.splice(addedIndex, 0, itemToAdd);
     }
     // cập columnID mới cho card_task

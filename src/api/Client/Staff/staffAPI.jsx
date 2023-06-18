@@ -3,54 +3,53 @@ import React from 'react';
 import { getCookies } from '../Auth';
 import axiosClient from '../../axiosClient';
 import {concatQueryString} from "~/utils/concatQueryString";
+import {titleToSlug} from "~/utils/titleToSlug";
 
 export const configHeadersAuthenticate = () => {
-    const token = getCookies('token');
+    const token = getCookies('vps_token');
     return {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
 };
-//
-// export const getAllStaffs = async ({ sort, filterStatus, filterRole, filter, search, page } = {}) => {
-//     const url = '/api/admin/staff';
-//     const queryString = [];
-//     if (sort && sort.length > 0) {
-//         sort.forEach((item) => {
-//             queryString.push(`sort[${titleToSlug(item.key)}]=${item.value}`);
-//         });
-//     }
-//     if (search) {
-//         queryString.push(`${filter}=${search}`);
-//     }
-//     if (page) {
-//         queryString.push(`page=${page}`);
-//     }
-//
-//     if (filterStatus === 1 || filterStatus === 0) {
-//         queryString.push(`filter[status]=${filterStatus}`);
-//     }
-//     if (filterRole) {
-//         queryString.push(`filter[category_id]=${filterRole}`);
-//     }
-//     const final_url = concatQueryString(queryString, url);
-//
-//     const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
-//     if (reponse.status === 401) {
-//         return 401;
-//     } else if (reponse.status === 'success') {
-//         return reponse.data;
-//     } else {
-//         return 500;
-//     }
-// };
+
+export const getListStaffs = async ({ sort,filter, search,keySearch, page } = {}) => {
+    const url = 'employees';
+    const queryString = [];
+    if (sort) {queryString.push(`orderBy=${sort}`)}
+    if (search) {
+       // queryString.push(`${keySearch}=${search}`);
+        queryString.push(search);
+    }
+    if (page) {
+        queryString.push(`page=${page}`);
+    }
+    if(!!filter){
+        if (filter.status!== 'all') {
+            queryString.push(`status=${filter.status}`);
+        }
+        if (filter.role!== 'all') {
+            queryString.push(`role_id=${filter.role}`);
+        }
+    }
+    const final_url = concatQueryString(queryString, url);
+    const reponse = await axiosClient.get(final_url, configHeadersAuthenticate());
+    console.log('request URL: ' + final_url);
+
+    if (reponse.status === 401) {
+        return 401;
+    } else if (reponse.status === 1) {
+        return reponse.data;
+    } else {
+        return 500;
+    }
+};
 
 export const getStaffById = async (id) => {
-    const url = `employees?id=${id}`;
-    const response = await axiosClient.get(url,{
-        paramsSerializer: {}
-    });
+    const url = `employees/${id}`;
+    const response = await axiosClient.get(url,configHeadersAuthenticate());
+    console.log(url)
     //console.log('response', response)
     if (response.status === 1) {
         return response.data.result;
@@ -60,61 +59,77 @@ export const getStaffById = async (id) => {
         return {};
     }
 };
-// export const addStaff = async (body) => {
-//     const url = '/api/admin/staff';
-//     //check email and phonenumber existance
-//     const email = body.email;
-//     const phoneNumber = body.phone;
-//     const check_email_existence = await getAllStaffsWithEmailAndPhone({ email, phoneNumber });
-//     if (check_email_existence === 401) return 401;
-//     if (check_email_existence.data.length > 0) return 402;
-//     else {
-//         const response = await axiosClient.post(url, body, configHeadersAuthenticate());
-//         if (response.status === 401) {
-//             return 401;
-//         } else if (response.status === 'success') {
-//             return 200;
-//         } else if (response.status === 500) {
-//             return 500;
-//         } else {
-//             return 404;
-//         }
-//     }
-// };
-//
-// export const editStaff = async (id, body) => {
-//     const url = `/api/admin/staff/${id}`;
-//     if (body.email || body.phone) {
-//         const check_email_existence = await getAllStaffsWithEmailAndPhone({ email: body.email, phoneNumber: body.phone });
-//         if (check_email_existence === 401) return 401;
-//         if (check_email_existence.data.length > 0) return 402;
-//     }
-//     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
-//     if (response.status === 401) {
-//         return 401;
-//     } else if (response.status === 'success') {
-//         return 200;
-//     } else if (response.status === 500) {
-//         return 500;
-//     } else {
-//         return 404;
-//     }
-// };
-// export const deleteStaff = async (id) => {
-//     const url = `/api/admin/staff/${id}`;
-//     const response = await axiosClient.delete(url, configHeadersAuthenticate());
-//     console.log(response)
-//     console.log(url);
-//     if (response.status === 401) {
-//         return 401;
-//     } else if (response.status === 'Success') {
-//         return 200;
-//     } else if (response.status === 500) {
-//         return 500;
-//     } else {
-//         return 404;
-//     }
-// };
+export const getListStaffsByDepartmentId = async (id) => {
+    const url = `employees/departments/${id}`;
+    const response = await axiosClient.get(url,configHeadersAuthenticate());
+    console.log(url)
+    //console.log('response', response)
+    if (response.status === 1) {
+        return response.data.result;
+    } else if (response.status === 401) {
+        return 401;
+    } else {
+        return {};
+    }
+};
+export const createStaff = async (body) => {
+    const url = 'employees';
+    const response = await axiosClient.post(url, body, configHeadersAuthenticate());
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,message:'Tạo nhân viên mới thành công'}
+    }
+    else if (response.status ===0){
+        switch (response.code) {
+            case -1009:
+                return {status:0,message:'Thông tin không chính xác'}
+                break
+            case -1010:
+                return {status:0,message:'Email đã tồn tại ! Vui lòng chọn email khác'}
+                break
+            case -1011:
+                return {status:0,message:'Tài khoản đã bị vo hiệu hóa'}
+                break
+            default:
+                break
+        }
+    }
+    console.log(response)
+
+};
+
+export const editStaff = async (body) => {
+    const url = `employees`;
+    const response = await axiosClient.put(url, body, configHeadersAuthenticate());
+    console.log('Respond của edit staff:',response)
+    if(response.status === 1 || response.message ==="Success") {
+        return {status:1,message:'Cập nhật nhân viên mới thành công'}
+    }
+    else if (response.status ===0){
+        switch (response.code) {
+            case -1009:
+                return {status:0,message:'Thông tin không chính xác'}
+                break
+            case -1010:
+                return {status:0,message:'Email đã tồn tại ! Vui lòng chọn email khác'}
+                break
+            case -1011:
+                return {status:0,message:'Tài khoản đã bị vo hiệu hóa'}
+                break
+            default:
+                break
+        }
+    }
+};
+export const deleteStaff = async (id) => {
+    const url = `/employees/${id}`;
+    const response = await axiosClient.delete(url, configHeadersAuthenticate());
+    console.log(response)
+    if (response.status === 1) {
+        return {status:1,message:'Cho Thôi Việc Thành Công'}
+    } else if (response.status === 0) {
+        return {status:0,message:'Cho Thôi Việc Thất Bại'}
+    }
+};
 // export const getAllStaffsWithEmailAndPhone = async ({ email, phoneNumber } = {}) => {
 //     const url = '/api/admin/staff';
 //     const queryString = [];

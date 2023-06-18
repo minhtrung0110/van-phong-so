@@ -12,7 +12,7 @@ CommentItem.propTypes = {
 };
 const cx=classNames.bind(styles)
 function CommentItem({comment, replies, setActiveComment, activeComment, updateComment, deleteComment,
-                         addComment, parentId = null, currentUserId}) {
+                         addComment, parentId = null, currentUser}) {
     const [isReplying,setIsReplying] =useState( false)
     const [visibleComments, setVisibleComments] = useState(0);
     const handleShowMoreComments = () => {
@@ -21,11 +21,11 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
     const displayedComments = replies.slice(0, visibleComments);
     const fiveMinutes = 300000;
     const timePassed = new Date() - new Date(comment.createdAt) > fiveMinutes;
-    const canDelete =currentUserId === comment.user.id && replies.length === 0; //&& !timePassed;
-    const canReply =Boolean(currentUserId)
-    const canEdit = currentUserId === comment.user.id; //&& !timePassed;
+    const canDelete =currentUser.id === comment.employee.id && replies.length === 0; //&& !timePassed;
+    const canReply =Boolean(currentUser.id)
+    const canEdit = currentUser.id === comment.employee.id; //&& !timePassed;
     const replyId = parentId ? parentId : comment.id;
-    const createdAt = new Date(comment.createdAt).toLocaleDateString();
+    const createdAt = new Date(comment.created_at).toLocaleDateString();
 
     const handleReply=(text)=>{
 
@@ -36,24 +36,24 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
         <div className={cx('comment')}>
             <div key={comment.id} className={cx("comment-item")}>
                 <div className={cx("comment-avatar")}>
-                    <AvatarCustom lastName={comment.user.last_name} avatar={comment.user.avatar} className={cx('post-avatar')} size={'small'} />
+                    <AvatarCustom lastName={comment.employee.last_name} avatar={comment.employee.avatar_url} className={cx('post-avatar')} size={'small'} />
                 </div>
                 <div className={cx("comment-right-part")}>
                     <div className={cx("comment-content")}>
-                        <div className={cx("comment-author")}>{`${comment.user.first_name} ${comment.user.last_name}`}</div>
-                       <div className={cx("comment-text")}>{comment.description}</div>
+                        <div className={cx("comment-author")}>{`${comment.employee.first_name} ${comment.employee.last_name}`}</div>
+                       <div className={cx("comment-text")}>{comment.content}</div>
 
                     </div>
                     <div className={cx("comment-actions")}>
-                        {canReply && (
-                            <div
-                                className={cx("comment-action")}
-                                onClick={() =>                                    setIsReplying(true)
-                                }
-                            >
-                                <FaReply />
-                            </div>
-                        )}
+                        {/*{canReply && (*/}
+                        {/*    <div*/}
+                        {/*        className={cx("comment-action")}*/}
+                        {/*        onClick={() =>                                    setIsReplying(!isReplying)*/}
+                        {/*        }*/}
+                        {/*    >*/}
+                        {/*        <FaReply />*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
                         {canEdit && (
                             <div
                                 className={cx("comment-action")}
@@ -80,20 +80,7 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
             {isReplying && (
                 <CommentForm
                     className={cx('form')}
-                    user={{
-                    id: 1,
-                    first_name: 'Nguyễn Đức Minh',
-                    last_name: 'Trung',
-                    username:'NguyenTrung',
-                    phone_number: '09744148784',
-                    gender: 'nam',
-                    birth_date: '01-10-2001',
-                    mail: 'minhtrung@gmail.com',
-                    role: 'CEO',
-                    avatar: 'https://i.ibb.co/mvybfht/C-i-n-3-1.jpg',
-                    address: 'Tan Quy Tây, Bình Chanh,HCM',
-                    status: 1,
-                }}
+                    user={currentUser}
                 onSubmit={handleReply}
                 />
             )}
@@ -109,7 +96,7 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
                             addComment={addComment}
                             parentId={comment.id}
                             replies={[]}
-                            currentUserId={currentUserId}
+                            currentUser={currentUser}
                         />
                     ))}
                     {visibleComments < replies.length && (

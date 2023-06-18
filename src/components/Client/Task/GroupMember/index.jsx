@@ -11,7 +11,8 @@ GroupMember.propTypes = {
 
 };
 
-function GroupMember({onMembers,defaultMembers=[],listMembersForTask,addMember=false,maxCount=4,sizeAvatar='default'}) {
+function GroupMember({onMembers,defaultMembers=[],selectLimit,listMembersForTask,addMember=false,maxCount=4,sizeAvatar='default'}) {
+   /// console.log('Testing:',listMembersForTask)
     const [openSelectMember, setOpenSelectMember] = useState(false)
     const listDefaultColors=['#721e1e',
         '#da7e14',
@@ -35,7 +36,7 @@ function GroupMember({onMembers,defaultMembers=[],listMembersForTask,addMember=f
                 {
                   !!defaultMembers &&  defaultMembers.map((item)=> (
                         <Tooltip title={`${item.first_name} ${item.last_name}`} placement="top" key={item.id}>
-                            <AvatarCustom avatar={item.avatar} lastName={item.last_name} />
+                            <AvatarCustom avatar={item.avatar_url} lastName={item.last_name} size={sizeAvatar} />
                             {/*<Avatar src={item.avatar}*/}
                             {/*    style={{*/}
                             {/*        backgroundColor: '#87d068',*/}
@@ -52,7 +53,7 @@ function GroupMember({onMembers,defaultMembers=[],listMembersForTask,addMember=f
                     <button className='add-member' onClick={()=>setOpenSelectMember(true)}><FaPlus/></button>
                 )
             }
-            <SearchSelectModal title='Chọn Thành Viên'  listOptions={listMembersForTask}
+            <SearchSelectModal title='Chọn Thành Viên'  listOptions={listMembersForTask} type='event' selectLimit={selectLimit}
                                onSubmit={onMembers}            open={openSelectMember} onClose={setOpenSelectMember}/>
         </div>
     );

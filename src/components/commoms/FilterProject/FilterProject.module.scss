@@ -2,46 +2,92 @@
   font-weight: 450;
   display: flex;
   align-items: center;
-  .icon{
+
+  .icon {
     font-weight: 200;
     color: #81807f;
     font-size: var(--14px);
     margin-right: 0.5rem;
   }
 }
-.list-sub-item-search{
+
+.list-sub-item-search {
   display: flex;
   height: 3rem;
   align-items: center;
   padding-left: 0.5rem;
 }
-.list-sub-item{
+
+.list-sub-item {
   display: flex;
   flex-direction: column;
-    padding-left: 0.5rem;
-  label{
+  padding-left: 0.5rem;
+
+  label {
     height: 2rem;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-inline-start:0!important;
+    margin-inline-start: 0 !important;
   }
-  .filter-select{
+
+  .filter-select {
     height: 2rem;
     margin: 0.4rem 0;
     width: 20rem !important;
   }
-    .filter-option{
-      height: 2.4rem;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      margin-inline-start:0!important;
-    }
 
+  .filter-option {
+    height: 2.4rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-inline-start: 0 !important;
+  }
 
 
 }
-.filter-select-member{
+
+.filter-select-member {
   height: 3rem;
+}
+
+.filter-btn {
+  height: 2rem;
+  background-color: var(--light);
+  padding: 1rem;
+  border-radius: var(--task-border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-right: 1.4rem;
+
+  .filter-project {
+
+    .amount {
+      font-size: var(--12px);
+      background-color: var(--negativeSecondary);
+      width: 1rem;
+      margin-left: 0.3rem;
+      padding: 0.3rem;
+      font-weight: 550;
+      border-radius: 45%;
+      color: var(--orange);
+    }
+  }
+}
+.btn-clear-filter{
+  height: 1.9rem;
+  border-radius: var(--task-border-radius);
+  background-color: var(--light);
+  font-weight: bold;
+  padding: 0 0.8rem;
+  border: 1px solid var(--gray60-color);
+  &:hover{
+    cursor: pointer;
+    color: white;
+    background-color:var(--red);
+
+  }
 }

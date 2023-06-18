@@ -83,6 +83,12 @@ $spacing: 0.5rem;
 
       .sprint-time {
         margin-left: $spacing;
+        &.over{
+          background-color: var(--negativeSecondary);
+          color: var(--red);
+          padding: 0.2rem 0.3rem;
+          border-radius: 0.2rem;
+        }
       }
       .total-task{
         font-size: var(--14px);
@@ -101,47 +107,47 @@ $spacing: 0.5rem;
         display: flex;
         align-items: center;
         justify-content: space-around;
-        .status-column-1  {
+        .status-1  {
           @include dot;
           color: #a9a8a8;
           background-color: #faf9f9;
         }
-        .status-column-2  {
+        .status-2  {
           @include dot;
           color: #fa8c16;
           background-color: rgba(250,140,22,.12);
 
         }
-        .status-column-3 {
+        .status-3 {
           @include dot;
           color: #3ab67b;
           background-color: #56ca7629;
 
         }
-        .status-column-4 {
+        .status-4 {
           @include dot;
           color: #18baff;
           background-color: rgba(24,186,255,.12);
 
         }
-        .status-column-5  {
+        .status-5  {
           @include dot;
           color: #e94040;
           background-color: rgba(233, 64, 64, .12);
 
         }
-        .status-column-6 {
+        .status-6 {
           @include dot;
           color: #760ae7;
           background-color: rgba(115,59,238,0.12);
 
         }
-        .status-column-7  {
+        .status-7  {
           @include dot;
           color: #43f5f5;
           background-color: rgba(54,245,229,0.12);
         }
-        .status-column-8  {
+        .status-8  {
           @include dot;
           color: #f326d0;
           background-color: rgba(219,37,239,0.12);
@@ -206,7 +212,43 @@ $spacing: 0.5rem;
   }
 
 }
+.notify-complete-sprint{
 
+  .header-complete-sprint{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10rem;
+    .info-title{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      .icon{
+        font-size: 6rem;
+        color: var(--yellow);
+      }
+      .title{
+        font-size: var(--20px);
+        font-weight: 700;
+        color: var(--primary-color-btn);
+      }
+    }
+  }
+
+  .footer-complete-sprint{
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem ;
+    .btn-complete{
+      @include btn-ok;
+      margin-right: 1rem;
+    }
+    .btn-cancel{
+      @include btn-cancel;
+    }
+  }
+}
 @keyframes rotate {
   0% {
     transform: rotate(0deg);

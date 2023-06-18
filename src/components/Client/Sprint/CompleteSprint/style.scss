@@ -1,0 +1,39 @@
+.content-complete-sprint{
+  padding: 1rem 2rem;
+  .title{
+    display: flex;
+    align-items: center;
+    font-size: var(--16px);
+    color: var(--bs-info);
+    .icon{
+      margin-right: 0.4rem;
+    }
+  }
+  .statistics{
+    padding: 0.5rem 1rem;
+    .statistic-item{
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      font-size: var(--14px);
+      line-height:1.8rem;
+      .icon-statistic-item{
+        margin-right: 0.3rem;
+        font-size: 0.6rem;
+
+        color: var(--red);
+      }
+      .result-statistic-item{
+        margin-left: 0.5rem;
+        font-weight: 700;
+      }
+    }
+  }
+  .description{
+    font-weight: 450;
+    font-size: var(--14px);
+    font-style: italic;
+    line-height:1.5rem;
+  }
+
+}

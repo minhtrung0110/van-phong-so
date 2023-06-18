@@ -5,7 +5,7 @@ import {FaEllipsisH, FaExclamationTriangle, FaPlus, FaTimes} from "react-icons/f
 import {Button, ButtonGroup} from "react-bootstrap";
 import {cloneDeep} from "lodash";
 import {mapOrder} from "~/utils/sorts";
-import {Dropdown, Input, Form, Modal} from "antd";
+import {Dropdown, Input, Form, Modal, message} from "antd";
 import Card from "~/components/Client/Task/Card/TaskItem";
 import TaskItem from "~/components/Client/Task/Card/TaskItem";
 import TextArea from "antd/es/input/TextArea";
@@ -14,23 +14,27 @@ import DetailTask from "~/components/Client/Task/DetailTask";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {useSelector} from "react-redux";
 import { projectSelector} from "~/redux/selectors/project/projectSelector";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {createTask} from "~/api/Client/Task/taskAPI";
 
 
-function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdateTask}) {
-    // console.log(column )
+function Column({sprint,column,onResetData, onCardDrop,members, onUpdateColumn,onDeleteTask,onUpdateTask,permission}) {
+   // console.log('Permission Column:',permission)
     const [showConfirmModal, setShowConfirmModal] = useState(false)
-    const [columnTitle, setColumnTitle] = useState('')
+    const [columnTitle, setColumnTitle] = useState(column.name)
     const [isAddCard, setIsAddCard] = useState(false)
+    const [messageApi, contextHolder] = message.useMessage();
     const [valueNewCard, setValueNewCard] = useState('')
     const [isOpenDetailTask,setIsOpenDetailTask]=useState(false)
     const [taskUpdate, setTaskUpdate] = useState({})
     const project=useSelector(projectSelector)
-    console.log(project)
+    const userLogin=useSelector(getUserSelector)
+  //  console.log(project)
     const newCardRef = useRef()
     useEffect(() => {
-        setColumnTitle(column.title)
-    }, [column.title])
-    const cards = column.cards;//mapOrder(column.cards, column.cardOrder, 'id')
+        setColumnTitle(column.name)
+    }, [column.name])
+    const cards = column.tasks;//mapOrder(column.cards, column.cardOrder, 'id')
     const handleRemoveColumn = () => {
             const newColumn = {
                 ...column,
@@ -51,44 +55,79 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
         onUpdateColumn(newColumn)
 
     }
-    const handleAddCard = () => {
+    const handleAddCard = async () => {
+
+        const length=column.tasks.length;
+        const newValueSortTask=length>0?column.tasks[length-1].sort:1
         const newCardToAdd = {
-            id: Math.random().toString(36).substr(2, 5),
-            boardId: column.boardId,
-            columnId: column.id,
+            sprint_id: sprint.id,
+            project_id: sprint.project_id,
+            board_column_id: column.id,
+            assignee_employee_id: null,
+            report_employee_id: userLogin.id,
             title: valueNewCard,
-            description: '',
-            startTime:'01/10/2022',
-            endTime:'31/12/2022',
-            priority:'none',
-            members:[],
-            todoList:[],
-            fileList:[],
-            comments:[],
+            start_time: new Date(),
+            end_time:   new Date(),
+            description: "",
+            priority: 4,
+            subtasks: [],
+            attachments: [],
+            comments: [],
+            estimate_point: 3,
+            status: 1,
+            sort: newValueSortTask+1,
         }
-        let newColumn = cloneDeep(column)
-        newColumn.cards.push(newCardToAdd)
-        newColumn.cardOrder.push(newCardToAdd.id)
-        // truyền lên board Content
-        onUpdateColumn(newColumn)
+        console.log(newCardToAdd)
+        const result = await createTask(newCardToAdd)
+        if (result.status === 1) {
+            let newColumn = cloneDeep(column)
+            newColumn.tasks.push(newCardToAdd)
+            onResetData(Math.random())
+            /// newColumn.cardOrder.push(newCardToAdd.id)
+            // truyền lên board Content
+            onUpdateColumn(newColumn)
+            // clear up
+            setValueNewCard('')
+            setIsAddCard(false)
+           // onResetData(Math.random() )
+            // onCreateTask(newCardToAdd)
+        } else {
+            messageApi.open({
+                type: 'error',
+                message: result.message,
+                duration: 1.3,
+            })
+            setValueNewCard('')
+            setIsAddCard(false)
 
-        // clear up
-        setValueNewCard('')
-        setIsAddCard(false)
-
+        }
     }
-    const handleDuplicateTask = (task) =>{
-        const taskDuplicate = {
-          ...task,
-            id: Math.random().toString(36).substr(2, 5),
+    const handleDuplicateTask = async (task) => {
+        const length = column.tasks.length;
+        const newValueSortTask = column.tasks[length - 1].sort
+        //console.log('Sao chep card:',length,column.tasks,{...task,sort: newValueSortTask+1,report_employee_id: userLogin.id,})
+        const newCardToAdd={...task,sort: newValueSortTask+1,report_employee_id: userLogin.id,}
+        const result = await createTask(newCardToAdd)
+        if (result.status === 1) {
+            let newColumn = cloneDeep(column)
+            newColumn.tasks.push(newCardToAdd)
+            /// newColumn.cardOrder.push(newCardToAdd.id)
+            // truyền lên board Content
+            onUpdateColumn(newColumn)
+            // clear up
+            setValueNewCard('')
+            setIsAddCard(false)
+            // onResetData(Math.random() )
+            // onCreateTask(newCardToAdd)
+        } else {
+            messageApi.open({
+                type: 'error',
+                message: result.message,
+                duration: 1.3,
+            })
+            setValueNewCard('')
+            setIsAddCard(false)
         }
-        let newColumn = cloneDeep(column)
-        newColumn.cards.push(taskDuplicate)
-        newColumn.cardOrder.push(taskDuplicate.id)
-        // truyền lên board Content
-        onUpdateColumn(newColumn)
-
-
     }
     const items = [
         {
@@ -142,6 +181,10 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
     const handleCloseDetailTask=() => {
         setIsOpenDetailTask(false)
         onUpdateTask(taskUpdate)
+    }
+    const handleDeleteTask=(id) => {
+        setIsOpenDetailTask(false)
+        onDeleteTask(id)
     }
     return (
         <div className="column">
@@ -204,9 +247,9 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
                     dropPlaceholderAnimationDuration={200}
                 >
                     {
-                        !!column.cards && column.cards.map((item, index) => (
+                        !!column.tasks && column.tasks.map((item, index) => (
                             <Draggable key={index}>
-                                <TaskItem task={item} onShowDetail={handleShowDetailTask}/>
+                                <TaskItem task={item} showDetail={true} onShowDetail={handleShowDetailTask} permission={permission} />
                             </Draggable>
 
                         ))
@@ -237,15 +280,15 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
                     </div>
                 )
             }
-            {
-                !isAddCard && (
+
                     <footer className='footer-column'>
+                        {
+                        (permission.createTask && !isAddCard) && (
                       <div className='add-card-task'  onClick={() => setIsAddCard(true)}>
                           <FaPlus className='footer-icon'/> Thêm Công Việc
-                      </div>
+                      </div>)}
                     </footer>
-                )
-            }
+
 
             {/*<ConfirmModal*/}
             {/*    show={showConfirmModal}*/}
@@ -262,7 +305,8 @@ function Column({sprint,column, onCardDrop, onUpdateColumn,onDeleteTask,onUpdate
                 destroyOnClose={true}
                // afterClose={()=>handleUpdateTask}
             >
-              <DetailTask isOpen={isOpenDetailTask} listMembers={project.listMembers} sprint={sprint} onDeleteTask={onDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
+              <DetailTask isOpen={isOpenDetailTask} column={column}   listMembers={members} sprint={sprint}
+                          onDeleteTask={handleDeleteTask} onUpdateTask={setTaskUpdate} onDuplicate={handleDuplicateTask}/>
             </Modal>
             <ConfirmModal open={showConfirmModal} title='Xác Nhận Xóa'
                           content={<div dangerouslySetInnerHTML={{__html:`Bạn Có Thực Sự Muốn Xóa Cột <strong>${columnTitle}</strong> Này ? `}} />}

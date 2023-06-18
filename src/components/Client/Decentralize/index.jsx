@@ -6,21 +6,39 @@ import {FaPen,FaTimesCircle} from "react-icons/fa";
 import {useDispatch} from "react-redux";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
 import {setDecentralize,setIsEdit} from "~/redux/reducer/decentralize/decentralizeReducer";
+import {getDepartmentById} from "~/api/Client/Department/departmentAPI";
+import {setDepartment} from "~/redux/reducer/department/departmentReducer";
+import {message} from "antd";
+import {getRoleById} from "~/api/Client/Role/roleAPI";
 
 
 DecentralizeTable.propTypes = {};
 
-function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
+function DecentralizeTable({deleteItem,editItem,tableHeader, tableBody,onDelete,onUpdate}) {
     const [showPopupDelete, setShowPopupDelete] = useState({
         department_id: null,
         name:'',
         show: false,
     });
+    const [messageApi, contextHolder] = message.useMessage();
     const dispatch = useDispatch()
-    const handleEditDecentralize = (e,item) => {
-        e.stopPropagation();
-        dispatch(setIsEdit(true));
-        dispatch(setDecentralize(item));
+    const handleEditDecentralize = async (item) => {
+        const data = await getRoleById(item.id);
+        console.log('Data nhận :', data)
+        if (Object.keys(data).length > 0) {
+            dispatch(setIsEdit(true));
+            dispatch(setDecentralize({...data.data,id: item.id}));
+        } else if (data === 401) {
+            //   //  Notiflix.Block.remove('#root');
+        } else {
+            //    // Notiflix.Block.remove('#root');
+            messageApi.open({
+                type: 'error',
+                content: 'Cập nhật thất bại',
+                duration: 1.3,
+            });
+        }
+
     };
     const handleConfirmDelete=(id)=>{
         setShowPopupDelete({...showPopupDelete, show: false});
@@ -30,7 +48,7 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
 
     const showConfirmDeleteDecentralize = (e, item) => {
         e.stopPropagation();
-        setShowPopupDelete({department_id: item.id,name:item.name, show: true});
+        setShowPopupDelete({department_id: item.id,name:item.title, show: true});
     };
     const renderTableBody = () => {
         return tableBody.map((item) => {
@@ -38,38 +56,47 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
                 <tr key={item.id} className="row-data c-pointer row-item"
 
                 >
+                    {contextHolder}
 
                     <td className="col-txt">{item.id}</td>
 
                     <td className="col-txt">
-                        {item.name}
+                        {item.title}
                     </td>
                     <td className={'text-status'}>
                         <p
                             className={` ${
-                                item.status === 1 ? 'active' : 'negative '
+                                item.status === true ? 'active' : 'negative '
                             }`}
                         >
-                            {item.status === 1 ? 'Đang Hoạt Động' : 'Tạm Dừng'}
+                            {item.status === true ? 'Đang Hoạt Động' : 'Vô Hiệu'}
                         </p>
                     </td>
                     <td className="col-action">
-                        <button
-                            id="edit-department"
-                            onClick={(e) => handleEditDecentralize(e,item)}
-                            className=" btn-edit"
-                        >
-                            <FaPen className="icon-edit"/>
-                        </button>
-                        <button
-                            id="disabled-user"
-                            onClick={(e) => {
-                                showConfirmDeleteDecentralize(e, item);
-                            }}
-                            className="btn-delete"
-                        >
-                            <FaTimesCircle className="icon-delete"/>
-                        </button>
+                        {
+                            editItem && (
+                                <button
+                                    id="edit-department"
+                                    onClick={() => handleEditDecentralize(item)}
+                                    className=" btn-edit"
+                                >
+                                    <FaPen className="icon-edit"/>
+                                </button>
+                            )
+                        }
+                        {
+                            deleteItem && (
+                                <button
+                                    id="disabled-user"
+                                    onClick={(e) => {
+                                        showConfirmDeleteDecentralize(e, item);
+                                    }}
+                                    className="btn-delete"
+                                >
+                                    <FaTimesCircle className="icon-delete"/>
+                                </button>
+                            )
+                        }
 
                     </td>
                 </tr>
@@ -82,9 +109,9 @@ function DecentralizeTable({tableHeader, tableBody,onDelete,onUpdate}) {
             <TableLayout tableHeader={tableHeader} tableBody={renderTableBody()}/>
 
 
-            <ConfirmModal title="Xác Nhận Xóa"
+            <ConfirmModal title="Xác Nhận Vô Hiệu Hóa Quyền"
                           open={showPopupDelete.show}
-                          content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Xóa Quyền <strong>${showPopupDelete.name}</strong>  ? `}} />}
+                          content={<div dangerouslySetInnerHTML={{__html: `Bạn Có Chắc Chắn Muốn Vô Hiệu Hóa Quyền <strong>${showPopupDelete.name}</strong>  ? `}} />}
                           textOK="Xóa"
                           textCancel="Hủy"
                           onOK={() => handleConfirmDelete(showPopupDelete.department_id)}

@@ -2,54 +2,57 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './FilterProject.module.scss'
 import classNames from "classnames/bind";
-import {Dropdown, Checkbox, Select} from "antd";
+import {Dropdown, Checkbox, Select, Radio} from "antd";
 import {FaFilter, FaPager, FaRegFlag, FaSearch, FaSignOutAlt, FaUser} from "react-icons/fa";
 import GroupMember from "~/components/Client/Task/GroupMember";
 import {config} from "~/config";
 import Menu from "~/components/commoms/Popper/Menu";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
+import {useSelector} from "react-redux";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
+import {isEmpty} from "lodash";
 
-FilterProject.propTypes = {
-
-};
+FilterProject.propTypes = {};
 const cx = classNames.bind(styles)
 
-function FilterProject({listmember = [], onFilter,className}) {
+function FilterProject({listmember = [], onFilter, className}) {
     const [checkedListMember, setCheckedListMember] = useState([]);
     const [checkedListDuration, setCheckedListDuration] = useState([]);
     const [checkedListPriority, setCheckedListPriority] = useState([]);
     const [listMemberMore, setListMemberMore] = useState([]);
+    const [amountFilter, setAmountFilter] = useState(0);
     const [searchValue, setSearchValue] = useState('')
+    const userLogin=useSelector(getUserSelector)
     const optionsSelectMember = listmember.map((d) => ({
         value: d.id,
         label: `${d.first_name} ${d.last_name}`,
     }))
     const optionsMember = [
-        {value: 'none-member', label: 'Không được giao'},
-        {value: 'myself', label: 'Giao cho tôi'},
+        {value: 'no_assign', label: 'Không được giao'},
+        {value: !isEmpty(userLogin)?userLogin.id:'myself', label: 'Giao cho tôi'},
 
     ];
     const optionsDueDay = [
-        {value: 'none-duration', label: 'Không có'},
-        {value: 'out-of-date', label: 'Quá hạn'},
-        {value: 'near-3', label: 'Gần đến hạn (3 ngày) '},
-        {value: 'near-7', label: 'Gần đến hạn (7 ngày) '},
-        {value: 'near-10', label: 'Gần đến hạn (10 ngày) '},
+        {value: 'none_duration_complete', label: 'Không có'},
+        {value: 'is_duration_complete', label: 'Quá hạn'},
+        {value: 3, label: 'Gần đến hạn (3 ngày) '},
+        {value: 7, label: 'Gần đến hạn (7 ngày) '},
+        {value: 10, label: 'Gần đến hạn (10 ngày) '},
     ];
     const optionsPriority = [
-        {value: 'none-priority', label: 'Không ưu tiên'},
-        {value: 'highly', label: 'Ưu tiên cao'},
-        {value: 'middle', label: 'Ưu tiên trung bình '},
-        {value: 'low', label: 'Ưu tiên thấp '},
+        {value: 4, label: 'Không ưu tiên'},
+        {value: 1, label: 'Ưu tiên cao'},
+        {value: 2, label: 'Ưu tiên trung bình '},
+        {value: 3, label: 'Ưu tiên thấp '},
     ];
-    const onChangeDuration = (list) => {
-        setCheckedListDuration(list)
+    const onChangeDuration = ({ target: { value }}) => {
+        setCheckedListDuration(value)
     };
     const onChangePriority = (list) => {
         setCheckedListPriority(list)
     };
-    const onChangeMember = (list) => {
-        setCheckedListMember(list)
+    const onChangeMember = ({ target: { value }}) => {
+        setCheckedListMember(value)
     };
     const onSearch = (value) => {
         setSearchValue(value)
@@ -60,21 +63,29 @@ function FilterProject({listmember = [], onFilter,className}) {
             width: '100%',
         },
         listmember,
-        options:optionsSelectMember,
+        options: optionsSelectMember,
         onChange: (newValue) => {
             setListMemberMore(newValue);
         },
         placeholder: 'Chọn thành viên...',
         maxTagCount: 'responsive',
     };
-
+    const handleClearFilter=()=>{
+        if(searchValue!=='' || checkedListPriority.length>0 || checkedListMember.length>0 || !!checkedListDuration){
+            setSearchValue('')
+            setCheckedListDuration([])
+            setCheckedListMember([])
+            setCheckedListPriority([])
+            setListMemberMore([])
+        }
+    }
     const itemsFilter = [
         {
             id: '1',
             label: 'Tìm kiếm',
             content: (
                 <div className={cx('list-sub-item-search')}>
-                    <SearchHidenButton className='search'  width='20rem' height='2rem'  searchButtonText={<FaSearch/>}
+                    <SearchHidenButton className='search' width='20rem' height='2rem' searchButtonText={<FaSearch/>}
                                        onSearch={onSearch}
                     />
                 </div>
@@ -85,7 +96,7 @@ function FilterProject({listmember = [], onFilter,className}) {
             label: 'Thành Viên',
             content: (
                 <div className={cx('list-sub-item')}>
-                    <Checkbox.Group className={cx('list-sub-item')}
+                    <Radio.Group className={cx('list-sub-item')}
                                     options={optionsMember}
                                     value={checkedListMember}
                                     onChange={onChangeMember}/>
@@ -99,7 +110,7 @@ function FilterProject({listmember = [], onFilter,className}) {
             id: '3',
             label: 'Thời gian hoàn thành',
             content: (
-                <Checkbox.Group className={cx('list-sub-item')}
+                <Radio.Group className={cx('list-sub-item')}
                                 options={optionsDueDay}
                                 value={checkedListDuration}
                                 name='duration'
@@ -117,25 +128,38 @@ function FilterProject({listmember = [], onFilter,className}) {
                                 value={checkedListPriority}
                                 onChange={onChangePriority}/>
             )
+        },
+        {
+            id: '5',
+            label: null,
+            content: (
+              <button className={cx('btn-clear-filter')} onClick={handleClearFilter}>Dọn dẹp bộ lọc</button>
+            )
         }
     ]
+    console.log('Kiểm tra isEmpty',isEmpty(checkedListDuration),checkedListDuration)
     useEffect(() => {
-        onFilter({
-            search:searchValue,
-            member: checkedListMember.concat(listMemberMore),
+        const filter = {
+            search: searchValue,
+            member: Array.isArray(checkedListMember)?checkedListMember.concat(listMemberMore):checkedListMember,
             duration: checkedListDuration,
             priority: checkedListPriority
-        })
-    }, [searchValue,checkedListMember,listMemberMore, checkedListDuration, checkedListPriority])
+        }
+        setAmountFilter(Object.values(filter).reduce((acc, item) => {
+            if (item.length===0) return acc
+            else return acc+1
+        }, 0))
+        onFilter(filter)
+
+    }, [searchValue, checkedListMember, listMemberMore, checkedListDuration, checkedListPriority])
     return (
-        <div>
+        <div className={cx('filter-btn')}>
             <Menu items={itemsFilter} hideOnClick={false} delay={400}>
-                <a onClick={(e) => e.preventDefault()} className={className}>
-                    <div className={cx('filter-project')}>
-                        <FaFilter className={cx('icon')}/>
-                        Bộ lọc
-                    </div>
-                </a>
+                <div className={cx('filter-project')}>
+                    <FaFilter className={cx('icon')}/>
+                    <span className={cx('title')}>  Bộ lọc</span>
+                    <span className={cx('amount')}>{amountFilter}</span>
+                </div>
             </Menu>
         </div>
     );

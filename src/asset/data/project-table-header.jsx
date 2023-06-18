@@ -24,9 +24,17 @@ export const project_table_header = [
         isSort: true,
         cursor: true,
     },
-
     {
         id: 4,
+        name: "Trạng Thái",
+        isSortAsc: false,
+        isSortDesc: false,
+        isSort: true,
+        cursor: true,
+    },
+
+    {
+        id: 5,
         name: "Hành Động",
         isSortAsc: false,
         isSortDesc: false,

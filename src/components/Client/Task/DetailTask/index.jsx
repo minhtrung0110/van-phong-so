@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, DatePicker, Dropdown, Input, InputNumber, Select, Tooltip, Upload} from "antd";
+import {DatePicker, Dropdown, Input, InputNumber, Select, Upload} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {detailTaskSelector} from "~/redux/selectors/project/projectSelector";
 import {
     FaCaretDown,
     FaCheckCircle,
     FaDesktop, FaEllipsisH,
-    FaFemale,
-    FaMale,
     FaPaperclip,
-    FaPlus,
     FaRegFlag
 } from "react-icons/fa";
 import './Detail.scss'
@@ -18,38 +15,32 @@ import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
 import ToDoList from "~/components/commoms/ToDoList";
 import {isEmpty} from "lodash";
-import {
-    getListNameColumn,
-    getListStatusProjecTask,
-    getListStatusTaskProject,
-    getNameColumn,
-    getStatusTaskProject
+import {    getListStatusTaskProject,getStatusTaskProject
 } from "~/utils/sorts";
-import {initialData} from "~/asset/data/initalDataTask";
 import {listColorStateDefaults, listPriority} from "~/asset/data/defaullt_data_task";
-import SearchSelectModal from "~/components/Client/Task/GroupMember/SearchSelectModal";
 import GroupMember from "~/components/Client/Task/GroupMember";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
-import {setDeleteTask} from "~/redux/reducer/project/projectReducer";
+import {getSubTask} from "~/api/Client/Task/taskAPI";
+import ToDoListSkeleton from "~/components/commoms/Skeleton/ToDoList/ToDoListSkeleton";
 
 DetailTask.propTypes = {};
 
-function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onDuplicate}) {
-
+function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTask, onDuplicate}) {
     const data = useSelector(detailTaskSelector)
+   /// console.log('Priority',data.priority);
     const [errorDescription, setErrorDescription] = useState('');
     const [description,setDescription]=useState(data.description);
-    const [todoList,setTodoList] = useState(data.todoList)
+    const [todoList,setTodoList] = useState([]);
     const [priority, setPriority] = useState(data.priority);
-    const [status, setStatus] = useState(getStatusTaskProject(sprint, data.columnId))
+    const [status, setStatus] = useState(getStatusTaskProject(sprint, data.board_column_id))
     const [listFile, setListFile] = useState(data.fileList)
-    const [point, setPoint] = useState(data.point)
+    const [point, setPoint] = useState(data.estimate_point)
     const [taskTitle, setTaskTitle] = useState(data.title)
-
     const [rangeValueTime, setRangeValueTime] = useState(
-        [dayjs(data.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(data.endTime, "DD/MM/YYYY HH:mm:ss")]);
-    const [members, setMembers] = useState(data.members)
-    const dispatch = useDispatch()
+        [dayjs(data.start_time), dayjs(data.start_time)]);
+    const [members, setMembers] = useState([data.assignee_employee])
+
+    const [loadingSubTask,setLoadingSubTask] = useState(true)
     const {RangePicker} = DatePicker;
     // console.log(priority)
     //  useEffect(()=>{
@@ -98,13 +89,14 @@ function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onD
     };
 
     const listState = getListStatusTaskProject(sprint)
+
     const listStateRender = listState.map((item, index) => ({
         label: item.label,
         value: item.id,
-        color: listColorStateDefaults[index].color,
-        backgroundColor: listColorStateDefaults[index].backgroundColor
+        color: listColorStateDefaults[item.id-1].color,
+        backgroundColor: listColorStateDefaults[item.id-1].backgroundColor
     }))
-    // console.log(listStateRender)
+   // console.log(listColorStateDefaults[9].color)
     // console.log('Status: ',status)
     const fileList = [
         {
@@ -170,46 +162,90 @@ function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onD
         if (e.key === 'remove-task') {
             // xóa project
             setShowConfirmModal(true);
-
-
         } else if (e.key === 'duplicate') {
             // hiện tai dang duplicate dựa trên task chưa onChange
-            onDuplicate(data)
-        } else {
-
+            const newCardToAdd = {
+                sprint_id: sprint.id,
+                project_id: sprint.project_id,
+                board_column_id: status.value,
+                assignee_employee_id: data.assignee_employee_id,
+                title: taskTitle,
+                start_time: rangeValueTime[0],
+                end_time: rangeValueTime[1],
+                description:description,
+                priority: priority,
+                comments: [],
+                estimate_point:point,
+            }
+            onDuplicate(newCardToAdd)
         }
     };
     const handleRemoveTask = () => {
-
-        dispatch(setDeleteTask({id: data.id, sprintId: sprint.id, columnId: data.columnId, boardId: data.boardId}))
+        onDeleteTask(data.id)
         setShowConfirmModal(false)
     }
     const handleChangeStatus = (value) => {
         setStatus({...status, value})
-        // post API Update Task
-        console.log('Post API :', {...data, columnId: value})
-        //onUpdateTask({...data, columnId:value})
+        // // post API Update Task
+        // console.log('Post API :', {...data, columnId: value})
+        // //onUpdateTask({...data, columnId:value})
     }
     useEffect(() => {
         // post API Update Task
         // console.log('Open: ',isOpen)
-        onUpdateTask({
-            ...data,
+        const updateTask=isEmpty(members)?{
+            id:data.id,
+            board_column_id: + status.value,
+            description: description,
+            estimate_point: point,
+            priority: priority,
+            sprint_id: sprint.id,
             title: taskTitle,
-            columnId: status.value,
-            priority:priority,
-            description,
-            todoList,
-            fileList:todoList,
-            members,
-            point,
-            startTime: dayjs(rangeValueTime[0], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
-            , endTime: dayjs(rangeValueTime[1], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
-        })
+           // sort:1,
+        }: {
+            id:data.id,
+            assignee_employee_id:members[0].id,
+            board_column_id: + status.value,
+            description: description,
+            estimate_point: point,
+            priority: priority,
+            sprint_id: sprint.id,
+            title: taskTitle,
+          //  sort:1,
+        }
+            onUpdateTask(updateTask)
+        // onUpdateTask({
+        //     ...data,
+        //     title: taskTitle,
+        //     columnId: status.value,
+        //     priority:priority,
+        //     description,
+        //     todoList,
+        //     fileList:todoList,
+        //     members,
+        //     point,
+        //     startTime: dayjs(rangeValueTime[0], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
+        //     , endTime: dayjs(rangeValueTime[1], "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
+        // })
 
     }, [taskTitle,status,priority,rangeValueTime,point,description,listFile,todoList,members])
     // DEBUG HERE
     // console.log(status)
+    // CallAPI
+    useEffect(()=>{
+            const fetchDataSubTask=async (id) => {
+                setLoadingSubTask(true)
+                const response = await getSubTask(id)
+             //   console.log(response)
+                if (response.status ===1){
+                    setTodoList(response.data)
+                }else {
+
+                }
+                setLoadingSubTask(false)
+            }
+            fetchDataSubTask(data.id)
+    },[])
     return (
         <div className='detail-task'>
             <div className='header'>
@@ -298,7 +334,8 @@ function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onD
                             onChange={(e) => setPriority(e)}
                         >
                             {listPriority.map((item) => (
-                                <Select.Option key={item.value}
+                                <Select.Option key={item.id}
+                                               value={item.value}
                                                style={{
                                                    marginTop: '0.2rem',
                                                    backgroundColor: item.backgroundColor,
@@ -316,12 +353,12 @@ function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onD
                 <div className='gr-02'>
                     <div className='members'>
                         <p>Thực Hiện :</p>
-                        <GroupMember onMembers={setMembers} defaultMembers={members} addMember={true} listMembersForTask={listMembers}/>
+                        <GroupMember onMembers={setMembers} selectLimit={1} defaultMembers={members} addMember={true} listMembersForTask={listMembers}/>
 
                     </div>
                     <div className='notification'>
                         <p>Điểm :</p>
-                        <InputNumber min={1} max={20} defaultValue={3} value={point} onChange={e=>setPoint(e.target.value)}/>
+                        <InputNumber min={1} max={20} defaultValue={point} onChange={setPoint}  />
                     </div>
 
                 </div>
@@ -331,8 +368,12 @@ function DetailTask({sprint,listMembers, isOpen, onUpdateTask, onDeleteTask, onD
                                   defaultValues={data.description}/>
                 </div>
                 <div className='todo-list'>
+                    {
+                        !!loadingSubTask?(<ToDoListSkeleton/>):(
+                            <ToDoList list={todoList} taskId={data.id} onUpdate={setTodoList}/>
+                        )
+                    }
 
-                    <ToDoList list={todoList} onUpdate={setTodoList}/>
                 </div>
                 <div className='attach-file'>
                     <Upload

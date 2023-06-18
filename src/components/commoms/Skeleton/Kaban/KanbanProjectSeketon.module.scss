@@ -1,0 +1,51 @@
+.page-kaban-item{
+  background-color: #fff;
+  border-radius:var(--border-radius);
+  padding: 1rem 2.5rem;
+  margin: var(--pd-content);
+  .title{
+    height: 3rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .text{
+      width: 20rem;
+    }
+  }
+  .header{
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 4rem;
+    margin-bottom: 2rem;
+  }
+  .content{
+    display: flex;
+    justify-content: space-around;
+    .column{
+      width:15rem;
+      border: 1px solid #eee;
+      display: flex;
+
+      flex-direction:column;
+      align-items: center;
+
+
+    }
+    .column-end{
+      height:30rem;
+    }
+    .task-item {
+
+      background-color: white;
+      padding: var(--gap);
+      min-height: calc(5 * var(--gap));
+      border-radius: var(--task-border-radius);
+      margin-bottom: var(--gap);
+      font-size: var(--fs-task-pg);
+    }
+  }
+
+}
+

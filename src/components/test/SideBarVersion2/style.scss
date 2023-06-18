@@ -11,9 +11,34 @@
   overflow-x: hidden;
   scrollbar-width: none;
   box-shadow: 1px 1px 2px 3px rgba(204, 202, 202, 0.2);
+  .side-bar-logo{
+    height: 120px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.mini{
+      width: 80px;
+      height: 60px;
+    }
+    .img-company{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 140px;
+      height: 80px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      &.mini{
+        width: 50px;
+        height: 40px;
+      }
+    }
+  }
 
   &.hide {
     width: 80px;
+
   }
 
   .ant-menu-submenu-open .ant-menu-submenu-title {

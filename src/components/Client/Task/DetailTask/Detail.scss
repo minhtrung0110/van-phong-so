@@ -20,6 +20,7 @@
       display: flex;
       align-items: center;
       .input-title-task{
+        width: 30rem;
         background-color: inherit;
         border: none;
         cursor: pointer;
@@ -65,7 +66,7 @@
         font-weight: bold;
         margin-right: 2rem;
       }
-      .status-column-1 .ant-select-selector {
+      .status-1 .ant-select-selector {
         color: #a9a8a8;
         background-color: #faf9f9;
         .ant-select-selection-item {
@@ -73,7 +74,7 @@
           margin-left: 0.5rem;
         }
       }
-      .status-column-2 .ant-select-selector {
+      .status-2 .ant-select-selector {
         color: #fa8c16;
         background-color: rgba(250,140,22,.12);
         .ant-select-selection-item {
@@ -81,7 +82,7 @@
           margin-left: 0.5rem;
         }
       }
-      .status-column-3 .ant-select-selector {
+      .status-3 .ant-select-selector {
         color: #3ab67b;
         background-color: #56ca7629;
         .ant-select-selection-item {
@@ -89,7 +90,7 @@
           margin-left: 0.5rem;
         }
       }
-      .status-column-4 .ant-select-selector {
+      .status-4 .ant-select-selector {
         color: #18baff;
         background-color: rgba(24,186,255,.12);
         .ant-select-selection-item {
@@ -97,7 +98,7 @@
           margin-left: 0.5rem;
         }
       }
-      .status-column-5 .ant-select-selector {
+      .status-5 .ant-select-selector {
         color: #e94040;
         background-color: rgba(233, 64, 64, .12);
         .ant-select-selection-item {
@@ -105,7 +106,7 @@
           margin-left: 0.5rem;
         }
       }
-      .status-column-6 .ant-select-selector {
+      .status-6 .ant-select-selector {
         color: #760ae7;
         background-color: rgba(115,59,238,0.12);
         .ant-select-selection-item {
@@ -113,17 +114,25 @@
           margin-left: 0.5rem;
         }
       }
-      .status-column-7 .ant-select-selector {
-        color: #43f5f5;
+      .status-7 .ant-select-selector {
+        color: #25adde;
         background-color: rgba(54,245,229,0.12);
         .ant-select-selection-item {
           font-weight: bold;
           margin-left: 0.5rem;
         }
       }
-      .status-column-8 .ant-select-selector {
-        color: #f326d0;
+      .status-8 .ant-select-selector {
+        color: #f326a1;
         background-color: rgba(219,37,239,0.12);
+        .ant-select-selection-item {
+          font-weight: bold;
+          margin-left: 0.5rem;
+        }
+      }
+      .status-9 .ant-select-selector {
+        color: #40d955;
+        background-color: rgba(71,255,0,0.12);
         .ant-select-selection-item {
           font-weight: bold;
           margin-left: 0.5rem;
@@ -175,7 +184,7 @@
         p {
           @include title
         }
-        .select-proiority-highly .ant-select-selector {
+        .select-proiority-1 .ant-select-selector {
           color: #e94040;
           background-color: rgba(233, 64, 64, .12);
 
@@ -186,7 +195,7 @@
 
         }
 
-        .select-proiority-low .ant-select-selector {
+        .select-proiority-3 .ant-select-selector {
           color: #18baff;
           background-color: rgba(24, 186, 255, .12);
 
@@ -197,7 +206,7 @@
 
         }
 
-        .select-proiority-middle .ant-select-selector {
+        .select-proiority-2 .ant-select-selector {
           color: #fa8c16;
           background-color: rgba(250, 140, 22, .12);
 
@@ -208,7 +217,7 @@
 
         }
 
-        .select-proiority-none .ant-select-selector {
+        .select-proiority-4 .ant-select-selector {
           color: #a9a8a8;
           background-color: #f5f7f9;
 

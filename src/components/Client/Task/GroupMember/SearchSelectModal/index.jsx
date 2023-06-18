@@ -10,11 +10,11 @@ import {isEmpty} from "lodash";
 SearchSelectModal.propTypes = {};
 const cx = classNames.bind(styles)
 
-function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], placeholder, top = '10rem'}) {
+function SearchSelectModal({open, onClose, onSubmit,selectLimit=10, title, listOptions = [],type, placeholder, top = '10rem'}) {
     const [value, setValue] = useState([]);
-    console.log(listOptions)
     const options = listOptions.map((d) => ({
-        value: d.id,
+        value: d.email,
+      //  label: type!=='event'?`${d.first_name} ${d.last_name}`:d.full_name,
         label: `${d.first_name} ${d.last_name}`,
     }))
     // calll API get Staff List
@@ -29,7 +29,7 @@ function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], pl
         options,
         defaultActiveFirstOption:true,
         onChange: (newValue) => {
-            if (newValue?.length > 1) {
+            if (newValue?.length > selectLimit) {
                 // if you want only one element :).
                 newValue.pop();
             }
@@ -40,9 +40,11 @@ function SearchSelectModal({open, onClose, onSubmit, title, listOptions = [], pl
     };
     const handleOnClose = () => {
         const listMemberChosen = value.map((id) => {
-            const item = listOptions.find((member) => id === member.id)
+            console.log('id', id)
+            const item = listOptions.find((member) => id === member.email);
             if (!isEmpty(item)) return item;
         })
+        console.log('member dc cchon',listMemberChosen)
         onSubmit(listMemberChosen);
         onClose(false)
     }

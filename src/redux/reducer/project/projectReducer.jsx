@@ -12,8 +12,11 @@ export const projectReducer = createSlice({
         isCreateProject:false,
         isAdd: false,
         isViewTimeline:false,
-        isEdit: false,
+        isEditProject: false,
         isReset:'reset-page',
+        isResetSprint:false,
+        isResetTask:false,
+        members:[],
         task: {},
     },
     reducers: {
@@ -25,6 +28,9 @@ export const projectReducer = createSlice({
         },
         setSprint: (state, action) => {
             state.sprint = action.payload;
+        },
+        setMembers: (state, action) => {
+            state.members = action.payload;
         },
         setDetailTask: (state, action) => {
             state.detailTask = action.payload;
@@ -38,8 +44,8 @@ export const projectReducer = createSlice({
         setIsCreateProject: (state, action) => {
             state.isCreateProject = action.payload;
         },
-        setIsEdit: (state, action) => {
-            state.isEdit = action.payload;
+        setIsEditProject: (state, action) => {
+            state.isEditProject = action.payload;
         },
         setTask: (state, action) => {
             state.task = action.payload;
@@ -47,12 +53,20 @@ export const projectReducer = createSlice({
         setIsReset: (state, action) => {
             state.isReset = action.payload;
         },
+        setIsResetSprint: (state, action) => {
+            state.isResetSprint = action.payload;
+        },
+        setIsResetTask: (state, action) => {
+            state.isResetTask = action.payload;
+        },
         setIsViewTimeline: (state, action) => {
             state.isViewTimeline = action.payload;
         },
     },
 });
 
-export const { setKeyProject,setIsAdd,setIsEdit, setTask,setSprint,setIsReset,setProject,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = projectReducer.actions;
+export const { setKeyProject,setIsAdd,setIsEditProject, setTask,setSprint,setIsReset,setIsResetSprint,setIsResetTask,
+    setMembers,
+    setProject,setDetailTask,setDeleteTask,setIsCreateProject,setIsViewTimeline } = projectReducer.actions;
 
 export default projectReducer.reducer;

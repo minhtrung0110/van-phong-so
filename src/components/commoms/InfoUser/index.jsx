@@ -7,21 +7,16 @@ import {Avatar, Button, Divider, Dropdown, Space} from "antd";
 import {FaExpand, FaLock, FaPager, FaSignOutAlt, FaUser} from "react-icons/fa";
 import Menu from "~/components/commoms/Popper/Menu";
 import {config} from "~/config";
-import checkErrorImage from "~/utils/validateImage";
+import checkErrorImage from "~/utils/validation";
 import AvatarCustom from "~/components/commoms/AvatarCustom";
 import './customDropdown.scss'
 import {NavLink} from "react-router-dom";
 InfoUser.propTypes = {
-    avatar: PropTypes.string,
-    firstName: PropTypes.string.isRequired,
-    lastName: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 const cx = classNames.bind(styles);
-
-function InfoUser({firstName, lastName, email, role, avatar}) {
+function InfoUser({user,onLogout}) {
     const [showImage, setShowImage] = useState(false);
     const checkImageUrl = (url) => {
         // /\.(jpeg|jpg|png|gif)\b/i.test(url);
@@ -31,6 +26,7 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
         img.onerror = () => setShowImage(false)
     }
    // checkImageUrl(avatar)
+
     const userMenu = [
         {
             icon: <FaLock/>,
@@ -51,10 +47,10 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
                   <div className={cx('info-user')}>
                       <div className={cx('title')}>Tài Khoản</div>
                       <div className={cx('info')}>
-                          <AvatarCustom avatar={avatar} lastName={lastName} size={'default'}/>
+                          <AvatarCustom avatar={user.avatar_url} lastName={user.name} size={'default'}/>
                           <div className={cx('gr')}>
-                              <span  className={cx('name')}>{`${firstName} ${lastName}`}</span>
-                              <span className={cx('role')} >{`${role} `}</span>
+                              <span  className={cx('name')}>{`${user.name}`}</span>
+                              <span className={cx('role')} >{`${user.role_title} `}</span>
                           </div>
                       </div>
 
@@ -73,11 +69,11 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
         {
             key: '3',
             label: (
-                    <NavLink className={cx('dropdown-item')} to={config.routes.logout}>
+                    <div className={cx('dropdown-item')} onClick={()=>onLogout(true)} >
                         <FaSignOutAlt className={cx('dropdown-icon')} />
                         <span className={cx('dropdown-title')}>Đăng Xuất</span>
 
-                    </NavLink>
+                    </div>
 
             ),
         },
@@ -89,15 +85,8 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
     };
     const menuStyle = {
         boxShadow: 'none',
-    };
-    //console.log('check Image',checkErrorImage(avatar))
+    }
     return (
-        // <Menu   items={ userMenu} hideOnClick={false}>
-        // <div className={cx('box-user')}>
-        //    <AvatarCustom avatar={avatar} lastName={lastName} />
-        //
-        // </div>
-        // </Menu>
         <Dropdown
             menu={{
                 items,
@@ -108,12 +97,10 @@ function InfoUser({firstName, lastName, email, role, avatar}) {
 
         >
             <div className={cx('box-user')}>
-                <AvatarCustom avatar={avatar} lastName={lastName}/>
+                <AvatarCustom avatar={user.avatar_url} lastName={user.name}/>
             </div>
         </Dropdown>
     );
 }
 
 export default InfoUser;
-
-//className={cx('')}

@@ -18,7 +18,7 @@ function SearchHidenButton({height, width,backgroundButton,searchButtonText,clas
     };
     return (
         <div className={cx('search-selection',className)}        >
-            <form onSubmit={(e)=>handleSearch()} role="search" className={cx('form-search')}
+            <form onSubmit={(e)=>handleSearch()} role="search" className={cx(`form-search`)}
                   style={{ width: width , backgroundColor:backgroundButton}}
             >
                 <label htmlFor="search" className={cx('label-search')}>Search for stuff</label>

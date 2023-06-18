@@ -10,7 +10,7 @@ import {
     FaRegBuilding,
     FaSearch
 } from "react-icons/fa";
-import FilterRadiobox from "~/components/commoms/FilterRadiobox";
+import FilterRadiobox from "~/components/commoms/FilterSelect";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
 import {Breadcrumb, Button, Modal, Tooltip} from "antd";
 import GroupTable from "~/components/Client/Group";

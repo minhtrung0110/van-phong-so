@@ -1,35 +1,20 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import styles from './FilterRadiobox.module.scss'
+import styles from './FilterSelect.module.scss'
 import classNames from "classnames/bind";
-import {Select, Input, DatePicker} from "antd";
+import {Select, Input} from "antd";
 
-FilterRadiobox.propTypes = {
+FilterSelect.propTypes = {
     width: PropTypes.string,
     height: PropTypes.string,
+    listOptions: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired,
+    onFilter:PropTypes.func.isRequired,
+    background: PropTypes.string,
 };
 const cx = classNames.bind(styles)
+function FilterSelect({listOptions=[],width, height,title,background='#0d6efd',onFilter}) {
 
-function FilterRadiobox({width, height,backGround='#0d6efd',onFilter}) {
-    const lists = [
-        {
-            id: 1,
-            label: 'Hoạt Động',
-            value: 'active',
-
-        },
-        {
-            id: 2,
-            label: 'Vô Hiệu',
-            value: 'disabled',
-        },
-        {
-            id: 3,
-            label: 'Tất Cả',
-            value: 'all',
-        },
-
-    ]
     const handleChange = (value) => {
       //  console.log(`selected ${value}`);
         onFilter(value)
@@ -44,31 +29,32 @@ function FilterRadiobox({width, height,backGround='#0d6efd',onFilter}) {
                     className={cx('filter-title')}
                     style={{
                         width: '44%',
-                        fontWeight: 'bold',
+                        fontWeight: '600',
                         color: 'white',
-                        backgroundColor:backGround,
-                        cursor: 'pointer'
+                        backgroundColor:background,
+                        cursor: 'pointer',
                     }}
                     disabled
-                    defaultValue="Trạng Thái:"
+                    defaultValue={title}
                 />
                 <Select
                     defaultValue= 'Tất Cả'
                     allowClear
                     size={"large"}
                     style={{
-                        width: 135,
+                        width: 130,
+                        fontSize:'0.8rem',
                     }}
                     dropdownStyle={{
                         padding:0,
-                        fontSize:'0.9rem',
+                        fontSize:'0.8rem',
                     }}
                     onChange={handleChange}
-                    options={lists}
+                    options={listOptions}
                     className={cx('select')}
                 >
                     {
-                        !!lists && lists.map((item)=>(
+                        !!listOptions && listOptions.map((item)=>(
                             <Select.Option key={item.id} value={item.key} className={cx('select-item')}>{item.label}</Select.Option>
                         ))
                     }
@@ -78,26 +64,4 @@ function FilterRadiobox({width, height,backGround='#0d6efd',onFilter}) {
     );
 }
 
-export default FilterRadiobox;
-//
-// const lists = [
-//     {
-//         id: 1,
-//         label: 'Quản Lý',
-//         key: 'manager',
-//     },
-//     {
-//         id: 2,
-//         label: 'Trưởng Phòng',
-//         key: 'leader',
-//     },
-//     {
-//         id: 3,
-//         label: 'Kế Toán',
-//         key: 'Accountant',
-//     },
-//     {
-//         id: 4,'Nhân Viên',
-//         key: 'staff',
-//     },
-// ]
+export default FilterSelect;

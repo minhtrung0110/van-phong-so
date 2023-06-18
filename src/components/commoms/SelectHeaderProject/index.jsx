@@ -6,11 +6,15 @@ import styles from './SelectHeaderProject.module.scss'
 import classNames from "classnames/bind";
 import {NavLink, useNavigate} from "react-router-dom";
 import './customOverlay.scss'
+import {setIsAdd} from "~/redux/reducer/project/projectReducer";
 import {config} from "~/config";
 import {useDispatch} from "react-redux";
 import {setKeyProject} from "~/redux/reducer/project/projectReducer";
 import AddProject from "~/components/Client/Project/Add";
 import project from "~/components/Client/Project";
+import {getListProjects} from "~/api/Client/Sprint/sprintAPI";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
 SelectHeaderProject.propTypes = {
 
 };
@@ -40,24 +44,45 @@ const data=[
 ]
 function SelectHeaderProject() {
     const [listProject,setListProject]=useState([])
-    const [openAddProject,setOpenAddProject] = useState(false)
     const navigate=useNavigate()
+    const dispatch=useDispatch()
     useEffect(()=>{
-        // calll API get ALL Project
-        const convertData=data.map((item)=>({label:item.name,key:item.id}))
-        setListProject(convertData)
+        async function fetchDataProject() {
+            const userLoginId=localStorage.getItem('userIdLogin')
+            const params={sort:'updated_at',user_id:userLoginId}
+            const respond = await getListProjects(params);
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setListProject([])
+                return false;
+            } else {
+                let data=respond.results.map((item)=>({label:item.name,key:item.id}))
+
+                setListProject(data);
+            }
+        }
+        fetchDataProject();
+
     },[])
+    console.log('Test: ',listProject)
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+        navigate(config.routes.login)
+    };
     const handleCreateNewProject=(data) => {
-        console.log('Create new project:',data)
-        setOpenAddProject(false)
-    }
-    const handleCancelCreateNewProject=() => {
-        setOpenAddProject(false)
+        dispatch(setIsAdd(true))
     }
     const handleClickMenu = ({ key }) => {
         //  onCurrentProject(key)
        if(key==='create-project'){
-            setOpenAddProject(true)
+           dispatch(setIsAdd(true))
        }
        else if(key==='all-projects'){
 
@@ -70,13 +95,12 @@ function SelectHeaderProject() {
            navigate(config.routes.backlog)
        }
     };
-    const dispatch =useDispatch()
     const items = [
         {
             key: 'list-project',
             type: 'group',
             label: 'Dự Án Gần Đây',
-            children: listProject,
+            children: listProject.slice(0, 5),
         },
         {
             key: 'all-projects',
@@ -90,7 +114,7 @@ function SelectHeaderProject() {
         {
             key: 'create-project',
             label: (
-                <div className={cx('action-project')}>
+                <div className={cx('action-project')} >
                   <FaPlus className={cx('action-project-icon')}/>  Tạo dự án mới
                 </div>
             ),
@@ -116,19 +140,6 @@ function SelectHeaderProject() {
                     <FaAngleDown  className={cx('icon-down')}/>
                 </div>
             </Dropdown>
-            <Modal
-                title="Tạo Dự Án Mới"
-                onCancel={handleCancelCreateNewProject}
-                footer={null
-                }
-                width={500}
-                style={{ top: 100   }}
-                bodyStyle={{height: "400px"}}
-
-                open={openAddProject}
-            >
-                <AddProject onCancel={handleCancelCreateNewProject} onSave={handleCreateNewProject} />
-            </Modal>
         </div>
     );
 }

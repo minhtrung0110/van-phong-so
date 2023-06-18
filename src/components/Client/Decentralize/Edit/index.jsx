@@ -1,74 +1,74 @@
 import React, { useState} from 'react';
 import PropTypes from 'prop-types';
 import {useForm, Controller} from "react-hook-form";
-import {message, Col, Form, Input, Row, } from "antd";
+import {message, Col, Form, Input, Row, Radio,} from "antd";
 import './style.scss'
 import HeaderContent from "~/components/commoms/HeaderContent";
 import GroupPermission from "~/components/Client/Decentralize/GroupPermission";
 import {useDispatch, useSelector} from "react-redux";
 import {decentralizeSelector} from "~/redux/selectors/decentralize/decentralizeSelector";
-import { setIsEdit} from "~/redux/reducer/decentralize/decentralizeReducer";
+import {setIsEdit, setIsReset} from "~/redux/reducer/decentralize/decentralizeReducer";
+import {createRole, editRole} from "~/api/Client/Role/roleAPI";
 
 EditRole.propTypes = {};
 
 function EditRole({ onBack}) {
     const data=useSelector(decentralizeSelector)
-    const {control, handleSubmit, setValue, register,getValues, formState: {errors}} = useForm();
+    //console.log(data)
+    const {control, handleSubmit, setValue, register,getValues, formState: {errors}} = useForm({
+        defaultValues: {...data,status:data.status===true?1:0}}
+    );
     const [messageApi, contextHolder] = message.useMessage();
+    const getCheckedRule=(key)=>{
+       return  data.permission.find(item=>item.name.toLowerCase()===key.toLowerCase())
+    }
+    //console.log('get Sprint',getCheckedRule('sprint').permission)
     const dispatch=useDispatch()
-    const [project,setProject]=useState({
-        add_project: false,
-        update_project: false,
-        delete_project: false,
-    });
-    const [sprint,setSprint]=useState({
-        add_sprint: false,
-        update_sprint: false,
-        delete_sprint: false,
-    });
-    const [task,setTask]=useState({
-        add_task: false,
-        update_task: false,
-        delete_task: false,
-    });
-    const [column,setColumn]=useState({
-        add_column: false,
-        update_column: false,
-        delete_column: false,
-    });
-    const [calendar,setCalendar]=useState({
-        add_calendar: false,
-        update_calendar: false,
-        delete_calendar: false,
-    });
-    const [staff,setStaff]=useState({
-        add_staff: false,
-        update_staff: false,
-        delete_staff: false,
-    });
-    const [department,setDepartment]=useState({
-        add_department: false,
-        update_department: false,
-        delete_department: false,
-    });
+    const [project,setProject]=useState(getCheckedRule('project').permission);
+    const [sprint,setSprint]=useState(getCheckedRule('sprint').permission);
+    const [task,setTask]=useState(getCheckedRule('task').permission);
+    const [role,setRole]=useState(getCheckedRule('role').permission);
+    const [post,setPost]=useState(getCheckedRule('post').permission);
+    const [staff,setStaff]=useState(getCheckedRule('staff').permission);
+    const [department,setDepartment]=useState(getCheckedRule('department').permission);
 
 
-    const handleSubmitPermission = ()=>{
-        const name=getValues("name");
-        const result={
-            name,
-            ...staff,...department,
-            ...project,...sprint,...task,...column,
-            ...calendar
+    const handleSubmitPermission = async (body) => {
+        const name = getValues("role_title");
+        const arrayPermissions = {
+            ...staff, ...department,
+            ...project, ...sprint, ...task,...role,...post,
         }
-        // thanh con
-        console.log('Update role:', result)
-        messageApi.open({
-            type: 'success',
-            content: 'Cập nhật thành công',
-            duration: 1.3,
-        });
-        setTimeout(()=> dispatch(setIsEdit(false)),1400)
+        const trueFieldsArray = Object.entries(arrayPermissions)
+            .filter(([key, value]) => value === true)
+            .map(([key]) => key);
+        const updateRole = {
+            id: data.id,
+            title: body.role_title,
+            status: body.status===1,
+            permissions_title: trueFieldsArray
+        }
+        console.log('Update role:', updateRole)
+        const result = await editRole(updateRole)
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+            setTimeout(() => {
+                dispatch(setIsEdit(false))
+                dispatch(setIsReset(Math.random()))
+            }, 800)
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3,
+            });
+            //  setTimeout(()=> dispatch(setIsAdd(false)),1400)
+        }
+
     }
 
     return (<div className={'container-edit-role'}>
@@ -88,7 +88,7 @@ function EditRole({ onBack}) {
             labelAlign={"left"}
             className='form-update-role'>
             <Controller
-                name="name"
+                name="role_title"
                 control={control}
                 defaultValue=""
                 rules={{required: true}}
@@ -96,24 +96,39 @@ function EditRole({ onBack}) {
                 render={({field}) => (<Form.Item
                     label="Tên quyền"
                     hasFeedback
-                    validateStatus={errors.name ? 'error' : 'success'}
-                    help={errors.name ? 'Vui lòng nhập tên quyền' : null}>
+                    validateStatus={errors.role_title ? 'error' : 'success'}
+                    help={errors.role_title ? 'Vui lòng nhập tên quyền' : null}>
 
                     <Input  {...field} size="middle" className='ant-input-no-radius '/>
                 </Form.Item>)}
+            />
+            <Controller
+                name="status"
+                control={control}
+                rules={{required: true}}
+                render={({field}) => (
+                    <Form.Item label="Trạng Thái" validateStatus={errors.status ? 'error' : 'success'}
+                               hasFeedback help={errors.status ? 'Vui lòng chọn trạng thái' : null}>
+                        <Radio.Group {...field}>
+                            <Radio value={1}>Hoạt Động</Radio>
+                            <Radio value={0}>Vô Hiệu</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                )}
             />
             <Row className={'list-group-permissions'}>
                 <Col className='col-title' xs={{span: 24}} lg={{span: 10}}>
                     <GroupPermission setSwitchGroupSate={setProject} switchGroupState={project} title={'dự án'} />
                     <GroupPermission setSwitchGroupSate={setSprint} switchGroupState={sprint} title={'sprint'} />
                     <GroupPermission setSwitchGroupSate={setTask} switchGroupState={task} title={'công việc'} />
-                    <GroupPermission setSwitchGroupSate={setColumn} switchGroupState={column} title={'trạng thái công việc'} />
+                    <GroupPermission setSwitchGroupSate={setPost} hideView={true} switchGroupState={post} title={'bài viết'}/>
 
                 </Col>
                 <Col className='col-title' xs={{span: 24}} lg={{span: 10}}>
                     <GroupPermission setSwitchGroupSate={setStaff} switchGroupState={staff} title={'nhân viên'} />
                     <GroupPermission setSwitchGroupSate={setDepartment} switchGroupState={department} title={'phòng ban'} />
-                    <GroupPermission setSwitchGroupSate={setCalendar} switchGroupState={calendar} title={'lịch biểu'} />
+                    <GroupPermission setSwitchGroupSate={setRole} switchGroupState={role}
+                                     title={'chức danh'}/>
                 </Col>
             </Row>
 

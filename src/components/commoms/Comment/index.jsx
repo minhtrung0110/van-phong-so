@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import AvatarCustom from "~/components/commoms/AvatarCustom";
 import styles from './Comment.module.scss'
@@ -7,95 +7,157 @@ import CommentItem from "~/components/commoms/Comment/CommentItem";
 import {isEmpty} from "lodash";
 import CommentForm from "~/components/commoms/Comment/CommentForm";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import {createComment, deleteComment, editComment, getListCommentsPost} from "~/api/Client/Post/postAPI";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import {config} from "~/config";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
 Comment.propTypes = {
 
 };
 const cx=classNames.bind(styles)
 
 
-function Comment({user,listComment}) {
+function Comment({user,postId,onUpdateAmountComment}) {
+    const [loading,setLoading]=useState(false)
+    const [listComments,setListComments]=useState([])
     const [activeComment, setActiveComment] = useState({});
+    const [reset,setReset] = useState(false)
     const [showConfirm,setShowConfirm] =useState({id:null,show:false})
-    const handleSubmitComment=(data) => {
-        console.log('Comment: ', data)
+    const handleSubmitComment=async (data) => {
+
+        //edit
+        if(data.hasOwnProperty('id')){
+            console.log('Update Comment: ', {
+                id:data.id,
+                content: data.comment,
+                employee_id: user.id,
+                post_id:postId,
+            })
+            const response = await editComment(postId,{
+                id:data.id,
+                content: data.comment,
+                employee_id: user.id,
+            })
+            if (response.status === 1) {
+                    setReset(!reset)
+
+            } else if (response === 401) {
+
+            } else {
+
+            }
+        }// create
+        else {
+            console.log('Create Comment: ', {
+                content: data.comment,
+                employee_id: user.id,
+            })
+            const response = await createComment(postId,{
+                content: data.comment,
+                employee_id: user.id,
+                post_id:postId,
+            })
+            if (response.status === 1) {
+                setReset(!reset)
+                onUpdateAmountComment(pre=>pre+1)
+            } else if (response === 401) {
+
+            } else {
+
+            }
+        }
     }
-    const handAddComment = (data,replyID) =>{
-        console.log('Comment Add: ', data,replyID)
+    const handAddReplyComment = async (data, replyID) => {
+        console.log('Comment Add: ', data, replyID)
+        // const response = await createComment({
+        //     content: data,
+        //     employee_id: user.id,
+        // })
+        // if (response.status === 1) {
+        //
+        // } else if (response === 401) {
+        //
+        // } else {
+        //
+        // }
     }
+    const navigate=useNavigate()
+    const dispatch = useDispatch()
     const handleUpdateComment = (comment)=>{
         setActiveComment(comment)
 
     }
-    const handleDeleteComment = (comment)=>{
-        console.log('Comment Delete: ', comment)
+    const handleDeleteComment = async (id) => {
+        console.log('Comment Delete: ', id)
+        const response = await deleteComment(postId,id)
+        if (response.status === 1) {
+            setReset(!reset)
+            onUpdateAmountComment(prev=>prev-1)
+            setShowConfirm(false)
+        } else if (response === 401) {
+
+        } else {
+
+        }
     }
     const handleConfirmDeleteComment = (id)=>{
         setShowConfirm({id,show:true})
     }
-    console.log('Comment Update: ', activeComment)
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+        navigate(config.routes.login)
+    };
+    useEffect(() => {
+        async function fetchDataComments() {
+            setLoading(true)
+            let params = {};
+            //console.log('Params:', params)
+            const respond = await getListCommentsPost(postId);
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setListComments([])
+                return false;
+            } else {
+                setListComments(respond.data, 'reset-page');
+            }
+            setLoading(false);
+        }
+
+        fetchDataComments();
+    },[reset])
     return (
         <div className={cx('container-comment')}>
             {
-                !!activeComment ?(
-                    <CommentForm  user={activeComment.user} onSubmit={handleSubmitComment} initialText={activeComment.description} fileAttached={activeComment.file}/>
+                !isEmpty(activeComment) ?(
+                    <CommentForm  user={activeComment.employee}
+                                  id={activeComment.id}
+                                  onUpdate={true}
+                                  onSubmit={handleSubmitComment} initialText={activeComment.content} />
                 ):(
                     <CommentForm  user={user} onSubmit={handleSubmitComment} />
                 )
             }
 
             <div className={cx('list-comments')}>
-                {!isEmpty(listComment) && listComment.map(item =>(
+                {!isEmpty(listComments) && listComments.map(item =>(
                     <CommentItem comment={item} key={item.id}
                                  replies={[
-                                     {
-                                         id: "2",
-                                         description: "Tôi đồng ý vói bạn",
-                                         file:null,
-                                         user:  {
-                                             id: 1,
-                                             first_name: 'Phạm Minh',
-                                             last_name: 'Trang',
-                                             username:'NPhamTrang',
-                                             phone_number: '09744148784',
-                                             gender: 'nam',
-                                             birth_date: '01-10-2001',
-                                             mail: 'minhtrung@gmail.com',
-                                             role: 'CEO',
-                                             avatar: 'https://i.ibb.co/mvybfht/C-i-n-3-1.jpg',
-                                             address: 'Tan Quy Tây, Bình Chanh,HCM',
-                                             status: 1,
-                                         },
-                                         userId: "2",
-                                         parentId: null,
-                                         createdAt: "2021-08-16T23:00:33.010+02:00",
-                                     },  {
-                                         id: "2",
-                                         description: "Second comment",
-                                         file:null,
-                                         user:  {
-                                             id: 1,
-                                             first_name: 'Nguyễn Đức Minh',
-                                             last_name: 'Trung',
-                                             username:'NguyenTrung',
-                                             phone_number: '09744148784',
-                                             gender: 'nam',
-                                             birth_date: '01-10-2001',
-                                             mail: 'minhtrung@gmail.com',
-                                             role: 'CEO',
-                                             avatar: 'https://i.ibb.co/mvybfht/C-i-n-3-1.jpg',
-                                             address: 'Tan Quy Tây, Bình Chanh,HCM',
-                                             status: 1,
-                                         },
-                                         userId: "2",
-                                         parentId: null,
-                                         createdAt: "2021-08-16T23:00:33.010+02:00",
-                                     },]}
+                                   ]}
                                  activeComment={activeComment}
                                  setActiveComment={setActiveComment}
-                                 addComment={handAddComment}
+                                 addComment={handAddReplyComment}
                                  deleteComment={handleConfirmDeleteComment}
 
-                    currentUserId={1}
+                    currentUser={user}
                     />
                 ))}
             </div>

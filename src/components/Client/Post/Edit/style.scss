@@ -79,6 +79,14 @@
       }
     }
   }
+  .post-name-created_by{
+      display: flex;
+      height: 2.5rem;
+      align-items: flex-start;
+      font-weight: 700;
+      font-size: var(--14px);
+      margin-left: 0.8rem;
+  }
   .footer{
     display: flex;
     justify-content: center;

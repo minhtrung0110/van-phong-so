@@ -5,29 +5,33 @@ import {DatePicker, Form, Input} from "antd";
 import {Controller, useForm} from "react-hook-form";
 import dayjs from "dayjs";
 import './style.scss'
+import {useSelector} from "react-redux";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 
 EditSprint.propTypes = {
 
 };
 
 function EditSprint({sprint,onClose,onSave}) {
-  // console.log(dayjs(sprint.startTime, "DD/MM/YYYY HH:mm:ss"))
-    const [rangeValueTime, setRangeValueTime] = useState(
-        [dayjs(sprint.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(sprint.endTime, "DD/MM/YYYY HH:mm:ss")]);
     const {
         control, handleSubmit, formState: { errors, isDirty, dirtyFields },
     } = useForm({
         defaultValues:{
-            name:sprint.name,
-            description:sprint.description,
-            duration:[dayjs(sprint.startTime, "DD/MM/YYYY HH:mm:ss"), dayjs(sprint.endTime, "DD/MM/YYYY HH:mm:ss")]
+            title:sprint.title,
+            goals:sprint.goals,
+            duration:[dayjs(sprint.start_date),dayjs(sprint.end_date)]
         }
 
     });
-
+    const project =JSON.parse(localStorage.getItem('project'));
+    const userLogin=useSelector(getUserSelector)
     const onSubmit=(data)=>{
-        const newDuration=[dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss'),dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss')]
-        onSave({...data,duration:newDuration})
+        onSave(sprint.id,{...data,id:sprint.id,
+            start_date:dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end_date:dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            project_id:project.projectId,
+            user_id:userLogin.id
+        })
     }
     const {RangePicker} = DatePicker;
     const rangePresets = [
@@ -52,15 +56,6 @@ function EditSprint({sprint,onClose,onSave}) {
             value: [dayjs().add(-90, 'd'), dayjs()],
         },
     ];
-    const onRangeChange = (dates, dateStrings) => {
-        if (dates) {
-            //  console.log('From: ', dates[0], ', to: ', dates[1]);
-            //    console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-        } else
-            //   console.log('Clear');
-            setRangeValueTime([dates[0],dates[1]])
-    }
-    console.log(isDirty)
     return (
         <Form
             labelCol={{
@@ -77,15 +72,15 @@ function EditSprint({sprint,onClose,onSave}) {
             className='create-sprint'>
             <div className="content">
                 <Controller
-                    name="name"
+                    name="title"
                     control={control}
                     defaultValue=''
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item label="Tên Sprint"
                                    hasFeedback
-                                   validateStatus={errors.name ? 'error' : 'success'}
-                                   help={errors.name ? 'Vui lòng nhập tên sprint ': null}
+                                   validateStatus={errors.title ? 'error' : 'success'}
+                                   help={errors.title ? 'Vui lòng nhập tên sprint ': null}
                         >
 
                             <Input {...field} size="middle" />
@@ -93,15 +88,15 @@ function EditSprint({sprint,onClose,onSave}) {
                     )}
                 />
                 <Controller
-                    name="description"
+                    name="goals"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item label="Mô Tả"
                                    hasFeedback
-                                   validateStatus={errors.description ? 'error' : 'success'}
-                                   help={errors.description ? 'Vui lòng nhập mô tả ': null}
+                                   validateStatus={errors.goals ? 'error' : 'success'}
+                                   help={errors.goals ? 'Vui lòng nhập mô tả ': null}
                         >
 
                             <Input.TextArea  {...field} size="middle" />

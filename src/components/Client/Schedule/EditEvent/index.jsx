@@ -63,7 +63,7 @@ const optionsNotifyDuration = [
 
 ]
 function EditEvent({event,onSave,onCancel,onDelete}) {
-    const [typeEvent, setTypeEvent] = useState(event.type)
+    const [typeEvent, setTypeEvent] = useState(event.event_type)
     const [rangeValueTime, setRangeValueTime] = useState(
         [dayjs(event.start),dayjs(event.end)]);
     const [errorDescription, setErrorDescription] = useState('');
@@ -84,6 +84,9 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
     });
     const onSubmit = (data) => {
         console.log('Submit: ',data)
+        setShowConfirm(false)
+        onSave(data)
+
     }
     console.log(event)
     const {RangePicker} = DatePicker;
@@ -127,18 +130,17 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
     }
     return (
         <Form
-
             layout="horizontal"
             style={{}}
-            onFinish={handleSubmit(onSave)}
+            onFinish={handleSubmit(onSubmit)}
             labelAlign={"left"}
             className='edit-event-item'
         >
             <div className='header-event-item'>
-                <span className={`type-item ${typeEvent}`}
+                <span className={`type-item ${typeEvent===1?'event':'schedule'}`}
                       onClick={() => setTypeEvent('event')}
                 >
-                   <FaCalendarAlt className='icon'/> {event.type==='event'?'Sự kiện':(event.type==='schedule'?'Cần làm':'Nhắc nhở')}</span>
+                   <FaCalendarAlt className='icon'/> {event.event_type===1?'Sự kiện':(event.event_type===2?'Cần làm':'Nhắc nhở')}</span>
                 <FaTrashAlt  className='btn-delete ' onClick={()=>setShowConfirm(true)}/>
             </div>
             <Controller
@@ -185,46 +187,46 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
                         </Form.Item>
                     )}
                 />
-                <div className='config'>
-                    <div className='repeat'>
-                        <FaRecycle className='icon'/>
-                        <Controller
-                            name="repeat"
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => (
-                                <Select
-                                    {...field}
-                                    defaultValue="Không lặp lại"
-                                    style={{
-                                        width: 190,
-                                    }}
-                                    options={optionsLoopDuration}
-                                />
-                            )}
-                        />
+                {/*<div className='config'>*/}
+                {/*    <div className='repeat'>*/}
+                {/*        <FaRecycle className='icon'/>*/}
+                {/*        <Controller*/}
+                {/*            name="repeat"*/}
+                {/*            control={control}*/}
+                {/*            defaultValue=""*/}
+                {/*            render={({field}) => (*/}
+                {/*                <Select*/}
+                {/*                    {...field}*/}
+                {/*                    defaultValue="Không lặp lại"*/}
+                {/*                    style={{*/}
+                {/*                        width: 190,*/}
+                {/*                    }}*/}
+                {/*                    options={optionsLoopDuration}*/}
+                {/*                />*/}
+                {/*            )}*/}
+                {/*        />*/}
 
-                    </div>
-                    <div className='notification'>
-                        <FaBell className='icon'/>
-                        <Controller
-                            name="notification"
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => (
-                                <Select
-                                    {...field}
-                                    defaultValue="Không nhắc"
-                                    style={{
-                                        width: 190,
-                                    }}
-                                    options={optionsNotifyDuration}
-                                />
-                            )}
-                        />
+                {/*    </div>*/}
+                {/*    <div className='notification'>*/}
+                {/*        <FaBell className='icon'/>*/}
+                {/*        <Controller*/}
+                {/*            name="notification"*/}
+                {/*            control={control}*/}
+                {/*            defaultValue=""*/}
+                {/*            render={({field}) => (*/}
+                {/*                <Select*/}
+                {/*                    {...field}*/}
+                {/*                    defaultValue="Không nhắc"*/}
+                {/*                    style={{*/}
+                {/*                        width: 190,*/}
+                {/*                    }}*/}
+                {/*                    options={optionsNotifyDuration}*/}
+                {/*                />*/}
+                {/*            )}*/}
+                {/*        />*/}
 
-                    </div>
-                </div>
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
             {
                 typeEvent==='event'  && (
@@ -235,19 +237,19 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
             }
 
             {
-                (typeEvent==='event' || typeEvent==='schedule') && (
+                (typeEvent===1 || typeEvent===2) && (
                     <div className='description'>
                         <p>Nội Dung Công Việc:</p>
                         <Controller
-                            name="description"
+                            name="content"
                             control={control}
                             defaultValue=""
                             rules={{required: true}}
                             render={({field}) => (
                                 <Form.Item
                                     hasFeedback
-                                    validateStatus={errors.description ? 'error' : 'success'}
-                                    help={errors.description ? 'Vui lòng điền mô tả cho sự kiện' : null}>
+                                    validateStatus={errors.content ? 'error' : 'success'}
+                                    help={errors.content ? 'Vui lòng điền mô tả cho sự kiện' : null}>
                                     <CustomEditor
                                         {...field}
                                         id="description" editorDescription={editorDescription}
@@ -260,7 +262,7 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
                 )
             }
             {
-                typeEvent==='event'  && (
+                typeEvent===1  && (
                     <div className='attach'>
                         <Controller
                             name="file"

@@ -1,10 +1,13 @@
 import React from 'react'
+import {forgotPassword} from "~/api/Client/Auth";
 
 const routes = {
     home:"/",
+    login:"/login",
+    forgotPassword:'/forgot-password',
     setting:"/setting",
     post:'/posts',
-    project:"/project",
+    project:"/projects/sprint",
     profile:"/@:nickname",
     meeting:"/meeting",
     staff:"/staff",
@@ -15,8 +18,8 @@ const routes = {
     changePassword:"/change-password",
     logout:"/logout",
     config:'/config',
-    backlog:'/project/backlog',
-    allProject:'/project/all',
+    backlog:'/projects/backlog',
+    allProject:'/projects',
     decentralize:'/decentralize',
 
 

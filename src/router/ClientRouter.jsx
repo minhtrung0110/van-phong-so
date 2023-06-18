@@ -27,6 +27,7 @@ import HomePage from "~/pages/Client/HomePage";
 import LayoutGroup from "~/layouts/Client/LayoutGroup";
 import ManageCompany from "~/pages/Client/ManageCompany";
 import ManageGroup from "~/pages/Client/ManageGroup";
+import ForgotPassword from "~/components/Client/Auth/FormForgotPassword";
 
 function ProtectedRoutes(props) {
     return null;
@@ -39,26 +40,27 @@ ProtectedRoutes.propTypes = {
 
 function ClientRouter(props) {
     const dispatch = useDispatch();
-    const isAuthenticate = useSelector(isLoginSelector);
-    useEffect(() => {
-        handleVerifyUserLogin().then((result) => {
-            if (result === 401) {
-                const token = getCookies('token');
-                dispatch(setIsLogin(false));
-                if (token) {
-                    deleteCookie('token');
-                }
-            } else {
-                dispatch(setIsLogin(true));
-                dispatch(setUser(result));
-
-            }
-        });
-    }, [dispatch]);
-    const user = useSelector(getUserSelector);
+    // const isAuthenticate = useSelector(isLoginSelector);
+    // useEffect(() => {
+    //     handleVerifyUserLogin().then((result) => {
+    //         if (result === 401) {
+    //             const token = getCookies('token');
+    //             dispatch(setIsLogin(false));
+    //             if (token) {
+    //                 deleteCookie('token');
+    //             }
+    //         } else {
+    //             dispatch(setIsLogin(true));
+    //             dispatch(setUser(result));
+    //
+    //         }
+    //     });
+    // }, [dispatch]);
+    // const user = useSelector(getUserSelector);
     return (
         <Routes>
-            <Route path="/login" element={<LoginPage/>}/>
+            <Route path={config.routes.login} element={<LoginPage/>}/>
+            <Route path={config.routes.forgotPassword} element={<ForgotPassword/>}/>
             {/* Requỉed login */}
             <Route element={<AuthRouter/>}>
                 <Route path={config.routes.home} element={<ClientLayout slot={<HomePage key={'a'} s/>}/>}/>
@@ -80,8 +82,6 @@ function ClientRouter(props) {
                 <Route path={config.routes.project} element={<ClientLayout slot={<ManageTaskPage key={'a'}/>}/>}/>
                 <Route path={config.routes.backlog} element={<ClientLayout slot={<BacklogPage key={'a'}/>}/>}/>
                 <Route path={config.routes.allProject} element={<ClientLayout slot={<AllProjectPage key={'a'}/>}/>}/>
-
-
 
             </Route>
         </Routes>

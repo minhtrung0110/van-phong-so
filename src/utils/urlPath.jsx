@@ -1,4 +1,5 @@
 export const URL_SERVER = 'http://127.0.0.1:8080/api/v1/';
+export const URL_SERVER_CALENDAR = 'http://127.0.0.1:8081/api/v1/';
 export const IMG_NOT_FOUND =
   'https://www.publicdomainpictures.net/pictures/280000/nahled/not-found-image-15383864787lu.jpg';
 export const CITIES = 'https://raw.githubusercontent.com/tanthuan031/cities/master/cities.json';

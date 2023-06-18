@@ -4,6 +4,8 @@ import {DatePicker, Form, Input} from "antd";
 import {Controller, useForm} from "react-hook-form";
 import dayjs from "dayjs";
 import './style.scss'
+import {useSelector} from "react-redux";
+import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 
 AddSprint.propTypes = {
 
@@ -16,10 +18,17 @@ function AddSprint({onClose,onSave}) {
         control, handleSubmit, formState: { errors, isDirty, dirtyFields },
     } = useForm({
     });
-
+    const project =JSON.parse(localStorage.getItem('project'));
+    const userLogin=useSelector(getUserSelector)
     const onSubmit=(data)=>{
        const newDuration=[dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss'),dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('DD/MM/YYYY HH:mm:ss')]
-        onSave({...data,duration:newDuration})
+        onSave({...data,
+            start_date:dayjs(data.duration[0], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end_date:dayjs(data.duration[1], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            project_id:project.projectId,
+            user_id:userLogin.id
+        })
+
     }
     const {RangePicker} = DatePicker;
     const rangePresets = [
@@ -70,15 +79,15 @@ function AddSprint({onClose,onSave}) {
             className='create-sprint'>
             <div className="content">
                 <Controller
-                    name="name"
+                    name="title"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item label="Tên Sprint"
                                    hasFeedback
-                                   validateStatus={errors.name ? 'error' : 'success'}
-                                   help={errors.name ? 'Vui lòng nhập tên sprint ': null}
+                                   validateStatus={errors.title ? 'error' : 'success'}
+                                   help={errors.title ? 'Vui lòng nhập tên sprint ': null}
                         >
 
                             <Input {...field} size="middle" />
@@ -86,15 +95,15 @@ function AddSprint({onClose,onSave}) {
                     )}
                 />
                 <Controller
-                    name="description"
+                    name="goals"
                     control={control}
                     defaultValue=""
                     rules={{required: true}}
                     render={({field}) => (
                         <Form.Item label="Mô Tả"
                                    hasFeedback
-                                   validateStatus={errors.description ? 'error' : 'success'}
-                                   help={errors.description ? 'Vui lòng nhập mô tả ': null}
+                                   validateStatus={errors.goals ? 'error' : 'success'}
+                                   help={errors.goals ? 'Vui lòng nhập mô tả ': null}
                         >
 
                             <Input.TextArea  {...field} size="middle" />
@@ -125,6 +134,7 @@ function AddSprint({onClose,onSave}) {
                         </Form.Item>
                     )}
                 />
+
                 <div className="footer-create-sprint">
                     <button className='btn-cancel' onClick={onClose}>Hủy</button>
                     <button type='submit' className='btn-save'>Lưu</button>

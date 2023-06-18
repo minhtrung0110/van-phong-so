@@ -7,6 +7,7 @@
   overflow-x: auto;
   padding: calc(2 * var(--gap));
   font-size: var(--14px);
+  min-height:800px;
 
   .column-drop-preview{
     background-color: rgba(150, 150, 200, 0.1);

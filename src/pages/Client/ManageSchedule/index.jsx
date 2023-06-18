@@ -1,15 +1,24 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import './style.scss'
 import {Calendar, momentLocalizer, Views} from "react-big-calendar";
 import moment from "moment";
-import 'moment/locale/vi';
+
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import {Modal} from "antd";
+import {message, Modal} from "antd";
 import EditProject from "~/components/Client/Project/EditProject";
 import EventItem from "~/components/Client/Schedule/AddEvent";
 import AddEvent from "~/components/Client/Schedule/AddEvent";
 import EditEvent from "~/components/Client/Schedule/EditEvent";
+import {getListDepartments} from "~/api/Client/Department/departmentAPI";
+import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
+import {deleteCookie, getCookies} from "~/api/Client/Auth";
+import {createEvent, deleteEvent, editEvent, getListEvents} from "~/api/Client/Calendar";
+import {useDispatch} from "react-redux";
+import dayjs from "dayjs";
+import {useNavigate} from "react-router-dom";
+import {config} from "~/config";
+import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 ManageSchedule.propTypes = {
 
 };
@@ -17,7 +26,13 @@ ManageSchedule.propTypes = {
 function ManageSchedule(props) {
     const [myEvents, setEvents] = useState([])
     const [showEvent,setShowEvent] = useState({event:null,show:false})
+    const [loading, setLoading] = React.useState(false);
     const [showAddEvent,setShowAddEvent] = useState({start:null,end:null,show:false})
+    const [listStaff,setListStaff] = useState([])
+    const [messageApi, contextHolder] = message.useMessage();
+    const [reset,setReset] = useState(false)
+    const dispatch=useDispatch()
+    const navigate=useNavigate()
     const handleCancelShowEvent = ()=>{
         setShowEvent({...showEvent,show: false})
     }
@@ -27,12 +42,12 @@ function ManageSchedule(props) {
     const events = [
         {
             id:'1KL578as',
-            title: 'Chơi Gái',
+            title: 'Họp Khoa Luận Tốt Nghiệp',
             type: 'reminder',
             notification:'1',
             repeat:0,
-            start: new Date(2023, 2, 18, 10, 0),
-            end: new Date(2023, 2, 20, 12, 0),
+            start: new Date(2023, 5, 18, 10, 0),
+            end: new Date(2023, 5, 20, 12, 0),
         },
         {
             title: 'Họp Dự Án ',
@@ -43,8 +58,8 @@ function ManageSchedule(props) {
             members: [],
             notification:'120',
             repeat:1,
-            start: new Date(2023, 2, 21, 10, 0),
-            end: new Date(2023, 2, 28, 12, 0),
+            start: new Date(2023, 5, 21, 10, 0),
+            end: new Date(2023, 5, 28, 12, 0),
         },
         {
             title: 'Đánh Cầu Lông',
@@ -52,18 +67,18 @@ function ManageSchedule(props) {
             type: 'schedule',
             notification:'3',
             repeat:0,
-            start: new Date(2023, 2, 28, 10, 0),
-            end: new Date(2023, 2, 28, 12, 0),
+            start: new Date(2023, 5, 28, 10, 0),
+            end: new Date(2023, 5, 28, 12, 0),
             description: 'Mô tả sự kiện B'
         },
         {
-            title: 'Sự kiện bắn súng',
+            title: 'Triển khai ứng dụng đặt xe',
             id:'1as',
             type: 'reminder',
             notification:'60',
             repeat:1,
-            start: new Date(2023, 2, 1, 10, 0), // Ngày bắt đầu
-            end: new Date(2023, 2, 12, 12, 0), // Ngày kết thúc
+            start: new Date(2023, 4, 26, 10, 0), // Ngày bắt đầu
+            end: new Date(2023, 1, 30, 12, 0), // Ngày kết thúc
             rule: {
                 freq: 'weekly',
                 interval: 1,
@@ -74,9 +89,52 @@ function ManageSchedule(props) {
         },
         // ...
     ];
-
+    const handleSetUnthorization = () => {
+        dispatch(setExpiredToken(true));
+        const token = getCookies('vps_token');
+        if (token) {
+            deleteCookie('vps_token');
+        }
+        navigate(config.routes.login)
+    };
+    useEffect(() => {
+        async function fetchDataEvents() {
+            const userIdLogin=localStorage.getItem('userIdLogin');
+            const respond = await getListEvents(userIdLogin);
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setEvents([])
+                return false;
+            } else {
+                setData(respond.results);
+            }
+            setLoading(false);
+        }
+        fetchDataEvents();
+        async function fetchDataStaff() {
+            const respond = await getListStaffs();
+            console.log('Data respond:', respond)
+            if (respond === 401) {
+                handleSetUnthorization();
+                return false;
+            } else if (respond === 500) {
+                setListStaff([])
+                return false;
+            } else {
+                setListStaff(respond.results);
+            }
+            setLoading(false);
+        }
+        fetchDataStaff();
+    }, [reset]);
     const localizer = momentLocalizer(moment);
-
+    const setData=(array)=>{
+      const events=  array.map((event)=>({id: event.id,start:new Date(event.start_time),end:new Date(event.end_time),title:event.title,...event}))
+        setEvents(events)
+    }
     const handleSelectSlot = useCallback(
         ({ start, end }) => {
             setShowAddEvent({start,end,show: true})
@@ -97,19 +155,78 @@ function ManageSchedule(props) {
     )
     const { defaultDate, scrollToTime } = useMemo(
         () => ({
-            defaultDate: new Date(2023, 2, 12),
-            scrollToTime: new Date(2023, 1, 1, 6),
+            defaultDate: new Date(2023, 5, 1),
+            scrollToTime: new Date(2023, 5, 30, 6),
         }),
         []
     )
-    const handleCreateEvent=(data) => {
+
+    const handleCreateEvent=async (data) => {
         console.log('Create event: ', data)
+        const result = await createEvent(data)
+        if (result.status===1) {
+            messageApi.open({
+                type:'success',
+                content:result.message,
+                duration:1.3
+            })
+            setShowAddEvent(true)
+            setReset(!reset)
+        }
+        else if(result.status===401){
+            handleSetUnthorization();
+        }
+        else {
+            messageApi.open({
+                type:'error',
+                content:result.message,
+                duration:1.3
+            })
+        }
+
     }
-    const handleUpdateEvent=(data) => {
+    const handleUpdateEvent=async (data) => {
         console.log('Update event: ', data)
+        const result = await editEvent(data)
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3
+            })
+            setShowAddEvent(true)
+            setReset(!reset)
+        } else if (result.status === 401) {
+            handleSetUnthorization();
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3
+            })
+        }
     }
-    const handleDeleteEvent=(data) => {
-        console.log('Delete event: ', data)
+    const handleDeleteEvent=async (id) => {
+        console.log('Delete event: ', id)
+        const response = await deleteEvent(id)
+        if (response.status===1) {
+            messageApi.open({
+                type:'success',
+                content:response.message,
+                duration:1.3
+            })
+            setReset(!reset)
+        }
+        else if(response.status===401){
+            handleSetUnthorization();
+        }
+        else {
+            messageApi.open({
+                type:'error',
+                content:response.message,
+                duration:1.3
+            })
+        }
     }
     const eventStyleGetter = (event, start, end, isSelected) => {
         const style = {
@@ -136,13 +253,14 @@ function ManageSchedule(props) {
             repeat:event.repeat,
         };
     };
+    console.log(myEvents)
     return (
         <div  className='container-schedule'>
             <Calendar
                 className='calendar'
                 defaultDate={defaultDate}
                 defaultView={Views.MONTH}
-                events={events}
+                events={myEvents}
                 localizer={localizer}
                 onSelectEvent={handleSelectEvent}
                 onSelectSlot={handleSelectSlot}
@@ -164,7 +282,9 @@ function ManageSchedule(props) {
                 destroyOnClose={true}
                 open={showAddEvent.show}
             >
-                <AddEvent start={showAddEvent.start} end={showAddEvent.end} onCancel={handleCancelShowAddEvent} onSave={handleCreateEvent} />
+                <AddEvent start={showAddEvent.start} end={showAddEvent.end}
+                          listStaff={listStaff}
+                          onCancel={handleCancelShowAddEvent} onSave={handleCreateEvent} />
             </Modal>
             <Modal
                 title="Cập Nhật Sư Kiện"

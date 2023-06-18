@@ -1,73 +1,100 @@
-import React, {useRef, useState} from 'react';
-import PropTypes from 'prop-types';
-import {useForm, Controller} from "react-hook-form";
-import {Checkbox, Col, Form, Input, message, Row, Switch,} from "antd";
+import React, {useState} from 'react';
+import {Controller, useForm} from "react-hook-form";
+import {Col, Form, Input, message, Row,} from "antd";
 import './style.scss'
 import HeaderContent from "~/components/commoms/HeaderContent";
 import GroupPermission from "~/components/Client/Decentralize/GroupPermission";
-import {setIsAdd} from "~/redux/reducer/decentralize/decentralizeReducer";
+import {setIsAdd, setIsReset} from "~/redux/reducer/decentralize/decentralizeReducer";
 import {useDispatch} from "react-redux";
+import {createRole} from "~/api/Client/Role/roleAPI";
 
 AddRole.propTypes = {};
 
 function AddRole({onBack}) {
-    const {control, handleSubmit,getValues, formState: {errors}} = useForm();
-    const dispatch=useDispatch()
+    const {control, handleSubmit, getValues, formState: {errors}} = useForm();
+    const dispatch = useDispatch()
     const [messageApi, contextHolder] = message.useMessage();
     const [project, setProject] = useState({
-        add_project: false,
-        update_project: false,
-        delete_project: false,
+
+        project_create: false,
+        project_update: false,
+        project_delete: false,
+        project_view: false,
     });
     const [sprint, setSprint] = useState({
-        add_sprint: false,
-        update_sprint: false,
-        delete_sprint: false,
+        sprint_create: false,
+        sprint_update: false,
+        sprint_delete: false,
+        sprint_view: false,
     });
     const [task, setTask] = useState({
-        add_task: false,
-        update_task: false,
-        delete_task: false,
+
+        task_create: false,
+        task_update: false,
+        task_delete: false,
+        task_view: false,
     });
-    const [column, setColumn] = useState({
-        add_column: false,
-        update_column: false,
-        delete_column: false,
+    const [role, setRole] = useState({
+
+        role_create: false,
+        role_update: false,
+        role_delete: false,
+        role_view: false,
     });
-    const [calendar, setCalendar] = useState({
-        add_calendar: false,
-        update_calendar: false,
-        delete_calendar: false,
-    });
+
     const [staff, setStaff] = useState({
-        add_staff: false,
-        update_staff: false,
-        delete_staff: false,
+
+        staff_create: false,
+        staff_update: false,
+        staff_delete: false,
+        staff_view: false,
     });
     const [department, setDepartment] = useState({
-        add_department: false,
-        update_department: false,
-        delete_department: false,
+        department_create: false,
+        department_update: false,
+        department_delete: false,
+        department_view: false,
+    });
+    const [post, setPost] = useState({
+        post_create: false,
+        post_update: false,
+        post_delete: false,
     });
 
 
-    const handleSubmitPermission = () => {
+    const handleSubmitPermission = async (data) => {
         const name = getValues("name");
-        const result = {
-            name,
-            ...staff, ...department,
-            ...project, ...sprint, ...task, ...column,
-            ...calendar
+        const arrayPermissions = {
+            ...staff, ...department, ...project, ...sprint, ...task, ...role,...post
         }
-        // console.log(result);
-        // thành công
-        console.log('Create new role:', result)
-        messageApi.open({
-            type: 'success',
-            content: 'Thêm thành công',
-            duration: 1.3,
-        });
-        setTimeout(()=> dispatch(setIsAdd(false)),1400)
+        const trueFieldsArray = Object.entries(arrayPermissions)
+            .filter(([key, value]) => value === true)
+            .map(([key]) => key);
+        const newRole = {
+            title: name,
+            status: true,
+            permissions_title: trueFieldsArray.map(item => item.replace(/_/g, '.'))
+        }
+        console.log(newRole);
+        const result = await createRole(newRole)
+        if (result.status === 1) {
+            messageApi.open({
+                type: 'success',
+                content: result.message,
+                duration: 1.3,
+            });
+            setTimeout(() => {
+                dispatch(setIsAdd(false))
+                dispatch(setIsReset(Math.random()))
+            }, 1000)
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: result.message,
+                duration: 1.3,
+            });
+            //  setTimeout(()=> dispatch(setIsAdd(false)),1400)
+        }
 
 
     }
@@ -108,15 +135,15 @@ function AddRole({onBack}) {
                     <GroupPermission setSwitchGroupSate={setProject} switchGroupState={project} title={'dự án'}/>
                     <GroupPermission setSwitchGroupSate={setSprint} switchGroupState={sprint} title={'sprint'}/>
                     <GroupPermission setSwitchGroupSate={setTask} switchGroupState={task} title={'công việc'}/>
-                    <GroupPermission setSwitchGroupSate={setColumn} switchGroupState={column}
-                                     title={'trạng thái công việc'}/>
+                    <GroupPermission setSwitchGroupSate={setPost} hideView={true} switchGroupState={post} title={'bài viết'}/>
 
                 </Col>
                 <Col className='col-title' xs={{span: 24}} lg={{span: 10}}>
                     <GroupPermission setSwitchGroupSate={setStaff} switchGroupState={staff} title={'nhân viên'}/>
                     <GroupPermission setSwitchGroupSate={setDepartment} switchGroupState={department}
                                      title={'phòng ban'}/>
-                    <GroupPermission setSwitchGroupSate={setCalendar} switchGroupState={calendar} title={'lịch biểu'}/>
+                    <GroupPermission setSwitchGroupSate={setRole} switchGroupState={role}
+                                     title={'chức danh'}/>
                 </Col>
             </Row>
 
