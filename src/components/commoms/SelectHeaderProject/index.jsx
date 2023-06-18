@@ -48,7 +48,8 @@ function SelectHeaderProject() {
     const dispatch=useDispatch()
     useEffect(()=>{
         async function fetchDataProject() {
-            const params={sort:'updated_at'}
+            const userLoginId=localStorage.getItem('userIdLogin')
+            const params={sort:'updated_at',user_id:userLoginId}
             const respond = await getListProjects(params);
             console.log('Data respond:', respond)
             if (respond === 401) {

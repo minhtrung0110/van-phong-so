@@ -7,7 +7,7 @@ import HeaderContent from "~/components/commoms/HeaderContent";
 import GroupPermission from "~/components/Client/Decentralize/GroupPermission";
 import {useDispatch, useSelector} from "react-redux";
 import {decentralizeSelector} from "~/redux/selectors/decentralize/decentralizeSelector";
-import { setIsEdit} from "~/redux/reducer/decentralize/decentralizeReducer";
+import {setIsEdit, setIsReset} from "~/redux/reducer/decentralize/decentralizeReducer";
 import {createRole, editRole} from "~/api/Client/Role/roleAPI";
 
 EditRole.propTypes = {};
@@ -28,7 +28,7 @@ function EditRole({ onBack}) {
     const [sprint,setSprint]=useState(getCheckedRule('sprint').permission);
     const [task,setTask]=useState(getCheckedRule('task').permission);
     const [role,setRole]=useState(getCheckedRule('role').permission);
- //   const [calendar,setCalendar]=useState(getCheckedRule('calendar').permission);
+    const [post,setPost]=useState(getCheckedRule('post').permission);
     const [staff,setStaff]=useState(getCheckedRule('staff').permission);
     const [department,setDepartment]=useState(getCheckedRule('department').permission);
 
@@ -37,7 +37,7 @@ function EditRole({ onBack}) {
         const name = getValues("role_title");
         const arrayPermissions = {
             ...staff, ...department,
-            ...project, ...sprint, ...task,...role,
+            ...project, ...sprint, ...task,...role,...post,
         }
         const trueFieldsArray = Object.entries(arrayPermissions)
             .filter(([key, value]) => value === true)
@@ -56,7 +56,10 @@ function EditRole({ onBack}) {
                 content: result.message,
                 duration: 1.3,
             });
-            setTimeout(() => dispatch(setIsEdit(false)), 1200)
+            setTimeout(() => {
+                dispatch(setIsEdit(false))
+                dispatch(setIsReset(Math.random()))
+            }, 800)
         } else {
             messageApi.open({
                 type: 'error',
@@ -118,6 +121,7 @@ function EditRole({ onBack}) {
                     <GroupPermission setSwitchGroupSate={setProject} switchGroupState={project} title={'dự án'} />
                     <GroupPermission setSwitchGroupSate={setSprint} switchGroupState={sprint} title={'sprint'} />
                     <GroupPermission setSwitchGroupSate={setTask} switchGroupState={task} title={'công việc'} />
+                    <GroupPermission setSwitchGroupSate={setPost} hideView={true} switchGroupState={post} title={'bài viết'}/>
 
                 </Col>
                 <Col className='col-title' xs={{span: 24}} lg={{span: 10}}>

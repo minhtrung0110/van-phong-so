@@ -69,7 +69,7 @@ function DecentralizeTable({deleteItem,editItem,tableHeader, tableBody,onDelete,
                                 item.status === true ? 'active' : 'negative '
                             }`}
                         >
-                            {item.status === true ? 'Đang Hoạt Động' : 'Tạm Dừng'}
+                            {item.status === true ? 'Đang Hoạt Động' : 'Vô Hiệu'}
                         </p>
                     </td>
                     <td className="col-action">

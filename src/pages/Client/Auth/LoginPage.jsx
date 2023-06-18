@@ -56,10 +56,12 @@ function LoginPage(props) {
                 duration: 1.45,
                 className: 'message-custom-success-message-success'
             });
+
             setCookies('vps_token', result.data.token, result.data.expire);
             if (!!result.data.user) {
                 dispatch(setUser(result.data.user))
                 dispatch(setIsLogin(true))
+                localStorage.setItem('userIdLogin',result.data.user.id )
             }
             // setTimeout(() => {
             //  //   navigate(config.routes.home)

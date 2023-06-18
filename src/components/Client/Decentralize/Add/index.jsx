@@ -4,59 +4,68 @@ import {Col, Form, Input, message, Row,} from "antd";
 import './style.scss'
 import HeaderContent from "~/components/commoms/HeaderContent";
 import GroupPermission from "~/components/Client/Decentralize/GroupPermission";
-import {setIsAdd} from "~/redux/reducer/decentralize/decentralizeReducer";
+import {setIsAdd, setIsReset} from "~/redux/reducer/decentralize/decentralizeReducer";
 import {useDispatch} from "react-redux";
 import {createRole} from "~/api/Client/Role/roleAPI";
 
 AddRole.propTypes = {};
 
 function AddRole({onBack}) {
-    const {control, handleSubmit,getValues, formState: {errors}} = useForm();
-    const dispatch=useDispatch()
+    const {control, handleSubmit, getValues, formState: {errors}} = useForm();
+    const dispatch = useDispatch()
     const [messageApi, contextHolder] = message.useMessage();
     const [project, setProject] = useState({
-        project_view:false,
+
         project_create: false,
         project_update: false,
         project_delete: false,
+        project_view: false,
     });
     const [sprint, setSprint] = useState({
-        srint_view:false,
         sprint_create: false,
         sprint_update: false,
         sprint_delete: false,
+        sprint_view: false,
     });
     const [task, setTask] = useState({
-        task_view:false,
+
         task_create: false,
         task_update: false,
         task_delete: false,
+        task_view: false,
     });
     const [role, setRole] = useState({
-        role_view:false,
+
         role_create: false,
         role_update: false,
         role_delete: false,
+        role_view: false,
     });
 
     const [staff, setStaff] = useState({
-        staff_view:false,
+
         staff_create: false,
         staff_update: false,
         staff_delete: false,
+        staff_view: false,
     });
     const [department, setDepartment] = useState({
-        department_view:false,
         department_create: false,
         department_update: false,
         department_delete: false,
+        department_view: false,
+    });
+    const [post, setPost] = useState({
+        post_create: false,
+        post_update: false,
+        post_delete: false,
     });
 
 
     const handleSubmitPermission = async (data) => {
         const name = getValues("name");
         const arrayPermissions = {
-            ...staff, ...department, ...project, ...sprint, ...task, ...role,
+            ...staff, ...department, ...project, ...sprint, ...task, ...role,...post
         }
         const trueFieldsArray = Object.entries(arrayPermissions)
             .filter(([key, value]) => value === true)
@@ -68,14 +77,17 @@ function AddRole({onBack}) {
         }
         console.log(newRole);
         const result = await createRole(newRole)
-        if(result.status===1){
+        if (result.status === 1) {
             messageApi.open({
                 type: 'success',
                 content: result.message,
                 duration: 1.3,
-            });setTimeout(()=> dispatch(setIsAdd(false)),1200)
-        }
-        else {
+            });
+            setTimeout(() => {
+                dispatch(setIsAdd(false))
+                dispatch(setIsReset(Math.random()))
+            }, 1000)
+        } else {
             messageApi.open({
                 type: 'error',
                 content: result.message,
@@ -83,7 +95,6 @@ function AddRole({onBack}) {
             });
             //  setTimeout(()=> dispatch(setIsAdd(false)),1400)
         }
-
 
 
     }
@@ -124,6 +135,7 @@ function AddRole({onBack}) {
                     <GroupPermission setSwitchGroupSate={setProject} switchGroupState={project} title={'dự án'}/>
                     <GroupPermission setSwitchGroupSate={setSprint} switchGroupState={sprint} title={'sprint'}/>
                     <GroupPermission setSwitchGroupSate={setTask} switchGroupState={task} title={'công việc'}/>
+                    <GroupPermission setSwitchGroupSate={setPost} hideView={true} switchGroupState={post} title={'bài viết'}/>
 
                 </Col>
                 <Col className='col-title' xs={{span: 24}} lg={{span: 10}}>

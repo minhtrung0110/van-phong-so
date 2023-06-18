@@ -5,9 +5,9 @@ import NotFoundData from "~/components/commoms/NotFoundData";
 import DepartmentTable from "~/components/Client/Department";
 import {department_table_header} from "~/asset/data/department-table-header";
 import PaginationUI from "~/components/commoms/Pagination";
-import { FaRegBuilding, FaSearch} from "react-icons/fa";
+import {FaRegBuilding, FaSearch} from "react-icons/fa";
 import SearchHidenButton from "~/components/commoms/SearchHideButton";
-import {Button, Modal, Tooltip,message} from "antd";
+import {Button, Modal, Tooltip, message} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {isEditDepartmentSelector, isResetDepartmentSelector} from "~/redux/selectors/department/departmenrSelector";
 import EditDepartment from "~/components/Client/Department/Edit";
@@ -22,6 +22,9 @@ import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 import {isEmpty} from "lodash";
 import {authorizationFeature} from "~/utils/authorizationUtils";
+import {navigate} from "react-big-calendar/lib/utils/constants";
+import {config} from "~/config";
+import {useNavigate} from "react-router-dom";
 
 ManageDepartment.propTypes = {};
 const listStatus = [
@@ -32,7 +35,7 @@ const listStatus = [
     },
     {
         id: '2x',
-        label: 'Thôi Việc',
+        label: 'Tạm Dừng',
         value: 0,
     },
     {
@@ -41,6 +44,7 @@ const listStatus = [
         value: 'all',
     },
 ]
+
 function ManageDepartment(props) {
     const [data, setData] = useState(listDepartments)
     const [page, setPage] = React.useState(1);
@@ -50,13 +54,14 @@ function ManageDepartment(props) {
     const isEdit = useSelector(isEditDepartmentSelector)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [search, setSearch] = React.useState('')
-    const [filter, setFilter] = React.useState({role:'all',status:'all'})
+    const [filter, setFilter] = React.useState({role: 'all', status: 'all'})
     const [messageApi, contextHolder] = message.useMessage();
-    const isReset=useSelector(isResetDepartmentSelector)
-    const userLogin=useSelector(getUserSelector)
-    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Department','create')
-    const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Department','update')
-    const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Department','delete')
+    const isReset = useSelector(isResetDepartmentSelector)
+    const userLogin = useSelector(getUserSelector)
+    const navigate=useNavigate()
+    const createPermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Department', 'create')
+    const editPermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Department', 'update')
+    const deletePermission = !isEmpty(userLogin) && authorizationFeature(userLogin.permission, 'Department', 'delete')
     const handlePageChange = async (page) => {
         setPage(page);
         setLoading(true);
@@ -79,11 +84,11 @@ function ManageDepartment(props) {
         setIsModalOpen(false);
     };
     const handleCancelEdit = () => {
-       dispatch(setIsEdit(false))
+        dispatch(setIsEdit(false))
     };
-    const handleFilterStatus=(value) => {
-        const stt={status:value}
-        setFilter(prev=>({...prev,...stt}))
+    const handleFilterStatus = (value) => {
+        const stt = {status: value}
+        setFilter(prev => ({...prev, ...stt}))
     }
 
 
@@ -93,6 +98,7 @@ function ManageDepartment(props) {
         if (token) {
             deleteCookie('vps_token');
         }
+        navigate(config.routes.login)
     };
     const setDepartment = (respond, value) => {
         setData(respond.results);
@@ -104,16 +110,17 @@ function ManageDepartment(props) {
     };
     const handleCreateDepartment = async (data) => {
         console.log('Create Department: ', data)
-        const response = await createDepartment({name:data.name,status:true});
-        if(response.status===1){
+        const response = await createDepartment({name: data.name, status: true});
+        if (response.status === 1) {
             messageApi.open({
                 type: 'success',
                 content: response.message,
                 duration: 1.35,
             });
-            dispatch(setIsReset(true))
-        }
-        else if(response.status===0){
+            dispatch(setIsReset(Math.random()))
+        } else if (response.status === 401) {
+            handleSetUnthorization()
+        } else {
             messageApi.open({
                 type: 'error',
                 content: response.message,
@@ -123,16 +130,16 @@ function ManageDepartment(props) {
         setIsModalOpen(false);
     }
 
-    const handleDeleteDepartment = (data)=>{
-        console.log('Delete Department: ',data)
+    const handleDeleteDepartment = (data) => {
+        console.log('Delete Department: ', data)
     }
     useEffect(() => {
         async function fetchDataDepartment() {
             //  setLoading(true)
             console.log('Search:', search, ' - Filter:', filter)
             let params = {};
-            if (filter.status !== 'all') params = { ...params, filter };
-            if (search !== '') params = { ...params, filter, search };
+            if (filter.status !== 'all') params = {...params, filter};
+            if (search !== '') params = {...params, filter, search};
             const respond = await getListDepartments(params);
             console.log('Data respond:', respond)
             if (respond === 401) {
@@ -146,11 +153,12 @@ function ManageDepartment(props) {
             }
             setLoading(false);
         }
+
         fetchDataDepartment();
-    }, [search, filter,isReset]);
+    }, [search, filter, isReset]);
     const backToDepartmentList = async (action) => {
         setLoading(true);
-        let sort=(action === 'edit') ? 'updated_at': 'created_at,desc';
+        let sort = (action === 'edit') ? '' : 'created_at,desc';
         const result = await getListDepartments({
             sort,
         });
@@ -159,63 +167,64 @@ function ManageDepartment(props) {
     };
     return (
         <>
-            {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit}  onBack={backToDepartmentList}   />):(
+            {!!isEdit ? (<EditDepartment onCancel={handleCancelEdit} onBack={backToDepartmentList}/>) : (
                 (
-                  !!loading ?(<ListPageSkeleton column={5} lengthItem={5} /> ):
-                      (  <div className='container-department'>
-                          <div className='header-department-page'>
-                              <div className='title '>
-                                  <FaRegBuilding className='icon'/>
-                                  <h3> Danh Sách Phòng Ban</h3>
-                              </div>
-                              <div className='filter-department-page'>
-                                  <div className='filter-group'>
-                                      <FilterSelect listOptions={listStatus} width='15.2rem'
-                                                    title={'Trạng thái'}
-                                                    background={'#de935e'}
-                                                    onFilter={handleFilterStatus}/>
-                                  </div>
-                                  <div className='search-excel'>
-                                      <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
-                                          onSearch={setSearch}               backgroundButton='#479f87'/>
-                                      {/*<Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>*/}
-                                      {/*    <Button className='btn'><FaFileUpload className='icon'/></Button>*/}
-                                      {/*</Tooltip>*/}
-                                      {/*<Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>*/}
-                                      {/*    <Button className='btn'><FaFileDownload className='icon'/></Button>*/}
-                                      {/*</Tooltip>*/}
-                                      {
-                                          createPermission && (
-                                              <Button className='btn-add'
-                                                      onClick={handleOpenAddDepartment}>Tạo Mới </Button>
-                                          )
-                                      }
-                                  </div>
-                              </div>
+                    !!loading ? (<ListPageSkeleton column={5} lengthItem={5}/>) :
+                        (<div className='container-department'>
+                            <div className='header-department-page'>
+                                <div className='title '>
+                                    <FaRegBuilding className='icon'/>
+                                    <h3> Danh Sách Phòng Ban</h3>
+                                </div>
+                                <div className='filter-department-page'>
+                                    <div className='filter-group'>
+                                        <FilterSelect listOptions={listStatus} width='15.2rem'
+                                                      title={'Trạng thái'}
+                                                      background={'#de935e'}
+                                                      onFilter={handleFilterStatus}/>
+                                    </div>
+                                    <div className='search-excel'>
+                                        <SearchHidenButton height='2.4rem' width='18rem' searchButtonText={<FaSearch/>}
+                                                           onSearch={setSearch} backgroundButton='#479f87'/>
+                                        {/*<Tooltip title='Nhập File Excel' color={'#2F8D45FF'} key={'import'}>*/}
+                                        {/*    <Button className='btn'><FaFileUpload className='icon'/></Button>*/}
+                                        {/*</Tooltip>*/}
+                                        {/*<Tooltip title='Xuất File Excel' color={'#2F8D45FF'} key={'export'}>*/}
+                                        {/*    <Button className='btn'><FaFileDownload className='icon'/></Button>*/}
+                                        {/*</Tooltip>*/}
+                                        {
+                                            createPermission && (
+                                                <Button className='btn-add'
+                                                        onClick={handleOpenAddDepartment}>Tạo Mới </Button>
+                                            )
+                                        }
+                                    </div>
+                                </div>
 
-                          </div>
-                          <div className='content-department-page'>
-                              {
-                                  data.length > 0 ? (
-                                      <DepartmentTable
-                                          editItem={editPermission}
-                                          deleteItem={deletePermission}
-                                          tableHeader={department_table_header} tableBody={data} onDelete={handleDeleteDepartment} />
-                                  ) : (
-                                      <NotFoundData/>
-                                  )
-                              }
-                              {totalRecord >= 5 && (
-                                  <PaginationUI
-                                      handlePageChange={handlePageChange}
-                                      perPage={5}
-                                      totalRecord={totalRecord}
-                                      currentPage={page}
-                                  />
-                              )}
+                            </div>
+                            <div className='content-department-page'>
+                                {
+                                    data.length > 0 ? (
+                                        <DepartmentTable
+                                            editItem={editPermission}
+                                            deleteItem={deletePermission}
+                                            tableHeader={department_table_header} tableBody={data}
+                                            onDelete={handleDeleteDepartment}/>
+                                    ) : (
+                                        <NotFoundData/>
+                                    )
+                                }
+                                {totalRecord >= 10 && (
+                                    <PaginationUI
+                                        handlePageChange={handlePageChange}
+                                        perPage={10}
+                                        totalRecord={totalRecord}
+                                        currentPage={page}
+                                    />
+                                )}
 
-                          </div>
-                      </div>)
+                            </div>
+                        </div>)
                 )
 
             )
@@ -228,7 +237,7 @@ function ManageDepartment(props) {
                    destroyOnClose={true}
                    style={{top: 150}}
             >
-              <AddDepartment onCancel={handleCancelAdd} onSave={handleCreateDepartment} />
+                <AddDepartment onCancel={handleCancelAdd} onSave={handleCreateDepartment}/>
             </Modal>
             {contextHolder}
 

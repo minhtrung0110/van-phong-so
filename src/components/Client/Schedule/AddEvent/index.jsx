@@ -152,10 +152,10 @@ function AddEvent({start, end, listStaff, onSave, onCancel}) {
                 >
                 <FaUserClock
                     className='icon'/> Cần làm</span>
-                <span className={`type-item reminder ${typeEvent === 'reminder' ? 'active' : ''}`}
-                      onClick={() => setTypeEvent('reminder')}
-                ><FaCheckCircle
-                    className='icon'/> Nhắc nhở</span>
+                {/*<span className={`type-item reminder ${typeEvent === 'reminder' ? 'active' : ''}`}*/}
+                {/*      onClick={() => setTypeEvent('reminder')}*/}
+                {/*><FaCheckCircle*/}
+                {/*    className='icon'/> Nhắc nhở</span>*/}
             </div>
             <Controller
                 name="title"

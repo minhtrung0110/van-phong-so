@@ -115,8 +115,8 @@ function PostItem({post,onUpdate,onDelete,onReset}) {
                 }
             </div>
             <div className={cx('post-stats')}>
-                <div className={cx('cmt')}>{totalComments} bình luận</div>
-                <div className={cx('like')}>{totalLike} thích</div>
+                <div className={cx('cmt')}>{totalComments<0?0:totalComments} bình luận</div>
+                <div className={cx('like')}>{totalLike<0?0:totalLike} thích</div>
             </div>
             <div className={cx('post-actions')}>
 

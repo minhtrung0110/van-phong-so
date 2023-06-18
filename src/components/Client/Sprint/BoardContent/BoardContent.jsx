@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import "./BoardContent.scss"
 
-import { Container, Draggable } from "react-smooth-dnd";
+import {Container, Draggable} from "react-smooth-dnd";
 import {FaCross, FaPlus, FaTerminal, FaTimes, FaTimesCircle} from "react-icons/fa";
 import {mapOrder} from "~/utils/sorts";
 import {applyDrag} from "~/utils/dragDrop";
@@ -19,54 +19,62 @@ import TimeLine from "~/components/Client/Sprint/TimeLine";
 import {dragAndDropTask} from "~/api/Client/Task/taskAPI";
 
 
-function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,members,onReset,timeLine,permission}) {
-   // console.log({board,onBoard,columnData})
-   // console.log('rendering')
-    const [columns,setColumns] = useState(columnData)
-    const [isOpenNewColForm,setIsOpenNewColForm]=useState(false)
-    const [newColTitle,setNewColTitle]=useState('')
+function BoardContent({
+                          board,
+                          onBoard,
+                          columnData,
+                          onDeleteTask,
+                          onUpdateTask,
+                          members,
+                          onReset,
+                          timeLine,
+                          permission
+                      }) {
+    // console.log({board,onBoard,columnData})
+    // console.log('rendering')
+    const [columns, setColumns] = useState(columnData)
+    const [isOpenNewColForm, setIsOpenNewColForm] = useState(false)
+    const [newColTitle, setNewColTitle] = useState('')
     const [messageApi, contextHolder] = message.useMessage();
-  //  console.log(columns)
-    const newColInputRef=useRef()
-        const isViewTimeLine=useSelector(isViewTimelineSelector)
-    useEffect(()=>{
-      setColumns(columnData)
-    },[columnData])
+    //  console.log(columns)
+    const newColInputRef = useRef()
+    const isViewTimeLine = useSelector(isViewTimelineSelector)
+    useEffect(() => {
+        setColumns(columnData)
+    }, [columnData])
 
-    const onColumnDrop=(dropResult)=>{
-        let newColumns=[...columns]
+    const onColumnDrop = (dropResult) => {
+        let newColumns = [...columns]
         // set lai ccolumn
 
-        newColumns=applyDrag(newColumns,dropResult)
-        let newBoard={...board}
+        newColumns = applyDrag(newColumns, dropResult)
+        let newBoard = {...board}
         // cập nhật columnnOrder bang các id sau khi keo tha
-       // newBoard.columnOrder=newColumns.map(item=>item.id)
-        newBoard.board_columns=newColumns
-        console.log('neww_Columns',newColumns)
+        // newBoard.columnOrder=newColumns.map(item=>item.id)
+        newBoard.board_columns = newColumns
+        console.log('neww_Columns', newColumns)
         setColumns(newColumns)
         onBoard(newBoard)
         // console.log(newColumns)
         // console.log(newBoard)
     }
     // khi kéo thả project qua lai giua cac cột
-    const updateStatusTask=async (body) => {
+    const updateStatusTask = async (body) => {
         const result = await dragAndDropTask(body)
         return result.status === 1;
     }
-    const handleSwitchTaskColumn=async (sort,id,columnID) => {
-        const columnBoundTask=columns.find(c => c.id === columnID)
-        console.log('Column chua task xu ly',columnBoundTask)
-        const newSortValue=isEmpty(columnBoundTask.tasks)?1:columnBoundTask.tasks[sort].sort
-      //  console.log('Sort thay tế',newSortValue)
+    const handleSwitchTaskColumn = async (sort, id, columnID) => {
+
+        //  console.log('Sort thay tế',newSortValue)
         const result = await dragAndDropTask({
-            sort: newSortValue,
+            sort: sort,
             board_column_id: columnID,
             task_id: id
         })
-        if(result.status ===1){
+        if (result.status === 1) {
             onReset(Math.random())
         }
-       console.log('Ket qua keo tha:',result  )
+        console.log('Ket qua keo tha:', result)
         // console.log('Keo Tha:',{
         //     sort: dropResult.addedIndex,
         //     sprint_id: dropResult.payload.sprint_id,
@@ -74,36 +82,42 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
         // })
     }
 
-    const onCardDrop = (columnId,dropResult) => {
-        console.log( 'Dichuyen',dropResult)
-        console.log('col -id:',columnId)
-        console.log('Columns',columns)
-        if(dropResult.removedIndex !=null || dropResult.addedIndex !=null) /// Drop lần 2 lần thả vào column
+    const onCardDrop = (columnId, dropResult) => {
+        console.log('Dichuyen', dropResult)
+        console.log('col -id:', columnId)
+        console.log('Columns', columns)
+        if (dropResult.removedIndex != null || dropResult.addedIndex != null) /// Drop lần 2 lần thả vào column
         {
-            let taskDrop= {
-                task_id: dropResult.payload.id,
-                new_index: dropResult.addedIndex,
-                new_boardcolumn: columnId,
-            }
-            console.log('Object PPut API',taskDrop)
+            // let taskDrop = {
+            //     task_id: dropResult.payload.id,
+            //     new_index: dropResult.addedIndex,
+            //     new_boardcolumn: columnId,
+            // }
+            // console.log('Object PPut API', taskDrop)
             // if(updateStatusTask(taskDrop)){
-                let newColumns=[...columns]
-                let currentColumn=newColumns.find((item=>item.id===columnId))
-                console.log('New column:',newColumns,currentColumn)
-            if(dropResult.addedIndex!==null && dropResult.removedIndex!==null){
-                handleSwitchTaskColumn(dropResult.addedIndex,dropResult.payload.id,dropResult.payload.board_column_id)
-                console.log('Di chuyen trong Column :',dropResult.addedIndex,dropResult.payload.id,dropResult.payload.board_column_id)
-            }
-            else {
-                if(dropResult.addedIndex!==null){
-                    handleSwitchTaskColumn(dropResult.addedIndex,dropResult.payload.id,columnId)
-                    console.log('Keo tha sang Column mới add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
+            let newColumns = [...columns]
+            let currentColumn = newColumns.find((item => item.id === columnId))
+            // console.log('New column:', newColumns, currentColumn)
+            if (dropResult.addedIndex !== null && dropResult.removedIndex !== null) {
+                const Inbound = columns.find(c => c.id === columnId)
+                const newSortValue =Inbound.tasks[dropResult.addedIndex].sort
+                handleSwitchTaskColumn(newSortValue===dropResult.payload.sort?newSortValue+1:newSortValue, dropResult.payload.id, dropResult.payload.board_column_id)
+                console.log('Di chuyen trong Column :',Inbound.tasks[dropResult.addedIndex] ,newSortValue===dropResult.payload.sort?newSortValue+1:newSortValue)
+            } else {
+                if (dropResult.addedIndex !== null) {
+                    const columnBoundTask = columns.find(c => c.id === columnId)
+                    //  console.log('chekc addindex:', dropResult.addedIndex, columnBoundTask.length)
+                    const visit = (columnBoundTask.tasks.length <= dropResult.addedIndex) ? dropResult.addedIndex - 1 : dropResult.addedIndex
+                    const newSortValue = isEmpty(columnBoundTask.tasks) ? 1 : columnBoundTask.tasks[visit].sort
+                    //  console.log('Column chua task xu ly', columnBoundTask.tasks, visit, dropResult.addedIndex)
+                    handleSwitchTaskColumn(newSortValue, dropResult.payload.id, columnId)
+                    console.log('Keo tha sang Column mới add:', dropResult.addedIndex, 'remove', dropResult.removedIndex)
                 }
 
             }
-                currentColumn.tasks=applyDrag(currentColumn.tasks,dropResult,currentColumn.id)
-                // currentColumn.cardOrder=currentColumn.tasks.map(i=>i.id)
-                setColumns(newColumns)
+            currentColumn.tasks = applyDrag(currentColumn.tasks, dropResult, currentColumn.id)
+            // currentColumn.cardOrder=currentColumn.tasks.map(i=>i.id)
+            setColumns(newColumns)
             // }else{
             //     messageApi.open({
             //         type:'error',
@@ -115,22 +129,22 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
         }
         // vấn de: khi kéo thả thì trường column_ID của project bi loi không thay dôi
     }
-    const handleAddNewColumn=()=>{
+    const handleAddNewColumn = () => {
         //    newColInputRef.current.focus();
-        const newColumnToAdd={
-            id:Math.random().toString(36).substr(2,5),
-            boardId:board.id,
-            title:newColTitle.trim(),
-            cardOrder:[],
-            cards:[]
+        const newColumnToAdd = {
+            id: Math.random().toString(36).substr(2, 5),
+            boardId: board.id,
+            title: newColTitle.trim(),
+            cardOrder: [],
+            cards: []
         }
-        let newColumns=[...columns]
+        let newColumns = [...columns]
         newColumns.push(newColumnToAdd)
-      //  console.log(newColumns)
-        let newBoard={...board}
+        //  console.log(newColumns)
+        let newBoard = {...board}
         // cập nhật columnnOrder bang các id sau khi keo tha
-        newBoard.columnOrder=newColumns.map(item=>item.id)
-        newBoard.board_columns=newColumns
+        newBoard.columnOrder = newColumns.map(item => item.id)
+        newBoard.board_columns = newColumns
         setColumns(newColumns)
         onBoard(newBoard)
 
@@ -142,42 +156,40 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
 
     }
 
-    const handleUpdateColumn=(newColUpdate)=>{
-        const columnIdToUpdate=newColUpdate.id
-        let newColumns=[...columns]
-        const columnIndexToUpdate=newColumns.findIndex(i=>i.id===newColUpdate.id)
+    const handleUpdateColumn = (newColUpdate) => {
+        const columnIdToUpdate = newColUpdate.id
+        let newColumns = [...columns]
+        const columnIndexToUpdate = newColumns.findIndex(i => i.id === newColUpdate.id)
         //console.log('xóa ở: ',columnIndexToUpdate)
-        if(newColUpdate._destroy){
-            newColumns.splice(columnIndexToUpdate,1)
+        if (newColUpdate._destroy) {
+            newColumns.splice(columnIndexToUpdate, 1)
             setColumns(newColumns)
-        }else{
-            newColumns.splice(columnIndexToUpdate,1,newColUpdate)
+        } else {
+            newColumns.splice(columnIndexToUpdate, 1, newColUpdate)
             setColumns(newColumns)
         }
 
         // console.log(columns)
-        let newBoard={...board}
-        newBoard.columnOrder=newColumns.map(item=>item.id)
-        newBoard.board_columns=newColumns
+        let newBoard = {...board}
+        newBoard.columnOrder = newColumns.map(item => item.id)
+        newBoard.board_columns = newColumns
 
         onBoard(newBoard)
-      //  console.log(newColUpdate)
+        //  console.log(newColUpdate)
     }
 
 
-
-
     return (
-        isEmpty(board)?(
+        isEmpty(board) ? (
             <NotFoundData/>
-        ):(
+        ) : (
             <div className="board-content ">
                 {
                     !isViewTimeLine ? (<>
                         <Container
                             orientation="horizontal"
                             onDrop={onColumnDrop}
-                            getChildPayload={index =>columns[index]}
+                            getChildPayload={index => columns[index]}
                             dragHandleSelector=".column-drag-handle"
                             dropPlaceholder={{
                                 animationDuration: 150,
@@ -186,7 +198,7 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
                             }}
                         >
                             {
-                                !!columns && columns.map((col,index)=> (
+                                !!columns && columns.map((col, index) => (
                                     <Draggable
 
                                         key={index}>
@@ -207,7 +219,7 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
                                 ))
                             }
                         </Container>
-                        <div className='trello-minhtrung-container'  >
+                        <div className='trello-minhtrung-container'>
                             {/*{!isOpenNewColForm && (*/}
                             {/*    <Row>*/}
                             {/*        <Col className='add-new-column'*/}
@@ -221,7 +233,7 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
                             {/*    </Row>*/}
                             {/*)}*/}
                             {
-                                !!isOpenNewColForm  && ( <Row>
+                                !!isOpenNewColForm && (<Row>
                                     <Col className='enter-new-column'>
                                         <TextArea
                                             size='middle'
@@ -229,16 +241,17 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
                                             placeholder='Tạo Mới'
                                             className='input-enter-new-column '
                                             value={newColTitle}
-                                            onChange={e=>setNewColTitle(e.target.value)}
+                                            onChange={e => setNewColTitle(e.target.value)}
                                             ref={newColInputRef}
-                                            onKeyDown={event => (event.key==='Enter')&& handleAddNewColumn()}
+                                            onKeyDown={event => (event.key === 'Enter') && handleAddNewColumn()}
                                         />
                                         <div className='ft-btn'>
                                             <button className='btn-outline-success btn-add-new-column'
                                                     onClick={handleAddNewColumn}
-                                            >Tạo</button>
+                                            >Tạo
+                                            </button>
                                             <FaTimes className='cancel-new-column'
-                                                     onClick={()=>setIsOpenNewColForm(false)}
+                                                     onClick={() => setIsOpenNewColForm(false)}
                                             />
                                         </div>
 
@@ -246,11 +259,10 @@ function BoardContent({board,onBoard,columnData,onDeleteTask,onUpdateTask,member
                                 </Row>)
                             }
                         </div>
-                    </>):(
-                      <TimeLine board={board} />
+                    </>) : (
+                        <TimeLine board={board}/>
                     )
                 }
-
 
 
             </div>

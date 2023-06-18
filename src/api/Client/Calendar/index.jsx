@@ -15,8 +15,8 @@ export const configHeadersAuthenticate = () => {
     };
 };
 
-export const getListEvents = async ({sort, filter, search, keySearch, page} = {}) => {
-    const url = 'events';
+export const getListEvents = async (user_id,{sort, filter, search, keySearch, page} = {}) => {
+    const url = `events/list/${user_id}`;
     const queryString = [];
     if (sort) {
         queryString.push(`orderBy=${sort}`)

@@ -89,7 +89,7 @@ function EditStaff(props) {
     const onSave = async (data) => {
         const updateStaff = {
             id:staff.id,
-            role_id: 1,
+            role_id: data.role_id,
             first_name: data.first_name,
             last_name: data.last_name,
             birthday: dayjs(data.birthday, "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),

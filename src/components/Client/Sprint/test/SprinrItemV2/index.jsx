@@ -182,6 +182,7 @@ function SprintItemV2({
         const done=sprint.board_columns.find(item=>item.name==='Done')
 
         onComplete(sprint.id,done.id)
+        setShowCompleteSprint(false)
     }
     return (
         <div className={`sprint-item ${sprint.status === -1 ? 'backlog' : ''}`}>

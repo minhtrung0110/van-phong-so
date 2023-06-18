@@ -14,7 +14,7 @@ export const configHeadersAuthenticate = () => {
     };
 };
 
-export const getListProjects = async ({ sort,filter, search,keySearch, page } = {}) => {
+export const getListProjects = async ({ sort,filter, search,user_id, page } = {}) => {
     const url = 'projects';
     const queryString = [];
     if (sort) {
@@ -22,6 +22,8 @@ export const getListProjects = async ({ sort,filter, search,keySearch, page } = 
     }
     if (search) {
             queryString.push(`name=${search}`);
+    }if(user_id) {
+        queryString.push(`user_id=${user_id}`)
     }
     if (page) {
         queryString.push(`page=${page}`);
@@ -116,8 +118,8 @@ export const editSprint = async (id, body) => {
                       return {status:0,message:'Cập nhật chu kỳ phát triển thất bại'}
     }
 };
-export const completeSprint = async (id, body) => {
-    const url = `sprints/${id}`;
+export const completeSprint = async (body) => {
+    const url = `complete_sprints`;
     const response = await axiosClient.put(url, body, configHeadersAuthenticate());
     console.log(response)
     if(response.status === 1 || response.message ==="Success") {

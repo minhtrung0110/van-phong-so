@@ -99,7 +99,8 @@ function ManageSchedule(props) {
     };
     useEffect(() => {
         async function fetchDataEvents() {
-            const respond = await getListEvents();
+            const userIdLogin=localStorage.getItem('userIdLogin');
+            const respond = await getListEvents(userIdLogin);
             console.log('Data respond:', respond)
             if (respond === 401) {
                 handleSetUnthorization();

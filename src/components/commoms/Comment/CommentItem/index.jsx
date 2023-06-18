@@ -45,15 +45,15 @@ function CommentItem({comment, replies, setActiveComment, activeComment, updateC
 
                     </div>
                     <div className={cx("comment-actions")}>
-                        {canReply && (
-                            <div
-                                className={cx("comment-action")}
-                                onClick={() =>                                    setIsReplying(!isReplying)
-                                }
-                            >
-                                <FaReply />
-                            </div>
-                        )}
+                        {/*{canReply && (*/}
+                        {/*    <div*/}
+                        {/*        className={cx("comment-action")}*/}
+                        {/*        onClick={() =>                                    setIsReplying(!isReplying)*/}
+                        {/*        }*/}
+                        {/*    >*/}
+                        {/*        <FaReply />*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
                         {canEdit && (
                             <div
                                 className={cx("comment-action")}

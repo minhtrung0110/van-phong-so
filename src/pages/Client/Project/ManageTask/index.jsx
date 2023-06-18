@@ -107,7 +107,7 @@ function ManageTaskPage(props) {
         }
 
         fetchDataSprint();
-        fetchDataMembers(1)
+        fetchDataMembers(project.projectId)
         // return () => {
         //     isMountedRef.current = false;
         // };

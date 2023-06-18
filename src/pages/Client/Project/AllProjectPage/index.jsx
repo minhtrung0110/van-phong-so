@@ -59,7 +59,8 @@ function AllProjectPage(props) {
         async function fetchDataProject() {
             const project=JSON.parse(localStorage.getItem('project'))
             let params = {};
-            if (search !== '') params = { ...params, search };
+                      const userIdLogin=localStorage.getItem('userIdLogin')
+            if (search !== '') params = { ...params, search,user_id: userIdLogin };
             const respond = await getListProjects(params);
             console.log('Data respond:', respond)
             if (respond === 401) {

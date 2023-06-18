@@ -56,8 +56,9 @@ function Column({sprint,column,onResetData, onCardDrop,members, onUpdateColumn,o
 
     }
     const handleAddCard = async () => {
+
         const length=column.tasks.length;
-        const newValueSortTask=column.tasks[length-1].sort
+        const newValueSortTask=length>0?column.tasks[length-1].sort:1
         const newCardToAdd = {
             sprint_id: sprint.id,
             project_id: sprint.project_id,
@@ -81,6 +82,7 @@ function Column({sprint,column,onResetData, onCardDrop,members, onUpdateColumn,o
         if (result.status === 1) {
             let newColumn = cloneDeep(column)
             newColumn.tasks.push(newCardToAdd)
+            onResetData(Math.random())
             /// newColumn.cardOrder.push(newCardToAdd.id)
             // truyền lên board Content
             onUpdateColumn(newColumn)

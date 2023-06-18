@@ -50,7 +50,7 @@ function DepartmentTable({editItem,deleteItem,tableHeader, tableBody,onDelete}) 
                 content: result.message,
                 duration: 1.3,
             });
-        } else if (result.status === 0) {
+        } else  {
             messageApi.open({
                 type: 'error',
                 content: result.message,
@@ -89,13 +89,13 @@ function DepartmentTable({editItem,deleteItem,tableHeader, tableBody,onDelete}) 
                         </p>
                     </td>
                     <td className="col-action">
-                        <button
-                            id="show-user"
-                           onClick={() => navigateGroupPage(item)}
-                            className="btn-show"
-                        >
-                            <FaEye className="icon-show"/>
-                        </button>
+                        {/*<button*/}
+                        {/*    id="show-user"*/}
+                        {/*   onClick={() => navigateGroupPage(item)}*/}
+                        {/*    className="btn-show"*/}
+                        {/*>*/}
+                        {/*    <FaEye className="icon-show"/>*/}
+                        {/*</button>*/}
                         {
                             editItem && (
                                 <button

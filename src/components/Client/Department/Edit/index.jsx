@@ -31,7 +31,7 @@ function EditDepartment({onCancel,onBack}) {
                 duration: 1.35,
             });
             setTimeout(() => dispatch(setIsEdit(false)), 800)
-            dispatch(setIsReset(true))
+            dispatch(setIsReset(Math.random()))
             onBack('edit')
 
 

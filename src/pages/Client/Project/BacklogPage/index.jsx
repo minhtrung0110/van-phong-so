@@ -353,14 +353,14 @@ function BacklogPage(props) {
     }
     const handleUpdateSprint = async (id, data) => {
         console.log('Update Sprint: ', id, data)
-        const result = await editSprint(id,data);
+        const result = await editSprint(id, data);
         if (result.status === 1) {
             messageApi.open({
                 type: 'success',
                 content: result.message,
                 duration: 1.3,
             });
-           // dispatch(setIsResetSprint(true))
+            // dispatch(setIsResetSprint(true))
             setLoadData(!loadData)
         } else if (result.status === 0) {
             messageApi.open({
@@ -371,15 +371,15 @@ function BacklogPage(props) {
         }
 
     }
-    const handleCompleteSprint = async (id,idDone) => {
+    const handleCompleteSprint = async (id, idDone) => {
         console.log('Complete Sprint: ', id)
-        const backlog=listSprints.find(sprint => sprint.title==="BackLog")
+        const backlog = listSprints.find(sprint => sprint.title === "BackLog")
         const complete = {
-            sprint_id: id,
-            to_sprint:backlog.id,
-            id_done:idDone
+            id: id,
+            board_column_id: idDone,
+            to_sprint_id: backlog.id,
         }
-        const result = await completeSprint(id,complete);
+        const result = await completeSprint(complete);
         if (result.status === 1) {
             messageApi.open({
                 type: 'success',
@@ -465,7 +465,7 @@ function BacklogPage(props) {
                             <BoardSprint
                                 permission={{
                                     edit: editPermission, delete: deletePermission,
-                                    createTask:createTaskPermission
+                                    createTask: createTaskPermission
                                 }}
                                 project={project} onBoard={handleUpdateSprint} columnData={listSprints}
                                 onEdit={handleUpdateSprint}

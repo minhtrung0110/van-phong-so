@@ -61,12 +61,12 @@ function BoardSprint({project,permission, columnData, onEdit, onDelete,onComplet
             // console.log('ccheccked',listCardSprint)
             if(dropResult.addedIndex!==null && dropResult.removedIndex!==null){
                     handleSwitchTask(dropResult.addedIndex,dropResult.payload.id,dropResult.payload.sprint_id)
-                console.log('Di chuyen trong Sprint add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
+                console.log('Di chuyen trong Sprint add:',dropResult.addedIndex,dropResult.payload.id,columnId)
             }
             else {
                 if(dropResult.addedIndex!==null){
                     handleSwitchTask(dropResult.addedIndex,dropResult.payload.id,columnId)
-                    console.log('Keo tha sang Sprint mới add:',dropResult.addedIndex,'remove',dropResult.removedIndex)
+                    console.log('Keo tha sang Sprint mới add:',dropResult.addedIndex,dropResult.payload.id,columnId)
                 }
 
             }

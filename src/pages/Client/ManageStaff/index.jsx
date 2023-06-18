@@ -3,7 +3,7 @@ import StaffTable from "~/components/Client/Staff";
 import {staff_table_header} from "~/asset/data/staff-table-header";
 import NotFoundData from "~/components/commoms/NotFoundData";
 import './style.scss'
-import {FaFileDownload,  FaFileUpload,  FaUsers} from "react-icons/fa";
+import {FaUsers} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
 import {
     isAddStaffSelector,
@@ -13,7 +13,7 @@ import {
 } from "~/redux/selectors/staff/staffSelector";
 import AddStaff from "~/components/Client/Staff/Add";
 import EditStaff from "~/components/Client/Staff/Edit";
-import {setIsAdd, setIsEdit} from "~/redux/reducer/staff/staffReducer";
+import {setIsAdd} from "~/redux/reducer/staff/staffReducer";
 import PaginationUI from "~/components/commoms/Pagination";
 import ListTableSkeleton from "~/components/commoms/Skeleton/ListPage/ListPageSkeleton";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
@@ -158,11 +158,17 @@ function ManageStaff(props) {
                 setData([])
                 return false;
             } else {
-                setListRoles(respond.results.map((item)=>( {
+                const listRolesTemp=respond.results.map((item)=>( {
                     id: item.id,
                     label: item.title,
                     value: item.id,
-                })));
+                }))
+                console.log('check ListRoles:', listRolesTemp)
+                 listRolesTemp.push({
+                    label:'Tất Cả',
+                    value: 'all',
+                })
+                setListRoles(listRolesTemp);
             }
             setLoading(false);
         }
@@ -178,7 +184,7 @@ function ManageStaff(props) {
     };
     const backToStaffList = async (action) => {
         setLoading(true);
-        let sort=(action === 'edit') ? 'updated_at,asc': 'created_at,desc';
+        let sort=(action === 'edit') ? '': 'created_at,desc';
         const result = await getListStaffs({
             sort,
         });

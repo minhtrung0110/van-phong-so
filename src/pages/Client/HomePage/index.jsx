@@ -25,23 +25,26 @@ import {deleteCookie, getCookies} from "~/api/Client/Auth";
 import {getListStaffs} from "~/api/Client/Staff/staffAPI";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 import ListSprintSkeleton from "~/components/commoms/Skeleton/Project/Sprint";
+import {authorizationFeature} from "~/utils/authorizationUtils";
 HomePage.propTypes = {
 
 };
 
 function HomePage({slot}) {
+    const userLogin=useSelector(getUserSelector)
     const [data,setData] =useState([])
     const [loading, setLoading] = React.useState(true);
-    const [loadMore, setLoadMore] = useState(true);
-    const [isReset,setIsReset] = useState(false);
+    const [isReset,setIsReset] = useState(2);
     const [showConfirm,setShowConfirm]=useState({id:null,show:false})
     const [postEdit,setPostEdit]=useState(false)
-    const [totalRecord, setTotalRecord] = React.useState(data.length);
+    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Post','create')
+    const updatePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Post','update')
+
     const [page, setPage] = React.useState(1);
     const [messageApi, contextHolder] = message.useMessage();
     const dispatch=useDispatch()
     const navigate=useNavigate()
-    const userLogin=useSelector(getUserSelector)
+
     const handleDeletePost=async (id) => {
         console.log('Delete post ', showConfirm.id)
         const response = await deletePost(showConfirm.id)
@@ -88,6 +91,7 @@ function HomePage({slot}) {
                 content: result.message,
                 duration: 1.3,
             });
+            setIsReset(Math.random())
         }else if(result===401){
             handleSetUnthorization()
         }else {
@@ -205,9 +209,13 @@ function HomePage({slot}) {
                     <div className='gr-left'>
 
                         <div className='list-posts' id={'list-posts'}>
-                            <div className='create-post'>
-                                <AddPost  author={userLogin} onSave={handleCreatePost} />
-                            </div>
+                            {
+                                createPermission && (
+                                    <div className='create-post'>
+                                        <AddPost  author={userLogin} onSave={handleCreatePost} />
+                                    </div>
+                                )
+                            }
                             {!!data && data.map(item => (
                                 <PostItem post={item}
                                           onReset={setIsReset}

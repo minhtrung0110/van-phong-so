@@ -41,9 +41,9 @@ function Decentralize(props) {
     const [filter, setFilter] = React.useState({role:'all',status:'all'})
     const [messageApi, contextHolder] = message.useMessage();
     const userLogin=useSelector(getUserSelector)
-    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Staff','create')
-    const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Staff','update')
-    const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Staff','delete')
+    const createPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Role','create')
+    const editPermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Role','update')
+    const deletePermission =!isEmpty(userLogin) && authorizationFeature(userLogin.permission,'Role','delete')
     const dispatch = useDispatch()
     const handleAddNewRole = () => {
         dispatch(setIsAdd(true))
