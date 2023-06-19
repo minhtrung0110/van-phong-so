@@ -51,15 +51,13 @@ export const getListEvents = async (user_id,{sort, filter, search, keySearch, pa
 
 export const getEventById = async (id) => {
     const url = `events/${id}`;
-    const response = await axiosClient.get(url, configHeadersAuthenticate());
-    console.log(url)
-    //console.log('response', response)
-    if (response.status === 1) {
-        return response.data.result;
-    } else if (response.status === 0) {
-        return 401;
-    } else {
-        return {};
+    const response = await axiosClientCalendar.get(url, configHeadersAuthenticate());
+    if(response.status === 1 ) {
+        return {status:1,data:response.data.result,message:'Lấy thông tin sự kiện thành công'}
+    }
+    else if (response.status===401)   return {status:401,message:'Không thể xác thực'}
+    else {
+        return {status:0,data:[],message:'Không thể lấy thông tin .'}
     }
 };
 export const getListEventsByDepartmentId = async (id) => {
@@ -88,7 +86,7 @@ export const createEvent = async (body) => {
 }
 export const editEvent = async (body) => {
     const url = `events`;
-    const response = await axiosClient.put(url, body, configHeadersAuthenticate());
+    const response = await axiosClientCalendar.put(url, body, configHeadersAuthenticate());
     if (response.status === 1) {
         return {status: 1, message: 'Cập nhật sự kiện mới thành công'}
     } else if (response.status === 401) return {status: 401, message: 'Không thể xác thuc'}

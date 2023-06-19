@@ -11,8 +11,9 @@ CompleteSprint.propTypes = {
 
 function CompleteSprint({sprint,onCancel,onComplete}) {
     const total =!isEmpty(sprint.tasks) ?sprint.tasks.length:0
+    const id_column_done=sprint.board_columns.find((item=>item.name==='Done')).id
     const tasksDone =!isEmpty(sprint.tasks) ? sprint.tasks.reduce((acc, task) => {
-        if (task.board_column_id === 9) {
+        if (task.board_column_id === id_column_done) {
             return acc + 1;
         } else {
             return acc;

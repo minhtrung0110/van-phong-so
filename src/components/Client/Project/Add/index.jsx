@@ -79,6 +79,7 @@ function AddProject({onBack}) {
         const member_ids=data.member_ids.map((member) =>{
             return listStaff.find(item => item.email===member).ID
         })
+        member_ids.push(userLogin.id)
         const newProject = {...data,member_ids,status:0, created_by: userLogin,}
         console.log(newProject)
         const result = await createProject(newProject)
@@ -88,7 +89,7 @@ function AddProject({onBack}) {
                 content: result.message,
                 duration: 1.3,
             });
-            setTimeout(() => handleCancel(), 1300)
+            setTimeout(() => handleCancel(), 300)
             onBack('desc', 'add')
         } else {
             messageApi.open({

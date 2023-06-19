@@ -86,9 +86,9 @@ export const createProject = async (body) => {
     const url = 'projects';
     const response = await axiosClient.post(url, body, configHeadersAuthenticate());
     console.log(response)
-    if(response.status === 1 || response.message ==="Success") {
+    if(response.status === 1 ) {
         return {status:1,message:'Tạo dự án mới thành công'}
-    }
+    }else if(response.status ===401) return 401
     else  return {status:0,message:'Tạo dự án mới thành công'}
     // xac thuc 401
 

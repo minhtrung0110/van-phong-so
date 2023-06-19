@@ -15,12 +15,10 @@ import {
 } from "react-icons/fa";
 import dayjs from "dayjs";
 import CustomEditor from "~/components/commoms/Edittor";
-import {isEmpty} from "lodash";
-import moment from "moment";
 import {useSelector} from "react-redux";
 import {getUserSelector} from "~/redux/selectors/auth/authSelector";
 import GroupMember from "~/components/Client/Task/GroupMember";
-import {setMembers} from "~/redux/reducer/project/projectReducer";
+
 
 AddEvent.propTypes = {};
 const optionsLoopDuration = [
@@ -103,19 +101,22 @@ function AddEvent({start, end, listStaff, onSave, onCancel}) {
     const userLogin = useSelector(getUserSelector)
     const onSubmit = (data) => {
         const {duration, ...rest} = data
+        const memberEvent=members.map((member,index) =>( {
+            employee_email: member.email,
+            employee_id:member.ID,
+            // id: index+1,
+        }))
+       memberEvent.push({employee_email:userLogin.email,employee_id: userLogin.id})
         const newEvent = (typeEvent === 'event') ? {
             event_type: 1,
             start_time: dayjs(duration[0], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             end_time: dayjs(duration[1], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             created_by_id: userLogin.id,
-            event_employee: members.map((member,index) =>( {
-                employee_email: member.email,
-                employee_id:member.ID,
-                id: index+1,
-            })),
+            event_employees:memberEvent ,
             ...rest
         } : {
             event_type: 2,
+            event_employees:[{employee_email:userLogin.email,employee_id: userLogin.id}],
             start_time: dayjs(duration[0], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             end_time: dayjs(duration[1], "DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             created_by_id: userLogin.id,
@@ -276,34 +277,34 @@ function AddEvent({start, end, listStaff, onSave, onCancel}) {
                     </div>
                 )
             }
-            {
-                typeEvent === 'event' && (
-                    <div className='attach'>
-                        <Controller
-                            name="file"
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => (
-                                <Upload
-                                    {...field}
-                                    action="http://localhost:3000/"
-                                    listType="picture"
-                                    // defaultFileList={listFile}
-                                    multiple
-                                    // onChange={handleChangeUpload}
-                                >
-                                    <button className='btn-upload'>
-                                        <FaPaperclip className='icon'/>
-                                        <span className='title'>Tải lên tệp đính kèm</span>
-                                    </button>
-                                </Upload>
-                            )}
-                        />
+            {/*{*/}
+            {/*    typeEvent === 'event' && (*/}
+            {/*        <div className='attach'>*/}
+            {/*            <Controller*/}
+            {/*                name="file"*/}
+            {/*                control={control}*/}
+            {/*                defaultValue=""*/}
+            {/*                render={({field}) => (*/}
+            {/*                    <Upload*/}
+            {/*                        {...field}*/}
+            {/*                        action="http://localhost:3000/"*/}
+            {/*                        listType="picture"*/}
+            {/*                        // defaultFileList={listFile}*/}
+            {/*                        multiple*/}
+            {/*                        // onChange={handleChangeUpload}*/}
+            {/*                    >*/}
+            {/*                        <button className='btn-upload'>*/}
+            {/*                            <FaPaperclip className='icon'/>*/}
+            {/*                            <span className='title'>Tải lên tệp đính kèm</span>*/}
+            {/*                        </button>*/}
+            {/*                    </Upload>*/}
+            {/*                )}*/}
+            {/*            />*/}
 
 
-                    </div>
-                )
-            }
+            {/*        </div>*/}
+            {/*    )*/}
+            {/*}*/}
 
             <div className='footer'>
                 <button className='btn-cancel' onClick={onCancel}>Hủy</button>

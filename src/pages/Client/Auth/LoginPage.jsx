@@ -140,7 +140,7 @@ function LoginPage(props) {
                                     </div>
                                     {errors.password && <span className='error'>{errors.password.message}</span>}
                                 </div>
-                                <NavLink to={config.routes.forgotPassword} className='forgot'>Quên Mật Khẩu?</NavLink>
+                                {/*<NavLink to={config.routes.forgotPassword} className='forgot'>Quên Mật Khẩu?</NavLink>*/}
                                 <input type="submit" className="btn-login" value="Đăng Nhập"/>
                             </form>
                         </div>

@@ -51,7 +51,7 @@ function TaskItem({task,type,columns, onShowDetail,showDetail=false}) {
                               color: stylePriority.color
                           }}
                     >{stylePriority.label}</span>
-                    <span className='id'>{`id: ${task.id} sort: ${task.sort}`}</span>
+                    <span className='id'>{`id: ${task.id} `}</span>
                 </div>
                 {/*<FaPen className='btn-edit-project'/>*/}
             </div>

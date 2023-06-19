@@ -33,7 +33,7 @@ function FilterProject({listmember = [], onFilter, className}) {
 
     ];
     const optionsDueDay = [
-        {value: 'none_duration_complete', label: 'Không có'},
+        {value: 'none_duration_complete', label: 'Không quá hạn'},
         {value: 'is_duration_complete', label: 'Quá hạn'},
         {value: 3, label: 'Gần đến hạn (3 ngày) '},
         {value: 7, label: 'Gần đến hạn (7 ngày) '},

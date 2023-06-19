@@ -228,28 +228,28 @@ function HomePage({slot}) {
                     </div>
                 )
             }
-            <div className='gr-right'>
-                <div className='filter-posts'>
-                    <SearchHidenButton width={'15rem'}/>
-                    <span className='title'>
-                        <FaList className={'icon'} />
-                        Danh sách nhóm</span>
-                    <div className='list-groups'>
+            {/*<div className='gr-right'>*/}
+            {/*    <div className='filter-posts'>*/}
+            {/*        /!*<SearchHidenButton width={'15rem'}/>*!/*/}
+            {/*        /!*<span className='title'>*!/*/}
+            {/*        /!*    <FaList className={'icon'} />*!/*/}
+            {/*        /!*    Danh sách nhóm</span>*!/*/}
+            {/*        /!*<div className='list-groups'>*!/*/}
 
-                        {
-                            listDepartments.map(department =>(
-                                <NavLink className='department-item'
-                                         to={`${config.routes.post}/${department.id}`}
-                                >
-                                    <FaChalkboard className='icon'></FaChalkboard>
-                                    {department.name}
-                                </NavLink>
-                            ))
-                        }
-                    </div>
-                </div>
+            {/*        /!*    {*!/*/}
+            {/*        /!*        listDepartments.map(department =>(*!/*/}
+            {/*        /!*            <NavLink className='department-item'*!/*/}
+            {/*        /!*                     to={`${config.routes.post}/${department.id}`}*!/*/}
+            {/*        /!*            >*!/*/}
+            {/*        /!*                <FaChalkboard className='icon'></FaChalkboard>*!/*/}
+            {/*        /!*                {department.name}*!/*/}
+            {/*        /!*            </NavLink>*!/*/}
+            {/*        /!*        ))*!/*/}
+            {/*        /!*    }*!/*/}
+            {/*        /!*</div>*!/*/}
+            {/*    </div>*/}
 
-            </div>
+            {/*</div>*/}
             <Modal title="" open={postEdit}
                    maskClosable={true}
                    destroyOnClose={true}

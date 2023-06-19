@@ -450,7 +450,7 @@ function BacklogPage(props) {
                                     Danh sách chu kỳ phát triển
                                 </div>
                                 <div className='sprint-backlog-actions'>
-                                    <SearchHidenButton width={'15rem'} onSearch={setSearch}/>
+                                    {/*<SearchHidenButton width={'15rem'} onSearch={setSearch}/>*/}
                                     {
                                         createPermission && (
                                             <button className='create-sprint' onClick={() => setShowAddSprint(true)}>

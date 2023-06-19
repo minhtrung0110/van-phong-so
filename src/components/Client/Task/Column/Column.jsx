@@ -203,25 +203,25 @@ function Column({sprint,column,onResetData, onCardDrop,members, onUpdateColumn,o
                     onMouseDown={e => e.preventDefault()}
                     onKeyDown={event => (event.key === 'Enter') && handleColumnTitleBlur()}
                 />
-                <Dropdown
-                    className='dropdown-btn'
-                    menu={{
-                        items,
-                        onClick: handleMenuClick,
-                    }}
-                    onOpenChange={handleOpenChange}
-                    open={open}
-                    placement="bottomRight"
-                    overlayStyle={{
-                        padding: '0',
-                        margin: '0',
-                    }}
-                    overlayClassName='overlay-more'
-                >
-                    <div>
-                        <FaEllipsisH className='dot'/>
-                    </div>
-                </Dropdown>
+                {/*<Dropdown*/}
+                {/*    className='dropdown-btn'*/}
+                {/*    menu={{*/}
+                {/*        items,*/}
+                {/*        onClick: handleMenuClick,*/}
+                {/*    }}*/}
+                {/*    onOpenChange={handleOpenChange}*/}
+                {/*    open={open}*/}
+                {/*    placement="bottomRight"*/}
+                {/*    overlayStyle={{*/}
+                {/*        padding: '0',*/}
+                {/*        margin: '0',*/}
+                {/*    }}*/}
+                {/*    overlayClassName='overlay-more'*/}
+                {/*>*/}
+                {/*    <div>*/}
+                {/*        <FaEllipsisH className='dot'/>*/}
+                {/*    </div>*/}
+                {/*</Dropdown>*/}
             </header>
             <div className='card-list'>
                 <Container

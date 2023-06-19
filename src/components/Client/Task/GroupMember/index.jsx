@@ -11,8 +11,8 @@ GroupMember.propTypes = {
 
 };
 
-function GroupMember({onMembers,defaultMembers=[],selectLimit,listMembersForTask,addMember=false,maxCount=4,sizeAvatar='default'}) {
-   /// console.log('Testing:',listMembersForTask)
+function GroupMember({onMembers,defaultMembers=[],type='normal',selectLimit,listMembersForTask,addMember=false,maxCount=4,sizeAvatar='default'}) {
+   console.log('Testing:',defaultMembers)
     const [openSelectMember, setOpenSelectMember] = useState(false)
     const listDefaultColors=['#721e1e',
         '#da7e14',
@@ -34,18 +34,26 @@ function GroupMember({onMembers,defaultMembers=[],selectLimit,listMembersForTask
             >
 
                 {
-                  !!defaultMembers &&  defaultMembers.map((item)=> (
-                        <Tooltip title={`${item.first_name} ${item.last_name}`} placement="top" key={item.id}>
-                            <AvatarCustom avatar={item.avatar_url} lastName={item.last_name} size={sizeAvatar} />
-                            {/*<Avatar src={item.avatar}*/}
-                            {/*    style={{*/}
-                            {/*        backgroundColor: '#87d068',*/}
-                            {/*    }}*/}
-                            {/*    icon={<FaMale/>}*/}
-                            {/*/>*/}
+                    type==='event'?(
+                        !!defaultMembers &&  defaultMembers.map((item)=> (
+                                <AvatarCustom avatar={item.employee.avatar_url} lastName={item.employee.last_name} size={sizeAvatar} />
 
-                        </Tooltip>
+                        ))
+                    ):(
+                    !!defaultMembers &&  defaultMembers.map((item)=> (
+                    <Tooltip title={`${item.first_name} ${item.last_name}`} placement="top" key={item.id}>
+                    <AvatarCustom avatar={item.avatar_url} lastName={item.last_name} size={sizeAvatar} />
+                {/*<Avatar src={item.avatar}*/}
+                {/*    style={{*/}
+                {/*        backgroundColor: '#87d068',*/}
+                {/*    }}*/}
+                {/*    icon={<FaMale/>}*/}
+                {/*/>*/}
+
+                    </Tooltip>
                     ))
+                )
+
                 }
             </Avatar.Group>
             {
