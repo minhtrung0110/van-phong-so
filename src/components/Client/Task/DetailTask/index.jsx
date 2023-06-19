@@ -89,12 +89,12 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
     };
 
     const listState = getListStatusTaskProject(sprint)
-
+    console.log('List state: ', listState)
     const listStateRender = listState.map((item, index) => ({
         label: item.label,
         value: item.id,
-        color: listColorStateDefaults[item.id-1].color,
-        backgroundColor: listColorStateDefaults[item.id-1].backgroundColor
+        color: listColorStateDefaults.find(c=>c.id===item.id).color,
+        backgroundColor: listColorStateDefaults.find(c=>c.id===item.id).backgroundColor
     }))
    // console.log(listColorStateDefaults[9].color)
     // console.log('Status: ',status)
@@ -375,24 +375,24 @@ function DetailTask({sprint,listMembers, isOpen,column, onUpdateTask, onDeleteTa
                     }
 
                 </div>
-                <div className='attach-file'>
-                    <Upload
-                        action="http://localhost:3000/"
-                        listType="picture"
-                        defaultFileList={listFile}
-                        fileList={listFile}
-                        multiple
-                        onChange={handleChangeUpload}
-                    >
-                        <button className='btn-upload'>
-                            <FaPaperclip className='icon'/>
-                            <span className='title'>Tải lên tệp đính kèm</span>
-                        </button>
-                    </Upload>
-                    {!isEmpty(listFile) && (<div className='title-upload'>Tệp đính kèm ({listFile.length})
-                        <FaCaretDown className='icon' onClick={handleHiddenListFile}/>
-                    </div>)}
-                </div>
+                {/*<div className='attach-file'>*/}
+                {/*    <Upload*/}
+                {/*        action="http://localhost:3000/"*/}
+                {/*        listType="picture"*/}
+                {/*        defaultFileList={listFile}*/}
+                {/*        fileList={listFile}*/}
+                {/*        multiple*/}
+                {/*        onChange={handleChangeUpload}*/}
+                {/*    >*/}
+                {/*        <button className='btn-upload'>*/}
+                {/*            <FaPaperclip className='icon'/>*/}
+                {/*            <span className='title'>Tải lên tệp đính kèm</span>*/}
+                {/*        </button>*/}
+                {/*    </Upload>*/}
+                {/*    {!isEmpty(listFile) && (<div className='title-upload'>Tệp đính kèm ({listFile.length})*/}
+                {/*        <FaCaretDown className='icon' onClick={handleHiddenListFile}/>*/}
+                {/*    </div>)}*/}
+                {/*</div>*/}
                 <div className='activity-task'>
                     <div className='description'>
 

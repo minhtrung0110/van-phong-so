@@ -50,47 +50,36 @@ function SprintItemV2({
     const [valueNewTask, setValueNewTask] = useState()
     const userLogin = useSelector(getUserSelector)
     const showSetting = (permission.edit || permission.delete)
-    const listOptions = (permission.edit && permission.delete) ? [
-        {
-            key: 'edit',
-            label: 'Cập nhật chu kỳ làm việc',
-        },
-        {
-            key: 'remove',
-            label: 'Xóa chu kỳ làm việc',
-        },
-        {
-            key: 'access',
-            label: 'Truy cập chu kỳ làm việc',
-        },
-    ] : (permission.edit === true) ? [
-        {
-            key: 'edit',
-            label: 'Cập nhật phiên làm việc',
-        }] : [
-        {
-            key: 'remove',
-            label: 'Xóa phiên làm việc',
-        }]
+    const listOptions = []
+    if (permission.update) listOptions.push({
+        key: 'edit',
+        label: 'Cập nhật chu kỳ làm việc',
+    })
+    if (permission.delete) listOptions.push({
+        key: 'remove',
+        label: 'Xóa chu kỳ làm việc',
+    })
+    listOptions.push({
+        key: 'access',
+        label: 'Truy cập chu kỳ làm việc',
+    })
     const handleOnClick = ({key}) => {
         if (key === 'edit') {
             setShowEditSprint(true)
             dispatch(setSprint(sprint))
-        } else if(key==='remove')
-        {
+        } else if (key === 'remove') {
             setShowConfirmDelete(true)
-        }
-        else {
-            if(sprint.status===1){
+        } else {
+            if (sprint.status === 1) {
                 const project = JSON.parse(localStorage.getItem("project"))
                 project.currentSprint = sprint.id
                 localStorage.setItem('project', JSON.stringify(project))
                 navigate(config.routes.project)
-            }else {
+            } else {
                 messageApi.open({
-                    type:'error',
-                    content:'Chỉ những sprint được bắt đầu mới phép truy cập.',
-                    duration:1.3
+                    type: 'error',
+                    content: 'Chỉ những sprint được bắt đầu mới phép truy cập.',
+                    duration: 1.3
                 })
             }
 
@@ -122,18 +111,18 @@ function SprintItemV2({
         setShowEditSprint(false)
     }
     const handleCreateTask = async () => {
-        const length=sprint.tasks.length
-        const newValueSortTask=!isEmpty(sprint.tasks)?sprint.tasks[length-1].sort:1
+        const length = sprint.tasks.length
+        const newValueSortTask = !isEmpty(sprint.tasks) ? sprint.tasks[length - 1].sort : 1
         const newCardToAdd = {
-            id:Math.floor(Math.random() * 100) + 1,
+            id: Math.floor(Math.random() * 100) + 1,
             sprint_id: sprint.id,
             project_id: sprint.project_id,
-            board_column_id: sprint.board_columns.find(board => board.name==='ToDo').id,
-           // assignee_employee_id: null,
+            board_column_id: sprint.board_columns.find(board => board.name === 'ToDo').id,
+            assignee_employee_id: null,
             report_employee_id: userLogin.id,
             title: valueNewTask,
             start_time: new Date(),
-            end_time:   new Date(),
+            end_time: new Date(),
             description: "",
             priority: 4,
             subtasks: [],
@@ -141,7 +130,7 @@ function SprintItemV2({
             comments: [],
             estimate_point: 3,
             status: 1,
-            sort: newValueSortTask+1,
+            sort: newValueSortTask + 1,
         }
         // add new card to Sprint
         const newSprint = {...sprint}
@@ -179,9 +168,9 @@ function SprintItemV2({
 
     const cards = sprint.tasks//conCatArrayInArray(sprint.columns);
     const handleCompleteSprint = () => {
-        const done=sprint.board_columns.find(item=>item.name==='Done')
+        const done = sprint.board_columns.find(item => item.name === 'Done')
 
-        onComplete(sprint.id,done.id)
+        onComplete(sprint.id, done.id)
         setShowCompleteSprint(false)
     }
     return (
@@ -215,19 +204,16 @@ function SprintItemV2({
                                     onClick={handleRunSprint}>
                                 {sprint.status === 0 ? 'Bắt Đầu' : 'Hoàn Thành'}
                             </button>
-                            {
-                                showSetting && (
-                                    <Dropdown
-                                        menu={{
-                                            items: listOptions,
-                                            onClick: handleOnClick,
-                                        }}
-                                        trigger={['click']}
-                                    >
-                                        <button className='btn-action'><FaEllipsisH className='dot'/></button>
-                                    </Dropdown>
-                                )
-                            }
+
+                            <Dropdown
+                                menu={{
+                                    items: listOptions,
+                                    onClick: handleOnClick,
+                                }}
+                                trigger={['click']}
+                            >
+                                <button className='btn-action'><FaEllipsisH className='dot'/></button>
+                            </Dropdown>
 
                         </div>
                     )

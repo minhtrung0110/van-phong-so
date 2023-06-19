@@ -6,14 +6,12 @@ import moment from "moment";
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import {message, Modal} from "antd";
-import EditProject from "~/components/Client/Project/EditProject";
-import EventItem from "~/components/Client/Schedule/AddEvent";
+
 import AddEvent from "~/components/Client/Schedule/AddEvent";
 import EditEvent from "~/components/Client/Schedule/EditEvent";
-import {getListDepartments} from "~/api/Client/Department/departmentAPI";
 import {setExpiredToken} from "~/redux/reducer/auth/authReducer";
 import {deleteCookie, getCookies} from "~/api/Client/Auth";
-import {createEvent, deleteEvent, editEvent, getListEvents} from "~/api/Client/Calendar";
+import {createEvent, deleteEvent, editEvent, getEventById, getListEvents} from "~/api/Client/Calendar";
 import {useDispatch} from "react-redux";
 import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
@@ -145,11 +143,24 @@ function ManageSchedule(props) {
         },
         [setEvents]
     )
+    const  fetchDataEvent=async (id) => {
+            const respond = await getEventById(id);
+            console.log('Data respond:', respond)
+            if (respond.status === 401) {
+                handleSetUnthorization();
+                setShowEvent({event:null,show:false})
+                return false;
+            } else if (respond.status === 1) {
+                setShowEvent({event:respond.data,show:true})
+                return true;
+            } else {
+                setShowEvent({event:null,show:false})
+            }
+    }
 
     const handleSelectEvent = useCallback(
         (event) => {
-
-            setShowEvent({event, show: true})
+            (fetchDataEvent(event.id))
         },
         []
     )
@@ -194,7 +205,7 @@ function ManageSchedule(props) {
                 content: result.message,
                 duration: 1.3
             })
-            setShowAddEvent(true)
+            setShowEvent({...showEvent,show: false})
             setReset(!reset)
         } else if (result.status === 401) {
             handleSetUnthorization();
@@ -298,7 +309,7 @@ function ManageSchedule(props) {
                 destroyOnClose={true}
                 open={showEvent.show}
             >
-                <EditEvent event={showEvent.event} onCancel={handleCancelShowEvent} onSave={handleUpdateEvent} onDelete={handleDeleteEvent} />
+                <EditEvent event={showEvent.event}    listStaff={listStaff} onCancel={handleCancelShowEvent} onSave={handleUpdateEvent} onDelete={handleDeleteEvent} />
             </Modal>
         </div>
     );

@@ -107,47 +107,47 @@ $spacing: 0.5rem;
         display: flex;
         align-items: center;
         justify-content: space-around;
-        .status-1  {
+        .status-13  {
           @include dot;
           color: #a9a8a8;
           background-color: #faf9f9;
         }
-        .status-2  {
+        .status-14  {
           @include dot;
           color: #fa8c16;
           background-color: rgba(250,140,22,.12);
 
         }
-        .status-3 {
+        .status-15 {
           @include dot;
           color: #3ab67b;
           background-color: #56ca7629;
 
         }
-        .status-4 {
+        .status-16 {
           @include dot;
           color: #18baff;
           background-color: rgba(24,186,255,.12);
 
         }
-        .status-5  {
+        .status-17  {
           @include dot;
           color: #e94040;
           background-color: rgba(233, 64, 64, .12);
 
         }
-        .status-6 {
+        .status-18 {
           @include dot;
           color: #760ae7;
           background-color: rgba(115,59,238,0.12);
 
         }
-        .status-7  {
+        .status-19  {
           @include dot;
           color: #43f5f5;
           background-color: rgba(54,245,229,0.12);
         }
-        .status-8  {
+        .status-20  {
           @include dot;
           color: #f326d0;
           background-color: rgba(219,37,239,0.12);

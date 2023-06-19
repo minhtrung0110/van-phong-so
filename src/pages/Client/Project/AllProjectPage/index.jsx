@@ -57,20 +57,22 @@ function AllProjectPage(props) {
     };
     useEffect(()=>{
         async function fetchDataProject() {
+            setLoading(true)
             const project=JSON.parse(localStorage.getItem('project'))
-            let params = {};
-                      const userIdLogin=localStorage.getItem('userIdLogin')
-            if (search !== '') params = { ...params, search,user_id: userIdLogin };
+            const userIdLogin=localStorage.getItem('userIdLogin')
+           const params = { search,user_id: userIdLogin };
             const respond = await getListProjects(params);
             console.log('Data respond:', respond)
             if (respond === 401) {
+              //  console.log('Vào1')
                 handleSetUnthorization();
                 return false;
             } else if (respond === 500) {
+             //   console.log('Vào500')
                 setListProject([])
                 return false;
             } else {
-                console.log('Vào')
+               // console.log('Vào')
                 setProject(respond, 'reset-page');
                 setLoading(false);
             }
@@ -95,6 +97,7 @@ function AllProjectPage(props) {
             setLoading(false);
         }
     };
+    console.log('List Projects',listProject)
     const handleLoading = async (value='desc', action) => {
         setLoading(true);
         const obSort=(action==='add')?`created_at`:`updated_at`

@@ -18,6 +18,7 @@ import CustomEditor from "~/components/commoms/Edittor";
 import {isEmpty} from "lodash";
 import moment from "moment";
 import ConfirmModal from "~/components/commoms/ConfirmModal";
+import GroupMember from "~/components/Client/Task/GroupMember";
 
 EditEvent.propTypes = {};
 const optionsLoopDuration = [
@@ -62,11 +63,12 @@ const optionsNotifyDuration = [
     },
 
 ]
-function EditEvent({event,onSave,onCancel,onDelete}) {
+function EditEvent({event,onSave,onCancel,onDelete,listStaff}) {
+    console.log('Detail Event: ',event)
     const [typeEvent, setTypeEvent] = useState(event.event_type)
-    const [rangeValueTime, setRangeValueTime] = useState(
-        [dayjs(event.start),dayjs(event.end)]);
+    const [rangeValueTime, setRangeValueTime] = useState([dayjs(event.start),dayjs(event.end)]);
     const [errorDescription, setErrorDescription] = useState('');
+    const [members, setMembers] = useState(event.event_employees)
    // console.log(optionsNotifyDuration.find(item=>item.value===event.notification))
     const [showConfirm,setShowConfirm]=useState(false)
     const {
@@ -76,12 +78,9 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
             ...event,
             duration:[dayjs(event.start),dayjs(event.end)],
             repeat:event.repeat===1?'Lặp lại':'Không lặp lại',
-
-
-
-
         }
     });
+
     const onSubmit = (data) => {
         console.log('Submit: ',data)
         setShowConfirm(false)
@@ -229,9 +228,12 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
                 {/*</div>*/}
             </div>
             {
-                typeEvent==='event'  && (
+                typeEvent===1  && (
                     <div className='members'>
                         <p>Người tham gia:</p>
+                        <GroupMember
+                            onMembers={setMembers} type={'event'} defaultMembers={members} addMember={true} selectLimit={100}
+                            listMembersForTask={listStaff}/>
                     </div>
                 )
             }
@@ -261,34 +263,34 @@ function EditEvent({event,onSave,onCancel,onDelete}) {
                     </div>
                 )
             }
-            {
-                typeEvent===1  && (
-                    <div className='attach'>
-                        <Controller
-                            name="file"
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => (
-                                <Upload
-                                    {...field}
-                                    action="http://localhost:3000/"
-                                    listType="picture"
-                                    // defaultFileList={listFile}
-                                    multiple
-                                    // onChange={handleChangeUpload}
-                                >
-                                    <button className='btn-upload'>
-                                        <FaPaperclip className='icon'/>
-                                        <span className='title'>Tải lên tệp đính kèm</span>
-                                    </button>
-                                </Upload>
-                            )}
-                        />
+            {/*{*/}
+            {/*    typeEvent===1  && (*/}
+            {/*        <div className='attach'>*/}
+            {/*            <Controller*/}
+            {/*                name="file"*/}
+            {/*                control={control}*/}
+            {/*                defaultValue=""*/}
+            {/*                render={({field}) => (*/}
+            {/*                    <Upload*/}
+            {/*                        {...field}*/}
+            {/*                        action="http://localhost:3000/"*/}
+            {/*                        listType="picture"*/}
+            {/*                        // defaultFileList={listFile}*/}
+            {/*                        multiple*/}
+            {/*                        // onChange={handleChangeUpload}*/}
+            {/*                    >*/}
+            {/*                        <button className='btn-upload'>*/}
+            {/*                            <FaPaperclip className='icon'/>*/}
+            {/*                            <span className='title'>Tải lên tệp đính kèm</span>*/}
+            {/*                        </button>*/}
+            {/*                    </Upload>*/}
+            {/*                )}*/}
+            {/*            />*/}
 
 
-                    </div>
-                )
-            }
+            {/*        </div>*/}
+            {/*    )*/}
+            {/*}*/}
 
             <div className='footer'>
                 <button className='btn-cancel' onClick={onCancel}>Hủy</button>
