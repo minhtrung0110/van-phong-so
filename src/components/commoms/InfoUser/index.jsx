@@ -57,15 +57,15 @@ function InfoUser({user,onLogout}) {
                   </div>
             ),
         },
-        // {
-        //     key: '2',
-        //     label: (
-        //           <NavLink className={cx('dropdown-item')} to={config.routes.changePassword}>
-        //               <FaLock className={cx('dropdown-icon')} />
-        //               <span className={cx('dropdown-title')}>Đổi Mật Khẩu</span>
-        //           </NavLink>
-        //     ),
-        // },
+        {
+            key: '2',
+            label: (
+                  <NavLink className={cx('dropdown-item')} to={config.routes.changePassword}>
+                      <FaLock className={cx('dropdown-icon')} />
+                      <span className={cx('dropdown-title')}>Đổi Mật Khẩu</span>
+                  </NavLink>
+            ),
+        },
         {
             key: '3',
             label: (
